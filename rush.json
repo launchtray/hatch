@@ -350,5 +350,9 @@
     //    */
     //   // "versionPolicyName": ""
     // },
+    {
+      "packageName": "@launchtray/hatch-util",
+      "projectFolder": "libraries/hatch-util"
+    }
   ]
 }

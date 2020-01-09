@@ -1,0 +1,20 @@
+{
+  "name": "@launchtray/hatch-util",
+  "version": "0.0.0",
+  "description": "Utilities used by several other hatch modules",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prepublish": "tsc",
+    "build": "tsc"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.0.1"
+  }
+}

@@ -1,0 +1,38 @@
+dependencies:
+  '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz'
+  reflect-metadata: 0.1.13
+  tsyringe: 4.0.1
+packages:
+  /reflect-metadata/0.1.13:
+    dev: false
+    resolution:
+      integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
+  /tslib/1.10.0:
+    dev: false
+    resolution:
+      integrity: sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+  /tsyringe/4.0.1:
+    dependencies:
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>= 6.0.0'
+    resolution:
+      integrity: sha512-Xtn/r3y4fjplogdjiG2buqPBo3/FcXdlUrVWx7JaXpNiwsPG135yEajVfIXVVT1VpnfBYbZ8hjKZer+NJVLTww==
+  'file:projects/hatch-util.tgz':
+    dependencies:
+      reflect-metadata: 0.1.13
+      tsyringe: 4.0.1
+    dev: false
+    name: '@rush-temp/hatch-util'
+    resolution:
+      integrity: sha512-x7hnUYE07hYH1FJkI0RUSjEGxivGwfL3d8Uy3u2+jgjdbJKr9eB5h9Wpzqqam6vq+2Z61lbt+CaZyl1fsyNptQ==
+      tarball: 'file:projects/hatch-util.tgz'
+    version: 0.0.0
+registry: 'https://registry.npmjs.org/'
+shrinkwrapMinorVersion: 9
+shrinkwrapVersion: 3
+specifiers:
+  '@rush-temp/hatch-util': 'file:./projects/hatch-util.tgz'
+  reflect-metadata: ^0.1.13
+  tsyringe: ^4.0.1

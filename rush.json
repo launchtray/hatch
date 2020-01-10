@@ -381,6 +381,10 @@
     {
       "packageName": "@launchtray/hatch-web-server",
       "projectFolder": "libraries/hatch-web-server"
+    },
+    {
+      "packageName": "@launchtray/example-web",
+      "projectFolder": "examples/example-web"
     }
   ]
 }

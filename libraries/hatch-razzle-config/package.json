@@ -12,7 +12,7 @@
   "dependencies": {
     "razzle-plugin-typescript": "^3.0.0"
   },
-  "devDependencies": {
+  "peerDependencies": {
     "tslint": "^5",
     "webpack": "^4"
   }

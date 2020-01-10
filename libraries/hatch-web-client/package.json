@@ -11,8 +11,8 @@
     "access": "restricted"
   },
   "devDependencies": {
-    "@types/node": "^12.12.7",
-    "@types/webpack-env": "^1.14.1",
+    "@types/node": "^12",
+    "@types/webpack-env": "^1",
     "rimraf": "3.0.0"
   },
   "peerDependencies": {

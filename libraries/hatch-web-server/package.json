@@ -14,9 +14,10 @@
     "serialize-javascript": "^2.1.0"
   },
   "devDependencies": {
-    "@types/node": "^12.12.7",
+    "@types/node": "^12",
     "@types/serialize-javascript": "^1.5.0",
-    "@types/webpack-env": "^1.14.1",
+    "@types/webpack-env": "^1",
+    "rimraf": "3.0.0"
   },
   "peerDependencies": {
     "@types/express": "^4",

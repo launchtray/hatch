@@ -160,7 +160,7 @@ export const initializeInjection = (context?: InjectionInitializationContext) =>
   }
 };
 
-export const injectable = tsyringe_injectable;
+export const injectable: <T>() => (target: Class<T>) => void = tsyringe_injectable;
 export const ROOT_CONTAINER: DependencyContainer = tsyringe_container;
 export const containerSingleton = <T>() => (target: Class<T>) => {
   return tsyringe_scoped(tsyringe_Lifecycle.ContainerScoped)(target);

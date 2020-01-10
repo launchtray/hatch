@@ -353,6 +353,10 @@
     {
       "packageName": "@launchtray/hatch-util",
       "projectFolder": "libraries/hatch-util"
+    },
+    {
+      "packageName": "@launchtray/hatch-server",
+      "projectFolder": "libraries/hatch-server"
     }
   ]
 }

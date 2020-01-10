@@ -377,6 +377,10 @@
     {
       "packageName": "@launchtray/hatch-web-client",
       "projectFolder": "libraries/hatch-web-client"
+    },
+    {
+      "packageName": "@launchtray/hatch-web-server",
+      "projectFolder": "libraries/hatch-web-server"
     }
   ]
 }

@@ -6,6 +6,7 @@ dependencies:
   '@rush-temp/hatch-test': 'file:projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz'
   '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz'
+  '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz'
   '@types/express': 4.17.2
   '@types/express-serve-static-core': 4.17.1
   '@types/history': 4.7.3
@@ -24,11 +25,13 @@ dependencies:
   razzle-plugin-typescript: 3.0.0
   react: 16.12.0
   react-dom: 16.12.0
+  react-helmet-async: 1.0.4
   react-native-web: 0.11.7
   react-redux: 7.1.3
   react-router: 5.1.2
   react-router-dom: 5.1.2
   redux: 4.0.5
+  redux-devtools-extension: 2.13.8
   redux-saga: 1.1.3
   reflect-metadata: 0.1.13
   rimraf: 3.0.0
@@ -893,16 +896,10 @@ packages:
       redux: ^3.6.0 || ^4.0.0
     resolution:
       integrity: sha512-qzsLPZCofSI80fwy+HgxtEgSGS4ndYUUZAWaw1dqaOGPLKX/FVwIOEb7q+hjHdnZ4v5pKZcNv5GG4urjujIoyA==
-  /connected-react-router/6.5.2/cfd98a933bb7359b880474609659a35f:
+  /connected-react-router/6.5.2/39ffd646a5a2cd7fc30b19407175c604:
     dependencies:
-      history: 4.10.1
-      immutable: 3.8.2
-      prop-types: 15.7.2
-      react: 16.12.0
-      react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
-      react-router: /react-router/5.1.2/prop-types@15.7.2+react@16.12.0
-      redux: 4.0.5
-      seamless-immutable: 7.1.4
+      react-redux: 7.1.3
+      react-router: 5.1.2
     dev: false
     id: registry.npmjs.org/connected-react-router/6.5.2
     peerDependencies:
@@ -2765,6 +2762,39 @@ packages:
       react: ^16.0.0
     resolution:
       integrity: sha512-LMxFfAGrcS3kETtQaCkTKjMiifahaMySFDn71fZUNpPHZQEzmk/GiAeIT8JSOrHB23fnuCOMruL2a8NYlw+8Gw==
+  /react-fast-compare/2.0.4:
+    dev: false
+    resolution:
+      integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+  /react-helmet-async/1.0.4:
+    dependencies:
+      '@babel/runtime': 7.7.7
+      invariant: 2.2.4
+      prop-types: 15.7.2
+      react-fast-compare: 2.0.4
+      shallowequal: 1.1.0
+    dev: false
+    peerDependencies:
+      react: ^16.6.0
+      react-dom: ^16.6.0
+    resolution:
+      integrity: sha512-KTGHE9sz8N7+fCkZ2a3vzXH9eIkiTNhL2NhKR7XzzQl3WsGlCHh76arauJUIiGdfhjeMp7DY7PkASAmYFXeJYg==
+  /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0:
+    dependencies:
+      '@babel/runtime': 7.7.7
+      invariant: 2.2.4
+      prop-types: 15.7.2
+      react: 16.12.0
+      react-dom: /react-dom/16.12.0/react@16.12.0
+      react-fast-compare: 2.0.4
+      shallowequal: 1.1.0
+    dev: false
+    id: registry.npmjs.org/react-helmet-async/1.0.4
+    peerDependencies:
+      react: ^16.6.0
+      react-dom: ^16.6.0
+    resolution:
+      integrity: sha512-KTGHE9sz8N7+fCkZ2a3vzXH9eIkiTNhL2NhKR7XzzQl3WsGlCHh76arauJUIiGdfhjeMp7DY7PkASAmYFXeJYg==
   /react-is/16.12.0:
     dev: false
     resolution:
@@ -2782,6 +2812,16 @@ packages:
       prop-types: 15.7.2
       react-timer-mixin: 0.13.4
     dev: false
+    peerDependencies:
+      react: '>=16.5.1'
+      react-dom: '>=16.5.1'
+    resolution:
+      integrity: sha512-w1KAxX2FYLS2GAi3w3BnEZg/IUu7FdgHnLmFKHplRnHMV3u1OPB2EVA7ndNdfu7ds4Rn2OZjSXoNh6F61g3gkA==
+  /react-native-web/0.11.7/react-dom@16.12.0:
+    dependencies:
+      react-dom: 16.12.0
+    dev: false
+    id: registry.npmjs.org/react-native-web/0.11.7
     peerDependencies:
       react: '>=16.5.1'
       react-dom: '>=16.5.1'
@@ -2936,6 +2976,21 @@ packages:
       node: '>=0.10'
     resolution:
       integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==
+  /redux-devtools-extension/2.13.8:
+    dev: false
+    peerDependencies:
+      redux: ^3.1.0 || ^4.0.0
+    resolution:
+      integrity: sha512-8qlpooP2QqPtZHQZRhx3x3OP5skEV1py/zUdMY28WNAocbafxdG2tRD1MWE7sp8obGMNYuLWanhhQ7EQvT1FBg==
+  /redux-devtools-extension/2.13.8/redux@4.0.5:
+    dependencies:
+      redux: 4.0.5
+    dev: false
+    id: registry.npmjs.org/redux-devtools-extension/2.13.8
+    peerDependencies:
+      redux: ^3.1.0 || ^4.0.0
+    resolution:
+      integrity: sha512-8qlpooP2QqPtZHQZRhx3x3OP5skEV1py/zUdMY28WNAocbafxdG2tRD1MWE7sp8obGMNYuLWanhhQ7EQvT1FBg==
   /redux-saga/1.1.3:
     dependencies:
       '@redux-saga/core': 1.1.3
@@ -3156,6 +3211,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==
+  /shallowequal/1.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==
   /simple-swizzle/0.2.2:
     dependencies:
       is-arrayish: 0.3.2
@@ -3828,6 +3887,36 @@ packages:
       integrity: sha512-BZBrR2SiFZHoBU1lBHZkYfl2KD5x32u2YGKx1tldfUdpTyGNsSmvRI+BxYZTdCn2+U/tK4W1+lEm7A4o4plECA==
       tarball: 'file:projects/hatch-util.tgz'
     version: 0.0.0
+  'file:projects/hatch-web-client.tgz':
+    dependencies:
+      '@redux-saga/core': 1.1.3
+      '@types/history': 4.7.3
+      '@types/node': 12.12.24
+      '@types/react': 16.9.17
+      '@types/react-dom': 16.9.4
+      '@types/react-native': 0.60.30
+      '@types/react-redux': 7.1.5
+      '@types/react-router': 5.1.4
+      '@types/react-router-dom': 5.1.3
+      '@types/webpack-env': 1.15.0
+      prop-types: 15.7.2
+      react: 16.12.0
+      react-dom: /react-dom/16.12.0/react@16.12.0
+      react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0
+      react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
+      react-router: /react-router/5.1.2/prop-types@15.7.2+react@16.12.0
+      react-router-dom: /react-router-dom/5.1.2/prop-types@15.7.2+react@16.12.0
+      redux: 4.0.5
+      redux-devtools-extension: /redux-devtools-extension/2.13.8/redux@4.0.5
+      redux-saga: 1.1.3
+      rimraf: 3.0.0
+    dev: false
+    name: '@rush-temp/hatch-web-client'
+    resolution:
+      integrity: sha512-KwdP/YFTyG4cyae099lu8DKX2b+zl9XBRFwI52q4uGOBO503bRUM4SKjU+RwRzIwwwGkH1caSQ49Z7SrLOdvhQ==
+      tarball: 'file:projects/hatch-web-client.tgz'
+    version: 0.0.0
   'file:projects/hatch-web.tgz':
     dependencies:
       '@redux-saga/core': 1.1.3
@@ -3840,15 +3929,15 @@ packages:
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
       '@types/webpack-env': 1.15.0
-      connected-react-router: /connected-react-router/6.5.2/cfd98a933bb7359b880474609659a35f
+      connected-react-router: /connected-react-router/6.5.2/39ffd646a5a2cd7fc30b19407175c604
       history: 4.10.1
       prop-types: 15.7.2
       react: 16.12.0
-      react-dom: /react-dom/16.12.0/react@16.12.0
-      react-native-web: /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0
-      react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
-      react-router: /react-router/5.1.2/prop-types@15.7.2+react@16.12.0
-      react-router-dom: /react-router-dom/5.1.2/prop-types@15.7.2+react@16.12.0
+      react-dom: 16.12.0
+      react-native-web: /react-native-web/0.11.7/react-dom@16.12.0
+      react-redux: 7.1.3
+      react-router: 5.1.2
+      react-router-dom: 5.1.2
       redux: 4.0.5
       redux-saga: 1.1.3
       rimraf: 3.0.0
@@ -3869,6 +3958,7 @@ specifiers:
   '@rush-temp/hatch-test': 'file:./projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:./projects/hatch-util.tgz'
   '@rush-temp/hatch-web': 'file:./projects/hatch-web.tgz'
+  '@rush-temp/hatch-web-client': 'file:./projects/hatch-web-client.tgz'
   '@types/express': ^4
   '@types/express-serve-static-core': ^4
   '@types/history': ^4.7.3
@@ -3887,11 +3977,13 @@ specifiers:
   razzle-plugin-typescript: ^3.0.0
   react: ^16
   react-dom: ^16
+  react-helmet-async: ^1
   react-native-web: ^0
   react-redux: ^7
   react-router: ^5
   react-router-dom: ^5
   redux: ^4
+  redux-devtools-extension: ^2
   redux-saga: ^1
   reflect-metadata: ^0.1.13
   rimraf: 3.0.0

@@ -1,0 +1,40 @@
+{
+  "name": "@launchtray/hatch-web-client",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.7",
+    "@types/webpack-env": "^1.14.1",
+    "rimraf": "3.0.0"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-web": "^0",
+    "@launchtray/hatch-util": "^0",
+    "react-helmet-async": "^1",
+    "react": "^16",
+    "react-dom": "^16",
+    "react-native-web": "^0",
+    "react-redux": "^7",
+    "react-router": "^5",
+    "react-router-dom": "^5",
+    "redux": "^4",
+    "redux-devtools-extension": "^2",
+    "redux-saga": "^1",
+    "@redux-saga/core": "^1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "@types/react-native": "^0",
+    "@types/react-redux": "^7",
+    "@types/react-router": "^5",
+    "@types/react-router-dom": "^5",
+    "prop-types": "^15"
+  }
+}

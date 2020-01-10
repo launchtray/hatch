@@ -38,7 +38,7 @@ const createServerAsync = async <T extends ServerComposition>(
   serverExtension?: ServerExtension<T>,
 ) => {
   if (runningServer != null && runningServerApp != null) {
-    runningServer.removeListener('request', runningServerApp as any);
+    runningServer.removeListener('request', runningServerApp);
   }
   const composition: T = await serverComposer();
   const {logger} = composition;
@@ -69,7 +69,7 @@ const createServerAsync = async <T extends ServerComposition>(
         console.error(err);
       });
   } else {
-    runningServer.on('request', runningServerApp as any);
+    runningServer.on('request', runningServerApp);
   }
 };
 

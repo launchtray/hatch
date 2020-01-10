@@ -46,7 +46,7 @@
      * The default value is false to avoid legacy compatibility issues.
      * It is strongly recommended to set strictPeerDependencies=true.
      */
-    // "strictPeerDependencies": true,
+    "strictPeerDependencies": true,
 
 
     /**
@@ -61,7 +61,7 @@
      * After modifying this field, it's recommended to run "rush update --full" so that the package manager
      * will recalculate all version selections.
      */
-    // "resolutionStrategy": "fast"
+    "resolutionStrategy": "fewer-dependencies"
   },
 
   /**
@@ -361,6 +361,10 @@
     {
       "packageName": "@launchtray/hatch-razzle-config",
       "projectFolder": "libraries/hatch-razzle-config"
+    },
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "projectFolder": "libraries/hatch-server-middleware"
     }
   ]
 }

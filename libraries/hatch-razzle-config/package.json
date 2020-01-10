@@ -11,5 +11,9 @@
   },
   "dependencies": {
     "razzle-plugin-typescript": "^3.0.0"
+  },
+  "devDependencies": {
+    "tslint": "^5",
+    "webpack": "^4"
   }
 }

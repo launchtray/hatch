@@ -365,6 +365,10 @@
     {
       "packageName": "@launchtray/hatch-server-middleware",
       "projectFolder": "libraries/hatch-server-middleware"
+    },
+    {
+      "packageName": "@launchtray/hatch-test",
+      "projectFolder": "libraries/hatch-test"
     }
   ]
 }

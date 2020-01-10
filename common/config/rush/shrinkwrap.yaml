@@ -2,16 +2,19 @@ dependencies:
   '@rush-temp/hatch-razzle-config': 'file:projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz'
+  '@rush-temp/hatch-test': 'file:projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz'
   '@types/express': 4.17.2
   '@types/express-serve-static-core': 4.17.1
   '@types/node': 13.1.6
+  '@types/selenium-webdriver': 4.0.6
   '@types/webpack-env': 1.15.0
   express: 4.17.1
   express-winston: 4.0.2
   razzle-plugin-typescript: 3.0.0
   reflect-metadata: 0.1.13
   rimraf: 3.0.0
+  selenium-webdriver: 4.0.0-alpha.5
   tslint: 5.20.1
   tsyringe: 4.0.1
   typescript: 3.7.4
@@ -72,6 +75,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
+  /@types/selenium-webdriver/4.0.6:
+    dev: false
+    resolution:
+      integrity: sha512-We3Ogdn6/EMiVUWyqHBfvLHogkgxhBWrmgayxCj5UqX5D6uVZ+JKr5qOqjGig+aHXVxDTnyisVF+t1vVINKD+w==
   /@types/serve-static/1.13.3:
     dependencies:
       '@types/express-serve-static-core': 4.17.1
@@ -1081,6 +1088,19 @@ packages:
       winston: '>=3.x <4'
     resolution:
       integrity: sha512-Dt2VRkIekVZQT4F8CiKsFm7dWhD7Hx32vyO62p9TIcOb9AdZ58HiX21b+2P2qrxTsOzYYA2N3mXu2vj+RTq8cQ==
+  /express-winston/4.0.2/winston@3.2.1:
+    dependencies:
+      chalk: 2.4.2
+      lodash: 4.17.15
+      winston: 3.2.1
+    dev: false
+    engines:
+      node: '>= 6'
+    id: registry.npmjs.org/express-winston/4.0.2
+    peerDependencies:
+      winston: '>=3.x <4'
+    resolution:
+      integrity: sha512-Dt2VRkIekVZQT4F8CiKsFm7dWhD7Hx32vyO62p9TIcOb9AdZ58HiX21b+2P2qrxTsOzYYA2N3mXu2vj+RTq8cQ==
   /express/4.17.1:
     dependencies:
       accepts: 1.3.7
@@ -1250,9 +1270,18 @@ packages:
       webpack: ^2.3.0 || ^3.0.0 || ^4.0.0
     resolution:
       integrity: sha512-qNYuygh2GxXehBvQZ5rI5YlQFn+7ZV6kmkyD9Sgs33dWl73NZdUOB5aCp8v0EXJn176AhPrZP8YCMT3h01fs+g==
-  /fork-ts-checker-webpack-plugin/0.4.15/tslint@5.20.1:
+  /fork-ts-checker-webpack-plugin/0.4.15/tslint@5.20.1+webpack@4.41.5:
     dependencies:
+      babel-code-frame: 6.26.0
+      chalk: 2.4.2
+      chokidar: 2.1.8
+      lodash: 4.17.15
+      micromatch: 3.1.10
+      minimatch: 3.0.4
+      resolve: 1.14.2
+      tapable: 1.1.3
       tslint: 5.20.1
+      webpack: 4.41.5
     dev: false
     engines:
       node: '>=6.11.5'
@@ -1461,6 +1490,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-xg7taebY/bazEEofy8ocGS3FtQE=
+  /immediate/3.0.6:
+    dev: false
+    resolution:
+      integrity: sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
   /imurmurhash/0.1.4:
     dev: false
     engines:
@@ -1683,6 +1716,15 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
+  /jszip/3.2.2:
+    dependencies:
+      lie: 3.3.0
+      pako: 1.0.10
+      readable-stream: 2.3.7
+      set-immediate-shim: 1.0.1
+    dev: false
+    resolution:
+      integrity: sha512-NmKajvAFQpbg3taXQXr/ccS2wcucR1AZ+NtyWp2Nq7HHVsXhcJFR8p0Baf32C2yVvBylFWVeKf+WI2AnvlPhpA==
   /kind-of/3.2.2:
     dependencies:
       is-buffer: 1.1.6
@@ -1717,6 +1759,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-J9nVUucG1p/skKul6DU3PUZrhs0LPulNaeUOox0IyXDi8S4CztTHs1gQphhuZmzXG7VOQSf6NJfKuzteQLv9gQ==
+  /lie/3.3.0:
+    dependencies:
+      immediate: 3.0.6
+    dev: false
+    resolution:
+      integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==
   /loader-runner/2.4.0:
     dev: false
     engines:
@@ -2085,6 +2133,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-hUNzx/XCMVkU/Jv8a9gjj92h7Cc=
+  /os-tmpdir/1.0.2:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
   /p-limit/2.2.2:
     dependencies:
       p-try: 2.2.0
@@ -2333,9 +2387,9 @@ packages:
       typescript: '>=2.4.1'
     resolution:
       integrity: sha512-cQbbpex31WpHBzXPfJ79QnhEB0oR2PUMnyuQuJKE2J0zjq43tmVx4PyK6ZTINFK6xysl3geduW7t4jYi7c4wgQ==
-  /razzle-plugin-typescript/3.0.0/tslint@5.20.1:
+  /razzle-plugin-typescript/3.0.0/tslint@5.20.1+webpack@4.41.5:
     dependencies:
-      fork-ts-checker-webpack-plugin: /fork-ts-checker-webpack-plugin/0.4.15/tslint@5.20.1
+      fork-ts-checker-webpack-plugin: /fork-ts-checker-webpack-plugin/0.4.15/tslint@5.20.1+webpack@4.41.5
       ts-loader: 5.4.5
     dev: false
     id: registry.npmjs.org/razzle-plugin-typescript/3.0.0
@@ -2465,6 +2519,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+  /sax/1.2.4:
+    dev: false
+    resolution:
+      integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
   /schema-utils/1.0.0:
     dependencies:
       ajv: 6.10.2
@@ -2475,6 +2533,17 @@ packages:
       node: '>= 4'
     resolution:
       integrity: sha512-i27Mic4KovM/lnGsy8whRCHhc7VicJajAjTrYg11K9zfZXnYIt4k5F+kZkwjnrhKzLic/HLU4j11mjsz2G/75g==
+  /selenium-webdriver/4.0.0-alpha.5:
+    dependencies:
+      jszip: 3.2.2
+      rimraf: 2.7.1
+      tmp: 0.0.30
+      xml2js: 0.4.23
+    dev: false
+    engines:
+      node: '>= 10.15.0'
+    resolution:
+      integrity: sha512-hktl3DSrhzM59yLhWzDGHIX9o56DvA+cVK7Dw6FcJR6qQ4CGzkaHeXQPcdrslkWMTeq0Ci9AmCxq0EMOvm2Rkg==
   /semver/5.7.1:
     dev: false
     hasBin: true
@@ -2515,6 +2584,12 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha512-JMrvUwE54emCYWlTI+hGrGv5I8dEwmco/00EvkzIIsR7MqrHonbD9pO2MOfFnpFntl7ecpZs+3mW+XbQZu9QCg==
+  /set-immediate-shim/1.0.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-SysbJ+uAip+NzEgaWOXlb1mfP2E=
   /set-value/2.0.1:
     dependencies:
       extend-shallow: 2.0.1
@@ -2771,6 +2846,14 @@ packages:
       node: '>=0.6.0'
     resolution:
       integrity: sha512-60aV6sgJ5YEbzUdn9c8kYGIqOubPoUdqQCul3SBAsRCZ40s6Y5cMcrW4dt3/k/EsbLVJNl9n6Vz3fTc+k2GeKQ==
+  /tmp/0.0.30:
+    dependencies:
+      os-tmpdir: 1.0.2
+    dev: false
+    engines:
+      node: '>=0.4.0'
+    resolution:
+      integrity: sha1-ckGdSovn1s51FI/YsyTlk6cRwu0=
   /to-arraybuffer/1.0.1:
     dev: false
     resolution:
@@ -3074,6 +3157,21 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+  /xml2js/0.4.23:
+    dependencies:
+      sax: 1.2.4
+      xmlbuilder: 11.0.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
+  /xmlbuilder/11.0.1:
+    dev: false
+    engines:
+      node: '>=4.0'
+    resolution:
+      integrity: sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
   /xtend/4.0.2:
     dev: false
     engines:
@@ -3090,7 +3188,7 @@ packages:
       integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
   'file:projects/hatch-razzle-config.tgz':
     dependencies:
-      razzle-plugin-typescript: /razzle-plugin-typescript/3.0.0/tslint@5.20.1
+      razzle-plugin-typescript: /razzle-plugin-typescript/3.0.0/tslint@5.20.1+webpack@4.41.5
       tslint: 5.20.1
       webpack: 4.41.5
     dev: false
@@ -3103,7 +3201,7 @@ packages:
     dependencies:
       '@types/express': 4.17.2
       express: 4.17.1
-      express-winston: 4.0.2
+      express-winston: /express-winston/4.0.2/winston@3.2.1
       winston: 3.2.1
     dev: false
     name: '@rush-temp/hatch-server-middleware'
@@ -3125,6 +3223,18 @@ packages:
       integrity: sha512-8kpG7vGF12QfguSJpqVKgXKg0QEn3wlsT1jL6/NVZVPgZNs8ufy+/gUoiUNJsjWdBxfflzMl66MRRcEPq507Jw==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
+  'file:projects/hatch-test.tgz':
+    dependencies:
+      '@types/selenium-webdriver': 4.0.6
+      rimraf: 3.0.0
+      selenium-webdriver: 4.0.0-alpha.5
+      typescript: 3.7.4
+    dev: false
+    name: '@rush-temp/hatch-test'
+    resolution:
+      integrity: sha512-Tc5K4u1zsRiUH5BuV3nFUs2B9QNqT6I0T2HTQP+sZwTDuCiJ6JEDTlWH8/LKFQMBbZaVuKGR7q1CnHDuJ6mHYA==
+      tarball: 'file:projects/hatch-test.tgz'
+    version: 0.0.0
   'file:projects/hatch-util.tgz':
     dependencies:
       reflect-metadata: 0.1.13
@@ -3144,16 +3254,19 @@ specifiers:
   '@rush-temp/hatch-razzle-config': 'file:./projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:./projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:./projects/hatch-server-middleware.tgz'
+  '@rush-temp/hatch-test': 'file:./projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:./projects/hatch-util.tgz'
   '@types/express': ^4
   '@types/express-serve-static-core': ^4
   '@types/node': ^13
+  '@types/selenium-webdriver': ^4.0.5
   '@types/webpack-env': ^1
   express: ^4
   express-winston: ^4.0.1
   razzle-plugin-typescript: ^3.0.0
   reflect-metadata: ^0.1.13
   rimraf: 3.0.0
+  selenium-webdriver: ^4.0.0-alpha.5
   tslint: ^5
   tsyringe: ^4.0.1
   typescript: ^3.7.3

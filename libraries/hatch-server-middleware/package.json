@@ -5,9 +5,7 @@
   "types": "dist/index.d.js",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf dist",
-    "prepublish": "tsc",
-    "build": "tsc"
+    "build": "rimraf dist && tsc"
   },
   "publishConfig": {
     "access": "restricted"

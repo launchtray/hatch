@@ -1,0 +1,21 @@
+{
+  "name": "@launchtray/hatch-test",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.3",
+    "rimraf": "3.0.0"
+  },
+  "peerDependencies": {
+    "@types/selenium-webdriver": "^4.0.5",
+    "selenium-webdriver": "^4.0.0-alpha.5"
+  }
+}

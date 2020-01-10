@@ -357,6 +357,10 @@
     {
       "packageName": "@launchtray/hatch-server",
       "projectFolder": "libraries/hatch-server"
+    },
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "projectFolder": "libraries/hatch-razzle-config"
     }
   ]
 }

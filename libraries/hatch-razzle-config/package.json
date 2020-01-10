@@ -1,0 +1,15 @@
+{
+  "name": "@launchtray/hatch-razzle-config",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": ""
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "dependencies": {
+    "razzle-plugin-typescript": "^3.0.0"
+  }
+}

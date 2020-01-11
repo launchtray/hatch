@@ -1,0 +1,43 @@
+{
+  "name": "@launchtray/hatch-web",
+  "version": "0.0.0",
+  "description": "Utilities for composing apps using dependency injection",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "dependencies": {
+    "history": "^4.10.1",
+    "connected-react-router": "6.5.2"
+  },
+  "devDependencies": {
+    "@types/history": "^4.7.3",
+    "@types/node": "^12",
+    "@types/webpack-env": "^1",
+    "rimraf": "3.0.0"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "^0",
+    "react": "^16",
+    "react-dom": "^16",
+    "react-native-web": "^0",
+    "react-redux": "^7",
+    "react-router": "^5",
+    "react-router-dom": "^5",
+    "redux": "^4",
+    "redux-saga": "^1",
+    "@redux-saga/core": "^1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "@types/react-native": "^0",
+    "@types/react-redux": "^7",
+    "@types/react-router": "^5",
+    "@types/react-router-dom": "^5",
+    "prop-types": "^15"
+  }
+}

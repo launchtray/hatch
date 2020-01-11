@@ -1,0 +1,25 @@
+{
+  "name": "@launchtray/hatch-server",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "peerDependencies": {
+    "@types/express": "^4",
+    "@types/express-serve-static-core": "^4",
+    "@types/node": "^13",
+    "@types/webpack-env": "^1",
+    "@launchtray/hatch-util": "^0",
+    "express": "^4",
+    "winston": "^3",
+    "@sentry/node": "^5",
+    "@sentry/types": "^5",
+    "winston-transport": "^4"
+  }
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/common/scripts" />
+      <excludeFolder url="file://$MODULE_DIR$/common/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/example-web/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/example-web/build" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-razzle-config/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-server-middleware/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-server-middleware/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-server/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-server/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-test/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-test/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-util/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-util/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web-client/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web-client/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web-server/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web-server/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web/dist" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

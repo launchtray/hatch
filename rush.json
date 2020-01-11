@@ -46,7 +46,7 @@
      * The default value is false to avoid legacy compatibility issues.
      * It is strongly recommended to set strictPeerDependencies=true.
      */
-    // "strictPeerDependencies": true,
+    "strictPeerDependencies": true,
 
 
     /**
@@ -61,7 +61,7 @@
      * After modifying this field, it's recommended to run "rush update --full" so that the package manager
      * will recalculate all version selections.
      */
-    // "resolutionStrategy": "fast"
+    "resolutionStrategy": "fewer-dependencies"
   },
 
   /**
@@ -350,5 +350,41 @@
     //    */
     //   // "versionPolicyName": ""
     // },
+    {
+      "packageName": "@launchtray/hatch-util",
+      "projectFolder": "libraries/hatch-util"
+    },
+    {
+      "packageName": "@launchtray/hatch-server",
+      "projectFolder": "libraries/hatch-server"
+    },
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "projectFolder": "libraries/hatch-razzle-config"
+    },
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "projectFolder": "libraries/hatch-server-middleware"
+    },
+    {
+      "packageName": "@launchtray/hatch-test",
+      "projectFolder": "libraries/hatch-test"
+    },
+    {
+      "packageName": "@launchtray/hatch-web",
+      "projectFolder": "libraries/hatch-web"
+    },
+    {
+      "packageName": "@launchtray/hatch-web-client",
+      "projectFolder": "libraries/hatch-web-client"
+    },
+    {
+      "packageName": "@launchtray/hatch-web-server",
+      "projectFolder": "libraries/hatch-web-server"
+    },
+    {
+      "packageName": "@launchtray/example-web",
+      "projectFolder": "examples/example-web"
+    }
   ]
 }

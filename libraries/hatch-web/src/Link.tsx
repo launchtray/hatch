@@ -2,7 +2,7 @@ import React from 'react';
 import {createElement, StyleProp, TextProps, TextStyle} from 'react-native';
 import {Link, LinkProps} from 'react-router-dom';
 
-type InheritedProps = Pick<LinkProps, 'to'> & Pick<TextProps, 'testID' | 'nativeID'>;
+type InheritedProps = Pick<LinkProps, 'to'> & Pick<TextProps, 'testID'>;
 
 interface PropTypes extends InheritedProps {
   textStyle?: StyleProp<TextStyle>;

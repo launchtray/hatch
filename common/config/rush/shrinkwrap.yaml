@@ -1,4 +1,5 @@
 dependencies:
+  '@babel/core': 7.7.7
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-web': 'file:projects/example-web.tgz'
   '@rush-temp/hatch-razzle-config': 'file:projects/hatch-razzle-config.tgz'
@@ -16,7 +17,6 @@ dependencies:
   '@types/jest': 24.0.25
   '@types/react': 16.9.17
   '@types/react-dom': 16.9.4
-  '@types/react-native': 0.60.30
   '@types/react-redux': 7.1.5
   '@types/react-router': 5.1.4
   '@types/react-router-dom': 5.1.3
@@ -24,20 +24,22 @@ dependencies:
   '@types/serialize-javascript': 1.5.0
   '@types/superagent': 4.1.4
   '@types/supertest': 2.0.8
+  '@types/webpack-env': 1.15.0
   chromedriver: 78.0.1
   connected-react-router: 6.5.2
   express: 4.17.1
   express-winston: 4.0.2
   geckodriver: 1.19.1
   history: 4.10.1
+  invariant: 2.2.4
   jest: 24.9.0
   prop-types: 15.7.2
   razzle: 3.0.0
   razzle-plugin-typescript: 3.0.0
   react: 16.12.0
   react-dom: 16.12.0
+  react-error-overlay: 6.0.4
   react-helmet-async: 1.0.4
-  react-native-web: 0.11.7
   react-redux: 7.1.3
   react-router: 5.1.2
   react-router-dom: 5.1.2
@@ -888,7 +890,7 @@ packages:
       '@babel/plugin-transform-unicode-regex': /@babel/plugin-transform-unicode-regex/7.7.4/@babel!core@7.7.7
       '@babel/types': 7.7.4
       browserslist: 4.8.3
-      core-js-compat: 3.6.2
+      core-js-compat: 3.6.3
       invariant: 2.2.4
       js-levenshtein: 1.1.6
       semver: 5.7.1
@@ -2382,7 +2384,7 @@ packages:
   /browserslist/4.1.1:
     dependencies:
       caniuse-lite: 1.0.30001020
-      electron-to-chromium: 1.3.330
+      electron-to-chromium: 1.3.331
       node-releases: 1.1.45
     dev: false
     hasBin: true
@@ -2391,7 +2393,7 @@ packages:
   /browserslist/4.8.3:
     dependencies:
       caniuse-lite: 1.0.30001020
-      electron-to-chromium: 1.3.330
+      electron-to-chromium: 1.3.331
       node-releases: 1.1.45
     dev: false
     hasBin: true
@@ -2946,13 +2948,13 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
-  /core-js-compat/3.6.2:
+  /core-js-compat/3.6.3:
     dependencies:
       browserslist: 4.8.3
       semver: 7.0.0
     dev: false
     resolution:
-      integrity: sha512-+G28dzfYGtAM+XGvB1C5AS1ZPKfQ47HLhcdeIQdZgQnJVdp7/D0m+W/TErwhgsX6CujRUk/LebB6dCrKrtJrvQ==
+      integrity: sha512-Y3YNGU3bU1yrnzVodop23ghArbKv4IqkZg9MMOWv/h7KT6NRk1/SzHhWDDlubg2+tlcUzAqgj1/GyeJ9fUKMeg==
   /core-js/1.2.7:
     deprecated: 'core-js@<3 is no longer maintained and not recommended for usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.'
     dev: false
@@ -3620,10 +3622,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
-  /electron-to-chromium/1.3.330:
+  /electron-to-chromium/1.3.331:
     dev: false
     resolution:
-      integrity: sha512-CUHUJ1c5mOqowGPhmSMHUDpZMpE33vocs77fCxIhVMG4tFNYSNhgE9n0WURxOgVO7nWaZpCiNTMwiHF8NAyP/Q==
+      integrity: sha512-GuDv5gkxwRROYnmIVFUohoyrNapWCKLNn80L7Pa+9WRF/oY4t7XLH7wBMsYBgIRwi8BvEvsGKLKh8kOciOp6kA==
   /elliptic/6.5.2:
     dependencies:
       bn.js: 4.11.8
@@ -4675,7 +4677,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-d4sze1JNC454Wdo2fkuyzCr6aHcbL6PGGuFAz0Li/NcOm1tCHGnWDRmJP85dh9IhQErTc2svWFEX5xHIOo//kQ==
-  /handlebars/4.6.0:
+  /handlebars/4.7.0:
     dependencies:
       neo-async: 2.6.1
       optimist: 0.6.1
@@ -4687,7 +4689,7 @@ packages:
     optionalDependencies:
       uglify-js: 3.7.4
     resolution:
-      integrity: sha512-i1ZUP7Qp2JdkMaFon2a+b0m5geE8Z4ZTLaGkgrObkEd+OkUKyRbRWw4KxuFCoHfdETSY1yf9/574eVoNSiK7pw==
+      integrity: sha512-PaZ6G6nYzfJ0Hd1WIhOpsnUPWh1R0Pg//r4wEYOtzG65c2V8RJQ/++yYlVmuoQ7EMXcb4eri5+FB2XH1Lwed9g==
   /har-schema/2.0.0:
     dev: false
     engines:
@@ -5693,13 +5695,13 @@ packages:
       integrity: sha512-R47KzMtDJH6X4/YW9XTx+jrLnZnscW4VpNN+1PViSYTejLVPWv7oov+Duf8YQSPyVRUvueQqz1TcsC6mooZTXw==
   /istanbul-reports/1.5.1:
     dependencies:
-      handlebars: 4.6.0
+      handlebars: 4.7.0
     dev: false
     resolution:
       integrity: sha512-+cfoZ0UXzWjhAdzosCPP3AN8vvef8XDkWtTfgaN+7L3YTpNYITnCaEkceo5SEYy644VkHka/P1FvkWvrG/rrJw==
   /istanbul-reports/2.2.6:
     dependencies:
-      handlebars: 4.6.0
+      handlebars: 4.7.0
     dev: false
     engines:
       node: '>=6'
@@ -8898,6 +8900,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==
+  /react-error-overlay/6.0.4:
+    dev: false
+    resolution:
+      integrity: sha512-ueZzLmHltszTshDMwyfELDq8zOA803wQ1ZuzCccXa1m57k1PxSHfflPD5W9YIiTXLs0JTLzoj6o1LuM5N6zzNA==
   /react-fast-compare/2.0.4:
     dev: false
     resolution:
@@ -8935,24 +8941,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
-  /react-native-web/0.11.7:
-    dependencies:
-      array-find-index: 1.0.2
-      create-react-class: 15.6.3
-      debounce: 1.2.0
-      deep-assign: 3.0.0
-      fbjs: 1.0.0
-      hyphenate-style-name: 1.0.3
-      inline-style-prefixer: 5.1.0
-      normalize-css-color: 1.0.2
-      prop-types: 15.7.2
-      react-timer-mixin: 0.13.4
-    dev: false
-    peerDependencies:
-      react: '>=16.5.1'
-      react-dom: '>=16.5.1'
-    resolution:
-      integrity: sha512-w1KAxX2FYLS2GAi3w3BnEZg/IUu7FdgHnLmFKHplRnHMV3u1OPB2EVA7ndNdfu7ds4Rn2OZjSXoNh6F61g3gkA==
   /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0:
     dependencies:
       array-find-index: 1.0.2
@@ -8974,6 +8962,27 @@ packages:
       react-dom: '>=16.5.1'
     resolution:
       integrity: sha512-w1KAxX2FYLS2GAi3w3BnEZg/IUu7FdgHnLmFKHplRnHMV3u1OPB2EVA7ndNdfu7ds4Rn2OZjSXoNh6F61g3gkA==
+  /react-native-web/0.12.0-rc.1/react-dom@16.12.0+react@16.12.0:
+    dependencies:
+      array-find-index: 1.0.2
+      create-react-class: 15.6.3
+      debounce: 1.2.0
+      deep-assign: 3.0.0
+      fbjs: 1.0.0
+      hyphenate-style-name: 1.0.3
+      inline-style-prefixer: 5.1.0
+      normalize-css-color: 1.0.2
+      prop-types: 15.7.2
+      react: 16.12.0
+      react-dom: /react-dom/16.12.0/react@16.12.0
+      react-timer-mixin: 0.13.4
+    dev: false
+    id: registry.npmjs.org/react-native-web/0.12.0-rc.1
+    peerDependencies:
+      react: '>=16.5.1'
+      react-dom: '>=16.5.1'
+    resolution:
+      integrity: sha512-tlpeWzn6NbTVJYvT5aNUru38ERXkQGp7yAuJ1WDO9oAlplrCghFvspU/7JKqtYRjzsYxR3w2sQMFIWdgajOQ3A==
   /react-redux/7.1.3:
     dependencies:
       '@babel/runtime': 7.7.7
@@ -11498,12 +11507,13 @@ packages:
       integrity: sha1-lSj0QtqxsihOWLQ3m7GU4i4MQAU=
   'file:projects/example-web.tgz':
     dependencies:
+      '@babel/core': 7.7.7
       '@redux-saga/core': 1.1.3
       '@types/chromedriver': 2.38.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
       '@types/jest': 24.0.25
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
       '@types/react-native': 0.60.30
@@ -11517,13 +11527,15 @@ packages:
       chromedriver: 78.0.1
       express: 4.17.1
       geckodriver: 1.19.1
+      invariant: 2.2.4
       jest: 24.9.0
       prop-types: 15.7.2
       razzle: 3.0.0
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
+      react-error-overlay: 6.0.4
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
-      react-native-web: /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.12.0-rc.1/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -11537,12 +11549,13 @@ packages:
       tslint-eslint-rules: /tslint-eslint-rules/5.4.0/typescript@3.7.4
       tslint-react: /tslint-react/4.1.0/typescript@3.7.4
       typescript: 3.7.4
+      webpack: 4.41.5
       winston: 3.2.1
       winston-transport: 4.3.0
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-FoNx0NHtVfCuFu8vWKdYp1h88Mks0X6eH3eTUfXeldfH2IFWk9VWoK0EkWm74fe+icSvJy8Z+Up4+Yboktm+Zw==
+      integrity: sha512-bjRWxMI91hVCz8uZjmABzT2C42TV1/tLs6Pv50Pk/Hl+aQU7XUsexxoYCBujk1rpMX4l+j1/4J+awVI1Zz+xlw==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -11632,7 +11645,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-slWTEBC9YNxM7kIA6NxGAQRfkBRbgUD9mZILXY2uB8JwddwClsmnUUNy7JwLysZcO9VWIme7yXs+N1Q1QSPUsw==
+      integrity: sha512-Tosldwjge5IojNyUhA/0TVmLczV7NhCrofTEhBGxgEwNfz2u0N1MnevgWEmL05Mh5AY90qRUq9yJBINLYejEAQ==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -11651,7 +11664,6 @@ packages:
       '@types/webpack-env': 1.15.0
       express: 4.17.1
       prop-types: 15.7.2
-      razzle: 3.0.0
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
@@ -11666,7 +11678,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-cq+SfRyYo1p4ctyS/hXYeUm2wlnROieghJYhuwNqozEOgJgBJxem78ih1qWTmpQ2ULeqrlAvPoBLE7fqDfzKKQ==
+      integrity: sha512-f7wvl2Fm4cLWN7iGRcX2j+gmhHBdbRymcIWaSz2tLEuHZnduzF3V35Ix7byrcUeBM+MF4TC+BMDpLw6sqSCbHg==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
@@ -11696,13 +11708,14 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-uKyrMV3v3mqsXUJTnHCRV11MmW7kr97FDZvh5679nysOO4PVPVfzYKXlgB4lwC09t74SCux2vykYnybmHY0x0g==
+      integrity: sha512-WvHa0TQZX5SHV/2UUReIY49mmv+fLBXxbBI+4+3SPiugtjyMni456KOX5ggNe7TlmLdT3q4FZ8OGRN/Q5GJyzg==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
+  '@babel/core': ^7
   '@redux-saga/core': ^1
   '@rush-temp/example-web': 'file:./projects/example-web.tgz'
   '@rush-temp/hatch-razzle-config': 'file:./projects/hatch-razzle-config.tgz'
@@ -11720,7 +11733,6 @@ specifiers:
   '@types/jest': ^24.0.22
   '@types/react': ^16
   '@types/react-dom': ^16
-  '@types/react-native': ^0
   '@types/react-redux': ^7
   '@types/react-router': ^5
   '@types/react-router-dom': ^5
@@ -11728,20 +11740,22 @@ specifiers:
   '@types/serialize-javascript': ^1.5.0
   '@types/superagent': ^4.1.4
   '@types/supertest': ^2.0.8
+  '@types/webpack-env': ^1
   chromedriver: ^78.0.1
   connected-react-router: 6.5.2
   express: ^4
   express-winston: ^4.0.1
   geckodriver: ^1.19.1
   history: ^4.10.1
+  invariant: ^2
   jest: ^24.9.0
   prop-types: ^15
   razzle: ^3
   razzle-plugin-typescript: ^3.0.0
   react: ^16
   react-dom: ^16
+  react-error-overlay: ^6
   react-helmet-async: ^1
-  react-native-web: ^0
   react-redux: ^7
   react-router: ^5
   react-router-dom: ^5

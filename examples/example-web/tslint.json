@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:latest", "tslint-react", "tslint-eslint-rules"],
+  "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "align": [true, "parameters", "arguments", "statements"],
     "ban": false,
@@ -87,6 +87,9 @@
       "check-typecast"
     ]
   },
+  "rulesDirectory": [
+    "./node_modules/tslint-eslint-rules/dist/rules"
+  ],
   "linterOptions": {
     "exclude": [
       "**/dist/*"

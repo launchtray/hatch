@@ -26,7 +26,6 @@
     "@launchtray/hatch-server": "^0",
     "@launchtray/hatch-web": "^0",
     "express": "^4",
-    "razzle": "^3",
     "react-helmet-async": "^1",
     "react-native-web": "^0",
     "react": "^16",

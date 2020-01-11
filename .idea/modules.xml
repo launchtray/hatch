@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hatch-rush.iml" filepath="$PROJECT_DIR$/.idea/hatch-rush.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hatch.iml" filepath="$PROJECT_DIR$/.idea/hatch.iml" />
     </modules>
   </component>
 </project>

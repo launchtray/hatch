@@ -1,5 +1,6 @@
 import Button from './Button';
 import ClientLoadContext from './ClientLoadContext';
+import {createErrorReporterMiddleware} from './createErrorReporterMiddleware';
 import defineAction, {resetDefinedActions} from './defineAction';
 import defineReducer from './defineReducer';
 import effects from './effects';
@@ -36,4 +37,5 @@ export {
   resolveWebAppManagers,
   Button,
   Link,
+  createErrorReporterMiddleware
 };

@@ -1,4 +1,4 @@
-import {Class, Logger} from '@launchtray/hatch-util';
+import {Class} from '@launchtray/hatch-util';
 import {Reducer} from 'redux';
 
 export interface TranslationsDictionary {
@@ -6,7 +6,6 @@ export interface TranslationsDictionary {
 }
 
 export interface WebCommonComposition {
-  logger: Logger;
   translations?: TranslationsDictionary;
   createRootReducer: () => Reducer;
   actions: any;

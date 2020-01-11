@@ -1,5 +1,14 @@
-import {initializeInjection, InjectionInitializationContext, ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {
+  ConsoleLogger,
+  initializeInjection,
+  InjectionInitializationContext,
+  NON_LOGGER,
+  ROOT_CONTAINER,
+  SentryMonitor,
+  SentryReporter,
+} from '@launchtray/hatch-util';
+import {
+  createErrorReporterMiddleware,
   createNavMiddleware,
   createSagaForWebAppManagers,
   NavProvider,
@@ -7,6 +16,15 @@ import {
   resetDefinedActions,
   resolveWebAppManagers
 } from '@launchtray/hatch-web';
+import {
+  addBreadcrumb,
+  Breadcrumb,
+  captureException,
+  init,
+  Integrations,
+  setExtra,
+  setTag} from '@sentry/browser';
+import {Options} from '@sentry/types';
 import React from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
@@ -49,6 +67,16 @@ if (module.hot) {
   }
 }
 
+const dsn: string | undefined = process.env.SENTRY_DSN;
+
+const sentryMonitor: SentryMonitor = {
+  addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },
+  captureException: (error: any) => { captureException(error); },
+  init: (options: Options) => { init(options); },
+  setExtra: (key: string, extra: any) => { setExtra(key, extra); },
+  setTag: (key: string, value: string) => { setTag(key, value); },
+};
+
 const createClientAsync = async (clientComposer: WebClientComposer) => {
   if (runningRootSagaTask != null) {
     runningRootSagaTask.cancel();
@@ -57,12 +85,25 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
 
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
-  const {logger} = composition;
 
+  const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
+  const sentry = new SentryReporter(sentryMonitor, {dsn, integrations: consoleBreadcrumbs});
+  container.registerInstance('ErrorReporter', sentry);
+
+  const appName = container.resolve<string>('appName');
+  const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger(appName);
+  container.registerInstance('Logger', logger);
+  let onSagaError: ((error: Error) => void) | null = null;
   if (store == null) {
-    sagaMiddleware = createSagaMiddleware();
+    sagaMiddleware = createSagaMiddleware({
+      onError: (error: Error) => {
+        if (onSagaError != null) {
+          onSagaError(error);
+        }
+      },
+    });
     const {navMiddleware} = createNavMiddleware();
-    let middleware = applyMiddleware(sagaMiddleware, navMiddleware);
+    let middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(sentry));
     if (process.env.NODE_ENV !== 'production') {
       const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions});
       middleware = composeEnhancers(middleware);
@@ -77,9 +118,16 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     container,
     ...webAppManagers,
   );
+
   const webAppManagerInstances = resolveWebAppManagers(container);
   const rootSaga = createSagaForWebAppManagers(logger, webAppManagerInstances, store, container);
 
+  if (rootSaga != null) {
+    onSagaError = (error) => {
+      logger.error('Root saga error: ' + error.message + ', stack trace: ' + error.stack);
+      sentry.captureException(error);
+    };
+  }
   runningRootSagaTask = sagaMiddleware.run(rootSaga);
 
   const App = composition.App;

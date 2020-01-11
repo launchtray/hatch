@@ -2,8 +2,9 @@ import {
   createServer,
   CreateServerOptions,
 } from '@launchtray/hatch-server';
-import {ROOT_CONTAINER} from '@launchtray/hatch-util';
+import {ErrorReporter, Logger, ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {
+  createErrorReporterMiddleware,
   createNavMiddleware,
   createSagaForWebAppManagers,
   navActions,
@@ -32,6 +33,8 @@ interface ClientRenderRequestContext {
   composition: WebCommonComposition;
   stateOnly?: boolean;
   prettify: boolean;
+  logger: Logger;
+  errorReporter: ErrorReporter;
 }
 
 let assets: any;
@@ -43,11 +46,10 @@ syncLoadAssets();
 
 const renderClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
   const clientContainer = ROOT_CONTAINER.createChildContainer();
-  const {composition} = requestContext;
-  const {logger} = composition;
+  const {composition, logger, errorReporter} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
   const {navMiddleware, location} = createNavMiddleware(requestContext.requestURL);
-  const middleware = applyMiddleware(sagaMiddleware, navMiddleware);
+  const middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(errorReporter));
   const store = createStore(composition.createRootReducer(), middleware);
 
   const webAppManagers = composition.webAppManagers ?? [];
@@ -126,7 +128,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
-  createServer(options, (server, composition) => {
+  createServer(options, (server, composition, logger, errorReporter) => {
     server
       .disable('x-powered-by')
       .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
@@ -143,7 +145,9 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
           composition,
           requestURL: req.url,
           stateOnly,
-          prettify
+          prettify,
+          logger,
+          errorReporter,
         };
         renderClient(requestContext).then((body) => {
           res.status(200).send(body);

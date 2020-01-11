@@ -10,6 +10,9 @@ dependencies:
   '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz'
   '@rush-temp/hatch-web-server': 'file:projects/hatch-web-server.tgz'
+  '@sentry/browser': 5.11.0
+  '@sentry/node': 5.11.0
+  '@sentry/types': 5.11.0
   '@types/chromedriver': 2.38.0
   '@types/express': 4.17.2
   '@types/express-serve-static-core': 4.17.1
@@ -1177,6 +1180,92 @@ packages:
     dev: false
     resolution:
       integrity: sha512-afmTuJrylUU/0OtqzaRkbyYFFNgCF73Bvel/sw90pvGrWIZ+vyoIJqA6eMSoA6+nb443kTmulmBtC9NerXboNg==
+  /@sentry/apm/5.11.0:
+    dependencies:
+      '@sentry/hub': 5.11.0
+      '@sentry/minimal': 5.11.0
+      '@sentry/types': 5.11.0
+      '@sentry/utils': 5.11.0
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-Eb/xsw5V8Cl80XRy2Pgknj121WlPVlbZ2huiQUcVm48+elg9k2H8FxK2mTyL/A26QZvQFgxAJ+ASVrE+Nff3NA==
+  /@sentry/browser/5.11.0:
+    dependencies:
+      '@sentry/core': 5.11.0
+      '@sentry/types': 5.11.0
+      '@sentry/utils': 5.11.0
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-+POFe768M6de+y6IK1jB+zXXpSPSekQ47retE5YLuGwdI5vBgB7V7/Zcv++Vrr5TR+TOwBxNQEuq7Z/bySeksw==
+  /@sentry/core/5.11.0:
+    dependencies:
+      '@sentry/hub': 5.11.0
+      '@sentry/minimal': 5.11.0
+      '@sentry/types': 5.11.0
+      '@sentry/utils': 5.11.0
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-bofpzY5Sgcrq69eg1iA13kGJqWia4s/jVOB3DCU3rPUKGHVL8hh9CjrIho1C0XygQxjuPAJznOj0cCaRxD1vJQ==
+  /@sentry/hub/5.11.0:
+    dependencies:
+      '@sentry/types': 5.11.0
+      '@sentry/utils': 5.11.0
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-ZtCcbq3BLkQo/y07amvP21ZjmL7up/fD1032XrA+44U7M1d2w+CDCVRWcCJGK/otzPz7cw8yc5oS4Cn68wLVxw==
+  /@sentry/minimal/5.11.0:
+    dependencies:
+      '@sentry/hub': 5.11.0
+      '@sentry/types': 5.11.0
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-fplz8sCmYE9Hdm+qnoATls5FPKjVyXcCuav9UKFLV6L+MAPjWVINbHFPBcYAmR5bjK4/Otfi1SPCBe1MQT/FtA==
+  /@sentry/node/5.11.0:
+    dependencies:
+      '@sentry/apm': 5.11.0
+      '@sentry/core': 5.11.0
+      '@sentry/hub': 5.11.0
+      '@sentry/types': 5.11.0
+      '@sentry/utils': 5.11.0
+      cookie: 0.3.1
+      https-proxy-agent: 4.0.0
+      lru_map: 0.3.3
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-WgcNTEDqud9eD2tT/2/MXmVUngivMeYmzVSUrRG05C7k9HiXwMr2v7H7HCMumlCLAqflr2qAsGa8tZa/nR+ZHw==
+  /@sentry/types/5.11.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-1Uhycpmeo1ZK2GLvrtwZhTwIodJHcyIS6bn+t4IMkN9MFoo6ktbAfhvexBDW/IDtdLlCGJbfm8nIZerxy0QUpg==
+  /@sentry/utils/5.11.0:
+    dependencies:
+      '@sentry/types': 5.11.0
+      tslib: 1.10.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-84MNM08ANmda/tWMBCCb9tga0b4ZD7tSo0i20RJalkdLk9zJmmepKw+sA5PyztO/YxkqAt9KijSmtIafd0LlOQ==
   /@types/babel__core/7.1.3:
     dependencies:
       '@babel/parser': 7.7.7
@@ -1610,6 +1699,12 @@ packages:
       node: '>= 4.0.0'
     resolution:
       integrity: sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
+  /agent-base/5.1.1:
+    dev: false
+    engines:
+      node: '>= 6.0.0'
+    resolution:
+      integrity: sha512-TMeqbNl2fMW0nMjTEPOwe3J/PRFP4vqeoNuQMG0HlMrtm5QxKqdvAkZ1pRBQ/ulIyDD5Yq0nJ7YbdD8ey0TO3g==
   /ajv-errors/1.0.1/ajv@6.10.2:
     dependencies:
       ajv: 6.10.2
@@ -2921,6 +3016,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-4wOogrNCzD7oylE6eZmXNNqzriw=
+  /cookie/0.3.1:
+    dev: false
+    engines:
+      node: '>= 0.6'
+    resolution:
+      integrity: sha1-5+Ch+e9DtMi6klxcWpboBtFoc7s=
   /cookie/0.4.0:
     dev: false
     engines:
@@ -4961,6 +5062,15 @@ packages:
       node: '>= 4.5.0'
     resolution:
       integrity: sha512-y4jAxNEihqvBI5F3SaO2rtsjIOnnNA8sEbuiP+UhJZJHeM2NRm6c09ax2tgqme+SgUUvjao2fJXF4h3D6Cb2HQ==
+  /https-proxy-agent/4.0.0:
+    dependencies:
+      agent-base: 5.1.1
+      debug: 4.1.1
+    dev: false
+    engines:
+      node: '>= 6.0.0'
+    resolution:
+      integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==
   /hyphenate-style-name/1.0.3:
     dev: false
     resolution:
@@ -6773,6 +6883,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
+  /lru_map/0.3.3:
+    dev: false
+    resolution:
+      integrity: sha1-tcg1G5Rky9dQM1p5ZQoOwOVhGN0=
   /make-dir/2.1.0:
     dependencies:
       pify: 4.0.1
@@ -11509,6 +11623,9 @@ packages:
     dependencies:
       '@babel/core': 7.7.7
       '@redux-saga/core': 1.1.3
+      '@sentry/browser': 5.11.0
+      '@sentry/node': 5.11.0
+      '@sentry/types': 5.11.0
       '@types/chromedriver': 2.38.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
@@ -11555,7 +11672,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-bjRWxMI91hVCz8uZjmABzT2C42TV1/tLs6Pv50Pk/Hl+aQU7XUsexxoYCBujk1rpMX4l+j1/4J+awVI1Zz+xlw==
+      integrity: sha512-6lAhgZwChAbqdQ+NqCQaBqNbUZ4CvfpPjMhlFErnbLymiwXpNekBQHNrAENu4cFNFzr4hevMSHWdfr1zwCos4A==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -11583,16 +11700,19 @@ packages:
     version: 0.0.0
   'file:projects/hatch-server.tgz':
     dependencies:
+      '@sentry/node': 5.11.0
+      '@sentry/types': 5.11.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
       '@types/node': 13.1.6
       '@types/webpack-env': 1.15.0
       express: 4.17.1
       winston: 3.2.1
+      winston-transport: 4.3.0
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-8kpG7vGF12QfguSJpqVKgXKg0QEn3wlsT1jL6/NVZVPgZNs8ufy+/gUoiUNJsjWdBxfflzMl66MRRcEPq507Jw==
+      integrity: sha512-rAMKSopDUIQ74VnXKy4KQc4ppl7Q2ruvNKsEpzgGgHBpnZ5+kIMM5Kf1rnKoLlgEHV/7YFEth/Z68Oc7vLeUCQ==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -11609,6 +11729,7 @@ packages:
     version: 0.0.0
   'file:projects/hatch-util.tgz':
     dependencies:
+      '@sentry/types': 5.11.0
       reflect-metadata: 0.1.13
       rimraf: 3.0.0
       tsyringe: 4.0.1
@@ -11616,12 +11737,14 @@ packages:
     dev: false
     name: '@rush-temp/hatch-util'
     resolution:
-      integrity: sha512-BZBrR2SiFZHoBU1lBHZkYfl2KD5x32u2YGKx1tldfUdpTyGNsSmvRI+BxYZTdCn2+U/tK4W1+lEm7A4o4plECA==
+      integrity: sha512-55ld1bzdZrDzlo/8pVsFNLLrfn2LNBBDEAeQ/dtb3oaZlT5c46Wo0e4kz2jF7qMJamNh74wb0iXqI8J75W/QvQ==
       tarball: 'file:projects/hatch-util.tgz'
     version: 0.0.0
   'file:projects/hatch-web-client.tgz':
     dependencies:
       '@redux-saga/core': 1.1.3
+      '@sentry/browser': 5.11.0
+      '@sentry/types': 5.11.0
       '@types/node': 12.12.24
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
@@ -11645,7 +11768,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-Tosldwjge5IojNyUhA/0TVmLczV7NhCrofTEhBGxgEwNfz2u0N1MnevgWEmL05Mh5AY90qRUq9yJBINLYejEAQ==
+      integrity: sha512-PKWPyxX8W5wIkUlZ15FTIA/8l8GDfjbqMkioIK1X3OBPyeWpID3acq9W0/b/o4o9i7/BkIi7wYoMFPC/0FaJCg==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -11726,6 +11849,9 @@ specifiers:
   '@rush-temp/hatch-web': 'file:./projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:./projects/hatch-web-client.tgz'
   '@rush-temp/hatch-web-server': 'file:./projects/hatch-web-server.tgz'
+  '@sentry/browser': ^5
+  '@sentry/node': ^5
+  '@sentry/types': ^5
   '@types/chromedriver': ^2.38.0
   '@types/express': ^4
   '@types/express-serve-static-core': ^4

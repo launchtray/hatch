@@ -18,5 +18,8 @@
   "devDependencies": {
     "typescript": "^3.7.3",
     "rimraf": "3.0.0"
+  },
+  "peerDependencies": {
+    "@sentry/types": "^5"
   }
 }

@@ -8,7 +8,7 @@
     $ brew link --force --overwrite node@12
     ```
 
-2. Install Rush:
+2. Install [Rush](https://rushjs.io/pages/intro/welcome/):
 
     ```
     $ npm install -g @microsoft/rush
@@ -17,19 +17,19 @@
 3. Install package dependencies:
 
     ```
-    rush install
+    $ rush install
     ```
     
 4. Build hatch libraries:
 
     ```
-    rush build
+    $ rush build
     ```
     
-4. Run example app:
+4. Run an example app:
 
     ```
-    cd examples/example-web
-    rushx start
+    $ cd examples/example-web
+    $ rushx start
     ```
     

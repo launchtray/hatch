@@ -1,0 +1,22 @@
+{
+  "name": "@launchtray/hatch-cli",
+  "entries": [
+    {
+      "version": "0.1.1",
+      "tag": "@launchtray/hatch-cli_v0.1.1",
+      "date": "Tue, 14 Jan 2020 09:17:35 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Initial release"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1` to `^0.1.1`"
+          }
+        ]
+      }
+    }
+  ]
+}

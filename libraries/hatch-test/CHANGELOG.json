@@ -1,0 +1,17 @@
+{
+  "name": "@launchtray/hatch-test",
+  "entries": [
+    {
+      "version": "0.1.1",
+      "tag": "@launchtray/hatch-test_v0.1.1",
+      "date": "Tue, 14 Jan 2020 09:17:35 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Initial release"
+          }
+        ]
+      }
+    }
+  ]
+}

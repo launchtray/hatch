@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "@types/express-serve-static-core": "^4",
     "@types/node": "^13",
     "@types/webpack-env": "^1",
-    "@launchtray/hatch-util": "^0.1",
+    "@launchtray/hatch-util": "^0.1.1",
     "express": "^4",
     "winston": "^3",
     "@sentry/node": "^5",

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-util",
   "entries": [
     {
+      "version": "0.1.2",
+      "tag": "@launchtray/hatch-util_v0.1.2",
+      "date": "Tue, 14 Jan 2020 09:51:30 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bug fixes following initial test release"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.1",
       "tag": "@launchtray/hatch-util_v0.1.1",
       "date": "Tue, 14 Jan 2020 09:17:35 GMT",

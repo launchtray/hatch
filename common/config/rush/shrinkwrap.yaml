@@ -20,6 +20,7 @@ dependencies:
   '@types/fs-extra': 8.0.1
   '@types/history': 4.7.3
   '@types/jest': 24.0.25
+  '@types/node': 12.12.24
   '@types/react': 16.9.17
   '@types/react-dom': 16.9.4
   '@types/react-redux': 7.1.5
@@ -1381,13 +1382,13 @@ packages:
   /@types/body-parser/1.17.1:
     dependencies:
       '@types/connect': 3.4.33
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
     dev: false
     resolution:
       integrity: sha512-RoX2EZjMiFMjZh9lmYrwgoP9RTpAjSHiJxdp4oidAQVO02T7HER3xj9UKue5534ULWeqVEkujhWcyvUce+d68w==
   /@types/chromedriver/2.38.0:
     dependencies:
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
     dev: false
     resolution:
       integrity: sha512-vcPGkZt1y2YVXKAY8SwCvU0u9mgw9+7tBV4HGb0YX/6bu1WXbb61bf8Y/N+xNCYwEj/Ug1UAMnhCcsSohXzRXw==
@@ -1397,7 +1398,7 @@ packages:
       integrity: sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
   /@types/connect/3.4.33:
     dependencies:
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
     dev: false
     resolution:
       integrity: sha512-2+FrkXY4zllzTNfJth7jOqEHC+enpLeGslEhpnTAkg21GkRrWV4SsAtqchtT4YS9/nODBU2/ZfsBY2X4J/dX7A==
@@ -1411,7 +1412,7 @@ packages:
       integrity: sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
   /@types/express-serve-static-core/4.17.1:
     dependencies:
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
       '@types/range-parser': 1.2.3
     dev: false
     resolution:
@@ -1426,7 +1427,7 @@ packages:
       integrity: sha512-5mHFNyavtLoJmnusB8OKJ5bshSzw+qkMIBAobLrIM48HJvunFva9mOa6aBwh64lBFyNwBbs0xiEFuj4eU/NjCA==
   /@types/fs-extra/8.0.1:
     dependencies:
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
     dev: false
     resolution:
       integrity: sha512-J00cVDALmi/hJOYsunyT52Hva5TnJeKP5yd1r+mH/ZU0mbYZflR0Z5kw5kITtKTRYMhm1JMClOFYdHnQszEvqw==
@@ -1434,7 +1435,7 @@ packages:
     dependencies:
       '@types/events': 3.0.0
       '@types/minimatch': 3.0.3
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
     dev: false
     resolution:
       integrity: sha512-1Bh06cbWJUHMC97acuD6UMG29nMt0Aqz1vF3guLfG+kHHJhy3AyohZFFxYk2f7Q1SQIrNwvncxAE0N/9s70F2w==
@@ -1484,10 +1485,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-1Ciqv9pqwVtW6FsIUKSZNB82E5Cu1I2bBTj1xuIHXLe/1zYLl3956Nbhg2MzSYHVfl9/rmanjbQIb7LibfCnug==
-  /@types/node/13.1.6:
-    dev: false
-    resolution:
-      integrity: sha512-Jg1F+bmxcpENHP23sVKkNuU3uaxPnsBMW0cLjleiikFKomJQbsn0Cqk2yDvQArqzZN6ABfBkZ0To7pQ8sLdWDg==
   /@types/prop-types/15.7.3:
     dev: false
     resolution:
@@ -1566,7 +1563,7 @@ packages:
   /@types/superagent/4.1.4:
     dependencies:
       '@types/cookiejar': 2.1.1
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
     dev: false
     resolution:
       integrity: sha512-SRH2q6/5/nhOkAuLXm3azRGjBYpoKCZWh138Rt1AxSIyE6/1b9uClIH2V+JfyDtjIvgr5yQqYgNUmdpbneJoZQ==
@@ -12064,7 +12061,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-/HRoKeLBwf0XmzmsAMYSJXlFF8eEqmho1rc9NbZcYToGlmjrr+DmXdUuD0El5sdxk9LSWQyS7iIA1kleQVdUFg==
+      integrity: sha512-6R6QNInRvT2ggD9LKXKVBPwW4h01k9xRUWAxDG3DBsU1EiFgrmnO2Cv1Sq1aHYuaJ1cEKZUNLVueHdOE11KFJQ==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -12084,7 +12081,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-2x6EF8KotUj9hBDuquq1UBxkmmXljPBJMgyOkW+1kyv8MRsUqLYUg2dP8+tAPndW9+dnSkLQsJtpxqub8ITYHg==
+      integrity: sha512-T/xwG7n3QjHa9pwtvwLHg3WKGZXGyWnr24qsdt482WKG36uALA/qB8+Brfael377GnDSJay6rPc6AYpIemgK3w==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -12107,7 +12104,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-4JjR0yFPE3kIDDzK0jkXqJedHKwWDC8ngCz8G0OnaIJFP0XFETsMzf6ncwZbssi17PZmWdGIDvQ3rzSKzCr4jw==
+      integrity: sha512-jI0StguWyCvTCPUO3KAqec1qvGnMqEDvm6UHtIXun6QalnKVmnTcK4Z1GIgYCqX2uQ92llZGC8FXJlc52aiTrQ==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -12116,7 +12113,7 @@ packages:
       '@sentry/types': 5.11.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
-      '@types/node': 13.1.6
+      '@types/node': 12.12.24
       '@types/webpack-env': 1.15.0
       express: 4.17.1
       winston: 3.2.1
@@ -12124,7 +12121,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-X+Dw4G+3NdUJnY4Cti/q3KwoK74y4kSxe6+39hUsc4EzeIjfHNCqSr+WGX2EUo77NMzKApr4/ZDbKEwSO3skJg==
+      integrity: sha512-h3fzFdy32LIDHEY1bcqI6h7WLI5b+MgGp7oQ8fDOZ4brRP0fHLR+CUpQ8g5YuBIhHa7CBYN3qijAAjkrlfUpYQ==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -12180,7 +12177,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-7i3enARtIixoZK52msLFjBhUHNtG+316OuMbd3RUsSD3tFsLPEPfPeqnok/Hk2KSCv+2UbaakU9Qsqh20cqcpA==
+      integrity: sha512-JtA1NMfI2hlfgRJkN/hHl4oiiUBKCMw0f8+PFhkkK99en84ooAk0G5yedm4xSclOrJUCC2NNZuMVgxrC+TRnEw==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -12213,7 +12210,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-UWJlcETTT8nwfas1Xbuj+kmquMR6hrk8Olp5h+MA1evp3q984ZMWsCq3qhNWxuMX85wl5pruNzCIiplDouc3zw==
+      integrity: sha512-CaWWiyaUxbPnZQzdzIScms/ZWkCNbg4JTsoWUPbNUbntKCMGysqlU55UN/oCPb6BCZnXEvo6Bln+FTOZJB4LGQ==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
@@ -12243,7 +12240,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-pjjdRzuGHFUJVEFB53IXtKDm3rSApluPYrYFpUaSYtsexlbpBUiEuRrmg9nWEWjrJEGMfMFAExUiJYcoJIQlmA==
+      integrity: sha512-dFZ82AG747NvQ6skiyC/7R4twBQNliIpI2Psjbncx+rgJrhRcJeQ81ApM+4m5zOZsdH08nAxuwQw4fnhpCPoeg==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: 'https://registry.npmjs.org/'
@@ -12271,6 +12268,7 @@ specifiers:
   '@types/fs-extra': ^8
   '@types/history': ^4.7.3
   '@types/jest': ^24.0.22
+  '@types/node': ^12
   '@types/react': ^16
   '@types/react-dom': ^16
   '@types/react-redux': ^7

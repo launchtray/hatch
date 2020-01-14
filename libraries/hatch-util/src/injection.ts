@@ -102,6 +102,14 @@ const isTokenDescriptor = (
 
 export interface DependencyContainer extends TSyringeDependencyContainer {}
 
+const resolveAll = (container: DependencyContainer, token: InjectionToken<any>) => {
+  try {
+    return container.resolveAll(token)
+  } catch {
+    return [];
+  }
+};
+
 // This is adapted from tsyringe's autoInjectable
 export const resolveArgs = (
   container: DependencyContainer,
@@ -116,7 +124,7 @@ export const resolveArgs = (
         try {
           if (isTokenDescriptor(type)) {
             return type.multiple
-              ? container.resolveAll(type.token)
+              ? resolveAll(container, type.token)
               : container.resolve(type.token);
           }
           return container.resolve(type);

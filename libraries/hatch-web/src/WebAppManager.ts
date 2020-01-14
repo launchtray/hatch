@@ -21,7 +21,11 @@ export const registerWebAppManagers = (container: DependencyContainer, ...webApp
 };
 
 export const resolveWebAppManagers = (container: DependencyContainer): any[] => {
-  return container.resolveAll<Class<any>>(webAppManagerKey);
+  try {
+    return container.resolveAll<Class<any>>(webAppManagerKey);
+  } catch {
+    return [];
+  }
 };
 
 export const onLocationChange = <Params extends { [K in keyof Params]?: string }>(

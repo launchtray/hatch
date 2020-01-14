@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-server",
+      "comment": "Initial release",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-server",
+  "email": "kiltyj@gmail.com"
+}

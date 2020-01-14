@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "comment": "Initial release",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-razzle-config",
+  "email": "kiltyj@gmail.com"
+}

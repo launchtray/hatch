@@ -16,6 +16,7 @@ import {Logger} from './Logger';
 import {NON_LOGGER, NonLogger} from './NonLogger';
 import {SentryMonitor} from './SentryMonitor';
 import SentryReporter from './SentryReporter';
+import CompletableFuture from './CompletableFuture';
 
 export {
   delay,
@@ -35,4 +36,5 @@ export {
   ErrorReporter,
   SentryMonitor,
   SentryReporter,
+  CompletableFuture,
 };

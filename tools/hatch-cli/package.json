@@ -1,0 +1,31 @@
+{
+  "name": "@launchtray/hatch-cli",
+  "version": "0.1.0",
+  "description": "",
+  "bin": {
+    "hatch": "./dist/index.js"
+  },
+  "types": "dist/index.d.js",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "dependencies": {
+    "@launchtray/hatch-util": "^0.1",
+    "@sentry/types": "^5",
+    "@types/fs-extra": "^8",
+    "@types/node": "^12",
+    "@types/tmp": "^0.1",
+    "ansi-escapes": "^4",
+    "chalk": "^3",
+    "commander": "^4",
+    "fs-extra": "^8",
+    "inquirer": "^7",
+    "ora": "^4",
+    "replace-in-file": "^5",
+    "tmp": "^0.1"
+  }
+}

@@ -385,6 +385,10 @@
     {
       "packageName": "@launchtray/example-web",
       "projectFolder": "examples/example-web"
+    },
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "projectFolder": "tools/hatch-cli"
     }
   ]
 }

@@ -22,6 +22,8 @@
       <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web-server/dist" />
       <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web/.rush" />
       <excludeFolder url="file://$MODULE_DIR$/libraries/hatch-web/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/hatch-cli/.rush" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/hatch-cli/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

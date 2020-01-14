@@ -1,0 +1,1 @@
+# HATCH_CLI_TEMPLATE_VAR_projectName

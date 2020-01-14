@@ -351,44 +351,53 @@
     //   // "versionPolicyName": ""
     // },
     {
-      "packageName": "@launchtray/hatch-util",
-      "projectFolder": "libraries/hatch-util"
-    },
-    {
-      "packageName": "@launchtray/hatch-server",
-      "projectFolder": "libraries/hatch-server"
-    },
-    {
-      "packageName": "@launchtray/hatch-razzle-config",
-      "projectFolder": "libraries/hatch-razzle-config"
-    },
-    {
-      "packageName": "@launchtray/hatch-server-middleware",
-      "projectFolder": "libraries/hatch-server-middleware"
-    },
-    {
-      "packageName": "@launchtray/hatch-test",
-      "projectFolder": "libraries/hatch-test"
-    },
-    {
-      "packageName": "@launchtray/hatch-web",
-      "projectFolder": "libraries/hatch-web"
-    },
-    {
-      "packageName": "@launchtray/hatch-web-client",
-      "projectFolder": "libraries/hatch-web-client"
-    },
-    {
-      "packageName": "@launchtray/hatch-web-server",
-      "projectFolder": "libraries/hatch-web-server"
-    },
-    {
       "packageName": "@launchtray/example-web",
       "projectFolder": "examples/example-web"
     },
     {
+      "packageName": "@launchtray/hatch-util",
+      "projectFolder": "libraries/hatch-util",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-server",
+      "projectFolder": "libraries/hatch-server",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "projectFolder": "libraries/hatch-razzle-config",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "projectFolder": "libraries/hatch-server-middleware",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-test",
+      "projectFolder": "libraries/hatch-test",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-web",
+      "projectFolder": "libraries/hatch-web",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-web-client",
+      "projectFolder": "libraries/hatch-web-client",
+      "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-web-server",
+      "projectFolder": "libraries/hatch-web-server",
+      "shouldPublish": true
+    },
+    {
       "packageName": "@launchtray/hatch-cli",
-      "projectFolder": "tools/hatch-cli"
+      "projectFolder": "tools/hatch-cli",
+      "shouldPublish": true
     }
   ]
 }

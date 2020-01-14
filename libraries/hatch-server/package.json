@@ -5,6 +5,7 @@
   "types": "dist/index.d.js",
   "license": "MIT",
   "scripts": {
+    "prepare": "rimraf dist && tsc",
     "build": "rimraf dist && tsc"
   },
   "publishConfig": {

@@ -11106,10 +11106,11 @@ packages:
       typescript: ^2.2.0 || ^3.0.0
     resolution:
       integrity: sha512-WlSXE+J2vY/VPgIcqQuijMQiel+UtmXS+4nvK4ZzlDiqBfXse8FAvkNnTcYhnQyOTW5KFM+uRRGXxYhFpuBc6w==
-  /tslint-eslint-rules/5.4.0/typescript@3.7.4:
+  /tslint-eslint-rules/5.4.0/tslint@5.20.1+typescript@3.7.4:
     dependencies:
       doctrine: 0.7.2
       tslib: 1.9.0
+      tslint: /tslint/5.20.1/typescript@3.7.4
       tsutils: /tsutils/3.17.1/typescript@3.7.4
       typescript: 3.7.4
     dev: false
@@ -11128,8 +11129,9 @@ packages:
       typescript: '>=2.8.0'
     resolution:
       integrity: sha512-Y7CbFn09X7Mpg6rc7t/WPbmjx9xPI8p1RsQyiGCLWgDR6sh3+IBSlT+bEkc0PSZcWwClOkqq2wPsID8Vep6szQ==
-  /tslint-react/4.1.0/typescript@3.7.4:
+  /tslint-react/4.1.0/tslint@5.20.1+typescript@3.7.4:
     dependencies:
+      tslint: /tslint/5.20.1/typescript@3.7.4
       tsutils: /tsutils/3.17.1/typescript@3.7.4
       typescript: 3.7.4
     dev: false
@@ -11162,10 +11164,45 @@ packages:
       typescript: '>=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >=3.0.0-dev || >= 3.1.0-dev || >= 3.2.0-dev'
     resolution:
       integrity: sha512-EcMxhzCFt8k+/UP5r8waCf/lzmeSyVlqxqMEDQE7rWYiQky8KpIBz1JAoYXfROHrPZ1XXd43q8yQnULOLiBRQg==
+  /tslint/5.20.1/typescript@3.7.4:
+    dependencies:
+      '@babel/code-frame': 7.8.3
+      builtin-modules: 1.1.1
+      chalk: 2.4.2
+      commander: 2.20.3
+      diff: 4.0.2
+      glob: 7.1.6
+      js-yaml: 3.13.1
+      minimatch: 3.0.4
+      mkdirp: 0.5.1
+      resolve: 1.14.2
+      semver: 5.7.1
+      tslib: 1.10.0
+      tsutils: /tsutils/2.29.0/typescript@3.7.4
+      typescript: 3.7.4
+    dev: false
+    engines:
+      node: '>=4.8.0'
+    hasBin: true
+    id: registry.npmjs.org/tslint/5.20.1
+    peerDependencies:
+      typescript: '>=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >=3.0.0-dev || >= 3.1.0-dev || >= 3.2.0-dev'
+    resolution:
+      integrity: sha512-EcMxhzCFt8k+/UP5r8waCf/lzmeSyVlqxqMEDQE7rWYiQky8KpIBz1JAoYXfROHrPZ1XXd43q8yQnULOLiBRQg==
   /tsutils/2.29.0:
     dependencies:
       tslib: 1.10.0
     dev: false
+    peerDependencies:
+      typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >= 3.0.0-dev || >= 3.1.0-dev'
+    resolution:
+      integrity: sha512-g5JVHCIJwzfISaXpXE1qvNalca5Jwob6FjI4AoPlqMusJ6ftFE7IkkFoMhVLRgK+4Kx3gkzb8UZK5t5yTTvEmA==
+  /tsutils/2.29.0/typescript@3.7.4:
+    dependencies:
+      tslib: 1.10.0
+      typescript: 3.7.4
+    dev: false
+    id: registry.npmjs.org/tsutils/2.29.0
     peerDependencies:
       typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev || >=2.9.0-dev || >= 3.0.0-dev || >= 3.1.0-dev'
     resolution:
@@ -12052,8 +12089,9 @@ packages:
       superagent: 5.2.1
       supertest: 4.0.2
       ts-jest: /ts-jest/24.3.0/jest@24.9.0
-      tslint-eslint-rules: /tslint-eslint-rules/5.4.0/typescript@3.7.4
-      tslint-react: /tslint-react/4.1.0/typescript@3.7.4
+      tslint: /tslint/5.20.1/typescript@3.7.4
+      tslint-eslint-rules: /tslint-eslint-rules/5.4.0/tslint@5.20.1+typescript@3.7.4
+      tslint-react: /tslint-react/4.1.0/tslint@5.20.1+typescript@3.7.4
       typescript: 3.7.4
       webpack: 4.41.5
       winston: 3.2.1
@@ -12061,7 +12099,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-6R6QNInRvT2ggD9LKXKVBPwW4h01k9xRUWAxDG3DBsU1EiFgrmnO2Cv1Sq1aHYuaJ1cEKZUNLVueHdOE11KFJQ==
+      integrity: sha512-saDeBd+AP5xWQKb7NRcCmClTk6NDa6t4dZh9jWsyVgHN9tw02YxVQoA7wUsUSrLFBce5mZ6jcpFhOCJ7Hfx0ug==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -12081,7 +12119,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-T/xwG7n3QjHa9pwtvwLHg3WKGZXGyWnr24qsdt482WKG36uALA/qB8+Brfael377GnDSJay6rPc6AYpIemgK3w==
+      integrity: sha512-HQgAJ4NvfD0/MgnW7krhGqXdALMjCgihA0nxhwMV8h6tiV7Nn0E34NmyB3Re7yFn/v5SDCTve0HAJSarPrH1eQ==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -12121,7 +12159,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-h3fzFdy32LIDHEY1bcqI6h7WLI5b+MgGp7oQ8fDOZ4brRP0fHLR+CUpQ8g5YuBIhHa7CBYN3qijAAjkrlfUpYQ==
+      integrity: sha512-ao7O2uxt/Kgf/cjmsS+azE04FuWq1gHmwE+WOhQjDUOSoDBFXCJf211rJ3GiaF0qxJHJidQGI55ifM9i4haASQ==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -12240,7 +12278,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-dFZ82AG747NvQ6skiyC/7R4twBQNliIpI2Psjbncx+rgJrhRcJeQ81ApM+4m5zOZsdH08nAxuwQw4fnhpCPoeg==
+      integrity: sha512-IWHgy9zd9AqC4NXzYYuf9G8hw3Q8onCOg1R4uBxnIGxBhhMzduAsA8vdG9/NsobzW3ki3crzO7FqI38j8LEKLQ==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: 'https://registry.npmjs.org/'

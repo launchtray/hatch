@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.1.3",
+      "tag": "@launchtray/hatch-web_v0.1.3",
+      "date": "Tue, 14 Jan 2020 10:46:31 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added prepare script to trigger rebuild before publishing"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.2` to `^0.1.3`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.2",
       "tag": "@launchtray/hatch-web_v0.1.2",
       "date": "Tue, 14 Jan 2020 09:51:30 GMT",

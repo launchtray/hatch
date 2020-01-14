@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-test",
   "entries": [
     {
+      "version": "0.1.2",
+      "tag": "@launchtray/hatch-test_v0.1.2",
+      "date": "Tue, 14 Jan 2020 10:46:31 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added prepare script to trigger rebuild before publishing"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.1",
       "tag": "@launchtray/hatch-test_v0.1.1",
       "date": "Tue, 14 Jan 2020 09:17:35 GMT",

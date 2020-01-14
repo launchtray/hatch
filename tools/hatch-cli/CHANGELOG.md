@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Tue, 14 Jan 2020 09:51:30 GMT and should not be manually modified.
+This log was last generated on Tue, 14 Jan 2020 10:04:12 GMT and should not be manually modified.
+
+## 0.1.3
+Tue, 14 Jan 2020 10:04:12 GMT
+
+### Patches
+
+- Added tslint to template webapp
 
 ## 0.1.2
 Tue, 14 Jan 2020 09:51:30 GMT

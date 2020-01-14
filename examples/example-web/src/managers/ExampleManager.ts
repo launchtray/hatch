@@ -40,6 +40,11 @@ export default class ExampleManager {
     yield effects.put({type: 'TEST_ACTION.handleEveryLocationChange'});
   }
 
+  @onLocationChange({path: '/hi'})
+  public async prepHI(context: LocationChangeContext<{route: string}>) {
+    this.logger.info('HELLO, WORLD!');
+  }
+
   @onLocationChange({path: '/:route'})
   public async prepRoute(context: LocationChangeContext<{route: string}>) {
     const route = context.pathMatch.params.route;

@@ -29,6 +29,14 @@ export const convertToLocation = (historyLocation: HistoryLocation): Location =>
   };
 };
 
+export const selectLocationFromLocationChangeAction = (action: AnyAction) => {
+  return convertToLocation(action.payload.location);
+};
+
+export const selectFirstRenderingFromLocationChangeAction = (action: AnyAction) => {
+  return action.payload.isFirstRendering;
+};
+
 interface NavActionDef<P> {
   type: string;
   actionCreator(...args: any[]): any;

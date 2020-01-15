@@ -24,6 +24,7 @@ import {applyMiddleware, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import serialize, {SerializeJSOptions} from 'serialize-javascript';
 import {WebServerComposition} from './WebServerComposer';
+import {runtimeConfig} from "./config";
 
 const SSR_TIMEOUT_MS = 5000;
 
@@ -120,6 +121,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       <div id="root">${html}</div>
       <script>
         window.__PRELOADED_STATE__ = ${serialize(store.getState())}
+        window.__ENV__ = ${serialize(runtimeConfig)}
       </script>
     </body>
     </html>`

@@ -67,7 +67,7 @@ if (module.hot) {
   }
 }
 
-const dsn: string | undefined = process.env.SENTRY_DSN;
+const dsn: string | undefined = (window as any).__ENV__.SENTRY_DSN;
 
 const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Tue, 14 Jan 2020 10:46:31 GMT and should not be manually modified.
+This log was last generated on Thu, 16 Jan 2020 06:11:00 GMT and should not be manually modified.
+
+## 0.1.5
+Thu, 16 Jan 2020 06:11:00 GMT
+
+### Patches
+
+- Fix server-side hot module reloading
 
 ## 0.1.4
 Tue, 14 Jan 2020 10:46:31 GMT

@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.1.2",
-    "@launchtray/hatch-razzle-config": "^0.1.1",
+    "@launchtray/hatch-razzle-config": "^0.1.2",
     "@types/chromedriver": "^2.38.0",
     "@types/selenium-webdriver": "^4.0.5",
     "@types/supertest": "^2.0.8",

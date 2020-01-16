@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.1.5",
+      "tag": "@launchtray/hatch-cli_v0.1.5",
+      "date": "Thu, 16 Jan 2020 06:11:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix server-side hot module reloading"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.4",
       "tag": "@launchtray/hatch-cli_v0.1.4",
       "date": "Tue, 14 Jan 2020 10:46:31 GMT",

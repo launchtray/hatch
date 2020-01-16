@@ -71,7 +71,8 @@
     "webpack": "^4",
     "react-error-overlay": "^6",
     "razzle": "^3",
-    "@babel/core": "^7"
+    "@babel/core": "^7",
+    "razzle-dev-utils": "^3.0.0"
   },
   "jest": {
     "transform": {

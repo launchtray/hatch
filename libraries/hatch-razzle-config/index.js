@@ -14,7 +14,7 @@ module.exports = {
       }
       config.node.fs = 'empty'; // Prevent winston from trying to load fs on the client.
     } else {
-      config.entry = [resolveApp('src/server')]
+      config.entry[config.entry.length - 1] = resolveApp('src/server');
     }
     // Since RN web takes care of CSS, we should remove it for a #perf boost
     config.module.rules = config.module.rules

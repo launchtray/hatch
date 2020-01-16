@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Tue, 14 Jan 2020 10:46:31 GMT and should not be manually modified.
+This log was last generated on Tue, 14 Jan 2020 23:53:51 GMT and should not be manually modified.
+
+## 0.1.4
+Tue, 14 Jan 2020 23:53:51 GMT
+
+### Patches
+
+- Fixed location change handlers
 
 ## 0.1.3
 Tue, 14 Jan 2020 10:46:31 GMT

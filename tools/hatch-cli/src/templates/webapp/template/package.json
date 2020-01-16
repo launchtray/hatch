@@ -72,7 +72,8 @@
     "react-error-overlay": "^6",
     "razzle": "^3",
     "@babel/core": "^7",
-    "selenium-webdriver": "^4.0.0-alpha.5"
+    "selenium-webdriver": "^4.0.0-alpha.5",
+    "razzle-dev-utils": "^3.0.0"
   },
   "jest": {
     "transform": {

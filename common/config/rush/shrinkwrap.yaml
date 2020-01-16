@@ -11,19 +11,19 @@ dependencies:
   '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz'
   '@rush-temp/hatch-web-server': 'file:projects/hatch-web-server.tgz'
-  '@sentry/browser': 5.11.0
-  '@sentry/node': 5.11.0
+  '@sentry/browser': 5.11.1
+  '@sentry/node': 5.11.1
   '@sentry/types': 5.11.0
   '@types/chromedriver': 2.38.0
   '@types/express': 4.17.2
   '@types/express-serve-static-core': 4.17.1
   '@types/fs-extra': 8.0.1
-  '@types/history': 4.7.3
-  '@types/jest': 24.0.25
+  '@types/history': 4.7.4
+  '@types/jest': 24.9.0
   '@types/node': 12.12.24
   '@types/react': 16.9.17
   '@types/react-dom': 16.9.4
-  '@types/react-redux': 7.1.5
+  '@types/react-redux': 7.1.6
   '@types/react-router': 5.1.4
   '@types/react-router-dom': 5.1.3
   '@types/selenium-webdriver': 4.0.6
@@ -48,6 +48,7 @@ dependencies:
   ora: 4.0.3
   prop-types: 15.7.2
   razzle: 3.0.0
+  razzle-dev-utils: 3.0.0
   razzle-plugin-typescript: 3.0.0
   react: 16.12.0
   react-dom: 16.12.0
@@ -1264,68 +1265,69 @@ packages:
     dev: false
     resolution:
       integrity: sha512-afmTuJrylUU/0OtqzaRkbyYFFNgCF73Bvel/sw90pvGrWIZ+vyoIJqA6eMSoA6+nb443kTmulmBtC9NerXboNg==
-  /@sentry/apm/5.11.0:
+  /@sentry/apm/5.11.1:
     dependencies:
-      '@sentry/hub': 5.11.0
-      '@sentry/minimal': 5.11.0
+      '@sentry/browser': 5.11.1
+      '@sentry/hub': 5.11.1
+      '@sentry/minimal': 5.11.1
       '@sentry/types': 5.11.0
-      '@sentry/utils': 5.11.0
+      '@sentry/utils': 5.11.1
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-Eb/xsw5V8Cl80XRy2Pgknj121WlPVlbZ2huiQUcVm48+elg9k2H8FxK2mTyL/A26QZvQFgxAJ+ASVrE+Nff3NA==
-  /@sentry/browser/5.11.0:
+      integrity: sha512-4iZH11p/7w9IMLT9hqNY1+EqLESltiIoF6/YsbpK93sXWGEs8VQ83IuvGuKWxajvHgDmj4ND0TxIliTsYqTqFw==
+  /@sentry/browser/5.11.1:
     dependencies:
-      '@sentry/core': 5.11.0
+      '@sentry/core': 5.11.1
       '@sentry/types': 5.11.0
-      '@sentry/utils': 5.11.0
+      '@sentry/utils': 5.11.1
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-+POFe768M6de+y6IK1jB+zXXpSPSekQ47retE5YLuGwdI5vBgB7V7/Zcv++Vrr5TR+TOwBxNQEuq7Z/bySeksw==
-  /@sentry/core/5.11.0:
+      integrity: sha512-oqOX/otmuP92DEGRyZeBuQokXdeT9HQRxH73oqIURXXNLMP3PWJALSb4HtT4AftEt/2ROGobZLuA4TaID6My/Q==
+  /@sentry/core/5.11.1:
     dependencies:
-      '@sentry/hub': 5.11.0
-      '@sentry/minimal': 5.11.0
+      '@sentry/hub': 5.11.1
+      '@sentry/minimal': 5.11.1
       '@sentry/types': 5.11.0
-      '@sentry/utils': 5.11.0
+      '@sentry/utils': 5.11.1
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-bofpzY5Sgcrq69eg1iA13kGJqWia4s/jVOB3DCU3rPUKGHVL8hh9CjrIho1C0XygQxjuPAJznOj0cCaRxD1vJQ==
-  /@sentry/hub/5.11.0:
+      integrity: sha512-BpvPosVNT20Xso4gAV54Lu3KqDmD20vO63HYwbNdST5LUi8oYV4JhvOkoBraPEM2cbBwQvwVcFdeEYKk4tin9A==
+  /@sentry/hub/5.11.1:
     dependencies:
       '@sentry/types': 5.11.0
-      '@sentry/utils': 5.11.0
+      '@sentry/utils': 5.11.1
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-ZtCcbq3BLkQo/y07amvP21ZjmL7up/fD1032XrA+44U7M1d2w+CDCVRWcCJGK/otzPz7cw8yc5oS4Cn68wLVxw==
-  /@sentry/minimal/5.11.0:
+      integrity: sha512-ucKprYCbGGLLjVz4hWUqHN9KH0WKUkGf5ZYfD8LUhksuobRkYVyig0ZGbshECZxW5jcDTzip4Q9Qimq/PkkXBg==
+  /@sentry/minimal/5.11.1:
     dependencies:
-      '@sentry/hub': 5.11.0
+      '@sentry/hub': 5.11.1
       '@sentry/types': 5.11.0
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-fplz8sCmYE9Hdm+qnoATls5FPKjVyXcCuav9UKFLV6L+MAPjWVINbHFPBcYAmR5bjK4/Otfi1SPCBe1MQT/FtA==
-  /@sentry/node/5.11.0:
+      integrity: sha512-HK8zs7Pgdq7DsbZQTThrhQPrJsVWzz7MaluAbQA0rTIAJ3TvHKQpsVRu17xDpjZXypqWcKCRsthDrC4LxDM1Bg==
+  /@sentry/node/5.11.1:
     dependencies:
-      '@sentry/apm': 5.11.0
-      '@sentry/core': 5.11.0
-      '@sentry/hub': 5.11.0
+      '@sentry/apm': 5.11.1
+      '@sentry/core': 5.11.1
+      '@sentry/hub': 5.11.1
       '@sentry/types': 5.11.0
-      '@sentry/utils': 5.11.0
+      '@sentry/utils': 5.11.1
       cookie: 0.3.1
       https-proxy-agent: 4.0.0
       lru_map: 0.3.3
@@ -1334,14 +1336,14 @@ packages:
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-WgcNTEDqud9eD2tT/2/MXmVUngivMeYmzVSUrRG05C7k9HiXwMr2v7H7HCMumlCLAqflr2qAsGa8tZa/nR+ZHw==
+      integrity: sha512-FbJs0blJ36gEzE0rc2yBfA/KE+kXOLl8MUfFTcyJCBdCGF8XMETDCmgINnJ4TyBUJviwKoPw2TCk9TL2pa/A1w==
   /@sentry/types/5.11.0:
     dev: false
     engines:
       node: '>=6'
     resolution:
       integrity: sha512-1Uhycpmeo1ZK2GLvrtwZhTwIodJHcyIS6bn+t4IMkN9MFoo6ktbAfhvexBDW/IDtdLlCGJbfm8nIZerxy0QUpg==
-  /@sentry/utils/5.11.0:
+  /@sentry/utils/5.11.1:
     dependencies:
       '@sentry/types': 5.11.0
       tslib: 1.10.0
@@ -1349,7 +1351,7 @@ packages:
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-84MNM08ANmda/tWMBCCb9tga0b4ZD7tSo0i20RJalkdLk9zJmmepKw+sA5PyztO/YxkqAt9KijSmtIafd0LlOQ==
+      integrity: sha512-O0Zl4R2JJh8cTkQ8ZL2cDqGCmQdpA5VeXpuBbEl1v78LQPkBDISi35wH4mKmLwMsLBtTVpx2UeUHBj0KO5aLlA==
   /@types/babel__core/7.1.3:
     dependencies:
       '@babel/parser': 7.8.3
@@ -1439,10 +1441,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-1Bh06cbWJUHMC97acuD6UMG29nMt0Aqz1vF3guLfG+kHHJhy3AyohZFFxYk2f7Q1SQIrNwvncxAE0N/9s70F2w==
-  /@types/history/4.7.3:
+  /@types/history/4.7.4:
     dev: false
     resolution:
-      integrity: sha512-cS5owqtwzLN5kY+l+KgKdRJ/Cee8tlmQoGQuIE9tWnSmS3JMKzmxo2HIAk2wODMifGwO20d62xZQLYz+RLfXmw==
+      integrity: sha512-+o2igcuZA3xtOoFH56s+MCZVidwlJNcJID57DSCyawS2i910yG9vkwehCjJNZ6ImhCR5S9DbvIJKyYHcMyOfMw==
   /@types/hoist-non-react-statics/3.3.1:
     dependencies:
       '@types/react': 16.9.17
@@ -1467,12 +1469,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-UpYjBi8xefVChsCoBpKShdxTllC9pwISirfoZsUa2AAdQg/Jd2KQGtSbw+ya7GPo7x/wAPlH6JBhKhAsXUEZNA==
-  /@types/jest/24.0.25:
+  /@types/jest/24.9.0:
     dependencies:
       jest-diff: 24.9.0
     dev: false
     resolution:
-      integrity: sha512-hnP1WpjN4KbGEK4dLayul6lgtys6FPz0UfxMeMQCv0M+sTnzN3ConfiO72jHgLxl119guHgI8gLqDOrRLsyp2g==
+      integrity: sha512-dXvuABY9nM1xgsXlOtLQXJKdacxZJd7AtvLsKZ/0b57ruMXDKCOXAC/M75GbllQX6o1pcZ5hAG4JzYy7Z/wM2w==
   /@types/mime/2.0.1:
     dev: false
     resolution:
@@ -1510,7 +1512,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Ho41o+6NBlv1K5q2Z+NREST3UsGahXn4V1to2D2U4bcn1hO5MGjzOdkruzsnN10WiP8hW33jvQE6eERClgwvJg==
-  /@types/react-redux/7.1.5:
+  /@types/react-redux/7.1.6:
     dependencies:
       '@types/hoist-non-react-statics': 3.3.1
       '@types/react': 16.9.17
@@ -1518,10 +1520,10 @@ packages:
       redux: 4.0.5
     dev: false
     resolution:
-      integrity: sha512-ZoNGQMDxh5ENY7PzU7MVonxDzS1l/EWiy8nUhDqxFqUZn4ovboCyvk4Djf68x6COb7vhGTKjyjxHxtFdAA5sUA==
+      integrity: sha512-OjIrYtOg+j7MwNURIZ1BHoxWEzX3lDS/5169JqXUE+1XcOHGRVZirnnsexBDl5ykjxXlNHi4AS0aOismP3DaIA==
   /@types/react-router-dom/5.1.3:
     dependencies:
-      '@types/history': 4.7.3
+      '@types/history': 4.7.4
       '@types/react': 16.9.17
       '@types/react-router': 5.1.4
     dev: false
@@ -1529,7 +1531,7 @@ packages:
       integrity: sha512-pCq7AkOvjE65jkGS5fQwQhvUp4+4PVD9g39gXLZViP2UqFiFzsEpB3PKf0O6mdbKsewSK8N14/eegisa/0CwnA==
   /@types/react-router/5.1.4:
     dependencies:
-      '@types/history': 4.7.3
+      '@types/history': 4.7.4
       '@types/react': 16.9.17
     dev: false
     resolution:
@@ -2094,10 +2096,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
-  /autoprefixer/9.7.3:
+  /autoprefixer/9.7.4:
     dependencies:
       browserslist: 4.8.3
-      caniuse-lite: 1.0.30001020
+      caniuse-lite: 1.0.30001021
       chalk: 2.4.2
       normalize-range: 0.1.2
       num2fraction: 1.2.2
@@ -2108,7 +2110,7 @@ packages:
       node: '>=6.0.0'
     hasBin: true
     resolution:
-      integrity: sha512-8T5Y1C5Iyj6PgkPSFd0ODvK9DIleuPKUPYniNxybS47g2k2wFgLZ46lGQHlBuGKIAEV8fbCDfKCCRS1tvOgc3Q==
+      integrity: sha512-g0Ya30YrMBAEZk60lp+qfX5YQllG+S5W3GYCFvyHTvhOki0AEQJLPEcIuGRsqVwLi8FvXPVtwTGhfr38hVpm0g==
   /aws-sign2/0.7.0:
     dev: false
     resolution:
@@ -2587,8 +2589,8 @@ packages:
       integrity: sha512-Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==
   /browserslist/4.1.1:
     dependencies:
-      caniuse-lite: 1.0.30001020
-      electron-to-chromium: 1.3.333
+      caniuse-lite: 1.0.30001021
+      electron-to-chromium: 1.3.335
       node-releases: 1.1.45
     dev: false
     hasBin: true
@@ -2596,8 +2598,8 @@ packages:
       integrity: sha512-VBorw+tgpOtZ1BYhrVSVTzTt/3+vSE3eFUh0N2GCFK1HffceOaf32YS/bs6WiFhjDAblAFrx85jMy3BG9fBK2Q==
   /browserslist/4.8.3:
     dependencies:
-      caniuse-lite: 1.0.30001020
-      electron-to-chromium: 1.3.333
+      caniuse-lite: 1.0.30001021
+      electron-to-chromium: 1.3.335
       node-releases: 1.1.45
     dev: false
     hasBin: true
@@ -2742,16 +2744,16 @@ packages:
   /caniuse-api/3.0.0:
     dependencies:
       browserslist: 4.8.3
-      caniuse-lite: 1.0.30001020
+      caniuse-lite: 1.0.30001021
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: false
     resolution:
       integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==
-  /caniuse-lite/1.0.30001020:
+  /caniuse-lite/1.0.30001021:
     dev: false
     resolution:
-      integrity: sha512-yWIvwA68wRHKanAVS1GjN8vajAv7MBFshullKCeq/eKpK7pJBVDgFFEqvgWTkcP2+wIDeQGYFRXECjKZnLkUjA==
+      integrity: sha512-wuMhT7/hwkgd8gldgp2jcrUjOU9RXJ4XxGumQeOsUr91l3WwmM68Cpa/ymCnWEDqakwFXhuDQbaKNHXBPgeE9g==
   /capture-exit/1.2.0:
     dependencies:
       rsvp: 3.6.2
@@ -3889,10 +3891,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
-  /electron-to-chromium/1.3.333:
+  /electron-to-chromium/1.3.335:
     dev: false
     resolution:
-      integrity: sha512-7MJfCpa/tmhqYy2lZ1NEbkSxH7q3KiZiepiSs2ayTPAweAjdzGXotij+7OKPPb3OwJD2ZuBKPrA2HIuuSi6ahw==
+      integrity: sha512-ngKsDGd/xr2lAZvilxTfdvfEiQKmavyXd6irlswaHnewmXoz6JgbM9FUNwgp3NFIUHHegh1F87H8f5BJ8zABxw==
   /elliptic/6.5.2:
     dependencies:
       bn.js: 4.11.8
@@ -3974,7 +3976,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==
-  /es-abstract/1.17.0:
+  /es-abstract/1.17.2:
     dependencies:
       es-to-primitive: 1.2.1
       function-bind: 1.1.1
@@ -3991,7 +3993,7 @@ packages:
     engines:
       node: '>= 0.4'
     resolution:
-      integrity: sha512-yYkE07YF+6SIBmg1MsJ9dlub5L48Ek7X0qz+c/CPCHS9EBXfESorzng4cJQjJW5/pB6vDF41u7F8vUhLVDqIug==
+      integrity: sha512-YoKuru3Lyoy7yVTBSH2j7UxTqe/je3dWAruC0sHvZX1GNd5zX8SSLvQqEgO9b3Ex8IW+goFI9arEEsFIbulhOw==
   /es-to-primitive/1.2.1:
     dependencies:
       is-callable: 1.1.5
@@ -7748,7 +7750,7 @@ packages:
   /object.getownpropertydescriptors/2.1.0:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.0
+      es-abstract: 1.17.2
     dev: false
     engines:
       node: '>= 0.8'
@@ -7774,7 +7776,7 @@ packages:
   /object.values/1.1.1:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.0
+      es-abstract: 1.17.2
       function-bind: 1.1.1
       has: 1.0.3
     dev: false
@@ -8766,9 +8768,9 @@ packages:
       integrity: sha512-Zb6byCSLkgRKLODj/5mQugyuj9bvAAw9LqJJjgwz5cYryGeXfFZfSXoP1UfveccFmeq0b/2xxwcTEVScnqGxBg==
   /postcss-preset-env/6.7.0:
     dependencies:
-      autoprefixer: 9.7.3
+      autoprefixer: 9.7.4
       browserslist: 4.8.3
-      caniuse-lite: 1.0.30001020
+      caniuse-lite: 1.0.30001021
       css-blank-pseudo: 0.1.4
       css-has-pseudo: 0.10.0
       css-prefers-color-scheme: 3.1.1
@@ -9677,7 +9679,7 @@ packages:
   /regexp.prototype.flags/1.3.0:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.0
+      es-abstract: 1.17.2
     dev: false
     engines:
       node: '>= 0.4'
@@ -12049,18 +12051,18 @@ packages:
     dependencies:
       '@babel/core': 7.8.3
       '@redux-saga/core': 1.1.3
-      '@sentry/browser': 5.11.0
-      '@sentry/node': 5.11.0
+      '@sentry/browser': 5.11.1
+      '@sentry/node': 5.11.1
       '@sentry/types': 5.11.0
       '@types/chromedriver': 2.38.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
-      '@types/jest': 24.0.25
+      '@types/jest': 24.9.0
       '@types/node': 12.12.24
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
       '@types/react-native': 0.60.30
-      '@types/react-redux': 7.1.5
+      '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
       '@types/selenium-webdriver': 4.0.6
@@ -12099,7 +12101,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-saDeBd+AP5xWQKb7NRcCmClTk6NDa6t4dZh9jWsyVgHN9tw02YxVQoA7wUsUSrLFBce5mZ6jcpFhOCJ7Hfx0ug==
+      integrity: sha512-KyCQf+FkE3kKw8Vh5ReXe1N3BZMLeGjpWq1NqT+GlnWiv7uxYna3XKX9WSPOSnJVK1HAmLfdexzyFRZK8j2J9w==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -12119,18 +12121,19 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-HQgAJ4NvfD0/MgnW7krhGqXdALMjCgihA0nxhwMV8h6tiV7Nn0E34NmyB3Re7yFn/v5SDCTve0HAJSarPrH1eQ==
+      integrity: sha512-khv0X/fK36dEvHO/T0QKjcK2RcUPlfNAGjWDJPgvm55UlQFsThiM+o2pmL9lgqW86rOq0Y/0qPITInj3OT3HZA==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
     dependencies:
+      razzle-dev-utils: 3.0.0
       razzle-plugin-typescript: /razzle-plugin-typescript/3.0.0/tslint@5.20.1+webpack@4.41.5
       tslint: 5.20.1
       webpack: 4.41.5
     dev: false
     name: '@rush-temp/hatch-razzle-config'
     resolution:
-      integrity: sha512-COLttP6807m8zPMuYK22DREOV/Zr6q8yVsRKWlsyBqjloiknqNiteqbrpdFzfBhVisbJQANiKo8TB0niR5Oa1A==
+      integrity: sha512-kPM4SxiXtriR7LnMvoP/jV91LJ+e9pJEueMlJl/0eVOK7fj/4mRWl/pmAeZyzIiuRcRMcYSW6dVybIKj5F3/nw==
       tarball: 'file:projects/hatch-razzle-config.tgz'
     version: 0.0.0
   'file:projects/hatch-server-middleware.tgz':
@@ -12142,12 +12145,12 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-jI0StguWyCvTCPUO3KAqec1qvGnMqEDvm6UHtIXun6QalnKVmnTcK4Z1GIgYCqX2uQ92llZGC8FXJlc52aiTrQ==
+      integrity: sha512-oNhfRcxW0vT9aUlFeIcBNC11MeTHvfc6c5CyXNKuzo1oPDHwluluWqaOLpIF2YDkqnkKfQ6wDf6XwxNNcxb3jg==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
     dependencies:
-      '@sentry/node': 5.11.0
+      '@sentry/node': 5.11.1
       '@sentry/types': 5.11.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
@@ -12159,7 +12162,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-ao7O2uxt/Kgf/cjmsS+azE04FuWq1gHmwE+WOhQjDUOSoDBFXCJf211rJ3GiaF0qxJHJidQGI55ifM9i4haASQ==
+      integrity: sha512-c1GIkTLeRIeWJq6yjvBrHQHSZlaVo/O1JvnLrGD0YYNo943TICDx66luZ6d80e/R2bdVBsYlPeOxWCIOVQwqfw==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -12190,13 +12193,13 @@ packages:
   'file:projects/hatch-web-client.tgz':
     dependencies:
       '@redux-saga/core': 1.1.3
-      '@sentry/browser': 5.11.0
+      '@sentry/browser': 5.11.1
       '@sentry/types': 5.11.0
       '@types/node': 12.12.24
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
       '@types/react-native': 0.60.30
-      '@types/react-redux': 7.1.5
+      '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
       '@types/webpack-env': 1.15.0
@@ -12215,7 +12218,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-JtA1NMfI2hlfgRJkN/hHl4oiiUBKCMw0f8+PFhkkK99en84ooAk0G5yedm4xSclOrJUCC2NNZuMVgxrC+TRnEw==
+      integrity: sha512-vvZbPQZLfHRfOS4Nxskj6Zmt0CuPGBFIfvbkt0rhVZtXzF9mli9HX3gNFpOJ+Vq4lkIlCPQzR4fTQle3xK8xlA==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -12227,7 +12230,7 @@ packages:
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
       '@types/react-native': 0.60.30
-      '@types/react-redux': 7.1.5
+      '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
       '@types/serialize-javascript': 1.5.0
@@ -12248,18 +12251,18 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-CaWWiyaUxbPnZQzdzIScms/ZWkCNbg4JTsoWUPbNUbntKCMGysqlU55UN/oCPb6BCZnXEvo6Bln+FTOZJB4LGQ==
+      integrity: sha512-PC3CrhLYteYnZTp0CeoflKhiiOoje+QvNg+V9PD3ZNunL1wtS3BWjpPEm0z1LPk/vXeARibaRRHtmlTMF7GBPA==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
     dependencies:
       '@redux-saga/core': 1.1.3
-      '@types/history': 4.7.3
+      '@types/history': 4.7.4
       '@types/node': 12.12.24
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
       '@types/react-native': 0.60.30
-      '@types/react-redux': 7.1.5
+      '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
       '@types/webpack-env': 1.15.0
@@ -12278,7 +12281,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-IWHgy9zd9AqC4NXzYYuf9G8hw3Q8onCOg1R4uBxnIGxBhhMzduAsA8vdG9/NsobzW3ki3crzO7FqI38j8LEKLQ==
+      integrity: sha512-ut8Gmt9kFTK4tJhdRct7TbXwJYqJ43rhNh3t02Dk6IFUplov1uop1auuah6zvezvLj0ah5vozmGKH1ujfwndAQ==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: 'https://registry.npmjs.org/'
@@ -12334,6 +12337,7 @@ specifiers:
   ora: ^4
   prop-types: ^15
   razzle: ^3
+  razzle-dev-utils: ^3.0.0
   razzle-plugin-typescript: ^3.0.0
   react: ^16
   react-dom: ^16

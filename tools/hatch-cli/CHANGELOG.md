@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Thu, 16 Jan 2020 06:11:00 GMT and should not be manually modified.
+This log was last generated on Fri, 17 Jan 2020 21:48:06 GMT and should not be manually modified.
+
+## 0.3.0
+Fri, 17 Jan 2020 21:48:06 GMT
+
+### Minor changes
+
+- Add websocket support
 
 ## 0.1.5
 Thu, 16 Jan 2020 06:11:00 GMT

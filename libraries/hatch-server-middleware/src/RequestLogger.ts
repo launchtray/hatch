@@ -43,7 +43,7 @@ export default class RequestLogger implements ServerMiddleware {
     this.serverLogFile = serverLogFile;
   }
 
-  public async register(server: Application) {
-    server.use(requestLogger(this.appName, this.serverLogFile));
+  public async register(app: Application) {
+    app.use(requestLogger(this.appName, this.serverLogFile));
   }
 }

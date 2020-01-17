@@ -20,22 +20,22 @@ import http from 'http';
 import util from 'util';
 import {createLogger, format, transports} from 'winston';
 import {ErrorReporterTransport} from './ErrorReporterTransport';
-import {assignRootContainerToController, hasControllerRoutes} from './server-routing';
+import {assignRootContainerToController, cleanUpRouting, hasControllerRoutes} from './server-routing';
 import {
   ServerComposer,
   ServerComposition,
 } from './ServerComposer';
-import {registerServerMiddleware, resolveServerMiddleware} from './ServerMiddleware';
+import {registerServerMiddleware, resolveServerMiddleware, Server} from './ServerMiddleware';
 
 export type ServerExtension<T extends ServerComposition> =
-  (server: Application, composition: T, logger: Logger, errorReporter: ErrorReporter) => void;
+  (server: Server, app: Application, composition: T, logger: Logger, errorReporter: ErrorReporter) => void;
 
 export interface CreateServerOptions<T extends ServerComposition> {
   reloadComposeModule: () => {default: ServerComposer<T>};
   injectionOptions?: InjectionInitializationContext;
 }
 
-let runningServer: http.Server;
+let runningServer: Server;
 let runningServerApp: Application;
 
 if (module.hot) {
@@ -122,11 +122,20 @@ const createServerAsync = async <T extends ServerComposition>(
   serverExtension?: ServerExtension<T>,
 ) => {
   if (runningServer != null && runningServerApp != null) {
-    runningServer.removeListener('request', runningServerApp);
+    runningServer.removeAllListeners('request');
+    cleanUpRouting(runningServerApp, runningServer);
   }
   const composition: T = await serverComposer();
 
   runningServerApp = express();
+  let newRunningServer: boolean;
+  if (runningServer == null) {
+    runningServer = http.createServer(runningServerApp);
+    newRunningServer = true;
+  } else {
+    newRunningServer = false;
+  }
+
   const serverMiddlewareClasses = composition.serverMiddleware ?? [];
   const rootContainer = ROOT_CONTAINER;
 
@@ -142,16 +151,15 @@ const createServerAsync = async <T extends ServerComposition>(
 
   const serverMiddlewareList = resolveServerMiddleware(rootContainer, logger);
   for (const serverMiddleware of serverMiddlewareList) {
-    await serverMiddleware.register(runningServerApp);
+    await serverMiddleware.register(runningServerApp, runningServer);
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);
     }
   }
 
-  serverExtension?.(runningServerApp, composition, logger, errorReporter);
+  serverExtension?.(runningServer, runningServerApp, composition, logger, errorReporter);
 
-  if (runningServer == null) {
-    runningServer = http.createServer(runningServerApp);
+  if (newRunningServer) {
     runningServer
       .listen(process.env.PORT || 3000)
       .on('error', (err: Error) => {

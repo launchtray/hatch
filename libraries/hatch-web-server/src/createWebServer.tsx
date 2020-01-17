@@ -128,8 +128,8 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
-  createServer(options, (server, composition, logger, errorReporter) => {
-    server
+  createServer(options, (server, app, composition, logger, errorReporter) => {
+    app
       .disable('x-powered-by')
       .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
       .get('/*', (req, res, next) => {

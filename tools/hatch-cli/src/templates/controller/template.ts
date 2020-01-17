@@ -15,7 +15,7 @@ export default class HATCH_CLI_TEMPLATE_VAR_moduleName implements ServerMiddlewa
 
   }
 
-  public async register(server: Application): Promise<void> {
+  public async register(app: Application): Promise<void> {
 
   }
 

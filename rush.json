@@ -124,7 +124,7 @@
    * and set projectFolderMaxDepth to a large number.
    */
   "projectFolderMinDepth": 2,
-  "projectFolderMaxDepth": 2,
+  "projectFolderMaxDepth": 6, // Should be 2 for everything but templates
 
   /**
    * This feature helps you to review and approve new packages before they are introduced
@@ -398,6 +398,11 @@
       "packageName": "@launchtray/hatch-cli",
       "projectFolder": "tools/hatch-cli",
       "shouldPublish": true
+    },
+    {
+      "packageName": "@launchtray/hatch-template-webapp",
+      "projectFolder": "tools/hatch-cli/src/templates/webapp/template",
+      "shouldPublish": false
     }
   ]
 }

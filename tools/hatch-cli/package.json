@@ -28,5 +28,8 @@
     "ora": "^4",
     "replace-in-file": "^5",
     "tmp": "^0.1"
+  },
+  "devDependencies": {
+    "@launchtray/hatch-template-webapp": "0.1.0"
   }
 }

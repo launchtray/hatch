@@ -13,9 +13,11 @@ import {
 import {
   registerServerMiddleware,
   resolveServerMiddleware,
+  Server,
   ServerMiddleware,
-  ServerMiddlewareClass
+  ServerMiddlewareClass,
 } from './ServerMiddleware';
+import {WebSocketRouteParams} from './WebSocketRouteParams';
 
 export {
   route,
@@ -32,4 +34,6 @@ export {
   ServerComposer,
   ServerComposition,
   CreateServerOptions,
+  Server,
+  WebSocketRouteParams,
 };

@@ -2,11 +2,13 @@ import {
   BasicRouteParams,
   controller,
   route,
-  ServerMiddleware
+  ServerMiddleware,
+  WebSocketRouteParams
 } from '@launchtray/hatch-server';
 import {HTTPResponder} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
+import WebSocket from 'ws';
 
 @controller()
 export default class ExampleController implements ServerMiddleware {
@@ -21,8 +23,8 @@ export default class ExampleController implements ServerMiddleware {
     responder.ok('Example GET');
   }
 
-  @route.custom((server, handler) => {
-    server.get('/api/example2', handler);
+  @route.custom((app, server, handler) => {
+    app.get('/api/example2', handler);
   })
   public exampleEndpoint2(responder: HTTPResponder) {
     responder.ok(this.testVar);
@@ -33,7 +35,20 @@ export default class ExampleController implements ServerMiddleware {
     params.res.status(200).send('Person: ' + params.req.params.id);
   }
 
-  public async register(server: Application): Promise<void> {
+  @route.websocket('/ws/:id')
+  public async handleWebsocket(params: WebSocketRouteParams) {
+    this.logger.debug('handleWebsocket: ' + params.req.url);
+    const ws = params.webSocket;
+    ws.on('message', (msg: string) => {
+      params.webSocketServer.clients.forEach((client: WebSocket) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(params.req.params.id + ': ' + msg);
+        }
+      });
+    });
+  }
+
+  public async register(app: Application): Promise<void> {
     this.logger.info('Calling original register:', this.testVar);
   }
 }

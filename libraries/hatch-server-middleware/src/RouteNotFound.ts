@@ -4,8 +4,8 @@ import {Application} from 'express';
 
 @injectable()
 export default class RouteNotFound implements ServerMiddleware {
-  public async register(server: Application) {
-    server
+  public async register(app: Application) {
+    app
       .get('/api/*', (req, res) => {
         res.status(404).send();
       });

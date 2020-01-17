@@ -46,7 +46,11 @@
     "winston-transport": "^4",
     "@sentry/types": "^5",
     "@sentry/node": "^5",
-    "@sentry/browser": "^5"
+    "@sentry/browser": "^5",
+    "@types/ws": "^7",
+    "ws": "^7",
+    "bufferutil": "^4",
+    "utf-8-validate": "^5"
   },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.1.2",

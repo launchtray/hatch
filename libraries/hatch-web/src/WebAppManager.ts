@@ -78,7 +78,7 @@ const forEachClientLoader = (
 };
 
 const hasWebAppManagerMethods = (target: any): boolean => {
-  return (target[clientLoadersKey] != null) && (target[pathMatchersKey] != null);
+  return (target[clientLoadersKey] != null) || (target[pathMatchersKey] != null);
 };
 
 export const createSagaForWebAppManagers = (

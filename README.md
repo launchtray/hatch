@@ -1,3 +1,14 @@
+<p align="center"> 
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_parrot.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_dino.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_snake.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_eyes.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_bird.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_webbed_feet.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_penguin.png" width="10%">
+  <img src="https://github.com/launchtray/hatch/raw/assets/hatch_platypus.png" width="10%">
+</p>
+
 # hatch
 This repository contains tools and libraries to aid development of TypeScript applications.
 

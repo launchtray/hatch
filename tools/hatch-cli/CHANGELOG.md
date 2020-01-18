@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Fri, 17 Jan 2020 21:48:06 GMT and should not be manually modified.
+This log was last generated on Sat, 18 Jan 2020 00:01:30 GMT and should not be manually modified.
+
+## 0.3.1
+Sat, 18 Jan 2020 00:01:30 GMT
+
+### Patches
+
+- Auto-update template dependencies
 
 ## 0.3.0
 Fri, 17 Jan 2020 21:48:06 GMT

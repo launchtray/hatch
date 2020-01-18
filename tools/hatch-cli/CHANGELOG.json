@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.3.2",
+      "tag": "@launchtray/hatch-cli_v0.3.2",
+      "date": "Sat, 18 Jan 2020 00:52:16 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Prevent publishing template node_modules"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.1",
       "tag": "@launchtray/hatch-cli_v0.3.1",
       "date": "Sat, 18 Jan 2020 00:01:30 GMT",

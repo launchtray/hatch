@@ -1,5 +1,34 @@
 # hatch
+This repository contains tools and libraries to aid development of TypeScript applications.
+
+The `hatch` command-line application is used to generate TypeScript projects that require minimal setup and boilerplate
+to start developing application code. This is achieved by generating projects which delegate heavily to the `hatch-*` 
+libraries in this repository. These libraries are highly opinionated, meaning they typically have several peer 
+dependencies, and are intended to be used according to a specific architecture.
+
+Hatch is for developers who are comfortable sacrificing flexibility in libraries and architecture in exchange for
+reducing time to development of application features. Developers who are looking for more flexibility and don't mind the 
+extra work to get things set up exactly how they want it should consider using tools which are less opinionated, like 
+[create-react-app](https://github.com/facebook/create-react-app), [Expo](https://expo.io/), 
+[electron](https://electronjs.org/), [express](http://expressjs.com/), or 
+[Razzle](https://github.com/jaredpalmer/razzle). These are all great frameworks, some of which are used as a foundation 
+for Hatch. 
+
+## Installation
+The `hatch` command-lin application can be installed via the npm registry, e.g. with npm:
+```
+npm install -g @launchtray/hatch-cli
+```
+
+## Usage
+For up-to-date usage, issue the following:
+```
+hatch --help
+```
+
 ## Developer setup
+These instructions are for developers who would like to contribute to Hatch.
+
 1. Install the latest LTS version of node. e.g. for macOS:
 
     ```
@@ -33,3 +62,5 @@
     $ rushx start
     ```
     
+## Concepts
+

@@ -1,0 +1,2 @@
+src/templates/**/node_modules
+src/templates/**/.rush

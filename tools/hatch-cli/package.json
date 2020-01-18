@@ -30,6 +30,8 @@
     "tmp": "^0.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-template-webapp": "0.1.0"
+    "@launchtray/hatch-template-webapp": "0.1.0",
+    "typescript": "^3.7.3",
+    "rimraf": "3.0.0"
   }
 }

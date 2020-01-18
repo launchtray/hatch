@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.1.5",
+      "tag": "@launchtray/hatch-web_v0.1.5",
+      "date": "Sat, 18 Jan 2020 00:01:30 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix registration of managers without routes"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.4",
       "tag": "@launchtray/hatch-web_v0.1.4",
       "date": "Tue, 14 Jan 2020 23:53:51 GMT",

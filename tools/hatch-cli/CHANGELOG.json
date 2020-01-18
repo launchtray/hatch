@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.3.1",
+      "tag": "@launchtray/hatch-cli_v0.3.1",
+      "date": "Sat, 18 Jan 2020 00:01:30 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Auto-update template dependencies"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.0",
       "tag": "@launchtray/hatch-cli_v0.3.0",
       "date": "Fri, 17 Jan 2020 21:48:06 GMT",

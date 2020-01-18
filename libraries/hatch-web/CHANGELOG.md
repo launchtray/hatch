@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Tue, 14 Jan 2020 23:53:51 GMT and should not be manually modified.
+This log was last generated on Sat, 18 Jan 2020 00:01:30 GMT and should not be manually modified.
+
+## 0.1.5
+Sat, 18 Jan 2020 00:01:30 GMT
+
+### Patches
+
+- Fix registration of managers without routes
 
 ## 0.1.4
 Tue, 14 Jan 2020 23:53:51 GMT

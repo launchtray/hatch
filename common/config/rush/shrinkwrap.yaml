@@ -21,7 +21,7 @@ dependencies:
   '@types/fs-extra': 8.0.1
   '@types/history': 4.7.4
   '@types/jest': 24.9.0
-  '@types/node': 12.12.24
+  '@types/node': 12.12.25
   '@types/react': 16.9.17
   '@types/react-dom': 16.9.4
   '@types/react-redux': 7.1.6
@@ -1390,13 +1390,13 @@ packages:
   /@types/body-parser/1.17.1:
     dependencies:
       '@types/connect': 3.4.33
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-RoX2EZjMiFMjZh9lmYrwgoP9RTpAjSHiJxdp4oidAQVO02T7HER3xj9UKue5534ULWeqVEkujhWcyvUce+d68w==
   /@types/chromedriver/2.38.0:
     dependencies:
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-vcPGkZt1y2YVXKAY8SwCvU0u9mgw9+7tBV4HGb0YX/6bu1WXbb61bf8Y/N+xNCYwEj/Ug1UAMnhCcsSohXzRXw==
@@ -1406,7 +1406,7 @@ packages:
       integrity: sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
   /@types/connect/3.4.33:
     dependencies:
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-2+FrkXY4zllzTNfJth7jOqEHC+enpLeGslEhpnTAkg21GkRrWV4SsAtqchtT4YS9/nODBU2/ZfsBY2X4J/dX7A==
@@ -1420,7 +1420,7 @@ packages:
       integrity: sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
   /@types/express-serve-static-core/4.17.1:
     dependencies:
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/range-parser': 1.2.3
     dev: false
     resolution:
@@ -1435,7 +1435,7 @@ packages:
       integrity: sha512-5mHFNyavtLoJmnusB8OKJ5bshSzw+qkMIBAobLrIM48HJvunFva9mOa6aBwh64lBFyNwBbs0xiEFuj4eU/NjCA==
   /@types/fs-extra/8.0.1:
     dependencies:
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-J00cVDALmi/hJOYsunyT52Hva5TnJeKP5yd1r+mH/ZU0mbYZflR0Z5kw5kITtKTRYMhm1JMClOFYdHnQszEvqw==
@@ -1443,7 +1443,7 @@ packages:
     dependencies:
       '@types/events': 3.0.0
       '@types/minimatch': 3.0.3
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-1Bh06cbWJUHMC97acuD6UMG29nMt0Aqz1vF3guLfG+kHHJhy3AyohZFFxYk2f7Q1SQIrNwvncxAE0N/9s70F2w==
@@ -1489,10 +1489,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
-  /@types/node/12.12.24:
-    dev: false
-    resolution:
-      integrity: sha512-1Ciqv9pqwVtW6FsIUKSZNB82E5Cu1I2bBTj1xuIHXLe/1zYLl3956Nbhg2MzSYHVfl9/rmanjbQIb7LibfCnug==
   /@types/node/12.12.25:
     dev: false
     resolution:
@@ -1522,6 +1518,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Y0Q+nv50KHnLL+jM0UH68gQQv7Wt6v2KuNepiHKwK1DoWGVd1oYun/GJCnvUje+/V8pMQQWW6QuBvHZz1pV7tQ==
+  /@types/react-native/0.61.0:
+    dependencies:
+      '@types/prop-types': 15.7.3
+      '@types/react': 16.9.17
+    dev: false
+    resolution:
+      integrity: sha512-pD6EZIGMRgedmfOLATkrVkPVuNkJTm1HXiPXj4V9l8zkANUv4pcxhdjMoWfV2nhXkbixcgIcD8odVwOqPa1xTQ==
   /@types/react-redux/7.1.6:
     dependencies:
       '@types/hoist-non-react-statics': 3.3.1
@@ -1575,7 +1578,7 @@ packages:
   /@types/superagent/4.1.4:
     dependencies:
       '@types/cookiejar': 2.1.1
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-SRH2q6/5/nhOkAuLXm3azRGjBYpoKCZWh138Rt1AxSIyE6/1b9uClIH2V+JfyDtjIvgr5yQqYgNUmdpbneJoZQ==
@@ -1595,7 +1598,7 @@ packages:
       integrity: sha512-TfcyNecCz8Z9/s90gBOBniyzZrTru8u2Vp0VZODq4KEBaQu8bfXvu7o/KUOecMpzjbFPUA7aqgSq628Iue5BQg==
   /@types/ws/7.2.0:
     dependencies:
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
     dev: false
     resolution:
       integrity: sha512-HnqczxiZ828df9FUh9OyY7vSOelpQNaj+SLEnDvU74rYijp61ggV7dhmDlMky0oYXKLdVuIG4KvExk8DEqzJgQ==
@@ -9590,7 +9593,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
-  /readable-stream/3.4.0:
+  /readable-stream/3.5.0:
     dependencies:
       inherits: 2.0.4
       string_decoder: 1.3.0
@@ -9599,7 +9602,7 @@ packages:
     engines:
       node: '>= 6'
     resolution:
-      integrity: sha512-jItXPLmrSR8jmTRmRWJXCnGJsfy85mB3Wd/uINMXA65yrnFo0cPClFIUWzo2najVNSl+mx7/4W8ttlLWJe99pQ==
+      integrity: sha512-gSz026xs2LfxBPudDuI41V1lka8cxg64E66SGe78zJlsUofOg/yqwezdIcdfwik6B4h8LFmWPA9ef9X3FiNFLA==
   /readdirp/2.2.1:
     dependencies:
       graceful-fs: 4.2.3
@@ -10400,7 +10403,7 @@ packages:
       detect-node: 2.0.4
       hpack.js: 2.1.6
       obuf: 1.1.2
-      readable-stream: 3.4.0
+      readable-stream: 3.5.0
       wbuf: 1.7.3
     dev: false
     resolution:
@@ -10711,7 +10714,7 @@ packages:
       methods: 1.1.2
       mime: 2.4.4
       qs: 6.9.1
-      readable-stream: 3.4.0
+      readable-stream: 3.5.0
       semver: 6.3.0
     dev: false
     engines:
@@ -11850,7 +11853,7 @@ packages:
       is-stream: 1.1.0
       logform: 2.1.2
       one-time: 0.0.4
-      readable-stream: 3.4.0
+      readable-stream: 3.5.0
       stack-trace: 0.0.10
       triple-beam: 1.3.0
       winston-transport: 4.3.0
@@ -12114,7 +12117,7 @@ packages:
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
       '@types/jest': 24.9.0
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
       '@types/react-native': 0.60.31
@@ -12162,14 +12165,14 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-WG+jwbO2NoiOMAL2Y69l/bJBigTLD+aijFVfmGCYpgTaYILeWc59RF0BxsOoMEYz1AB7lxWDXwzbYXCeDSY4uw==
+      integrity: sha512-YSti/7JbdBbHjuMlB0WoZ7pOn348qN6a/fYgSD+GF5m0lejYmEXe97+96Uen0X4DVlByP/6vXIEsqH8Kjy0E7A==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
     dependencies:
       '@sentry/types': 5.11.0
       '@types/fs-extra': 8.0.1
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/tmp': 0.1.0
       ansi-escapes: 4.3.0
       chalk: 3.0.0
@@ -12178,11 +12181,13 @@ packages:
       inquirer: 7.0.3
       ora: 4.0.3
       replace-in-file: 5.0.2
+      rimraf: 3.0.0
       tmp: 0.1.0
+      typescript: 3.7.5
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-UrTcHoj7590y0n67etl1bDDS3xUIJnJnUP+rC9LDsvB1kN+twdcAlSHqwuksCvEr6EGIc1oQr70vyAUlJc8hqQ==
+      integrity: sha512-WcbacoDsVxc1Crnf0qxGZ3JuHt5UlFJO/WAAhXR9+ASoA1+FzcWiEPAuGLfzYqDyyux0TCluTuuh1tLFungo8A==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -12215,7 +12220,7 @@ packages:
       '@sentry/types': 5.11.0
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/webpack-env': 1.15.0
       '@types/ws': 7.2.0
       bufferutil: 4.0.1
@@ -12290,7 +12295,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-webapp'
     resolution:
-      integrity: sha512-8XBYhUq4KyUVpO1ZndH3zAcgLMcDR1YDqmorOdFzI22ABMVidBYu78F+pxyp/spCnBoTuqKjuQZ0TBwKtLIRZA==
+      integrity: sha512-gAZ7Clvrff+prdtkS4G8XSVJFivIMU9Nn9O9E0rqiTZjJc35wiN+ZgfaVoH7vQDp/xFyxiPpuW5Kgbg0IDZuxA==
       tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -12323,10 +12328,10 @@ packages:
       '@redux-saga/core': 1.1.3
       '@sentry/browser': 5.11.1
       '@sentry/types': 5.11.0
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
-      '@types/react-native': 0.60.31
+      '@types/react-native': 0.61.0
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
@@ -12354,10 +12359,10 @@ packages:
       '@redux-saga/core': 1.1.3
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
-      '@types/react-native': 0.60.31
+      '@types/react-native': 0.61.0
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3
@@ -12386,10 +12391,10 @@ packages:
     dependencies:
       '@redux-saga/core': 1.1.3
       '@types/history': 4.7.4
-      '@types/node': 12.12.24
+      '@types/node': 12.12.25
       '@types/react': 16.9.17
       '@types/react-dom': 16.9.4
-      '@types/react-native': 0.60.31
+      '@types/react-native': 0.61.0
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
       '@types/react-router-dom': 5.1.3

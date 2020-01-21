@@ -16,6 +16,7 @@ dependencies:
   '@sentry/node': 5.11.1
   '@sentry/types': 5.11.0
   '@types/chromedriver': 2.38.0
+  '@types/cookie-parser': 1.4.2
   '@types/express': 4.17.2
   '@types/express-serve-static-core': 4.17.1
   '@types/fs-extra': 8.0.1
@@ -23,7 +24,7 @@ dependencies:
   '@types/jest': 24.9.0
   '@types/node': 12.12.25
   '@types/react': 16.9.17
-  '@types/react-dom': 16.9.4
+  '@types/react-dom': 16.9.5
   '@types/react-redux': 7.1.6
   '@types/react-router': 5.1.4
   '@types/react-router-dom': 5.1.3
@@ -40,6 +41,7 @@ dependencies:
   chromedriver: 78.0.1
   commander: 4.1.0
   connected-react-router: 6.5.2
+  cookie-parser: 1.4.4
   express: 4.17.1
   express-winston: 4.0.2
   fs-extra: 8.1.0
@@ -98,7 +100,7 @@ packages:
       integrity: sha512-a9gxpmdXtZEInkCSHUJDLHZVBgb1QS0jhss4cPP93EW7s+uC5bikET2twEF3KV+7rDblJcmNvTR7VJejqd2C2g==
   /@babel/compat-data/7.8.1:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       invariant: 2.2.4
       semver: 5.7.1
     dev: false
@@ -167,7 +169,7 @@ packages:
     dependencies:
       '@babel/compat-data': 7.8.1
       '@babel/core': 7.8.3
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       invariant: 2.2.4
       levenary: 1.1.0
       semver: 5.7.1
@@ -983,7 +985,7 @@ packages:
       '@babel/plugin-transform-typeof-symbol': /@babel/plugin-transform-typeof-symbol/7.8.3/@babel!core@7.8.3
       '@babel/plugin-transform-unicode-regex': /@babel/plugin-transform-unicode-regex/7.8.3/@babel!core@7.8.3
       '@babel/types': 7.8.3
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       core-js-compat: 3.6.4
       invariant: 2.2.4
       levenary: 1.1.0
@@ -1410,6 +1412,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-2+FrkXY4zllzTNfJth7jOqEHC+enpLeGslEhpnTAkg21GkRrWV4SsAtqchtT4YS9/nODBU2/ZfsBY2X4J/dX7A==
+  /@types/cookie-parser/1.4.2:
+    dependencies:
+      '@types/express': 4.17.2
+    dev: false
+    resolution:
+      integrity: sha512-uwcY8m6SDQqciHsqcKDGbo10GdasYsPCYkH3hVegj9qAah6pX5HivOnOuI3WYmyQMnOATV39zv/Ybs0bC/6iVg==
   /@types/cookiejar/2.1.1:
     dev: false
     resolution:
@@ -1462,16 +1470,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-hRJD2ahnnpLgsj6KWMYSrmXkM3rm2Dl1qkx6IOFD5FnuNPXJIG5L0dhgKXCYTRMGzU4n0wImQ/xfmRc4POUFlg==
-  /@types/istanbul-lib-report/1.1.1:
+  /@types/istanbul-lib-report/3.0.0:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.1
     dev: false
     resolution:
-      integrity: sha512-3BUTyMzbZa2DtDI2BkERNC6jJw2Mr2Y0oGI7mRxYNBPxppbtEK1F66u3bKwU2g+wxwWI7PAoRpJnOY1grJqzHg==
+      integrity: sha512-plGgXAPfVKFoYfa9NpYDAkseG+g6Jr294RqeqcqDixSbU34MZVJRi/P+7Y8GDpzkEwLaGZZOpKIEmeVZNtKsrg==
   /@types/istanbul-reports/1.1.1:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.1
-      '@types/istanbul-lib-report': 1.1.1
+      '@types/istanbul-lib-report': 3.0.0
     dev: false
     resolution:
       integrity: sha512-UpYjBi8xefVChsCoBpKShdxTllC9pwISirfoZsUa2AAdQg/Jd2KQGtSbw+ya7GPo7x/wAPlH6JBhKhAsXUEZNA==
@@ -1505,12 +1513,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
-  /@types/react-dom/16.9.4:
+  /@types/react-dom/16.9.5:
     dependencies:
       '@types/react': 16.9.17
     dev: false
     resolution:
-      integrity: sha512-fya9xteU/n90tda0s+FtN5Ym4tbgxpq/hb/Af24dvs6uYnYn+fspaxw5USlw0R8apDNwxsqumdRoCoKitckQqw==
+      integrity: sha512-BX6RQ8s9D+2/gDhxrj8OW+YD4R+8hj7FEM/OJHGNR0KipE1h1mSsf39YeyC81qafkq+N3rU3h3RFbLSwE5VqUg==
   /@types/react-native/0.60.31:
     dependencies:
       '@types/prop-types': 15.7.3
@@ -1820,33 +1828,33 @@ packages:
       node: '>= 6.0.0'
     resolution:
       integrity: sha512-TMeqbNl2fMW0nMjTEPOwe3J/PRFP4vqeoNuQMG0HlMrtm5QxKqdvAkZ1pRBQ/ulIyDD5Yq0nJ7YbdD8ey0TO3g==
-  /ajv-errors/1.0.1/ajv@6.10.2:
+  /ajv-errors/1.0.1/ajv@6.11.0:
     dependencies:
-      ajv: 6.10.2
+      ajv: 6.11.0
     dev: false
     id: registry.npmjs.org/ajv-errors/1.0.1
     peerDependencies:
       ajv: '>=5.0.0'
     resolution:
       integrity: sha512-DCRfO/4nQ+89p/RK43i8Ezd41EqdGIU4ld7nGF8OQ14oc/we5rEntLCUa7+jrn3nn83BosfwZA0wb4pon2o8iQ==
-  /ajv-keywords/3.4.1/ajv@6.10.2:
+  /ajv-keywords/3.4.1/ajv@6.11.0:
     dependencies:
-      ajv: 6.10.2
+      ajv: 6.11.0
     dev: false
     id: registry.npmjs.org/ajv-keywords/3.4.1
     peerDependencies:
       ajv: ^6.9.1
     resolution:
       integrity: sha512-RO1ibKvd27e6FEShVFfPALuHI3WjSVNeK5FIsmme/LYRNxjKuNj+Dt7bucLa6NdSv3JcVTyMlm9kGR84z1XpaQ==
-  /ajv/6.10.2:
+  /ajv/6.11.0:
     dependencies:
-      fast-deep-equal: 2.0.1
+      fast-deep-equal: 3.1.1
       fast-json-stable-stringify: 2.1.0
       json-schema-traverse: 0.4.1
       uri-js: 4.2.2
     dev: false
     resolution:
-      integrity: sha512-TXtUUEYHuaTEbLZWIKUr5pmBuhDLy+8KYtPYdcV8qC+pOZL+NKqYwvWSRrVXHn+ZmRRAu8vJTAznH7Oag6RVRw==
+      integrity: sha512-nCprB/0syFYy9fVYU1ox1l2KN8S9I+tziH8D4zdZuLT3N6RMlGSGt5FSTpAiHB/Whv8Qs1cWHma1aMKZyaHRKA==
   /alphanum-sort/1.0.2:
     dev: false
     resolution:
@@ -2117,8 +2125,8 @@ packages:
       integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
   /autoprefixer/9.7.4:
     dependencies:
-      browserslist: 4.8.3
-      caniuse-lite: 1.0.30001021
+      browserslist: 4.8.4
+      caniuse-lite: 1.0.30001022
       chalk: 2.4.2
       normalize-range: 0.1.2
       num2fraction: 1.2.2
@@ -2608,22 +2616,22 @@ packages:
       integrity: sha512-Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==
   /browserslist/4.1.1:
     dependencies:
-      caniuse-lite: 1.0.30001021
-      electron-to-chromium: 1.3.336
-      node-releases: 1.1.45
+      caniuse-lite: 1.0.30001022
+      electron-to-chromium: 1.3.338
+      node-releases: 1.1.46
     dev: false
     hasBin: true
     resolution:
       integrity: sha512-VBorw+tgpOtZ1BYhrVSVTzTt/3+vSE3eFUh0N2GCFK1HffceOaf32YS/bs6WiFhjDAblAFrx85jMy3BG9fBK2Q==
-  /browserslist/4.8.3:
+  /browserslist/4.8.4:
     dependencies:
-      caniuse-lite: 1.0.30001021
-      electron-to-chromium: 1.3.336
-      node-releases: 1.1.45
+      caniuse-lite: 1.0.30001022
+      electron-to-chromium: 1.3.338
+      node-releases: 1.1.46
     dev: false
     hasBin: true
     resolution:
-      integrity: sha512-iU43cMMknxG1ClEZ2MDKeonKE1CCrFVkQK2AqO2YWFmvIrx4JWrvQ4w4hQez6EpVI8rHTtqh/ruHHDHSOKxvUg==
+      integrity: sha512-3qv/Ar3nRnRTpwGD+LZc7F4YHDBb3NAEIn+DesNa8TcBhyxf8eDqYwTOa70kiWXwvFjQQz+abbykJcyOlfBfNg==
   /bs-logger/0.2.6:
     dependencies:
       fast-json-stable-stringify: 2.1.0
@@ -2769,17 +2777,17 @@ packages:
       integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
   /caniuse-api/3.0.0:
     dependencies:
-      browserslist: 4.8.3
-      caniuse-lite: 1.0.30001021
+      browserslist: 4.8.4
+      caniuse-lite: 1.0.30001022
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: false
     resolution:
       integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==
-  /caniuse-lite/1.0.30001021:
+  /caniuse-lite/1.0.30001022:
     dev: false
     resolution:
-      integrity: sha512-wuMhT7/hwkgd8gldgp2jcrUjOU9RXJ4XxGumQeOsUr91l3WwmM68Cpa/ymCnWEDqakwFXhuDQbaKNHXBPgeE9g==
+      integrity: sha512-FjwPPtt/I07KyLPkBQ0g7/XuZg6oUkYBVnPHNj3VHJbOjmmJ/GdSo/GUY6MwINEQvjhP6WZVbX8Tvms8xh0D5A==
   /capture-exit/1.2.0:
     dependencies:
       rsvp: 3.6.2
@@ -3200,6 +3208,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4FJkXzKXEDB1snCFZlLP4gpC3JILicCpGbzG9f9G7tGqGCzETQ2hWPrcinA9oU4wtf2biUaEH5065UnMeR33oA==
+  /cookie-parser/1.4.4:
+    dependencies:
+      cookie: 0.3.1
+      cookie-signature: 1.0.6
+    dev: false
+    engines:
+      node: '>= 0.8.0'
+    resolution:
+      integrity: sha512-lo13tqF3JEtFO7FyA49CqbhaFkskRJ0u/UAiINgrIXeRCY41c88/zxtrECl8AKH3B0hj9q10+h3Kt8I7KlW4tw==
   /cookie-signature/1.0.6:
     dev: false
     resolution:
@@ -3239,7 +3256,7 @@ packages:
       integrity: sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
   /core-js-compat/3.6.4:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       semver: 7.0.0
     dev: false
     resolution:
@@ -3917,10 +3934,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
-  /electron-to-chromium/1.3.336:
+  /electron-to-chromium/1.3.338:
     dev: false
     resolution:
-      integrity: sha512-FtazvnXAizSVMxQNPqUcTv2UElY5r3uRPQwiU1Tyg/Yc2UFr+/3wqDoLIV9ES6ablW3IrCcR8uEK2ppxaNPWhw==
+      integrity: sha512-wlmfixuHEc9CkfOKgcqdtzBmRW4NStM9ptl5oPILY2UDyHuSXb3Yit+yLVyLObTgGuMMU36hhnfs2GDJId7ctA==
   /elliptic/6.5.2:
     dependencies:
       bn.js: 4.11.8
@@ -4002,7 +4019,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==
-  /es-abstract/1.17.2:
+  /es-abstract/1.17.3:
     dependencies:
       es-to-primitive: 1.2.1
       function-bind: 1.1.1
@@ -4019,7 +4036,7 @@ packages:
     engines:
       node: '>= 0.4'
     resolution:
-      integrity: sha512-YoKuru3Lyoy7yVTBSH2j7UxTqe/je3dWAruC0sHvZX1GNd5zX8SSLvQqEgO9b3Ex8IW+goFI9arEEsFIbulhOw==
+      integrity: sha512-AwiVPKf3sKGMoWtFw0J7Y4MTZ4Iek67k4COWOwHqS8B9TOZ71DCfcoBmdamy8Y6mj4MDz0+VNUpC2HKHFHA3pg==
   /es-to-primitive/1.2.1:
     dependencies:
       is-callable: 1.1.5
@@ -4050,9 +4067,9 @@ packages:
       node: '>=0.8.0'
     resolution:
       integrity: sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
-  /escodegen/1.12.1:
+  /escodegen/1.13.0:
     dependencies:
-      esprima: 3.1.3
+      esprima: 4.0.1
       estraverse: 4.3.0
       esutils: 2.0.3
       optionator: 0.8.3
@@ -4063,7 +4080,7 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
     resolution:
-      integrity: sha512-Q8t2YZ+0e0pc7NRVj3B4tSQ9rim1oi4Fh46k2xhJ2qOiEwhQfdjyEQddWdj7ZFaKmU+5104vn1qrcjEPWq+bgQ==
+      integrity: sha512-eYk2dCkxR07DsHA/X2hRBj0CFAZeri/LyDMc0C8JT1Hqi6JnVpMhJ7XFITbb0+yZS3lVkaPL2oCkZ3AVmeVbMw==
   /eslint-scope/4.0.3:
     dependencies:
       esrecurse: 4.2.1
@@ -4073,13 +4090,6 @@ packages:
       node: '>=4.0.0'
     resolution:
       integrity: sha512-p7VutNr1O/QrxysMo3E45FjYDTeXBy0iTltPFNSqKAIfjDSXC+4dj+qfyuD8bfAXrW/y6lW3O76VaYNPKfpKrg==
-  /esprima/3.1.3:
-    dev: false
-    engines:
-      node: '>=4'
-    hasBin: true
-    resolution:
-      integrity: sha1-/cpRzuYTOJXjyI1TXOSdv/YqRjM=
   /esprima/4.0.1:
     dev: false
     engines:
@@ -4381,10 +4391,10 @@ packages:
       '0': node >=0.6.0
     resolution:
       integrity: sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
-  /fast-deep-equal/2.0.1:
+  /fast-deep-equal/3.1.1:
     dev: false
     resolution:
-      integrity: sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
+      integrity: sha512-8UEa58QDLauDNfpbrX55Q9jrGHThw2ZMdOky5Gl1CDtVeJDPVrG4Jxx1N8jw2gkWaff5UUuX1KJd+9zGe2B+ZA==
   /fast-glob/2.2.7:
     dependencies:
       '@mrmlnc/readdir-enhanced': 2.2.1
@@ -5011,7 +5021,7 @@ packages:
       node: '>=0.4.7'
     hasBin: true
     optionalDependencies:
-      uglify-js: 3.7.5
+      uglify-js: 3.7.6
     resolution:
       integrity: sha512-4PwqDL2laXtTWZghzzCtunQUTLbo31pcCJrd/B/9JP8XbhVzpS5ZXuKqlOzsd1rtcaLo4KqAn8nl8mkknS4MHw==
   /har-schema/2.0.0:
@@ -5022,7 +5032,7 @@ packages:
       integrity: sha1-qUwiJOvKwEeCoNkDVSHyRzW37JI=
   /har-validator/5.1.3:
     dependencies:
-      ajv: 6.10.2
+      ajv: 6.11.0
       har-schema: 2.0.0
     dev: false
     engines:
@@ -6800,7 +6810,7 @@ packages:
       cssstyle: 1.4.0
       data-urls: 1.1.0
       domexception: 1.0.1
-      escodegen: 1.12.1
+      escodegen: 1.13.0
       html-encoding-sniffer: 1.0.2
       left-pad: 1.3.0
       nwsapi: 2.2.0
@@ -7644,12 +7654,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-M4UBGcs4jeOK9CjTsYwkvH6/MzuUmGCyTW+kCY7uO+1ZVr0+FHGdPdIf5CCLqAaxnRrWidyoQlNkMIIVwbKB8Q==
-  /node-releases/1.1.45:
+  /node-releases/1.1.46:
     dependencies:
       semver: 6.3.0
     dev: false
     resolution:
-      integrity: sha512-cXvGSfhITKI8qsV116u2FTzH5EWZJfgG7d4cpqwF8I8+1tWpD6AsvvGRKq2onR0DNj1jfqsjkXZsm14JMS7Cyg==
+      integrity: sha512-YOjdx+Uoh9FbRO7yVYbnbt1puRWPQMemR3SutLeyv2XfxKs1ihpe0OLAUwBPEP2ImNH/PZC7SEiC6j32dwRZ7g==
   /node-status-codes/1.0.0:
     dev: false
     engines:
@@ -7781,7 +7791,7 @@ packages:
   /object.getownpropertydescriptors/2.1.0:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.2
+      es-abstract: 1.17.3
     dev: false
     engines:
       node: '>= 0.8'
@@ -7807,7 +7817,7 @@ packages:
   /object.values/1.1.1:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.2
+      es-abstract: 1.17.3
       function-bind: 1.1.1
       has: 1.0.3
     dev: false
@@ -8369,7 +8379,7 @@ packages:
       integrity: sha512-aAe3OhkS6qJXBbqzvZth2Au4V3KieR5sRQ4ptb2b2O8wgvB3SJBsdG+jsn2BZbbwekDG8nTfcCNKcSfe/lEy8g==
   /postcss-colormin/4.0.3:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       color: 3.1.2
       has: 1.0.3
       postcss: 7.0.26
@@ -8584,7 +8594,7 @@ packages:
       integrity: sha512-alx/zmoeXvJjp7L4mxEMjh8lxVlDFX1gqWHzaaQewwMZiVhLo42TEClKaeHbRf6J7j82ZOdTJ808RtN0ZOZwvw==
   /postcss-merge-rules/4.0.3:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       caniuse-api: 3.0.0
       cssnano-util-same-parent: 4.0.1
       postcss: 7.0.26
@@ -8618,7 +8628,7 @@ packages:
   /postcss-minify-params/4.0.2:
     dependencies:
       alphanum-sort: 1.0.2
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       cssnano-util-get-arguments: 4.0.0
       postcss: 7.0.26
       postcss-value-parser: 3.3.1
@@ -8736,7 +8746,7 @@ packages:
       integrity: sha512-acwJY95edP762e++00Ehq9L4sZCEcOPyaHwoaFOhIwWCDfik6YvqsYNxckee65JHLKzuNSSmAdxwD2Cud1Z54A==
   /postcss-normalize-unicode/4.0.1:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       postcss: 7.0.26
       postcss-value-parser: 3.3.1
     dev: false
@@ -8800,8 +8810,8 @@ packages:
   /postcss-preset-env/6.7.0:
     dependencies:
       autoprefixer: 9.7.4
-      browserslist: 4.8.3
-      caniuse-lite: 1.0.30001021
+      browserslist: 4.8.4
+      caniuse-lite: 1.0.30001022
       css-blank-pseudo: 0.1.4
       css-has-pseudo: 0.10.0
       css-prefers-color-scheme: 3.1.1
@@ -8852,7 +8862,7 @@ packages:
       integrity: sha512-lgXW9sYJdLqtmw23otOzrtbDXofUdfYzNm4PIpNE322/swES3VU9XlXHeJS46zT2onFO7V1QFdD4Q9LiZj8mew==
   /postcss-reduce-initial/4.0.3:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       caniuse-api: 3.0.0
       has: 1.0.3
       postcss: 7.0.26
@@ -9707,7 +9717,7 @@ packages:
   /regexp.prototype.flags/1.3.0:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.2
+      es-abstract: 1.17.3
     dev: false
     engines:
       node: '>= 0.4'
@@ -10060,9 +10070,9 @@ packages:
       integrity: sha512-agTSHR1Nbfi6ulI0kYNK0203joW2Y5W4po4l+v03tOoiJKpTBbxpNhWDvqc/4IcOw+KLmSiQLTasZ4cab2/UWQ==
   /schema-utils/1.0.0:
     dependencies:
-      ajv: 6.10.2
-      ajv-errors: /ajv-errors/1.0.1/ajv@6.10.2
-      ajv-keywords: /ajv-keywords/3.4.1/ajv@6.10.2
+      ajv: 6.11.0
+      ajv-errors: /ajv-errors/1.0.1/ajv@6.11.0
+      ajv-keywords: /ajv-keywords/3.4.1/ajv@6.11.0
     dev: false
     engines:
       node: '>= 4'
@@ -10677,7 +10687,7 @@ packages:
       integrity: sha512-XK+uv9kWwhZMZ1y7mysB+zoihsEj4wneFWAS5qoiLwzW0WzSqMrrsIy+a3zkQJq0ipFtBpX5W3MqyRIBF/WFGg==
   /stylehacks/4.0.3:
     dependencies:
-      browserslist: 4.8.3
+      browserslist: 4.8.4
       postcss: 7.0.26
       postcss-selector-parser: 3.1.1
     dev: false
@@ -11335,7 +11345,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-+O8/qh/Qj8CgC6eYBVBykMrNtp5Gebn4dlGD/kKXVkJNDwyrAwSIqwz8CDf+tsAIWVycKcku6gIXJ0qwx/ZXaQ==
-  /uglify-js/3.7.5:
+  /uglify-js/3.7.6:
     dependencies:
       commander: 2.20.3
       source-map: 0.6.1
@@ -11345,7 +11355,7 @@ packages:
     hasBin: true
     optional: true
     resolution:
-      integrity: sha512-GFZ3EXRptKGvb/C1Sq6nO1iI7AGcjyqmIyOw0DrD0675e+NNbGO72xmMM2iEBdFbxaTLo70NbjM/Wy54uZIlsg==
+      integrity: sha512-yYqjArOYSxvqeeiYH2VGjZOqq6SVmhxzaPjJC1W2F9e+bqvFL9QXQ2osQuKUFjM2hGjKG2YclQnRKWQSt/nOTQ==
   /unicode-canonical-property-names-ecmascript/1.0.4:
     dev: false
     engines:
@@ -11507,7 +11517,7 @@ packages:
   /util.promisify/1.0.1:
     dependencies:
       define-properties: 1.1.3
-      es-abstract: 1.17.2
+      es-abstract: 1.17.3
       has-symbols: 1.0.1
       object.getownpropertydescriptors: 2.1.0
     dev: false
@@ -11705,8 +11715,8 @@ packages:
       '@webassemblyjs/wasm-edit': 1.8.5
       '@webassemblyjs/wasm-parser': 1.8.5
       acorn: 6.4.0
-      ajv: 6.10.2
-      ajv-keywords: /ajv-keywords/3.4.1/ajv@6.10.2
+      ajv: 6.11.0
+      ajv-keywords: /ajv-keywords/3.4.1/ajv@6.11.0
       chrome-trace-event: 1.0.2
       enhanced-resolve: 4.1.1
       eslint-scope: 4.0.3
@@ -11736,8 +11746,8 @@ packages:
       '@webassemblyjs/wasm-edit': 1.8.5
       '@webassemblyjs/wasm-parser': 1.8.5
       acorn: 6.4.0
-      ajv: 6.10.2
-      ajv-keywords: /ajv-keywords/3.4.1/ajv@6.10.2
+      ajv: 6.11.0
+      ajv-keywords: /ajv-keywords/3.4.1/ajv@6.11.0
       chrome-trace-event: 1.0.2
       enhanced-resolve: 4.1.1
       eslint-scope: 4.0.3
@@ -12114,12 +12124,13 @@ packages:
       '@sentry/node': 5.11.1
       '@sentry/types': 5.11.0
       '@types/chromedriver': 2.38.0
+      '@types/cookie-parser': 1.4.2
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
       '@types/jest': 24.9.0
       '@types/node': 12.12.25
       '@types/react': 16.9.17
-      '@types/react-dom': 16.9.4
+      '@types/react-dom': 16.9.5
       '@types/react-native': 0.60.31
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
@@ -12131,6 +12142,7 @@ packages:
       '@types/ws': 7.2.0
       bufferutil: 4.0.1
       chromedriver: 78.0.1
+      cookie-parser: 1.4.4
       express: 4.17.1
       geckodriver: 1.19.1
       invariant: 2.2.4
@@ -12165,7 +12177,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-YSti/7JbdBbHjuMlB0WoZ7pOn348qN6a/fYgSD+GF5m0lejYmEXe97+96Uen0X4DVlByP/6vXIEsqH8Kjy0E7A==
+      integrity: sha512-mQ/8z1s64voNOLmE3vFPZ6NuUWhyQ7dN1SWSiEea3kjde1O+Lo8J2BVc/bD8OiG/N3TRxzvUEU9QElqhKOsAMA==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -12204,14 +12216,16 @@ packages:
     version: 0.0.0
   'file:projects/hatch-server-middleware.tgz':
     dependencies:
+      '@types/cookie-parser': 1.4.2
       '@types/express': 4.17.2
+      cookie-parser: 1.4.4
       express: 4.17.1
       express-winston: /express-winston/4.0.2/winston@3.2.1
       winston: 3.2.1
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-DFiLTJHdhOJNy3auFU9uwidBRibjE07uXqU7kQ9Qox2siocJ6LS1a18iXqRI+2uG/7BmYqIIfVS3C1w7MrnU1A==
+      integrity: sha512-/lEETQu46HgjotbG0pl+sfcE3mBHbkAE0ol40mp5AC8atqCBHWaqDGXGrmg7QV6hL0PiEB6AA00xyzh/b2Wuyg==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -12243,12 +12257,13 @@ packages:
       '@sentry/node': 5.11.1
       '@sentry/types': 5.11.0
       '@types/chromedriver': 2.38.0
+      '@types/cookie-parser': 1.4.2
       '@types/express': 4.17.2
       '@types/express-serve-static-core': 4.17.1
       '@types/jest': 24.9.0
       '@types/node': 12.12.25
       '@types/react': 16.9.17
-      '@types/react-dom': 16.9.4
+      '@types/react-dom': 16.9.5
       '@types/react-native': 0.60.31
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
@@ -12260,6 +12275,7 @@ packages:
       '@types/ws': 7.2.0
       bufferutil: 4.0.1
       chromedriver: 78.0.1
+      cookie-parser: 1.4.4
       express: 4.17.1
       geckodriver: 1.19.1
       invariant: 2.2.4
@@ -12295,7 +12311,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-webapp'
     resolution:
-      integrity: sha512-gAZ7Clvrff+prdtkS4G8XSVJFivIMU9Nn9O9E0rqiTZjJc35wiN+ZgfaVoH7vQDp/xFyxiPpuW5Kgbg0IDZuxA==
+      integrity: sha512-4a+TC+jViFRyzTbqHfvIKAAUBY8l4z4cYwiahiF7d1OwoNk55sx9HNVtBS8baA7YPbs5/xbAPtBhdXfGwE29Aw==
       tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -12330,7 +12346,7 @@ packages:
       '@sentry/types': 5.11.0
       '@types/node': 12.12.25
       '@types/react': 16.9.17
-      '@types/react-dom': 16.9.4
+      '@types/react-dom': 16.9.5
       '@types/react-native': 0.61.0
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
@@ -12361,7 +12377,7 @@ packages:
       '@types/express-serve-static-core': 4.17.1
       '@types/node': 12.12.25
       '@types/react': 16.9.17
-      '@types/react-dom': 16.9.4
+      '@types/react-dom': 16.9.5
       '@types/react-native': 0.61.0
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
@@ -12393,7 +12409,7 @@ packages:
       '@types/history': 4.7.4
       '@types/node': 12.12.25
       '@types/react': 16.9.17
-      '@types/react-dom': 16.9.4
+      '@types/react-dom': 16.9.5
       '@types/react-native': 0.61.0
       '@types/react-redux': 7.1.6
       '@types/react-router': 5.1.4
@@ -12438,6 +12454,7 @@ specifiers:
   '@sentry/node': ^5
   '@sentry/types': ^5
   '@types/chromedriver': ^2.38.0
+  '@types/cookie-parser': ^1.4.2
   '@types/express': ^4
   '@types/express-serve-static-core': ^4
   '@types/fs-extra': ^8
@@ -12462,6 +12479,7 @@ specifiers:
   chromedriver: ^78.0.1
   commander: ^4
   connected-react-router: 6.5.2
+  cookie-parser: ^1.4.4
   express: ^4
   express-winston: ^4.0.1
   fs-extra: ^8

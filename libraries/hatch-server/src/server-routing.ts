@@ -21,7 +21,7 @@ const wsRoutesKey = Symbol('wsEnabled');
 const custom = (routeDefiner: RouteDefiner) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
-    const requestHandler = (ctlr: any, req: Request, res: Response, next: NextFunction) => {
+    const requestHandler = async (ctlr: any, req: Request, res: Response, next: NextFunction) => {
       const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
       const container = rootContainer.createChildContainer();
       const logger = container.resolve<Logger>('Logger');
@@ -29,7 +29,7 @@ const custom = (routeDefiner: RouteDefiner) => {
         useValue: new BasicRouteParams(req, res, next, logger)
       });
       const args = resolveArgs(container, target, propertyKey);
-      originalMethod.apply(ctlr, args);
+      await originalMethod.apply(ctlr, args);
     };
 
     if (target[routeDefinersKey] == null) {
@@ -37,7 +37,7 @@ const custom = (routeDefiner: RouteDefiner) => {
     }
     target[routeDefinersKey].push((ctlr: any, app: Application, server: Server) => {
       routeDefiner(app, server, (req: Request<any>, res: Response, next: NextFunction) => {
-        requestHandler(ctlr, req, res, next);
+        requestHandler(ctlr, req, res, next).catch(next);
       });
     });
   };

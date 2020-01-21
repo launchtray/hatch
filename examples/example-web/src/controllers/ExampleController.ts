@@ -6,7 +6,7 @@ import {
   WebSocketRouteParams
 } from '@launchtray/hatch-server';
 import {HTTPResponder} from '@launchtray/hatch-server-middleware';
-import {inject, Logger} from '@launchtray/hatch-util';
+import {delay, inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import WebSocket from 'ws';
 
@@ -33,6 +33,12 @@ export default class ExampleController implements ServerMiddleware {
   @route.get('/api/person/:id')
   public personEndpoint(params: BasicRouteParams) {
     params.res.status(200).send('Person: ' + params.req.params.id);
+  }
+
+  @route.get('/api/error')
+  public async errorEndpoint(params: BasicRouteParams) {
+    await delay(1000);
+    throw new Error('Test error');
   }
 
   @route.websocket('/ws/:id')

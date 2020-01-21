@@ -74,7 +74,71 @@ from `hatch-web-server`. Conceptually, `WebClientComposition` represents entry p
 are not already coverd by `WebCommonComposition`.
 
 ### Controllers
-TODO
+Controllers are define HTTP routes that the server handles. Controller classes are registered by the 
+[composeServer.ts](#composeServerTs) module, and must be annotated with the `@controller` annotation exported by
+`hatch-server`. Within a Controller, routes are defined using decorators within the `route`
+namespace exported by `hatch-server`. These decorators use the same routing syntax that is used by
+[express](https://expressjs.com), including support for route parameters. A simple example of a GET route with a person
+ID parameter can be seen below:
+
+```typescript
+import {
+  BasicRouteParams,
+  controller,
+  route,
+  ServerMiddleware,
+} from '@launchtray/hatch-server';
+import {inject, Logger} from '@launchtray/hatch-util';
+
+@controller()
+export default class ExampleController implements ServerMiddleware {
+  // Note: dependencies can be injected into the constructor
+  constructor(@inject('Logger') private readonly logger: Logger) {
+  }
+
+  @route.get('/api/person/:id')
+  public personEndpoint(params: BasicRouteParams) {
+    params.res.status(200).send('Person: ' + params.req.params.id);
+  }
+
+  ...
+```
+
+As shown above, route methods can take in a parameter of type `BasicRouteParams`, which contains the Express 
+[Request](https://expressjs.com/en/api.html#req) and [Response](https://expressjs.com/en/api.html#res) objects, the 
+`next` callback passed to the request handler, as well as a Logger instance.
+
+However, when a request comes in, the server creates a new dependency injection container specifically for that request.
+This container is a child of the root container that is used by [composeServer.ts](#composeServerTs) and 
+[composeCommon.ts](#composeCommonTs) to register dependency classes. The only object that gets registered into the child
+container that is not also in the root container is a `BasicRouteParams` instance. The parameters of the route handler
+methods are actually auto-resolved using this container. This means that not only could we define the method with a
+single BasicRouteParams parameter, but we could also use any parameters, as long as they can be resolved by the child
+container described above. For example, imagine a very simple `HTTPResponder` class which depends on `BasicRouteParams`:
+```typescript
+import {BasicRouteParams} from '@launchtray/hatch-server';
+import {containerSingleton} from '@launchtray/hatch-util';
+
+@containerSingleton()
+export default class HTTPResponder {
+  constructor(public readonly params: BasicRouteParams) {}
+
+  public ok(body?: any) {
+    this.params.res.status(200).send(body);
+  }
+}
+```
+Since this class is annotated as injectable (via `@containerSingleton()`), and since it only depends on things that are
+registered in an HTTP request's child container (in this case, just `BasicRouteParams`), we can use it as a parameter to
+a route like so:
+
+```typescript
+@route.get('/api/example')
+public exampleEndpoint(responder: HTTPResponder) {
+  this.logger.info('Example endpoint called');
+  responder.ok('Example GET');
+}
+```
 
 ### Components
 Components are presentational React Components that are concerned with "how things look" and are not directly 
@@ -91,84 +155,90 @@ often also involve [React Router](https://reacttraining.com/react-router) compon
 
 If you're adding something that represents a "page" or "screen," it's likely a Container.
 
-Whenever you can, prefer using Components that are ignorant of Redux and React Router over Containers.
+Whenever you can, prefer using [Components](#Components) that are ignorant of Redux and React Router over Containers.
 
 ### Managers
 Web App Managers (or "Managers" for short, in the context of this project) tie the UI to business logic defined via
-[Service](#Services) modules. Managers do this by defining two types of methods:
-1. Methods decorated with `@onLocationChange()`, which run whenever a UI route is loaded. These methods run both on the
-   server and on the client. The server runs them during server-side rendering for the route that has been requested
-   by the browser. The client runs them for all client-side navigation events after the initial rendering by the server.
-   
-   The decorator applied to these methods can optionally constrain which routes will cause the method to run, by passing
-   in either a string representing a path, or an object which conforms to
-   [React Router's Route Props](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#route-props)
-   type. Note only the following are fields of this interface are really relevant to this use case: 
-   * [`path`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#path-string--string)
-   * [`exact`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#exact-bool)
-   * [`sensitive`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#sensitive-bool)
-   * [`strict`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#strict-bool)
-   
-   As an example, here's a method that is only called when the `/hi` route is loaded:
-   
-   ```typescript
-   @onLocationChange({path: '/hi'})
-   public async prepGreeting() {
-     this.logger.info('Hello, world!');
-   }
-   ```
-   Note that this could also just use the string '/hi' as a parameter:
-   ```typescript
-   @onLocationChange('/hi')
-   public async prepGreeting() {
-     this.logger.info('Hello, world!');
-   }
-   ```
-   Routes paths can also contain route parameters, e.g. extracting a user ID from the route:
-   ```typescript
-   @onLocationChange('/user/:id')
-   public async prepRoute(context: LocationChangeContext<{id: string}>) {
-     this.logger.info('Loaded user: ' + context.pathMatch.params.id);
-   }
-   ```
-   
-   As shown above, these methods can take in a `LocationChangeContext` object, which contains information about the 
-   route change that has been applied.
-   
-   However, making use of dependency injection, these methods can also take in any class registered in the dependency 
-   injection container. The container used to resolve the dependency will be injected with a single instance of
-   `LocationChangeContext`, meaning complex objects depending on this object can be constructed.
-   
-   For example, imagine we had a class `UserContext` which only needs an ID to be constructed:
-   ```typescript
-   @injectable
-   class UserContext {
-     public id: string;
-   
-     constructor(locationChangeContext: LocationChangeContext) {
-       this.id = context.pathMatch.params.id;
-     }
-   }
-   ```
-   
-   Our user ID location change handler above could simply be written as this:
-   
-   ```typescript
-   @onLocationChange('/user/:id')
-   public async prepRoute(context: UserContext) {
-     this.logger.info('Loaded user: ' + context.id);
-   }
-   ```
-   As you might imagine, much more complex object trees could potentially be derived from a container injected with a
-   `LocationChangeContext` object.
-   
-1. Methods decorated with `@onClientLoad()`, which run when the client loads. Common use cases for these are for setting
-   up long-running effects (e.g. refresh timers, or `takeEvery` saga effects).
-   
-   The root parameter type for these methods is `ClientLoadContext`. However, like with `@onLocationChange` methods, 
-   these methods can build up more complex parameter types, making use of dependency injection. The container used to
-   resolve the dependency will be injected with a single instance of `ClientLoadContext`.
-   
+[Service](#Services) modules. Managers do this by defining two types of methods: 
+[location change handlers](#location-change-handlers) and [client load handlers](#client-load-handlers). Either of these
+methods types can be defined as `async` methods, or [as Sagas](#manager-methods-as-sagas).
+
+#### Location change handlers
+Methods decorated with `@onLocationChange()`, which run whenever a UI route is loaded. These methods run both on the
+server and on the client. The server runs them during server-side rendering for the route that has been requested
+by the browser. The client runs them for all client-side navigation events after the initial rendering by the server.
+
+The decorator applied to these methods can optionally constrain which routes will cause the method to run, by passing
+in either a string representing a path, or an object which conforms to
+[React Router's Route Props](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#route-props)
+type. Note only the following are fields of this interface are really relevant to this use case: 
+* [`path`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#path-string--string)
+* [`exact`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#exact-bool)
+* [`sensitive`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#sensitive-bool)
+* [`strict`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#strict-bool)
+
+As an example, here's a method that is only called when the `/hi` route is loaded:
+
+```typescript
+@onLocationChange({path: '/hi'})
+public async prepGreeting() {
+  this.logger.info('Hello, world!');
+}
+```
+Note that this could also just use the string '/hi' as a parameter:
+```typescript
+@onLocationChange('/hi')
+public async prepGreeting() {
+  this.logger.info('Hello, world!');
+}
+```
+Routes paths can also contain route parameters, e.g. extracting a user ID from the route:
+```typescript
+@onLocationChange('/user/:id')
+public async prepRoute(context: LocationChangeContext<{id: string}>) {
+  this.logger.info('Loaded user: ' + context.pathMatch.params.id);
+}
+```
+
+As shown above, these methods can take in a `LocationChangeContext` object, which contains information about the 
+route change that has been applied.
+
+However, making use of dependency injection, these methods can also take in any class registered in the dependency 
+injection container. The container used to resolve the dependency will be injected with a single instance of
+`LocationChangeContext`, meaning complex objects depending on this object can be constructed.
+
+For example, imagine we had a class `UserContext` which only needs an ID to be constructed:
+```typescript
+@injectable
+class UserContext {
+  public id: string;
+
+  constructor(locationChangeContext: LocationChangeContext) {
+    this.id = context.pathMatch.params.id;
+  }
+}
+```
+
+Our user ID location change handler above could simply be written as this:
+
+```typescript
+@onLocationChange('/user/:id')
+public async prepRoute(context: UserContext) {
+  this.logger.info('Loaded user: ' + context.id);
+}
+```
+As you might imagine, much more complex object trees could potentially be derived from a container injected with a
+`LocationChangeContext` object.
+
+#### Client load handlers
+Methods decorated with `@onClientLoad()`, which run when the client loads. Common use cases for these are for setting
+up long-running effects (e.g. refresh timers, or `takeEvery` saga effects).
+
+The root parameter type for these methods is `ClientLoadContext`. However, like with `@onLocationChange` methods, 
+these methods can build up more complex parameter types, making use of dependency injection. The container used to
+resolve the dependency will be injected with a single instance of `ClientLoadContext`.
+
+#### Manager methods as Sagas
 All of the examples above show `async` methods. For simple use cases, this might be sufficient. However, for more 
 complex cases, these methods can also be generators which yield 
 [Redux Saga Effects](https://redux-saga.js.org/docs/basics/DeclarativeEffects.html). For example:
@@ -187,7 +257,56 @@ complex cases, these methods can also be generators which yield
    ```
 
 ### Actions
+Actions are simply [Redux actions](https://redux.js.org/basics/actions). For the best developer experience, actions 
+should be defined in a top-level `actions` object using the `defineAction` module in `hatch-web`. As an example:
+
+```typescript
+import {defineAction} from '@launchtray/hatch-web';
+
+const actions = {
+  exampleAction: defineAction
+    .type('exampleAction')
+    .payload<{
+      stringField: string,
+      optionalStringField?: string,
+    }>(),
+  exampleAction2: defineAction
+    .type('exampleAction2')
+    .payload<{
+      numberField: number,
+    }>(),
+};
+
+export default actions;
+```
+The syntax is admittedly a little weird (don't miss the trailing `()`), but ensures type safety.
+
 ### Reducers
+Reducers are simply [Redux reducers](https://redux.js.org/basics/reducers). For the best developer experience, reducers
+should be defined using the `defineReducer` module in `hatch-web`. As an example:
+
+```typescript
+import {defineReducer} from '@launchtray/hatch-web';
+import actions from '../actions/index';
+
+export default defineReducer({
+  numberState: 97,
+  stringState: '',
+})
+  .on(actions.exampleAction, (state, payload) => {
+    return {
+      ...state,
+      stringState: payload.stringField,
+    };
+  })
+  .on(actions.exampleAction2, (state, payload) => ({
+    ...state,
+    numberState: payload.numberField,
+  }));
+```
+
+Using this module adds type safety.
+
 ### Services
 ### Utilities
 

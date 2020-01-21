@@ -7,6 +7,7 @@ import {
   scoped as tsyringe_scoped,
 } from 'tsyringe';
 import {Dictionary} from 'tsyringe/dist/typings/types';
+import {NonLogger} from './NonLogger';
 
 export type TokenKey = string | symbol;
 
@@ -39,7 +40,13 @@ const remapToken = ({tokenRegisteredByProject, tokenUsedByDependency, dependency
 const getToken = (tokenUsedByDependency: TokenKey, dependency: any): TokenKey => {
   const dependencyName = dependency?.name;
   if (dependencySpecificTokens == null) {
-    throw new Error('Injectable "' + dependencyName + '" cannot be imported before composition module');
+    if (process && process.env && (process.env.JEST_WORKER_ID || process.env.NODE_ENV === 'test')) {
+      console.info('Using default dependency injection initialization for testing');
+      initializeInjection();
+      ROOT_CONTAINER.registerInstance('Logger', new NonLogger());
+    } else {
+      throw new Error('Injectable "' + dependencyName + '" cannot be imported before composition module');
+    }
   }
   const tokenMap = dependencySpecificTokens.get(dependencyName) ?? globalTokens;
   const resolvedToken = tokenMap.get(tokenUsedByDependency);

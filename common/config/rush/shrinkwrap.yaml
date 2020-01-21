@@ -12329,6 +12329,7 @@ packages:
   'file:projects/hatch-util.tgz':
     dependencies:
       '@sentry/types': 5.11.0
+      '@types/node': 12.12.25
       reflect-metadata: 0.1.13
       rimraf: 3.0.0
       tsyringe: 4.0.1
@@ -12336,7 +12337,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-util'
     resolution:
-      integrity: sha512-55ld1bzdZrDzlo/8pVsFNLLrfn2LNBBDEAeQ/dtb3oaZlT5c46Wo0e4kz2jF7qMJamNh74wb0iXqI8J75W/QvQ==
+      integrity: sha512-eaDYNWwdyl9Sejc4iNMNCzFRdybRF/zCRo+ZCoIFLPZWpz98PMo9w/E2OFtBTfRULvp+mlAgU8A2nVyE1YS2tA==
       tarball: 'file:projects/hatch-util.tgz'
     version: 0.0.0
   'file:projects/hatch-web-client.tgz':

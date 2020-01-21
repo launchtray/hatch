@@ -6,7 +6,6 @@ import {Application} from 'express';
 @injectable()
 export default class CookieParser implements ServerMiddleware {
   public async register(app: Application) {
-    app
-      .use(cookieParser());
+    app.use(cookieParser());
   }
 }

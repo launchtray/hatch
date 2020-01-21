@@ -42,7 +42,7 @@ export default class ExampleManager {
 
   @onLocationChange({path: '/hi'})
   public async prepHI(context: LocationChangeContext<{route: string}>) {
-    this.logger.info('HELLO, WORLD!');
+    this.logger.info('HELLO, WORLD. Cookie: ' + context.cookie);
   }
 
   @onLocationChange({path: '/:route'})

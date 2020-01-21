@@ -15,11 +15,9 @@
     "express-winston": "^4.0.1"
   },
   "peerDependencies": {
-    "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4",
     "@launchtray/hatch-server": "^0.2.0",
     "@launchtray/hatch-util": "^0.1.3",
-    "cookie-parser": "^1.4.4",
     "express": "^4",
     "winston": "^3"
   }

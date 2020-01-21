@@ -1,6 +1,5 @@
 import {middlewareFor} from '@launchtray/hatch-server';
 import {
-  CookieParser,
   JSONBodyParser,
   RequestLogger,
   RouteNotFound,
@@ -24,7 +23,6 @@ export default async (): Promise<WebServerComposition> => {
     serverMiddleware: [
       JSONBodyParser,
       RequestLogger,
-      CookieParser,
       RouteNotFound, // Catch-all 404 for unimplemented APIs
     ],
   };

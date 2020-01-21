@@ -35,6 +35,8 @@ interface ClientRenderRequestContext {
   prettify: boolean;
   logger: Logger;
   errorReporter: ErrorReporter;
+  cookie?: string;
+  authHeader?: string;
 }
 
 let assets: any;
@@ -46,7 +48,7 @@ syncLoadAssets();
 
 const renderClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
   const clientContainer = ROOT_CONTAINER.createChildContainer();
-  const {composition, logger, errorReporter} = requestContext;
+  const {composition, logger, errorReporter, cookie, authHeader} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
   const {navMiddleware, location} = createNavMiddleware(requestContext.requestURL);
   const middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(errorReporter));
@@ -58,7 +60,9 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
     ...webAppManagers,
   );
   const webAppManagerInstances = resolveWebAppManagers(clientContainer);
-  const rootSaga = createSagaForWebAppManagers(logger, webAppManagerInstances, store, clientContainer, true);
+  const rootSaga = createSagaForWebAppManagers(
+    logger, webAppManagerInstances, store, clientContainer, cookie, authHeader, true
+  );
 
   const rootSagaTask = sagaMiddleware.run(rootSaga);
   store.dispatch(navActions.serverLocationLoaded({location}));
@@ -148,6 +152,8 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
           prettify,
           logger,
           errorReporter,
+          cookie: req.headers.cookie,
+          authHeader: req.headers.authorization,
         };
         renderClient(requestContext).then((body) => {
           res.status(200).send(body);

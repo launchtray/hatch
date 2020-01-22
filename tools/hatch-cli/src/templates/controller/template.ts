@@ -1,20 +1,14 @@
 import {
   controller,
   route,
-  ServerMiddleware
 } from '@launchtray/hatch-server';
 import {BasicRouteParams, HTTPResponder} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
-import {Application} from 'express';
 
 @controller()
-export default class HATCH_CLI_TEMPLATE_VAR_moduleName implements ServerMiddleware {
+export default class HATCH_CLI_TEMPLATE_VAR_moduleName {
 
   constructor(@inject('Logger') private readonly logger: Logger) {
-
-  }
-
-  public async register(app: Application): Promise<void> {
 
   }
 

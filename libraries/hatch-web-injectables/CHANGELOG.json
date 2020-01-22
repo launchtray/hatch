@@ -1,0 +1,25 @@
+{
+  "name": "@launchtray/hatch-web-injectables",
+  "entries": [
+    {
+      "version": "0.1.1",
+      "tag": "@launchtray/hatch-web-injectables_v0.1.1",
+      "date": "Wed, 22 Jan 2020 07:53:10 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Initial release to support flattening of per-request dependencies"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.3` to `^0.1.4`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-web\" from `^0.1.5` to `^0.2.0`"
+          }
+        ]
+      }
+    }
+  ]
+}

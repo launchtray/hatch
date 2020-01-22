@@ -2,6 +2,26 @@
   "name": "@launchtray/hatch-web-client",
   "entries": [
     {
+      "version": "0.2.0",
+      "tag": "@launchtray/hatch-web-client_v0.2.0",
+      "date": "Wed, 22 Jan 2020 07:53:10 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Flattened per-request dependencies"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-web\" from `^0.1.3` to `^0.2.0`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.3` to `^0.1.4`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.2",
       "tag": "@launchtray/hatch-web-client_v0.1.2",
       "date": "Tue, 14 Jan 2020 10:46:31 GMT",

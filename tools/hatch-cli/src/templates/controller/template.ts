@@ -1,10 +1,9 @@
 import {
-  BasicRouteParams,
   controller,
   route,
   ServerMiddleware
 } from '@launchtray/hatch-server';
-import {HTTPResponder} from '@launchtray/hatch-server-middleware';
+import {BasicRouteParams, HTTPResponder} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 

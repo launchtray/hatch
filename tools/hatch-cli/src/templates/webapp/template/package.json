@@ -13,7 +13,7 @@
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
-    "@launchtray/hatch-server": "^0.3.0",
+    "@launchtray/hatch-server": "^0.3.1",
     "@launchtray/hatch-util": "^0.1.4",
     "@launchtray/hatch-web": "^0.2.0",
     "@launchtray/hatch-web-injectables": "^0.1.1",

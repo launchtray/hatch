@@ -13,6 +13,7 @@ import {
   resetDefinedActions,
   resolveWebAppManagers,
   WebCommonComposition,
+  runtimeConfig,
 } from '@launchtray/hatch-web';
 import express from 'express';
 import React from 'react';
@@ -24,7 +25,6 @@ import {applyMiddleware, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import serialize, {SerializeJSOptions} from 'serialize-javascript';
 import {WebServerComposition} from './WebServerComposer';
-import {runtimeConfig} from "./config";
 
 const SSR_TIMEOUT_MS = 5000;
 

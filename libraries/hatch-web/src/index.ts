@@ -16,6 +16,7 @@ import {
   webAppManager
 } from './WebAppManager';
 import {WebCommonComposition} from './WebCommonComposer';
+import {runtimeConfig} from './config';
 
 export {
   effects,
@@ -37,5 +38,6 @@ export {
   resolveWebAppManagers,
   Button,
   Link,
-  createErrorReporterMiddleware
+  createErrorReporterMiddleware,
+  runtimeConfig
 };

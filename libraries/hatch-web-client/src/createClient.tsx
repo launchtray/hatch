@@ -14,7 +14,8 @@ import {
   NavProvider,
   registerWebAppManagers,
   resetDefinedActions,
-  resolveWebAppManagers
+  resolveWebAppManagers,
+  runtimeConfig,
 } from '@launchtray/hatch-web';
 import {
   addBreadcrumb,
@@ -67,7 +68,7 @@ if (module.hot) {
   }
 }
 
-const dsn: string | undefined = process.env.SENTRY_DSN;
+const dsn: string | undefined = runtimeConfig.SENTRY_DSN;
 
 const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },

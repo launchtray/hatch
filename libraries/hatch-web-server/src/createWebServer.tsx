@@ -13,6 +13,7 @@ import {
   resetDefinedActions,
   resolveWebAppManagers,
   WebCommonComposition,
+  runtimeConfig,
 } from '@launchtray/hatch-web';
 import express from 'express';
 import React from 'react';
@@ -124,6 +125,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       <div id="root">${html}</div>
       <script>
         window.__PRELOADED_STATE__ = ${serialize(store.getState())}
+        window.__ENV__ = ${serialize(runtimeConfig)}
       </script>
     </body>
     </html>`

@@ -7,7 +7,7 @@ export default class SentryReporter implements ErrorReporter {
   private initializedWarningShown: boolean = false;
 
   constructor(private readonly sentry: SentryMonitor, options: Options) {
-    if (options !== null) {
+    if (options && options.dsn) {
       this.sentry.init({dsn: options.dsn, integrations: options.integrations});
       this.initialized = true;
     } else {

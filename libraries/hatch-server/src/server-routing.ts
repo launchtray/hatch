@@ -99,9 +99,11 @@ const websocket = (path: PathParams) => {
 };
 
 export const cleanUpRouting = (app: Application, server: Server) => {
-  server[wsRoutesKey].forEach((route: any) => {
-    route.wss.close();
-  });
+  if (server[wsRoutesKey] != null) {
+    server[wsRoutesKey].forEach((route: any) => {
+      route.wss.close();
+    });
+  }
   server[wsRoutesKey] = null;
   server.removeAllListeners('upgrade');
 };

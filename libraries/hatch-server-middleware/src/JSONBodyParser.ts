@@ -4,7 +4,7 @@ import express, {Application} from 'express';
 
 @injectable()
 export default class JSONBodyParser implements ServerMiddleware {
-  public async register(server: Application) {
-    server.use(express.json());
+  public async register(app: Application) {
+    app.use(express.json());
   }
 }

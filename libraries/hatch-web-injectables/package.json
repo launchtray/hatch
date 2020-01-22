@@ -1,0 +1,28 @@
+{
+  "name": "@launchtray/hatch-web-injectables",
+  "version": "0.1.1",
+  "description": "Injectable utility components for web applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "devDependencies": {
+    "rimraf": "3.0.0"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "^0.1.4",
+    "@launchtray/hatch-web": "^0.2.0",
+    "react-router": "^5",
+    "react-router-dom": "^5",
+    "redux": "^4",
+    "@types/react-dom": "^16",
+    "@types/react-router": "^5",
+    "@types/react-router-dom": "^5"
+  }
+}

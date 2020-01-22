@@ -66,6 +66,7 @@ export const moduleCreator = (parentDirectory: string, extension = 'ts') => {
 };
 
 export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: CopyDirOptions) => {
+  const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   if (fs.existsSync(dstPath)) {
     throw new Error('Failed to create ' + dstPath + ' as it already exits!');
   }
@@ -88,23 +89,28 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
         tempFileFuture.complete([path, cleanUp]);
       });
     }
-    const [path, cleanUp] = await tempFileFuture.get();
+    const [tempFilePath, cleanUp] = await tempFileFuture.get();
     try {
-      await fs.copy(srcPath, path);
+      await fs.copy(srcPath, tempFilePath);
       if (isProject) {
         await replace({
-          files: path + '/**/*',
+          files: tempFilePath + '/**/*',
           from: /HATCH_CLI_TEMPLATE_VAR_projectName/g,
           to: name,
         });
+        await replace({
+          files: tempFilePath + '/package.json',
+          from: '@launchtray/hatch-template-' + templateName,
+          to: name
+        })
       } else {
         await replace({
-          files: path,
+          files: tempFilePath,
           from: /HATCH_CLI_TEMPLATE_VAR_moduleName/g,
           to: name,
         });
       }
-      await fs.copy(path, dstPath);
+      await fs.copy(tempFilePath, dstPath);
     } finally {
       cleanUp();
     }

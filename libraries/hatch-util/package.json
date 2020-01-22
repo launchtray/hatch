@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-util",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Utilities used by several other hatch modules",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -14,11 +14,12 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.0.1"
+    "tsyringe": "4.0.1"
   },
   "devDependencies": {
     "typescript": "^3.7.3",
-    "rimraf": "3.0.0"
+    "rimraf": "3.0.0",
+    "@types/node": "^12"
   },
   "peerDependencies": {
     "@sentry/types": "^5"

@@ -1,12 +1,16 @@
 import {Class, DependencyContainer, injectable, Logger, resolveArgs} from '@launchtray/hatch-util';
 import {match, matchPath, RouteProps} from 'react-router';
-import {Store} from 'redux';
+import {AnyAction, Store} from 'redux';
 import {Saga} from 'redux-saga';
 import {call} from 'redux-saga/effects';
-import ClientLoadContext from './ClientLoadContext';
 import effects, {Effect} from './effects';
-import LocationChangeContext from './LocationChangeContext';
-import {Location, navActions} from './NavProvider';
+import {
+  Location,
+  navActions,
+  selectLocationFromLocationChangeAction,
+  selectFirstRenderingFromLocationChangeAction
+} from './NavProvider';
+import {isActionType} from './defineAction';
 
 export const webAppManager = injectable;
 const pathMatchersKey = Symbol('pathMatchers');
@@ -72,7 +76,7 @@ const forEachClientLoader = (
 };
 
 const hasWebAppManagerMethods = (target: any): boolean => {
-  return (target[clientLoadersKey] != null) && (target[pathMatchersKey] != null);
+  return (target[clientLoadersKey] != null) || (target[pathMatchersKey] != null);
 };
 
 export const createSagaForWebAppManagers = (
@@ -80,6 +84,8 @@ export const createSagaForWebAppManagers = (
   webAppManagers: any[],
   store: Store,
   rootContainer: DependencyContainer,
+  cookie?: string,
+  authHeader?: string,
   isServer = false,
   ssrEnabled = true,
 ): Saga => {
@@ -95,9 +101,9 @@ export const createSagaForWebAppManagers = (
   if (!isServer) {
     const handleClientLoadSagas: Effect[] = [];
     const container = rootContainer.createChildContainer();
-    container.register<ClientLoadContext>(ClientLoadContext, {
-      useValue: new ClientLoadContext(store)
-    });
+    container.registerInstance('Store', store);
+    container.registerInstance('cookie', cookie ?? '');
+    container.registerInstance('authHeader', authHeader ?? '');
     webAppManagers.forEach((manager: any) => {
       const target = manager.constructor.prototype;
       forEachClientLoader(target, (propertyKey) => {
@@ -111,9 +117,18 @@ export const createSagaForWebAppManagers = (
     navActions.locationChange,
     navActions.serverLocationLoaded
   ];
-  const navWorker = function *(action: {payload: {location: Location, isFirstRendering?: boolean}}) {
-    const {location, isFirstRendering} = action.payload;
-    if (!ssrEnabled || !isFirstRendering) {
+  const navWorker = function *(action: AnyAction) {
+    let location: Location;
+    let isFirstRendering: boolean;
+    if (isActionType(navActions.serverLocationLoaded, action)) {
+      location = action.payload.location;
+      isFirstRendering = false;
+    } else {
+      location = selectLocationFromLocationChangeAction(action);
+      isFirstRendering = selectFirstRenderingFromLocationChangeAction(action);
+    }
+
+    if (!ssrEnabled || !isFirstRendering || location.fragment) {
       const handleLocationChangeSagas: Effect[] = [];
       webAppManagers.forEach((manager: any) => {
         const target = manager.constructor.prototype;
@@ -121,9 +136,14 @@ export const createSagaForWebAppManagers = (
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
             const container = rootContainer.createChildContainer();
-            container.register<LocationChangeContext>(LocationChangeContext, {
-              useValue: new LocationChangeContext(pathMatch, location, isServer, store)
-            });
+
+            container.registerInstance('pathMatch', pathMatch);
+            container.registerInstance('Location', location);
+            container.registerInstance('isServer', isServer);
+            container.registerInstance('Store', store);
+            container.registerInstance('cookie', cookie ?? '');
+            container.registerInstance('authHeader', authHeader ?? '');
+
             const args = resolveArgs(container, target, propertyKey);
             handleLocationChangeSagas.push(call(
               [manager, manager[propertyKey]], ...args));

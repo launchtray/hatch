@@ -6,11 +6,11 @@ import {
 } from '@launchtray/hatch-util';
 import {
   effects,
-  LocationChangeContext,
   onClientLoad,
   onLocationChange,
   webAppManager,
 } from '@launchtray/hatch-web';
+import {ClientLoadContext, LocationChangeContext} from '@launchtray/hatch-web-injectables';
 
 @injectable()
 export class ExampleDependencyForManager {
@@ -38,6 +38,11 @@ export default class ExampleManager {
   public *handleEveryLocationChange() {
     yield *effects.call([this.logger, this.logger.info], 'ExampleManager.handleEveryLocationChange');
     yield effects.put({type: 'TEST_ACTION.handleEveryLocationChange'});
+  }
+
+  @onLocationChange({path: '/hi'})
+  public async prepHI(context: LocationChangeContext<{route: string}>) {
+    this.logger.info('HELLO, WORLD. Cookie: ' + context.cookie);
   }
 
   @onLocationChange({path: '/:route'})

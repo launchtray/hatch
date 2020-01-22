@@ -6,10 +6,12 @@ dependencies:
   '@rush-temp/hatch-razzle-config': 'file:projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz'
+  '@rush-temp/hatch-template-webapp': 'file:projects/hatch-template-webapp.tgz'
   '@rush-temp/hatch-test': 'file:projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz'
   '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz'
+  '@rush-temp/hatch-web-injectables': 'file:projects/hatch-web-injectables.tgz'
   '@rush-temp/hatch-web-server': 'file:projects/hatch-web-server.tgz'
   '@sentry/browser': 5.11.1
   '@sentry/node': 5.11.1
@@ -32,7 +34,9 @@ dependencies:
   '@types/supertest': 2.0.8
   '@types/tmp': 0.1.0
   '@types/webpack-env': 1.15.0
+  '@types/ws': 7.2.0
   ansi-escapes: 4.3.0
+  bufferutil: 4.0.1
   chalk: 3.0.0
   chromedriver: 78.0.1
   commander: 4.1.0
@@ -48,11 +52,13 @@ dependencies:
   ora: 4.0.3
   prop-types: 15.7.2
   razzle: 3.0.0
+  razzle-dev-utils: 3.0.0
   razzle-plugin-typescript: 3.0.0
   react: 16.12.0
   react-dom: 16.12.0
   react-error-overlay: 6.0.4
   react-helmet-async: 1.0.4
+  react-native-web: 0.11.7
   react-redux: 7.1.3
   react-router: 5.1.2
   react-router-dom: 5.1.2
@@ -73,9 +79,11 @@ dependencies:
   tslint-react: 4.2.0
   tsyringe: 4.0.1
   typescript: 3.7.5
+  utf-8-validate: 5.0.2
   webpack: 4.41.5
   winston: 3.2.1
   winston-transport: 4.3.0
+  ws: 7.2.1
 packages:
   /@babel/code-frame/7.0.0:
     dependencies:
@@ -1589,6 +1597,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-TfcyNecCz8Z9/s90gBOBniyzZrTru8u2Vp0VZODq4KEBaQu8bfXvu7o/KUOecMpzjbFPUA7aqgSq628Iue5BQg==
+  /@types/ws/7.2.0:
+    dependencies:
+      '@types/node': 12.12.25
+    dev: false
+    resolution:
+      integrity: sha512-HnqczxiZ828df9FUh9OyY7vSOelpQNaj+SLEnDvU74rYijp61ggV7dhmDlMky0oYXKLdVuIG4KvExk8DEqzJgQ==
   /@types/yargs-parser/15.0.0:
     dev: false
     resolution:
@@ -2645,6 +2659,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==
+  /bufferutil/4.0.1:
+    dependencies:
+      node-gyp-build: 3.7.0
+    dev: false
+    requiresBuild: true
+    resolution:
+      integrity: sha512-xowrxvpxojqkagPcWRQVXZl0YXhRhAtBEIq3VoER1NH5Mw1n1o0ojdspp+GS2J//2gCVyrzQDApQ4unGF+QOoA==
   /builtin-modules/1.1.1:
     dev: false
     engines:
@@ -7564,6 +7585,11 @@ packages:
       node: '>= 4.5.0'
     resolution:
       integrity: sha512-7ASaDa3pD+lJ3WvXFsxekJQelBKRpne+GOVbLbtHYdd7pFspyeuJHnWfLplGf3SwKGbfs/aYl5V/JCIaHVUKKQ==
+  /node-gyp-build/3.7.0:
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-L/Eg02Epx6Si2NXmedx+Okg+4UHqmaf3TNcxd50SF9NQGcJaON3AtU++kax69XV7YWz4tUspqZSAsVofhFKG2w==
   /node-int64/0.4.0:
     dev: false
     resolution:
@@ -9352,6 +9378,24 @@ packages:
     dev: false
     resolution:
       integrity: sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
+  /react-native-web/0.11.7:
+    dependencies:
+      array-find-index: 1.0.2
+      create-react-class: 15.6.3
+      debounce: 1.2.0
+      deep-assign: 3.0.0
+      fbjs: 1.0.0
+      hyphenate-style-name: 1.0.3
+      inline-style-prefixer: 5.1.0
+      normalize-css-color: 1.0.2
+      prop-types: 15.7.2
+      react-timer-mixin: 0.13.4
+    dev: false
+    peerDependencies:
+      react: '>=16.5.1'
+      react-dom: '>=16.5.1'
+    resolution:
+      integrity: sha512-w1KAxX2FYLS2GAi3w3BnEZg/IUu7FdgHnLmFKHplRnHMV3u1OPB2EVA7ndNdfu7ds4Rn2OZjSXoNh6F61g3gkA==
   /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0:
     dependencies:
       array-find-index: 1.0.2
@@ -9373,27 +9417,6 @@ packages:
       react-dom: '>=16.5.1'
     resolution:
       integrity: sha512-w1KAxX2FYLS2GAi3w3BnEZg/IUu7FdgHnLmFKHplRnHMV3u1OPB2EVA7ndNdfu7ds4Rn2OZjSXoNh6F61g3gkA==
-  /react-native-web/0.12.0-rc.1/react-dom@16.12.0+react@16.12.0:
-    dependencies:
-      array-find-index: 1.0.2
-      create-react-class: 15.6.3
-      debounce: 1.2.0
-      deep-assign: 3.0.0
-      fbjs: 1.0.0
-      hyphenate-style-name: 1.0.3
-      inline-style-prefixer: 5.1.0
-      normalize-css-color: 1.0.2
-      prop-types: 15.7.2
-      react: 16.12.0
-      react-dom: /react-dom/16.12.0/react@16.12.0
-      react-timer-mixin: 0.13.4
-    dev: false
-    id: registry.npmjs.org/react-native-web/0.12.0-rc.1
-    peerDependencies:
-      react: '>=16.5.1'
-      react-dom: '>=16.5.1'
-    resolution:
-      integrity: sha512-tlpeWzn6NbTVJYvT5aNUru38ERXkQGp7yAuJ1WDO9oAlplrCghFvspU/7JKqtYRjzsYxR3w2sQMFIWdgajOQ3A==
   /react-redux/7.1.3:
     dependencies:
       '@babel/runtime': 7.8.3
@@ -11466,6 +11489,13 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
+  /utf-8-validate/5.0.2:
+    dependencies:
+      node-gyp-build: 3.7.0
+    dev: false
+    requiresBuild: true
+    resolution:
+      integrity: sha512-SwV++i2gTD5qh2XqaPzBnNX88N6HdyhQrNNRykvcS0QKvItV9u3vPEJr+X5Hhfb1JC0r0e1alL0iB09rY8+nmw==
   /util-deprecate/1.0.2:
     dev: false
     resolution:
@@ -11907,6 +11937,28 @@ packages:
     dev: false
     resolution:
       integrity: sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
+  /ws/7.2.1:
+    dev: false
+    engines:
+      node: '>=8.3.0'
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    resolution:
+      integrity: sha512-sucePNSafamSKoOqoNfBd8V0StlkzJKL2ZAhGQinCfNQ+oacw+Pk7lcdAElecBF2VkLNZRiIb5Oi1Q5lVUVt2A==
+  /ws/7.2.1/5290a7aab7631971258e1bd11475725e:
+    dependencies:
+      bufferutil: 4.0.1
+      utf-8-validate: 5.0.2
+    dev: false
+    engines:
+      node: '>=8.3.0'
+    id: registry.npmjs.org/ws/7.2.1
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    resolution:
+      integrity: sha512-sucePNSafamSKoOqoNfBd8V0StlkzJKL2ZAhGQinCfNQ+oacw+Pk7lcdAElecBF2VkLNZRiIb5Oi1Q5lVUVt2A==
   /xml-name-validator/3.0.0:
     dev: false
     resolution:
@@ -12072,6 +12124,8 @@ packages:
       '@types/superagent': 4.1.4
       '@types/supertest': 2.0.8
       '@types/webpack-env': 1.15.0
+      '@types/ws': 7.2.0
+      bufferutil: 4.0.1
       chromedriver: 78.0.1
       express: 4.17.1
       geckodriver: 1.19.1
@@ -12079,11 +12133,12 @@ packages:
       jest: 24.9.0
       prop-types: 15.7.2
       razzle: 3.0.0
+      razzle-dev-utils: 3.0.0
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-error-overlay: 6.0.4
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
-      react-native-web: /react-native-web/0.12.0-rc.1/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -12098,13 +12153,15 @@ packages:
       tslint-eslint-rules: /tslint-eslint-rules/5.4.0/tslint@5.20.1+typescript@3.7.5
       tslint-react: /tslint-react/4.2.0/tslint@5.20.1+typescript@3.7.5
       typescript: 3.7.5
+      utf-8-validate: 5.0.2
       webpack: 4.41.5
       winston: 3.2.1
       winston-transport: 4.3.0
+      ws: /ws/7.2.1/5290a7aab7631971258e1bd11475725e
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-saDeBd+AP5xWQKb7NRcCmClTk6NDa6t4dZh9jWsyVgHN9tw02YxVQoA7wUsUSrLFBce5mZ6jcpFhOCJ7Hfx0ug==
+      integrity: sha512-xIdkobsOCpQ58P5r4XT6N0CTnYel93UP95hsOmZFoSkreLmZ2gK1eEafcN/3Bgl6A+Uci4kEcmz2MktiI36UUg==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -12120,34 +12177,42 @@ packages:
       inquirer: 7.0.3
       ora: 4.0.3
       replace-in-file: 5.0.2
+      rimraf: 3.0.0
       tmp: 0.1.0
+      typescript: 3.7.5
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-HQgAJ4NvfD0/MgnW7krhGqXdALMjCgihA0nxhwMV8h6tiV7Nn0E34NmyB3Re7yFn/v5SDCTve0HAJSarPrH1eQ==
+      integrity: sha512-WcbacoDsVxc1Crnf0qxGZ3JuHt5UlFJO/WAAhXR9+ASoA1+FzcWiEPAuGLfzYqDyyux0TCluTuuh1tLFungo8A==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
     dependencies:
+      razzle-dev-utils: 3.0.0
       razzle-plugin-typescript: /razzle-plugin-typescript/3.0.0/tslint@5.20.1+webpack@4.41.5
       tslint: 5.20.1
       webpack: 4.41.5
     dev: false
     name: '@rush-temp/hatch-razzle-config'
     resolution:
-      integrity: sha512-COLttP6807m8zPMuYK22DREOV/Zr6q8yVsRKWlsyBqjloiknqNiteqbrpdFzfBhVisbJQANiKo8TB0niR5Oa1A==
+      integrity: sha512-kPM4SxiXtriR7LnMvoP/jV91LJ+e9pJEueMlJl/0eVOK7fj/4mRWl/pmAeZyzIiuRcRMcYSW6dVybIKj5F3/nw==
       tarball: 'file:projects/hatch-razzle-config.tgz'
     version: 0.0.0
   'file:projects/hatch-server-middleware.tgz':
     dependencies:
       '@types/express': 4.17.2
+      '@types/express-serve-static-core': 4.17.2
+      '@types/ws': 7.2.0
+      bufferutil: 4.0.1
       express: 4.17.1
       express-winston: /express-winston/4.0.2/winston@3.2.1
+      utf-8-validate: 5.0.2
       winston: 3.2.1
+      ws: /ws/7.2.1/5290a7aab7631971258e1bd11475725e
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-jI0StguWyCvTCPUO3KAqec1qvGnMqEDvm6UHtIXun6QalnKVmnTcK4Z1GIgYCqX2uQ92llZGC8FXJlc52aiTrQ==
+      integrity: sha512-IpxOpWUplxDtuuzI8G8NNLfczbdaj7qiRhIpOOZb/FZMRnemSN66FY3jVrfr9No1h+8rXHxdfz2Pf563zTzVcA==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -12158,14 +12223,81 @@ packages:
       '@types/express-serve-static-core': 4.17.2
       '@types/node': 12.12.25
       '@types/webpack-env': 1.15.0
+      '@types/ws': 7.2.0
+      bufferutil: 4.0.1
       express: 4.17.1
+      utf-8-validate: 5.0.2
       winston: 3.2.1
       winston-transport: 4.3.0
+      ws: /ws/7.2.1/5290a7aab7631971258e1bd11475725e
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-ao7O2uxt/Kgf/cjmsS+azE04FuWq1gHmwE+WOhQjDUOSoDBFXCJf211rJ3GiaF0qxJHJidQGI55ifM9i4haASQ==
+      integrity: sha512-2mVSH54Xq65hHyE2pxGUpr0GvquA8BPtOlycNPVqGmF52JKrS/L66W2gXpfaR/lWAalg9oiiEH/6TN7nneKsYw==
       tarball: 'file:projects/hatch-server.tgz'
+    version: 0.0.0
+  'file:projects/hatch-template-webapp.tgz':
+    dependencies:
+      '@babel/core': 7.8.3
+      '@redux-saga/core': 1.1.3
+      '@sentry/browser': 5.11.1
+      '@sentry/node': 5.11.1
+      '@sentry/types': 5.11.0
+      '@types/chromedriver': 2.38.0
+      '@types/express': 4.17.2
+      '@types/express-serve-static-core': 4.17.2
+      '@types/jest': 24.9.0
+      '@types/node': 12.12.25
+      '@types/react': 16.9.18
+      '@types/react-dom': 16.9.5
+      '@types/react-native': 0.60.31
+      '@types/react-redux': 7.1.6
+      '@types/react-router': 5.1.4
+      '@types/react-router-dom': 5.1.3
+      '@types/selenium-webdriver': 4.0.6
+      '@types/superagent': 4.1.4
+      '@types/supertest': 2.0.8
+      '@types/webpack-env': 1.15.0
+      '@types/ws': 7.2.0
+      bufferutil: 4.0.1
+      chromedriver: 78.0.1
+      express: 4.17.1
+      geckodriver: 1.19.1
+      invariant: 2.2.4
+      jest: 24.9.0
+      prop-types: 15.7.2
+      razzle: 3.0.0
+      razzle-dev-utils: 3.0.0
+      react: 16.12.0
+      react-dom: /react-dom/16.12.0/react@16.12.0
+      react-error-overlay: 6.0.4
+      react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.11.7/react-dom@16.12.0+react@16.12.0
+      react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
+      react-router: /react-router/5.1.2/react@16.12.0
+      react-router-dom: /react-router-dom/5.1.2/react@16.12.0
+      redux: 4.0.5
+      redux-devtools-extension: /redux-devtools-extension/2.13.8/redux@4.0.5
+      redux-saga: 1.1.3
+      rimraf: 3.0.0
+      selenium-webdriver: 4.0.0-alpha.5
+      superagent: 5.2.1
+      supertest: 4.0.2
+      ts-jest: /ts-jest/24.3.0/jest@24.9.0
+      tslint: /tslint/5.20.1/typescript@3.7.5
+      tslint-eslint-rules: /tslint-eslint-rules/5.4.0/tslint@5.20.1+typescript@3.7.5
+      tslint-react: /tslint-react/4.2.0/tslint@5.20.1+typescript@3.7.5
+      typescript: 3.7.5
+      utf-8-validate: 5.0.2
+      webpack: 4.41.5
+      winston: 3.2.1
+      winston-transport: 4.3.0
+      ws: /ws/7.2.1/5290a7aab7631971258e1bd11475725e
+    dev: false
+    name: '@rush-temp/hatch-template-webapp'
+    resolution:
+      integrity: sha512-Snq5xt9lofh459eKua0DTUblWhCyarejJfpMYcrO7+nOkIXQ+oDfofu0SK26HJEZwEOxpX2CeABye+ZnuYQ/XQ==
+      tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
     dependencies:
@@ -12182,6 +12314,7 @@ packages:
   'file:projects/hatch-util.tgz':
     dependencies:
       '@sentry/types': 5.11.0
+      '@types/node': 12.12.25
       reflect-metadata: 0.1.13
       rimraf: 3.0.0
       tsyringe: 4.0.1
@@ -12189,7 +12322,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-util'
     resolution:
-      integrity: sha512-55ld1bzdZrDzlo/8pVsFNLLrfn2LNBBDEAeQ/dtb3oaZlT5c46Wo0e4kz2jF7qMJamNh74wb0iXqI8J75W/QvQ==
+      integrity: sha512-xIvFobeU6S19GAHy4SmVNMIxOFbr5/f/+EZ8PB0bCbV9CgDsYuhfmLrfszBfRT4UV7c0hvO9fQioLZpzDlqaAw==
       tarball: 'file:projects/hatch-util.tgz'
     version: 0.0.0
   'file:projects/hatch-web-client.tgz':
@@ -12220,8 +12353,23 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-JtA1NMfI2hlfgRJkN/hHl4oiiUBKCMw0f8+PFhkkK99en84ooAk0G5yedm4xSclOrJUCC2NNZuMVgxrC+TRnEw==
+      integrity: sha512-vvZbPQZLfHRfOS4Nxskj6Zmt0CuPGBFIfvbkt0rhVZtXzF9mli9HX3gNFpOJ+Vq4lkIlCPQzR4fTQle3xK8xlA==
       tarball: 'file:projects/hatch-web-client.tgz'
+    version: 0.0.0
+  'file:projects/hatch-web-injectables.tgz':
+    dependencies:
+      '@types/react-dom': 16.9.5
+      '@types/react-router': 5.1.4
+      '@types/react-router-dom': 5.1.3
+      react-router: 5.1.2
+      react-router-dom: 5.1.2
+      redux: 4.0.5
+      rimraf: 3.0.0
+    dev: false
+    name: '@rush-temp/hatch-web-injectables'
+    resolution:
+      integrity: sha512-Xk9QzU2/E+LSOWmdJkz378vj97b6/1PaJ31M/t6BdVc99IFxglusRES9QjTMJEhZIMCUPkcKJdgH6VC7QBKfuQ==
+      tarball: 'file:projects/hatch-web-injectables.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
     dependencies:
@@ -12253,7 +12401,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-CaWWiyaUxbPnZQzdzIScms/ZWkCNbg4JTsoWUPbNUbntKCMGysqlU55UN/oCPb6BCZnXEvo6Bln+FTOZJB4LGQ==
+      integrity: sha512-HUp5/mGfZExYyQKjd36aOHQZGWGvAdAI5fNG2KdB0KSDWqy53sT2IywpZrKWJeN0+aFC+8SO22q5NHje6lSYwQ==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
@@ -12283,7 +12431,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-IWHgy9zd9AqC4NXzYYuf9G8hw3Q8onCOg1R4uBxnIGxBhhMzduAsA8vdG9/NsobzW3ki3crzO7FqI38j8LEKLQ==
+      integrity: sha512-ut8Gmt9kFTK4tJhdRct7TbXwJYqJ43rhNh3t02Dk6IFUplov1uop1auuah6zvezvLj0ah5vozmGKH1ujfwndAQ==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: 'https://registry.npmjs.org/'
@@ -12297,10 +12445,12 @@ specifiers:
   '@rush-temp/hatch-razzle-config': 'file:./projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:./projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:./projects/hatch-server-middleware.tgz'
+  '@rush-temp/hatch-template-webapp': 'file:./projects/hatch-template-webapp.tgz'
   '@rush-temp/hatch-test': 'file:./projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:./projects/hatch-util.tgz'
   '@rush-temp/hatch-web': 'file:./projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:./projects/hatch-web-client.tgz'
+  '@rush-temp/hatch-web-injectables': 'file:./projects/hatch-web-injectables.tgz'
   '@rush-temp/hatch-web-server': 'file:./projects/hatch-web-server.tgz'
   '@sentry/browser': ^5
   '@sentry/node': ^5
@@ -12323,7 +12473,9 @@ specifiers:
   '@types/supertest': ^2.0.8
   '@types/tmp': ^0.1
   '@types/webpack-env': ^1
+  '@types/ws': ^7
   ansi-escapes: ^4
+  bufferutil: ^4
   chalk: ^3
   chromedriver: ^78.0.1
   commander: ^4
@@ -12339,11 +12491,13 @@ specifiers:
   ora: ^4
   prop-types: ^15
   razzle: ^3
+  razzle-dev-utils: ^3.0.0
   razzle-plugin-typescript: ^3.0.0
   react: ^16
   react-dom: ^16
   react-error-overlay: ^6
   react-helmet-async: ^1
+  react-native-web: ^0
   react-redux: ^7
   react-router: ^5
   react-router-dom: ^5
@@ -12362,8 +12516,10 @@ specifiers:
   tslint: ^5
   tslint-eslint-rules: ^5.4.0
   tslint-react: ^4.1.0
-  tsyringe: ^4.0.1
+  tsyringe: 4.0.1
   typescript: ^3.7.3
+  utf-8-validate: ^5
   webpack: ^4
   winston: ^3
   winston-transport: ^4
+  ws: ^7

@@ -1,6 +1,48 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Tue, 14 Jan 2020 10:04:12 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jan 2020 07:53:10 GMT and should not be manually modified.
+
+## 0.4.0
+Wed, 22 Jan 2020 07:53:10 GMT
+
+### Minor changes
+
+- Updated template to use hatch-web-injectables
+
+## 0.3.2
+Sat, 18 Jan 2020 00:52:16 GMT
+
+### Patches
+
+- Prevent publishing template node_modules
+
+## 0.3.1
+Sat, 18 Jan 2020 00:01:30 GMT
+
+### Patches
+
+- Auto-update template dependencies
+
+## 0.3.0
+Fri, 17 Jan 2020 21:48:06 GMT
+
+### Minor changes
+
+- Add websocket support
+
+## 0.1.5
+Thu, 16 Jan 2020 06:11:00 GMT
+
+### Patches
+
+- Fix server-side hot module reloading
+
+## 0.1.4
+Tue, 14 Jan 2020 10:46:31 GMT
+
+### Patches
+
+- Added prepare script to trigger rebuild before publishing
 
 ## 0.1.3
 Tue, 14 Jan 2020 10:04:12 GMT

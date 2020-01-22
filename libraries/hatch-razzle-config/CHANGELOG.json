@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-razzle-config",
   "entries": [
     {
+      "version": "0.1.2",
+      "tag": "@launchtray/hatch-razzle-config_v0.1.2",
+      "date": "Thu, 16 Jan 2020 06:11:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix server-side hot module reloading"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.1",
       "tag": "@launchtray/hatch-razzle-config_v0.1.1",
       "date": "Tue, 14 Jan 2020 09:17:35 GMT",

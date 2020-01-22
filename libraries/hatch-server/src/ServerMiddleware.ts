@@ -1,8 +1,11 @@
 import {Class, DependencyContainer, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
+import http from 'http';
+
+export type Server = http.Server;
 
 export interface ServerMiddleware {
-  register(server: Application): Promise<void>;
+  register(app: Application, server: Server): Promise<void>;
 }
 
 export type ServerMiddlewareClass = Class<ServerMiddleware>;

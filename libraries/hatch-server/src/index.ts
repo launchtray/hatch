@@ -1,4 +1,3 @@
-import {BasicRouteParams} from './BasicRouteParams';
 import createServer, {CreateServerOptions} from './createServer';
 import route, {
   assignRootContainerToController,
@@ -13,15 +12,15 @@ import {
 import {
   registerServerMiddleware,
   resolveServerMiddleware,
+  Server,
   ServerMiddleware,
-  ServerMiddlewareClass
+  ServerMiddlewareClass,
 } from './ServerMiddleware';
 
 export {
   route,
   controller,
   createServer,
-  BasicRouteParams,
   ServerMiddleware,
   ServerMiddlewareClass,
   middlewareFor,
@@ -32,4 +31,5 @@ export {
   ServerComposer,
   ServerComposition,
   CreateServerOptions,
+  Server,
 };

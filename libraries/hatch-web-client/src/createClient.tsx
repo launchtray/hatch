@@ -121,7 +121,9 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   );
 
   const webAppManagerInstances = resolveWebAppManagers(container);
-  const rootSaga = createSagaForWebAppManagers(logger, webAppManagerInstances, store, container);
+  const rootSaga = createSagaForWebAppManagers(
+    logger, webAppManagerInstances, store, container, document.cookie
+  );
 
   if (rootSaga != null) {
     onSagaError = (error) => {

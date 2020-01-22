@@ -7,6 +7,7 @@ import {
   scoped as tsyringe_scoped,
 } from 'tsyringe';
 import {Dictionary} from 'tsyringe/dist/typings/types';
+import {NonLogger} from './NonLogger';
 
 export type TokenKey = string | symbol;
 
@@ -36,10 +37,19 @@ const remapToken = ({tokenRegisteredByProject, tokenUsedByDependency, dependency
   tokenMap.set(tokenUsedByDependency, tokenRegisteredByProject);
 };
 
-const getToken = (tokenUsedByDependency: TokenKey, dependency: any): TokenKey => {
-  const dependencyName = dependency?.name;
+const getToken = (tokenUsedByDependency: TokenKey, dependency: any, propertyKey?: string | symbol): TokenKey => {
+  let dependencyName = dependency?.name;
+  if (propertyKey) {
+    dependencyName = dependency?.constructor?.name + '.' + String(propertyKey);
+  }
   if (dependencySpecificTokens == null) {
-    throw new Error('Injectable "' + dependencyName + '" cannot be imported before composition module');
+    if (process && process.env && (process.env.JEST_WORKER_ID || process.env.NODE_ENV === 'test')) {
+      console.info('Using default dependency injection initialization for testing');
+      initializeInjection();
+      ROOT_CONTAINER.registerInstance('Logger', new NonLogger());
+    } else {
+      throw new Error('Injectable "' + dependencyName + '" cannot be imported before composition module');
+    }
   }
   const tokenMap = dependencySpecificTokens.get(dependencyName) ?? globalTokens;
   const resolvedToken = tokenMap.get(tokenUsedByDependency);
@@ -59,11 +69,21 @@ const injectHelper = (token: InjectionToken<any>) => {
       ? Reflect.getOwnMetadata(INJECTION_TOKEN_METADATA_KEY, target, propertyKey) || {}
       : Reflect.getOwnMetadata(INJECTION_TOKEN_METADATA_KEY, target) || {};
     injectionTokens[parameterIndex] = token;
-    Reflect.defineMetadata(
-      INJECTION_TOKEN_METADATA_KEY,
-      injectionTokens,
-      target
-    );
+
+    if (propertyKey) {
+      Reflect.defineMetadata(
+        INJECTION_TOKEN_METADATA_KEY,
+        injectionTokens,
+        target,
+        propertyKey
+      );
+    } else {
+      Reflect.defineMetadata(
+        INJECTION_TOKEN_METADATA_KEY,
+        injectionTokens,
+        target
+      );
+    }
   };
 };
 
@@ -144,7 +164,7 @@ export const resolveArgs = (
             ? params.split(',')[argIndex]
             : `#${argIndex}`;
 
-          throw new Error(`Failed to inject parameter '${argName}' of ${targetName}.`);
+          throw new Error(`Failed to inject parameter '${argName}' of ${targetName}: ${e}`);
         }
       })
     )
@@ -154,7 +174,7 @@ export const resolveArgs = (
 
 export const inject = (token: TokenKey): (target: any, propertyKey: string | symbol, parameterIndex: number) => any => {
   return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
-    return injectHelper(getToken(token, target))(target, propertyKey, parameterIndex);
+    return injectHelper(getToken(token, target, propertyKey))(target, propertyKey, parameterIndex);
   };
 };
 

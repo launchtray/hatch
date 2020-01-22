@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.1",
+      "tag": "@launchtray/hatch-cli_v0.4.1",
+      "date": "Wed, 22 Jan 2020 19:47:48 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix template import"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.0",
       "tag": "@launchtray/hatch-cli_v0.4.0",
       "date": "Wed, 22 Jan 2020 07:53:10 GMT",

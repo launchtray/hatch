@@ -86,6 +86,8 @@ export const createSagaForWebAppManagers = (
   webAppManagers: any[],
   store: Store,
   rootContainer: DependencyContainer,
+  cookie?: string,
+  authHeader?: string,
   isServer = false,
   ssrEnabled = true,
 ): Saga => {
@@ -137,7 +139,7 @@ export const createSagaForWebAppManagers = (
           if (pathMatch != null) {
             const container = rootContainer.createChildContainer();
             container.register<LocationChangeContext>(LocationChangeContext, {
-              useValue: new LocationChangeContext(pathMatch, location, isServer, store)
+              useValue: new LocationChangeContext(pathMatch, location, isServer, store, cookie, authHeader)
             });
             const args = resolveArgs(container, target, propertyKey);
             handleLocationChangeSagas.push(call(

@@ -8,5 +8,7 @@ export default class LocationChangeContext<Params extends { [K in keyof Params]?
     public readonly location: Location,
     public readonly isServer: boolean,
     public readonly store: Store,
+    public readonly cookie?: string,
+    public readonly authHeader?: string,
   ) {}
 }

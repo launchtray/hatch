@@ -1,11 +1,9 @@
 import {
-  BasicRouteParams,
   controller,
   route,
   ServerMiddleware,
-  WebSocketRouteParams
 } from '@launchtray/hatch-server';
-import {HTTPResponder} from '@launchtray/hatch-server-middleware';
+import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
 import {delay, inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import WebSocket from 'ws';

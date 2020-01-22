@@ -2,13 +2,10 @@ import {
   Class,
   DependencyContainer,
   injectable,
-  Logger,
   resolveArgs,
 } from '@launchtray/hatch-util';
 import express, {Application, NextFunction, Request, RequestHandler, Response} from 'express';
-import {BasicRouteParams} from './BasicRouteParams';
 import {Server, ServerMiddlewareClass} from './ServerMiddleware';
-import {WebSocketRouteParams} from './WebSocketRouteParams';
 import WebSocket from 'ws';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
@@ -24,10 +21,11 @@ const custom = (routeDefiner: RouteDefiner) => {
     const requestHandler = async (ctlr: any, req: Request, res: Response, next: NextFunction) => {
       const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
       const container = rootContainer.createChildContainer();
-      const logger = container.resolve<Logger>('Logger');
-      container.register<BasicRouteParams>(BasicRouteParams, {
-        useValue: new BasicRouteParams(req, res, next, logger)
-      });
+      container.registerInstance('Request', req);
+      container.registerInstance('Response', res);
+      container.registerInstance('NextFunction', next);
+      container.registerInstance('cookie', req.headers.cookie ?? '');
+      container.registerInstance('authHeader', req.headers.authorization ?? '');
       const args = resolveArgs(container, target, propertyKey);
       await originalMethod.apply(ctlr, args);
     };
@@ -48,11 +46,12 @@ const websocket = (path: PathParams) => {
     const originalMethod = descriptor.value;
     const requestHandler = (ctlr: any, webSocket: WebSocket, req: Request, webSocketServer: WebSocket.Server) => {
       const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
-      const logger = rootContainer.resolve<Logger>('Logger');
       const socketContainer = rootContainer.createChildContainer();
-      socketContainer.register<WebSocketRouteParams>(WebSocketRouteParams, {
-        useValue: new WebSocketRouteParams(req, webSocket, webSocketServer, logger)
-      });
+      socketContainer.registerInstance('Request', req);
+      socketContainer.registerInstance('WebSocket', webSocket);
+      socketContainer.registerInstance('WebSocketServer', webSocketServer);
+      socketContainer.registerInstance('cookie', req.headers.cookie ?? '');
+      socketContainer.registerInstance('authHeader', req.headers.authorization ?? '');
       const args = resolveArgs(socketContainer, target, propertyKey);
       originalMethod.apply(ctlr, args);
     };

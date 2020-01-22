@@ -1,5 +1,6 @@
-import {BasicRouteParams} from '@launchtray/hatch-server';
 import {containerSingleton} from '@launchtray/hatch-util';
+
+import BasicRouteParams from './BasicRouteParams';
 
 @containerSingleton()
 export default class HTTPResponder {

@@ -3,9 +3,7 @@ import {match, matchPath, RouteProps} from 'react-router';
 import {AnyAction, Store} from 'redux';
 import {Saga} from 'redux-saga';
 import {call} from 'redux-saga/effects';
-import ClientLoadContext from './ClientLoadContext';
 import effects, {Effect} from './effects';
-import LocationChangeContext from './LocationChangeContext';
 import {
   Location,
   navActions,
@@ -103,9 +101,9 @@ export const createSagaForWebAppManagers = (
   if (!isServer) {
     const handleClientLoadSagas: Effect[] = [];
     const container = rootContainer.createChildContainer();
-    container.register<ClientLoadContext>(ClientLoadContext, {
-      useValue: new ClientLoadContext(store)
-    });
+    container.registerInstance('Store', store);
+    container.registerInstance('cookie', cookie ?? '');
+    container.registerInstance('authHeader', authHeader ?? '');
     webAppManagers.forEach((manager: any) => {
       const target = manager.constructor.prototype;
       forEachClientLoader(target, (propertyKey) => {
@@ -138,9 +136,14 @@ export const createSagaForWebAppManagers = (
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
             const container = rootContainer.createChildContainer();
-            container.register<LocationChangeContext>(LocationChangeContext, {
-              useValue: new LocationChangeContext(pathMatch, location, isServer, store, cookie, authHeader)
-            });
+
+            container.registerInstance('pathMatch', pathMatch);
+            container.registerInstance('Location', location);
+            container.registerInstance('isServer', isServer);
+            container.registerInstance('Store', store);
+            container.registerInstance('cookie', cookie ?? '');
+            container.registerInstance('authHeader', authHeader ?? '');
+
             const args = resolveArgs(container, target, propertyKey);
             handleLocationChangeSagas.push(call(
               [manager, manager[propertyKey]], ...args));

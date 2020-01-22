@@ -1,12 +1,10 @@
 import Button from './Button';
-import ClientLoadContext from './ClientLoadContext';
 import {createErrorReporterMiddleware} from './createErrorReporterMiddleware';
 import defineAction, {resetDefinedActions} from './defineAction';
 import defineReducer from './defineReducer';
 import effects from './effects';
 import Link from './Link';
-import LocationChangeContext from './LocationChangeContext';
-import NavProvider, {createNavMiddleware, createNavReducers, navActions} from './NavProvider';
+import NavProvider, {createNavMiddleware, createNavReducers, Location, navActions} from './NavProvider';
 import {
   createSagaForWebAppManagers,
   onClientLoad,
@@ -21,8 +19,6 @@ export {
   effects,
   defineAction,
   defineReducer,
-  ClientLoadContext,
-  LocationChangeContext,
   webAppManager,
   onLocationChange,
   onClientLoad,
@@ -32,6 +28,7 @@ export {
   createNavMiddleware,
   createSagaForWebAppManagers,
   NavProvider,
+  Location,
   registerWebAppManagers,
   resetDefinedActions,
   resolveWebAppManagers,

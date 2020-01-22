@@ -1,4 +1,3 @@
-import {BasicRouteParams} from './BasicRouteParams';
 import createServer, {CreateServerOptions} from './createServer';
 import route, {
   assignRootContainerToController,
@@ -17,13 +16,11 @@ import {
   ServerMiddleware,
   ServerMiddlewareClass,
 } from './ServerMiddleware';
-import {WebSocketRouteParams} from './WebSocketRouteParams';
 
 export {
   route,
   controller,
   createServer,
-  BasicRouteParams,
   ServerMiddleware,
   ServerMiddlewareClass,
   middlewareFor,
@@ -35,5 +32,4 @@ export {
   ServerComposition,
   CreateServerOptions,
   Server,
-  WebSocketRouteParams,
 };

@@ -49,8 +49,8 @@ As shown above, these methods can take in a `LocationChangeContext` object, whic
 route change that has been applied.
 
 However, making use of dependency injection, these methods can also take in any class registered in the dependency 
-injection container. The container used to resolve the dependency will be injected with a single instance of
-`LocationChangeContext`, meaning complex objects depending on this object can be constructed.
+injection container. The container used to resolve the dependency will be injected with the fields of
+`LocationChangeContext`, meaning complex objects depending on these fields can be constructed.
 
 For example, imagine we had a class `UserContext` which only needs an ID to be constructed:
 ```typescript
@@ -58,8 +58,8 @@ For example, imagine we had a class `UserContext` which only needs an ID to be c
 class UserContext {
   public id: string;
 
-  constructor(locationChangeContext: LocationChangeContext) {
-    this.id = context.pathMatch.params.id;
+  constructor(@inject('pathMatch') pathMatch: match<{id: string}>) {
+    this.id = pathMatch.params.id;
   }
 }
 ```
@@ -81,7 +81,7 @@ up long-running effects (e.g. refresh timers, or `takeEvery` saga effects).
 
 The root parameter type for these methods is `ClientLoadContext`. However, like with `@onLocationChange` methods, 
 these methods can build up more complex parameter types, making use of dependency injection. The container used to
-resolve the dependency will be injected with a single instance of `ClientLoadContext`.
+resolve the dependency will be injected with the fields of `ClientLoadContext`.
 
 #### Manager methods as Sagas
 All of the examples above show `async` methods. For simple use cases, this might be sufficient. However, for more 

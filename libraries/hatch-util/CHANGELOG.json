@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-util",
   "entries": [
     {
+      "version": "0.1.5",
+      "tag": "@launchtray/hatch-util_v0.1.5",
+      "date": "Wed, 22 Jan 2020 23:35:40 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix client-side Sentry support"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.4",
       "tag": "@launchtray/hatch-util_v0.1.4",
       "date": "Wed, 22 Jan 2020 07:53:10 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-util
 
-This log was last generated on Wed, 22 Jan 2020 07:53:10 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jan 2020 23:35:40 GMT and should not be manually modified.
+
+## 0.1.5
+Wed, 22 Jan 2020 23:35:40 GMT
+
+### Patches
+
+- Fix client-side Sentry support
 
 ## 0.1.4
 Wed, 22 Jan 2020 07:53:10 GMT

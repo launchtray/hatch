@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.2.1",
+      "tag": "@launchtray/hatch-web_v0.2.1",
+      "date": "Wed, 22 Jan 2020 23:35:40 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix client-side Sentry support"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.4` to `^0.1.5`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.2.0",
       "tag": "@launchtray/hatch-web_v0.2.0",
       "date": "Wed, 22 Jan 2020 07:53:10 GMT",

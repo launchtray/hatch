@@ -6,11 +6,11 @@ import {
 } from '@launchtray/hatch-util';
 import {
   effects,
-  LocationChangeContext,
   onClientLoad,
   onLocationChange,
   webAppManager,
 } from '@launchtray/hatch-web';
+import {ClientLoadContext, LocationChangeContext} from '@launchtray/hatch-web-injectables';
 
 @injectable()
 export class ExampleDependencyForManager {

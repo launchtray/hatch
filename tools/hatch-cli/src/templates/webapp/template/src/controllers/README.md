@@ -35,14 +35,14 @@ export default class ExampleController implements ServerMiddleware {
 
 As shown above, route methods can take in a parameter of type `BasicRouteParams`, which contains the Express 
 [Request](https://expressjs.com/en/api.html#req) and [Response](https://expressjs.com/en/api.html#res) objects, the 
-`next` callback passed to the request handler, as well as a Logger instance.
+`next` callback passed to the request handler, a Logger instance, any cookies, and the auth header.
 
 However, when a request comes in, the server creates a new dependency injection container specifically for that request.
 This container is a child of the root container that is used by [composeServer.ts](../../README.md#composeserverts) and
-[composeCommon.ts](../../README.md#composecommonts) to register dependency classes. The only object that gets registered
-into the child container that is not also in the root container is a `BasicRouteParams` instance. The parameters of the
+[composeCommon.ts](../../README.md#composecommonts) to register dependency classes. The only objects that get registered
+into the child container that are not also in the root container are the fields of `BasicRouteParams`. The parameters of
 route handler methods are actually auto-resolved using this container. This means that not only could we define the 
-method with a single BasicRouteParams parameter, but we could also use any parameters, as long as they can be resolved 
+method with a single `BasicRouteParams` parameter, but we could also use any parameters, as long as they can be resolved 
 by the child container described above. For example, imagine a very simple `HTTPResponder` class which depends on 
 `BasicRouteParams`:
 

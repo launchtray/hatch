@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.0.1"
+    "tsyringe": "4.0.1"
   },
   "devDependencies": {
     "typescript": "^3.7.3",

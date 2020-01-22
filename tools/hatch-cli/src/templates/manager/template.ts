@@ -3,12 +3,11 @@ import {
   Logger,
 } from '@launchtray/hatch-util';
 import {
-  ClientLoadContext,
-  LocationChangeContext,
   onClientLoad,
   onLocationChange,
   webAppManager,
 } from '@launchtray/hatch-web';
+import {ClientLoadContext, LocationChangeContext} from '@launchtray/hatch-web-injectables';
 
 @webAppManager()
 export default class HATCH_CLI_TEMPLATE_VAR_moduleName {

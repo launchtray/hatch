@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Sat, 18 Jan 2020 00:01:30 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jan 2020 07:53:10 GMT and should not be manually modified.
+
+## 0.2.0
+Wed, 22 Jan 2020 07:53:10 GMT
+
+### Minor changes
+
+- Flattened per-request dependencies
 
 ## 0.1.5
 Sat, 18 Jan 2020 00:01:30 GMT

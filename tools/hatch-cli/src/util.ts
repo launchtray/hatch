@@ -111,7 +111,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
         });
       }
       await fs.move(
-        path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_moduleName.iml'),
+        path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectName.iml'),
         path.resolve(tempFilePath, 'dot-idea', `${name}.iml`)
       );
       await fs.move(path.resolve(tempFilePath, 'dot-idea'), path.resolve(tempFilePath, '.idea'));

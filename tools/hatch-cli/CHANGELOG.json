@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.3",
+      "tag": "@launchtray/hatch-cli_v0.4.3",
+      "date": "Thu, 23 Jan 2020 00:44:42 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed project file name for webapp template"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.2",
       "tag": "@launchtray/hatch-cli_v0.4.2",
       "date": "Thu, 23 Jan 2020 00:38:11 GMT",

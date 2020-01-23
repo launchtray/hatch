@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.2",
+      "tag": "@launchtray/hatch-cli_v0.4.2",
+      "date": "Thu, 23 Jan 2020 00:38:11 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added gitignore and project files"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.1",
       "tag": "@launchtray/hatch-cli_v0.4.1",
       "date": "Wed, 22 Jan 2020 19:47:48 GMT",

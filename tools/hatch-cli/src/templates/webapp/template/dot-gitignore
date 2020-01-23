@@ -68,6 +68,7 @@ common/temp/**
 node_modules
 dist
 build
+
 **/.idea/workspace.xml
 **/.idea/tasks.xml
 **/.idea/dictionaries/
@@ -79,6 +80,6 @@ build
 **/.idea/dynamic.xml
 **/.idea/uiDesigner.xml
 **/.idea/libraries
-**/.idea/inspectionProfiles
+
 **/.tmp/
 $PRODUCT_WORKSPACE_FILE$

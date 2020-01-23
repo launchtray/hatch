@@ -24,8 +24,8 @@ export const resolveServerMiddleware = (container: DependencyContainer, logger?:
   let middlewareList: ServerMiddleware[];
   try {
     middlewareList = container.resolveAll<ServerMiddleware>(serverMiddlewareKey);
-  } catch {
-    middlewareList = [];
+  } catch (err) {
+    throw new Error('Error resolving server middleware with exception: ' + JSON.stringify(err));
   }
   logger?.debug('Total server middleware count: ' + middlewareList.length);
   for (const middleware of middlewareList) {

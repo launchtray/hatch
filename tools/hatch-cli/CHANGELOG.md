@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Thu, 23 Jan 2020 00:38:11 GMT and should not be manually modified.
+This log was last generated on Thu, 23 Jan 2020 00:44:42 GMT and should not be manually modified.
+
+## 0.4.3
+Thu, 23 Jan 2020 00:44:42 GMT
+
+### Patches
+
+- Fixed project file name for webapp template
 
 ## 0.4.2
 Thu, 23 Jan 2020 00:38:11 GMT

@@ -136,6 +136,7 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
 };
 
 type HTTPMethodUnion =
+  | 'all'
   | 'checkout'
   | 'copy'
   | 'delete'

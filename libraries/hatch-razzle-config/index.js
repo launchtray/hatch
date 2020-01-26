@@ -16,14 +16,6 @@ module.exports = {
     } else {
       config.entry[config.entry.length - 1] = resolveApp('src/server');
     }
-    // Since RN web takes care of CSS, we should remove it for a #perf boost
-    config.module.rules = config.module.rules
-      .filter((rule) =>
-        !(rule.test && rule.test.exec && rule.test.exec('./something.css'))
-      )
-      .filter((rule) =>
-        !(rule.test && rule.test.exec && rule.test.exec('./something.module.css'))
-      );
 
     // From https://github.com/jaredpalmer/razzle/issues/689#issuecomment-480159678
     const allowedPackages = [

@@ -15,6 +15,7 @@ import {
 } from './WebAppManager';
 import {WebCommonComposition} from './WebCommonComposer';
 import {runtimeConfig} from './config';
+import createReactNativeElement from './createReactNativeElement';
 
 export {
   effects,
@@ -36,5 +37,6 @@ export {
   Button,
   Link,
   createErrorReporterMiddleware,
-  runtimeConfig
+  runtimeConfig,
+  createReactNativeElement,
 };

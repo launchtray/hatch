@@ -32,6 +32,7 @@ module.exports = {
       '@launchtray/hatch-util',
       '@launchtray/hatch-web',
       '@launchtray/hatch-web-client',
+      '@launchtray/hatch-web-injectables',
       '@launchtray/hatch-web-server',
     ];
 

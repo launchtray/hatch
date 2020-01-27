@@ -26,8 +26,8 @@ import {
   ServerComposer,
   ServerComposition,
 } from './ServerComposer';
-import {APIMetadata, registerServerMiddleware, resolveServerMiddleware, Server} from './ServerMiddleware';
-import {OpenAPISpec, OpenAPISpecBuilder} from "./OpenAPI";
+import {registerServerMiddleware, resolveServerMiddleware, Server} from './ServerMiddleware';
+import {OpenAPISpecBuilder} from './OpenAPI';
 
 export type ServerExtension<T extends ServerComposition> =
   (server: Server, app: Application, composition: T, logger: Logger, errorReporter: ErrorReporter) => void;

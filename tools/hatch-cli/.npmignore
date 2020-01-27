@@ -1,2 +1,3 @@
 src/templates/**/node_modules
 src/templates/**/.rush
+src/templates/**/*.build.log

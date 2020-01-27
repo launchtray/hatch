@@ -28,9 +28,13 @@ module.exports = {
       '@launchtray/hatch-web-server',
     ];
 
-    const allowedPackagePaths = allowedPackages.map(packageName =>
-      fs.realpathSync('./node_modules/' + packageName)
-    );
+    const allowedPackagePaths = [];
+    allowedPackages.forEach((packageName) => {
+      const path = './node_modules/' + packageName;
+      if (fs.existsSync(path)) {
+        allowedPackagePaths.push(fs.realpathSync(path));
+      }
+    });
 
     const tsRuleIndex = config.module.rules.findIndex(
       rule =>

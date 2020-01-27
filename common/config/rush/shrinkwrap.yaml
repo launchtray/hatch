@@ -6,6 +6,7 @@ dependencies:
   '@rush-temp/hatch-razzle-config': 'file:projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz'
+  '@rush-temp/hatch-template-microservice': 'file:projects/hatch-template-microservice.tgz'
   '@rush-temp/hatch-template-webapp': 'file:projects/hatch-template-webapp.tgz'
   '@rush-temp/hatch-test': 'file:projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz'
@@ -76,6 +77,7 @@ dependencies:
   serialize-javascript: 2.1.2
   superagent: 5.2.1
   supertest: 4.0.2
+  swagger-ui: 3.25.0
   swagger-ui-react: 3.25.0
   tmp: 0.1.0
   ts-jest: 24.3.0
@@ -9556,6 +9558,17 @@ packages:
       react: ^15.3.0 || ^16.0.0
     resolution:
       integrity: sha512-RIBu68Cq/gImKz/2h1cE042REDqyqj3D+7SJ3lnnIpJX0ht9D9PfH7KAnL+SgDz6hvKa9pZS2CnAxlkrLmnQlg==
+  /react-debounce-input/3.2.2/react@15.6.2:
+    dependencies:
+      lodash.debounce: 4.0.8
+      prop-types: 15.7.2
+      react: 15.6.2
+    dev: false
+    id: registry.npmjs.org/react-debounce-input/3.2.2
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0
+    resolution:
+      integrity: sha512-RIBu68Cq/gImKz/2h1cE042REDqyqj3D+7SJ3lnnIpJX0ht9D9PfH7KAnL+SgDz6hvKa9pZS2CnAxlkrLmnQlg==
   /react-debounce-input/3.2.2/react@16.12.0:
     dependencies:
       lodash.debounce: 4.0.8
@@ -9598,6 +9611,19 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-ThbJ86coVd6wV/QiTo8klDTvdAJ1WsFCGQN07+UkN+QN9CtCSsl/+YuDJToKGeG8X4j9HMGXNKbk2QhPAZr43w==
+  /react-dom/15.6.2/react@15.6.2:
+    dependencies:
+      fbjs: 0.8.17
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.7.2
+      react: 15.6.2
+    dev: false
+    id: registry.npmjs.org/react-dom/15.6.2
+    peerDependencies:
+      react: ^15.6.2
+    resolution:
+      integrity: sha1-Qc+t9pO3V/rycIRDodH9WgK+9zA=
   /react-dom/16.12.0:
     dependencies:
       loose-envify: 1.4.0
@@ -9672,6 +9698,21 @@ packages:
       immutable: '>=3.6.2'
     resolution:
       integrity: sha1-Aj1vObsVyXwHHp5g0A0TbqxfoLQ=
+  /react-immutable-pure-component/1.2.3/89baac68d36c566aaab9eeb71a8bdb98:
+    dependencies:
+      immutable: 3.8.2
+      react: 15.6.2
+      react-dom: /react-dom/15.6.2/react@15.6.2
+    dev: false
+    id: registry.npmjs.org/react-immutable-pure-component/1.2.3
+    optionalDependencies:
+      '@types/react': 16.4.6
+    peerDependencies:
+      immutable: '>= 3'
+      react: '>= 15'
+      react-dom: '>= 15'
+    resolution:
+      integrity: sha512-kNy2A/fDrSuR8TKwB+4ynmItmp1vgF87tWxxfmadwDYo2J3ANipHqTjDIBvJvJ7libvuh76jIbvmK0krjtKH1g==
   /react-immutable-pure-component/1.2.3/e748ab1c68d8c365561fed23345130e3:
     dependencies:
       immutable: 3.8.2
@@ -9710,6 +9751,18 @@ packages:
       react: ^0.14.0 || ^15.0.0 || ^16.0.0
     resolution:
       integrity: sha512-tUUK7t3KWgZEIUktOYko5Ic/oYwvjEvQUFAGC1UeMeDaQ5za2yZFtItJa2RTwBJB//NxPr000WQK6sEbqC6y0Q==
+  /react-inspector/2.3.1/react@15.6.2:
+    dependencies:
+      babel-runtime: 6.26.0
+      is-dom: 1.1.0
+      prop-types: 15.7.2
+      react: 15.6.2
+    dev: false
+    id: registry.npmjs.org/react-inspector/2.3.1
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0
+    resolution:
+      integrity: sha512-tUUK7t3KWgZEIUktOYko5Ic/oYwvjEvQUFAGC1UeMeDaQ5za2yZFtItJa2RTwBJB//NxPr000WQK6sEbqC6y0Q==
   /react-inspector/2.3.1/react@16.12.0:
     dependencies:
       babel-runtime: 6.26.0
@@ -9732,6 +9785,18 @@ packages:
       prop-types: 15.7.2
       raf: 3.4.1
     dev: false
+    peerDependencies:
+      react: ^0.14.9 || ^15.3.0 || ^16.0.0
+    resolution:
+      integrity: sha512-9q3YAvHoUiWlP3cK0v+w1N5Z23HXMj4IF4YuvjvWegWqNPfLXsOBE/V7UvQGpXxHFKRQQcNcVQE31g9SB/6qgQ==
+  /react-motion/0.5.2/react@15.6.2:
+    dependencies:
+      performance-now: 0.2.0
+      prop-types: 15.7.2
+      raf: 3.4.1
+      react: 15.6.2
+    dev: false
+    id: registry.npmjs.org/react-motion/0.5.2
     peerDependencies:
       react: ^0.14.9 || ^15.3.0 || ^16.0.0
     resolution:
@@ -9787,6 +9852,23 @@ packages:
       react-dom: '>=16.5.1'
     resolution:
       integrity: sha512-O7Jb4XN8ficbCDIj6fOx+dVqh6jswuxM1Q+W3Q+iTET/pFCQ8jGFOKkjW0WoO7IFjHGuIwrqC3JzzRaZbDMu0Q==
+  /react-redux/4.4.10/react@15.6.2+redux@3.7.2:
+    dependencies:
+      create-react-class: 15.6.3
+      hoist-non-react-statics: 3.3.2
+      invariant: 2.2.4
+      lodash: 4.17.15
+      loose-envify: 1.4.0
+      prop-types: 15.7.2
+      react: 15.6.2
+      redux: 3.7.2
+    dev: false
+    id: registry.npmjs.org/react-redux/4.4.10
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0-0 || ^15.4.0-0 || ^16.0.0-0
+      redux: ^2.0.0 || ^3.0.0
+    resolution:
+      integrity: sha512-tjL0Bmpkj75Td0k+lXlF8Fc8a9GuXFv/3ahUOCXExWs/jhsKiQeTffdH0j5byejCGCRL4tvGFYlrwBF1X/Aujg==
   /react-redux/4.4.10/react@16.12.0+redux@3.7.2:
     dependencies:
       create-react-class: 15.6.3
@@ -9921,6 +10003,18 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4+ow23tp/Tv7hBM5Az5/Be/eKKF7DIvJ09voz5LyHGQaqqz9WV8YMs31eFvcYQs7d451LSg7kDJV70XYN/Ug/Q==
+  /react/15.6.2:
+    dependencies:
+      create-react-class: 15.6.3
+      fbjs: 0.8.17
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.7.2
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-26BDSrQ5z+gvEI8PURZjkIF5qnI=
   /react/16.12.0:
     dependencies:
       loose-envify: 1.4.0
@@ -11337,6 +11431,47 @@ packages:
       react-dom: '>=15.6.2'
     resolution:
       integrity: sha512-2MMk3p42Q3x/E91vIqitvXJLAvDsBwxW8DLt3FfI0H6YPnWGqafsU4kP6unVriQqJqafcQII5suDwmycdmqSdw==
+  /swagger-ui/3.25.0:
+    dependencies:
+      '@babel/runtime-corejs2': 7.8.3
+      '@braintree/sanitize-url': 3.1.0
+      '@kyleshockey/object-assign-deep': 0.4.2
+      '@kyleshockey/xml': 1.0.2
+      base64-js: 1.3.1
+      classnames: 2.2.6
+      core-js: 2.6.11
+      css.escape: 1.5.1
+      deep-extend: 0.6.0
+      dompurify: 2.0.7
+      ieee754: 1.1.13
+      immutable: 3.8.2
+      js-file-download: 0.4.9
+      js-yaml: 3.13.1
+      lodash: 4.17.15
+      memoizee: 0.4.14
+      prop-types: 15.7.2
+      randombytes: 2.1.0
+      react: 15.6.2
+      react-debounce-input: /react-debounce-input/3.2.2/react@15.6.2
+      react-dom: /react-dom/15.6.2/react@15.6.2
+      react-immutable-proptypes: /react-immutable-proptypes/2.1.0/immutable@3.8.2
+      react-immutable-pure-component: /react-immutable-pure-component/1.2.3/89baac68d36c566aaab9eeb71a8bdb98
+      react-inspector: /react-inspector/2.3.1/react@15.6.2
+      react-motion: /react-motion/0.5.2/react@15.6.2
+      react-redux: /react-redux/4.4.10/react@15.6.2+redux@3.7.2
+      redux: 3.7.2
+      redux-immutable: 3.1.0
+      remarkable: 1.7.4
+      reselect: 2.5.4
+      serialize-error: 2.1.0
+      sha.js: 2.4.11
+      swagger-client: 3.10.0
+      url-parse: 1.4.7
+      xml-but-prettier: 1.0.1
+      zenscroll: 4.0.2
+    dev: false
+    resolution:
+      integrity: sha512-OfGWc93d/jqZ3LQC8fCxWm0nKodGFqa1TkxIW5jSmVqoPlEFGKdeGlrVtnINXn3kGNNuvPgNixb6Rp9sB6nC1Q==
   /symbol-observable/1.2.0:
     dev: false
     engines:
@@ -12837,6 +12972,48 @@ packages:
       integrity: sha512-3PzxnXbUCKVUDuA3WfjDvndgNWyf+eMz5aKZzB8eQTt2aKYXseNMYC/fC/wUhIvndIhIzskcuMg2nBL7F7JhVw==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
+  'file:projects/hatch-template-microservice.tgz':
+    dependencies:
+      '@babel/core': 7.8.3
+      '@sentry/browser': 5.11.1
+      '@sentry/node': 5.11.1
+      '@sentry/types': 5.11.0
+      '@types/express': 4.17.2
+      '@types/express-serve-static-core': 4.17.2
+      '@types/jest': 24.9.1
+      '@types/node': 12.12.25
+      '@types/superagent': 4.1.4
+      '@types/supertest': 2.0.8
+      '@types/webpack-env': 1.15.0
+      '@types/ws': 7.2.0
+      bufferutil: 4.0.1
+      express: 4.17.1
+      invariant: 2.2.4
+      isarray: 2.0.5
+      jest: 24.9.0
+      razzle: 3.0.0
+      razzle-dev-utils: 3.0.0
+      regenerator-runtime: 0.13.3
+      rimraf: 3.0.0
+      superagent: 5.2.1
+      supertest: 4.0.2
+      swagger-ui: 3.25.0
+      ts-jest: /ts-jest/24.3.0/jest@24.9.0
+      tslint: /tslint/5.20.1/typescript@3.7.5
+      tslint-eslint-rules: /tslint-eslint-rules/5.4.0/tslint@5.20.1+typescript@3.7.5
+      tslint-react: /tslint-react/4.2.0/tslint@5.20.1+typescript@3.7.5
+      typescript: 3.7.5
+      utf-8-validate: 5.0.2
+      webpack: 4.41.5
+      winston: 3.2.1
+      winston-transport: 4.3.0
+      ws: /ws/7.2.1/5290a7aab7631971258e1bd11475725e
+    dev: false
+    name: '@rush-temp/hatch-template-microservice'
+    resolution:
+      integrity: sha512-nWNJBYXIsydPqI6b0NU7HijSGI4LBEJl8wCU6CaT8qSxwezN5iD5N8mizvRbWP7yH45iCxdALV+gHlQDE9Hrsg==
+      tarball: 'file:projects/hatch-template-microservice.tgz'
+    version: 0.0.0
   'file:projects/hatch-template-webapp.tgz':
     dependencies:
       '@babel/core': 7.8.3
@@ -13052,6 +13229,7 @@ specifiers:
   '@rush-temp/hatch-razzle-config': 'file:./projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:./projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:./projects/hatch-server-middleware.tgz'
+  '@rush-temp/hatch-template-microservice': 'file:./projects/hatch-template-microservice.tgz'
   '@rush-temp/hatch-template-webapp': 'file:./projects/hatch-template-webapp.tgz'
   '@rush-temp/hatch-test': 'file:./projects/hatch-test.tgz'
   '@rush-temp/hatch-util': 'file:./projects/hatch-util.tgz'
@@ -13122,6 +13300,7 @@ specifiers:
   serialize-javascript: ^2.1.0
   superagent: ^5.1.1
   supertest: ^4.0.2
+  swagger-ui: ^3.25.0
   swagger-ui-react: ^3.25.0
   tmp: ^0.1
   ts-jest: ^24.1.0

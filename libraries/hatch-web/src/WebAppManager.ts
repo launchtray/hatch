@@ -25,9 +25,9 @@ export const registerWebAppManagers = (container: DependencyContainer, ...webApp
 };
 
 export const resolveWebAppManagers = (container: DependencyContainer): any[] => {
-  try {
+  if (container.isRegistered(webAppManagerKey)) {
     return container.resolveAll<Class<any>>(webAppManagerKey);
-  } catch {
+  } else {
     return [];
   }
 };

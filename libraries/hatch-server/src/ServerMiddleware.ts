@@ -41,9 +41,9 @@ export const registerServerMiddleware = (
 
 export const resolveServerMiddleware = (container: DependencyContainer, logger?: Logger): ServerMiddleware[] => {
   let middlewareList: ServerMiddleware[];
-  try {
+  if (container.isRegistered(serverMiddlewareKey)) {
     middlewareList = container.resolveAll<ServerMiddleware>(serverMiddlewareKey);
-  } catch {
+  } else {
     middlewareList = [];
   }
   logger?.debug('Total server middleware count: ' + middlewareList.length);

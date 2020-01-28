@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Thu, 23 Jan 2020 00:44:42 GMT and should not be manually modified.
+This log was last generated on Tue, 28 Jan 2020 04:47:08 GMT and should not be manually modified.
+
+## 0.4.4
+Tue, 28 Jan 2020 04:47:08 GMT
+
+### Patches
+
+- Added microservice template and Swagger
 
 ## 0.4.3
 Thu, 23 Jan 2020 00:44:42 GMT

@@ -2,6 +2,26 @@
   "name": "@launchtray/hatch-web-client",
   "entries": [
     {
+      "version": "0.2.2",
+      "tag": "@launchtray/hatch-web-client_v0.2.2",
+      "date": "Tue, 28 Jan 2020 04:47:08 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added microservice template and Swagger"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-web\" from `^0.2.1` to `^0.2.2`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.5` to `^0.1.6`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.2.1",
       "tag": "@launchtray/hatch-web-client_v0.2.1",
       "date": "Wed, 22 Jan 2020 23:35:40 GMT",

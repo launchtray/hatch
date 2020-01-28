@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-razzle-config",
   "entries": [
     {
+      "version": "0.1.3",
+      "tag": "@launchtray/hatch-razzle-config_v0.1.3",
+      "date": "Tue, 28 Jan 2020 04:47:08 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added microservice template and Swagger"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.2",
       "tag": "@launchtray/hatch-razzle-config_v0.1.2",
       "date": "Thu, 16 Jan 2020 06:11:00 GMT",

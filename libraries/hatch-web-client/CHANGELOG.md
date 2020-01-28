@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web-client
 
-This log was last generated on Wed, 22 Jan 2020 23:35:40 GMT and should not be manually modified.
+This log was last generated on Tue, 28 Jan 2020 04:47:08 GMT and should not be manually modified.
+
+## 0.2.2
+Tue, 28 Jan 2020 04:47:08 GMT
+
+### Patches
+
+- Added microservice template and Swagger
 
 ## 0.2.1
 Wed, 22 Jan 2020 23:35:40 GMT

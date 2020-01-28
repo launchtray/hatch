@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.3.2",
+      "tag": "@launchtray/hatch-server_v0.3.2",
+      "date": "Tue, 28 Jan 2020 04:47:08 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added microservice template and Swagger"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.4` to `^0.1.6`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.1",
       "tag": "@launchtray/hatch-server_v0.3.1",
       "date": "Wed, 22 Jan 2020 19:47:48 GMT",

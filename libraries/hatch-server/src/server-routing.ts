@@ -5,11 +5,20 @@ import {
   resolveArgs,
 } from '@launchtray/hatch-util';
 import express, {Application, NextFunction, Request, RequestHandler, Response} from 'express';
-import {Server, ServerMiddlewareClass} from './ServerMiddleware';
+import {
+  APIMetadataConsumer,
+  APIMetadataParameters,
+  Server,
+  ServerMiddlewareClass
+} from './ServerMiddleware';
 import WebSocket from 'ws';
+import {OpenAPIMethod, OpenAPIParameter} from './OpenAPI';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
-export type RouteDefiner = (app: Application, server: Server, handler: RequestHandler) => void;
+
+export interface RouteDefiner {
+  (app: Application, server: Server, handler: RequestHandler, apiMetadataConsumer: APIMetadataConsumer): void;
+}
 
 const routeDefinersKey = Symbol('routeDefiners');
 const rootContainerKey = Symbol('rootContainer');
@@ -33,11 +42,17 @@ const custom = (routeDefiner: RouteDefiner) => {
     if (target[routeDefinersKey] == null) {
       target[routeDefinersKey] = [];
     }
-    target[routeDefinersKey].push((ctlr: any, app: Application, server: Server) => {
+    const ctlrRouteDefiner = (
+        ctlr: any,
+        app: Application,
+        server: Server,
+        apiMetadataConsumer: APIMetadataConsumer
+    ) => {
       routeDefiner(app, server, (req: Request<any>, res: Response, next: NextFunction) => {
         requestHandler(ctlr, req, res, next).catch(next);
-      });
-    });
+      }, apiMetadataConsumer);
+    };
+    target[routeDefinersKey].push(ctlrRouteDefiner);
   };
 };
 
@@ -116,21 +131,30 @@ export const hasControllerRoutes = (maybeController: any) => {
   return maybeController.prototype[routeDefinersKey] != null;
 };
 
+type ControllerBoundRouteDefiner = (
+    controller: any,
+    app: Application,
+    server: Server,
+    apiMetadataConsumer: APIMetadataConsumer
+) => void;
+
 export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewareClass => {
   if (!hasControllerRoutes(target)) {
     throw new Error(`Cannot register ${target.name} as middleware, as it has no @routes defined.`);
   }
 
   const originalRegister = target.prototype.register;
-  target.prototype.register = async function(app: Application, server: Server) {
+  target.prototype.register = async function(
+    app: Application,
+    server: Server,
+    apiMetadataConsumer: APIMetadataConsumer
+  ) {
     if (originalRegister != null) {
-      await originalRegister.bind(this)(app, server);
+      await originalRegister.bind(this)(app, server, apiMetadataConsumer);
     }
-    target.prototype[routeDefinersKey].forEach(
-      (routeDefiner: (controller: any, app: Application, server: Server) => void) => {
-        routeDefiner(this, app, server);
-      }
-    );
+    target.prototype[routeDefinersKey].forEach((controllerBoundRouteDefiner: ControllerBoundRouteDefiner) => {
+      controllerBoundRouteDefiner(this, app, server, apiMetadataConsumer);
+    });
   };
   return target;
 };
@@ -162,18 +186,46 @@ type HTTPMethodUnion =
 
 export type StandardRouteDefiners = {
   [method in HTTPMethodUnion]:
-    (path: PathParams) => any;
+    (path: PathParams, metadata?: APIMetadataParameters) => any;
 };
 
 export interface NonStandardRouteDefiners {
   custom: (routeDefiner: RouteDefiner) => any;
-  m_search: (path: PathParams) => any;
-  websocket: (path: PathParams) => any;
+  m_search: (path: PathParams, metadata?: APIMetadataParameters) => any;
+  websocket: (path: PathParams, metadata?: APIMetadataParameters) => any;
 }
 
 export type RouteDefiners = StandardRouteDefiners & NonStandardRouteDefiners;
 
 export const controller: <T>() => (target: Class<T>) => void = injectable;
+
+export const convertExpressPathToOpenAPIPath = (
+  path: PathParams,
+  paramsIn: {
+    [key: string]: Partial<OpenAPIParameter>,
+  },
+  paramsOut: OpenAPIParameter[],
+): string | undefined => {
+  if (typeof path === 'string') {
+    return path.replace(/:([A-Za-z0-0_]*)/g, (_, param) => {
+      paramsOut.push({
+        ...paramsIn[param],
+        name: param,
+        in: 'path',
+        required: true,
+      });
+      return `{${param}}`
+    });
+  }
+  return undefined
+};
+
+export const convertExpressMethodToOpenAPIMethod = (method: keyof RouteDefiners): OpenAPIMethod | undefined => {
+  if (['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'].includes(method)) {
+    return method as OpenAPIMethod;
+  }
+  return undefined;
+};
 
 const proxy = {
   get(target: RouteDefiners, method: keyof RouteDefiners) {
@@ -187,13 +239,31 @@ const proxy = {
     if (method === 'm_search') {
       adjustedMethod = 'm-search';
     }
-    return (path: PathParams) => {
-      return custom(((app, server, handler) => {
+    return (path: PathParams, metadata: APIMetadataParameters = {}) => {
+      const routeDefiner: RouteDefiner = (app, server, handler, apiMetadataConsumer: APIMetadataConsumer) => {
         const definer = app[adjustedMethod].bind(app) as (path: PathParams, handler: any) => void;
         definer(path, handler);
-      }));
+        const apiMethod = convertExpressMethodToOpenAPIMethod(method);
+        const parameters: OpenAPIParameter[] = [];
+        const apiPath = convertExpressPathToOpenAPIPath(path, metadata.parameters ?? {}, parameters);
+        if (apiMethod && apiPath) {
+          const apiMetadata = {
+            description: metadata.description ?? '',
+            method: apiMethod,
+            path: apiPath,
+            parameters,
+            responses: metadata.responses ?? {
+              default: {
+                description: '',
+              },
+            },
+          };
+          apiMetadataConsumer(apiMetadata);
+        }
+      };
+      return custom(routeDefiner);
     };
-  }
+  },
 };
 
 export default new Proxy({custom} as any, proxy) as RouteDefiners;

@@ -408,6 +408,11 @@
       "packageName": "@launchtray/hatch-template-webapp",
       "projectFolder": "tools/hatch-cli/src/templates/webapp/template",
       "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/hatch-template-microservice",
+      "projectFolder": "tools/hatch-cli/src/templates/microservice/template",
+      "shouldPublish": false
     }
   ]
 }

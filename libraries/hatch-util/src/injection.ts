@@ -123,9 +123,9 @@ const isTokenDescriptor = (
 export interface DependencyContainer extends TSyringeDependencyContainer {}
 
 const resolveAll = (container: DependencyContainer, token: InjectionToken<any>) => {
-  try {
+  if (container.isRegistered(token)) {
     return container.resolveAll(token)
-  } catch {
+  } else {
     return [];
   }
 };

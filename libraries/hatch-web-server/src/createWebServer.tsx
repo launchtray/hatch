@@ -24,6 +24,7 @@ import {Provider as StoreProvider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import serialize, {SerializeJSOptions} from 'serialize-javascript';
+
 import {WebServerComposition} from './WebServerComposer';
 
 const SSR_TIMEOUT_MS = 5000;
@@ -115,6 +116,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
+      ${assets.client.css ? `<link rel="stylesheet" href="${assets.client.css}">` : ''}
       ${
         process.env.NODE_ENV === 'production'
           ? `<script src="${requestContext.clientJS}" defer></script>`

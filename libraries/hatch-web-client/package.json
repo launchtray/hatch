@@ -38,6 +38,8 @@
     "@types/react-router-dom": "^5",
     "prop-types": "^15",
     "@sentry/browser": "^5",
-    "@sentry/types": "^5"
+    "@sentry/types": "^5",
+    "swagger-ui-react": "^3.25.0",
+    "@types/swagger-ui-react": "^3.23.0"
   }
 }

@@ -1,3 +1,4 @@
+import createMicroservice from './createMicroservice';
 import createServer, {CreateServerOptions} from './createServer';
 import route, {
   assignRootContainerToController,
@@ -32,4 +33,5 @@ export {
   ServerComposition,
   CreateServerOptions,
   Server,
+  createMicroservice,
 };

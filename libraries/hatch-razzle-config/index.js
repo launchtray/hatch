@@ -16,14 +16,6 @@ module.exports = {
     } else {
       config.entry[config.entry.length - 1] = resolveApp('src/server');
     }
-    // Since RN web takes care of CSS, we should remove it for a #perf boost
-    config.module.rules = config.module.rules
-      .filter((rule) =>
-        !(rule.test && rule.test.exec && rule.test.exec('./something.css'))
-      )
-      .filter((rule) =>
-        !(rule.test && rule.test.exec && rule.test.exec('./something.module.css'))
-      );
 
     // From https://github.com/jaredpalmer/razzle/issues/689#issuecomment-480159678
     const allowedPackages = [
@@ -32,12 +24,17 @@ module.exports = {
       '@launchtray/hatch-util',
       '@launchtray/hatch-web',
       '@launchtray/hatch-web-client',
+      '@launchtray/hatch-web-injectables',
       '@launchtray/hatch-web-server',
     ];
 
-    const allowedPackagePaths = allowedPackages.map(packageName =>
-      fs.realpathSync('./node_modules/' + packageName)
-    );
+    const allowedPackagePaths = [];
+    allowedPackages.forEach((packageName) => {
+      const path = './node_modules/' + packageName;
+      if (fs.existsSync(path)) {
+        allowedPackagePaths.push(fs.realpathSync(path));
+      }
+    });
 
     const tsRuleIndex = config.module.rules.findIndex(
       rule =>

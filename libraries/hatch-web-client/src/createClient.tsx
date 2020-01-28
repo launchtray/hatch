@@ -30,9 +30,13 @@ import React from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
+import {Route, Switch} from 'react-router';
 import {applyMiddleware, createStore, Middleware, Store} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import createSagaMiddleware, {Saga, Task} from 'redux-saga';
+import SwaggerUI from 'swagger-ui-react';
+import 'swagger-ui-react/swagger-ui.css';
+
 import {WebClientComposer, WebClientComposition} from './WebClientComposer';
 
 export interface CreateClientOptions {
@@ -45,7 +49,14 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
     <StoreProvider store={reduxStore}>
       <NavProvider>
         <HelmetProvider>
-          <RootApp/>
+          <Switch>
+            <Route path={'/api'}>
+              <SwaggerUI url='/api.json' docExpansion={'list'}/>
+            </Route>
+            <Route>
+              <RootApp/>
+            </Route>
+          </Switch>
         </HelmetProvider>
       </NavProvider>
     </StoreProvider>

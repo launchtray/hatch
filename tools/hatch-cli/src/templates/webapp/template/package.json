@@ -26,7 +26,7 @@
     "@types/node": "^12",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "@types/react-native": "^0.60",
+    "@types/react-native": "^0",
     "@types/react-redux": "^7",
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",
@@ -51,7 +51,11 @@
     "@types/ws": "^7",
     "ws": "^7",
     "bufferutil": "^4",
-    "utf-8-validate": "^5"
+    "utf-8-validate": "^5",
+    "swagger-ui-react": "^3.25.0",
+    "@types/swagger-ui-react": "^3.23.0",
+    "isarray": "^2.0.5",
+    "regenerator-runtime": "^0.13.3"
   },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.1.2",

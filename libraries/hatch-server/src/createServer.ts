@@ -17,6 +17,7 @@ import {
 import {Options} from '@sentry/types';
 import express, {Application} from 'express';
 import http from 'http';
+import serialize, {SerializeJSOptions} from 'serialize-javascript';
 import util from 'util';
 import {createLogger, format, transports} from 'winston';
 import {ErrorReporterTransport} from './ErrorReporterTransport';
@@ -26,6 +27,7 @@ import {
   ServerComposition,
 } from './ServerComposer';
 import {registerServerMiddleware, resolveServerMiddleware, Server} from './ServerMiddleware';
+import {OpenAPISpecBuilder} from './OpenAPI';
 
 export type ServerExtension<T extends ServerComposition> =
   (server: Server, app: Application, composition: T, logger: Logger, errorReporter: ErrorReporter) => void;
@@ -149,13 +151,30 @@ const createServerAsync = async <T extends ServerComposition>(
     ...serverMiddlewareClasses,
   );
 
+  const appName = rootContainer.resolve<string>('appName');
+  const appVersion = rootContainer.isRegistered('appVersion')
+      ? rootContainer.resolve<string>('appVersion')
+      : '0.0.0';
+
+  const apiSpecBuilder = new OpenAPISpecBuilder(appName, appVersion);
   const serverMiddlewareList = resolveServerMiddleware(rootContainer, logger);
+  const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
   for (const serverMiddleware of serverMiddlewareList) {
-    await serverMiddleware.register(runningServerApp, runningServer);
+    await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);
     }
   }
+
+  const apiSpec = apiSpecBuilder.build();
+  runningServerApp.get('/api.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    const options: SerializeJSOptions = {unsafe: true, isJSON: true};
+    if (req.query.pretty) {
+      options.space = 2;
+    }
+    res.status(200).send(serialize(apiSpec, options));
+  });
 
   serverExtension?.(runningServer, runningServerApp, composition, logger, errorReporter);
 

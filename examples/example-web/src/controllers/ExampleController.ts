@@ -28,7 +28,13 @@ export default class ExampleController implements ServerMiddleware {
     responder.ok(this.testVar);
   }
 
-  @route.get('/api/person/:id')
+  @route.get('/api/person/:id', {
+    parameters: {
+      id: {
+        description: 'The person\'s identifier',
+      },
+    },
+  })
   public personEndpoint(params: BasicRouteParams) {
     params.res.status(200).send('Person: ' + params.req.params.id);
   }

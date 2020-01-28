@@ -6,14 +6,13 @@ import {
 } from '@launchtray/hatch-util';
 import express, {Application, NextFunction, Request, RequestHandler, Response} from 'express';
 import {
-  APIMetadata,
   APIMetadataConsumer,
   APIMetadataParameters,
   Server,
   ServerMiddlewareClass
 } from './ServerMiddleware';
 import WebSocket from 'ws';
-import {OpenAPIMethod, OpenAPIParameter} from "./OpenAPI";
+import {OpenAPIMethod, OpenAPIParameter} from './OpenAPI';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
 

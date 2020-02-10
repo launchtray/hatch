@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.5",
+      "tag": "@launchtray/hatch-cli_v0.4.5",
+      "date": "Mon, 10 Feb 2020 22:03:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "License, documentation, and tslint updates"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.4",
       "tag": "@launchtray/hatch-cli_v0.4.4",
       "date": "Tue, 28 Jan 2020 04:47:08 GMT",

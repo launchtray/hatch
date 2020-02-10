@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Tue, 28 Jan 2020 04:47:08 GMT and should not be manually modified.
+This log was last generated on Mon, 10 Feb 2020 22:03:00 GMT and should not be manually modified.
+
+## 0.4.5
+Mon, 10 Feb 2020 22:03:00 GMT
+
+### Patches
+
+- License, documentation, and tslint updates
 
 ## 0.4.4
 Tue, 28 Jan 2020 04:47:08 GMT

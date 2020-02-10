@@ -11,6 +11,10 @@ to start developing application code. This is achieved by generating projects wh
 libraries in this repository. These libraries are highly opinionated, meaning they typically have several peer 
 dependencies, and are intended to be used according specific architectural patterns.
 
+## Disclaimer
+This project is very much a work in progress. Until the first major release, there will likely be issues, sparse 
+documentation, and APIs that are changing in backwards-incompatible ways. Please proceed at your own risk.
+
 ## Who is this for?
 In short, probably just ourselves! But maybe you, too.
 
@@ -27,6 +31,12 @@ extra work to get things set up exactly how they want it should consider using t
 [express](http://expressjs.com), or 
 [Razzle](https://github.com/jaredpalmer/razzle). 
 These are all great frameworks, and some of them used heavily by hatch for its foundation. 
+
+## Acknowledgements
+This project would not be possible without the support of the initial contributors' employer, 
+[Bigfoot Biomedical](https://www.bigfootbiomedical.com/), which has allowed us to work on the project both on our time 
+and on Bigfoot's when it is mutually beneficial. Bigfoot Biomedical has deep roots in the open source community, and 
+benefits greatly from it. We are proud to have Bigfoot's support as we contribute hatch back to this community.
 
 ## Installation
 The `hatch` command-line application can be installed via the npm registry, e.g. with npm:

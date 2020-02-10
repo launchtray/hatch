@@ -100,6 +100,7 @@ own outside of a project created by `hatch`.
 * [hatch-razzle-config](libraries/hatch-razzle-config) -- a helper method for creating a 
   [Razzle](https://github.com/jaredpalmer/razzle) config file that is compatible with the design of the 
   [webapp](tools/hatch-cli/src/templates/webapp) template
+* [hatch-web-injectables](libraries/hatch-web-injectables) -- a library used for injecting useful web parameters
 
 
 ## Developer setup

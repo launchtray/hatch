@@ -93,6 +93,17 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
     try {
       await fs.copy(srcPath, tempFilePath);
       if (isProject) {
+        // Delete files that might be copied over if this is a local dev install
+        const nodeModulesPath = path.resolve(tempFilePath, 'node_modules');
+        if (fs.existsSync(nodeModulesPath)) {
+          await fs.remove(nodeModulesPath);
+        }
+        const rushPath = path.resolve(tempFilePath, '.rush');
+        if (fs.existsSync(rushPath)) {
+          await fs.remove(rushPath);
+        }
+
+        // Replace template names with generated project name
         await replace({
           files: tempFilePath + '/**/*',
           from: /HATCH_CLI_TEMPLATE_VAR_projectName/g,
@@ -103,6 +114,8 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
           from: '@launchtray/hatch-template-' + templateName,
           to: name
         });
+
+        // Rename hidden / project files
         const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectName.iml');
         if (fs.existsSync(imlPath)) {
           await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${name}.iml`));

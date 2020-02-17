@@ -102,7 +102,19 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
           files: tempFilePath + '/package.json',
           from: '@launchtray/hatch-template-' + templateName,
           to: name
-        })
+        });
+        const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectName.iml');
+        if (fs.existsSync(imlPath)) {
+          await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${name}.iml`));
+        }
+        const dotIdeaPath = path.resolve(tempFilePath, 'dot-idea');
+        if (fs.existsSync(dotIdeaPath)) {
+          await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+        }
+        const dotGitIgnorePath = path.resolve(tempFilePath, 'dot-gitignore');
+        if (fs.existsSync(dotGitIgnorePath)) {
+          await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
+        }
       } else {
         await replace({
           files: tempFilePath,
@@ -110,12 +122,6 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
           to: name,
         });
       }
-      await fs.move(
-        path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectName.iml'),
-        path.resolve(tempFilePath, 'dot-idea', `${name}.iml`)
-      );
-      await fs.move(path.resolve(tempFilePath, 'dot-idea'), path.resolve(tempFilePath, '.idea'));
-      await fs.move(path.resolve(tempFilePath, 'dot-gitignore'), path.resolve(tempFilePath, '.gitignore'));
       await fs.copy(tempFilePath, dstPath);
     } finally {
       cleanUp();

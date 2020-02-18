@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.6",
+      "tag": "@launchtray/hatch-cli_v0.4.6",
+      "date": "Tue, 18 Feb 2020 18:10:03 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed generation of non-project files"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.5",
       "tag": "@launchtray/hatch-cli_v0.4.5",
       "date": "Mon, 10 Feb 2020 22:03:00 GMT",

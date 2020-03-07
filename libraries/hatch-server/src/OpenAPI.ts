@@ -10,6 +10,55 @@ export type OpenAPIResponses = {
   [statusCode in number | 'default']?: OpenAPIResponse;
 };
 
+export interface OpenAPISchemaObject {
+  // TODO: Flesh this out more to improve IDE help
+  // For now, see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
+  [key: string]: any;
+}
+
+export interface OpenAPIExampleObject {
+  summary?: string;
+  description?: string;
+  value: any;
+}
+
+export interface OpenAPIHeaders {
+  [name: string]: Omit<OpenAPIParameter, 'name' | 'in'>;
+}
+
+export interface OpenAPIEncodingObject {
+  contentType: string;
+  headers: OpenAPIHeaders;
+  style?: string;
+  explode?: boolean;
+  allowReserved?: boolean;
+}
+
+export type OpenAPIExamples = {
+  [name: string]: OpenAPIExampleObject;
+};
+
+export type OpenAPIEncodings = {
+  [propertyName: string]: OpenAPIEncodingObject;
+};
+
+export interface OpenAPIMediaTypeObject {
+  schema: OpenAPISchemaObject;
+  example?: any;
+  examples?: OpenAPIExamples;
+  encoding?: OpenAPIEncodings;
+}
+
+export type OpenAPIRequestBodyContent = {
+  [mediaType: string]: OpenAPIMediaTypeObject;
+};
+
+export interface OpenAPIRequestBody {
+  description: string;
+  required?: boolean;
+  content: OpenAPIRequestBodyContent;
+}
+
 export type OpenAPIMethod =
   | 'get'
   | 'put'
@@ -25,11 +74,13 @@ export interface OpenAPIParameter {
   in: 'query' | 'header' | 'path' | 'cookie';
   required: boolean;
   description?: string;
+  allowEmptyValue?: boolean;
 }
 
 export interface OpenAPIOperation {
   responses: OpenAPIResponses;
   parameters: OpenAPIParameter[];
+  requestBody?: OpenAPIRequestBody;
 }
 
 export type OpenAPIOperations = {
@@ -70,7 +121,8 @@ export class OpenAPISpecBuilder {
       description: apiMetadata.description ?? '',
       [apiMetadata.method]: {
         responses: apiMetadata.responses,
-        parameters: apiMetadata.parameters
+        parameters: apiMetadata.parameters,
+        requestBody: apiMetadata.requestBody,
       }
     }
   }

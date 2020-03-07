@@ -28,6 +28,62 @@ export default class ExampleController implements ServerMiddleware {
     responder.ok(this.testVar);
   }
 
+  @route.get('/api/greeting', {
+    parameters: {
+      name: {
+        description: 'Example greeting endpoint using a query param',
+      },
+    },
+  })
+  public parseQueryParam(responder: HTTPResponder) {
+    const name = responder.params.req.query.name;
+    if (name) {
+      responder.ok(`Hello, ${responder.params.req.query.name}!`);
+    } else {
+      responder.ok('Hello!');
+    }
+  }
+
+  @route.post('/api/processBody', {
+    requestBody: {
+      description: 'Example request body',
+      content: { // Note: the following below could be defined as a constant for reuse, etc.
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: [
+              'name'
+            ],
+            properties: {
+              name: {
+                type: 'string'
+              },
+              age: {
+                type: 'integer',
+                format: 'int32',
+                minimum: 0
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  public processBody(responder: HTTPResponder) {
+    const name = responder.params.req.body.name;
+    const age = responder.params.req.body.age;
+    if (age) {
+      responder.ok(`Processed age of ${name}: ${age}`);
+    } else {
+      responder.ok(`Age of ${name} is unknown`);
+    }
+  }
+
+  @route.post('/api/processBodyWithoutSpec')
+  public processBodyWithoutSpec(responder: HTTPResponder) {
+    this.processBody(responder);
+  }
+
   @route.get('/api/person/:id', {
     parameters: {
       id: {

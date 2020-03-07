@@ -12,7 +12,7 @@ import {
   ServerMiddlewareClass
 } from './ServerMiddleware';
 import WebSocket from 'ws';
-import {OpenAPIMethod, OpenAPIParameter} from './OpenAPI';
+import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody} from './OpenAPI';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
 
@@ -206,8 +206,11 @@ export const convertExpressPathToOpenAPIPath = (
   },
   paramsOut: OpenAPIParameter[],
 ): string | undefined => {
+  const nonPathParams = {...paramsIn};
+  let newPath: string | undefined = undefined;
   if (typeof path === 'string') {
-    return path.replace(/:([A-Za-z0-0_]*)/g, (_, param) => {
+    newPath = path.replace(/:([A-Za-z0-0_]*)/g, (_, param) => {
+      delete nonPathParams[param];
       paramsOut.push({
         ...paramsIn[param],
         name: param,
@@ -217,12 +220,36 @@ export const convertExpressPathToOpenAPIPath = (
       return `{${param}}`
     });
   }
-  return undefined
+  Object.keys(nonPathParams).forEach((param) => {
+    paramsOut.push({
+      name: param,
+      in: 'query',
+      required: false,
+      ...paramsIn[param],
+    });
+  });
+  return newPath;
 };
 
 export const convertExpressMethodToOpenAPIMethod = (method: keyof RouteDefiners): OpenAPIMethod | undefined => {
   if (['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'].includes(method)) {
     return method as OpenAPIMethod;
+  }
+  return undefined;
+};
+
+const defaultRequestBody = (method: OpenAPIMethod, metadata: APIMetadataParameters): OpenAPIRequestBody | undefined => {
+  if (['put', 'post', 'patch'].includes(method)) {
+    return {
+      ...metadata.requestBody,
+      description: metadata.requestBody?.description ?? '',
+      content: metadata.requestBody?.content ?? {
+        'application/json': {
+          schema: {},
+          example: {},
+        }
+      },
+    };
   }
   return undefined;
 };
@@ -251,6 +278,7 @@ const proxy = {
             description: metadata.description ?? '',
             method: apiMethod,
             path: apiPath,
+            requestBody: metadata.requestBody ?? defaultRequestBody(apiMethod, metadata),
             parameters,
             responses: metadata.responses ?? {
               default: {

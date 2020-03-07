@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.3.3",
+      "tag": "@launchtray/hatch-server_v0.3.3",
+      "date": "Sat, 07 Mar 2020 23:54:53 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add ability to create API docs for request bodies and query parameters"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.2",
       "tag": "@launchtray/hatch-server_v0.3.2",
       "date": "Tue, 28 Jan 2020 04:47:08 GMT",

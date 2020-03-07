@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Tue, 28 Jan 2020 04:47:08 GMT and should not be manually modified.
+This log was last generated on Sat, 07 Mar 2020 23:54:53 GMT and should not be manually modified.
+
+## 0.3.3
+Sat, 07 Mar 2020 23:54:53 GMT
+
+### Patches
+
+- Add ability to create API docs for request bodies and query parameters
 
 ## 0.3.2
 Tue, 28 Jan 2020 04:47:08 GMT

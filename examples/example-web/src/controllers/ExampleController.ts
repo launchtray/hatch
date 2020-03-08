@@ -4,10 +4,29 @@ import {
   ServerMiddleware,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
-import {delay, inject, Logger} from '@launchtray/hatch-util';
+import {containerSingleton, delay, inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import WebSocket from 'ws';
 
+@containerSingleton()
+class CustomResponder {
+  public params: BasicRouteParams;
+
+  constructor(@inject('Logger') private readonly logger: Logger, public readonly responder: HTTPResponder) {
+    logger.info('Instantiating CustomResponder');
+    this.params = responder.params;
+  }
+
+  public ok(body?: any) {
+    this.responder.ok(body);
+  }
+
+  public next() {
+    this.params.next();
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
 @controller()
 export default class ExampleController implements ServerMiddleware {
   private readonly testVar: string;
@@ -15,8 +34,14 @@ export default class ExampleController implements ServerMiddleware {
     this.testVar = 'A';
   }
 
+  @route.all('/api/*')
+  public catchallEndpoint(responder: CustomResponder) {
+    this.logger.info('Catch-all endpoint called');
+    responder.next();
+  }
+
   @route.get('/api/example')
-  public exampleEndpoint(responder: HTTPResponder) {
+  public exampleEndpoint(responder: CustomResponder) {
     this.logger.info('Example endpoint called');
     responder.ok('Example GET');
   }
@@ -24,7 +49,7 @@ export default class ExampleController implements ServerMiddleware {
   @route.custom((app, server, handler) => {
     app.get('/api/example2', handler);
   })
-  public exampleEndpoint2(responder: HTTPResponder) {
+  public exampleEndpoint2(responder: CustomResponder) {
     responder.ok(this.testVar);
   }
 
@@ -35,7 +60,7 @@ export default class ExampleController implements ServerMiddleware {
       },
     },
   })
-  public parseQueryParam(responder: HTTPResponder) {
+  public parseQueryParam(responder: CustomResponder) {
     const name = responder.params.req.query.name;
     if (name) {
       responder.ok(`Hello, ${responder.params.req.query.name}!`);
@@ -69,10 +94,10 @@ export default class ExampleController implements ServerMiddleware {
       }
     }
   })
-  public processBody(responder: HTTPResponder) {
+  public processBody(responder: CustomResponder) {
     const name = responder.params.req.body.name;
     const age = responder.params.req.body.age;
-    if (age) {
+    if (age != null) {
       responder.ok(`Processed age of ${name}: ${age}`);
     } else {
       responder.ok(`Age of ${name} is unknown`);
@@ -80,7 +105,7 @@ export default class ExampleController implements ServerMiddleware {
   }
 
   @route.post('/api/processBodyWithoutSpec')
-  public processBodyWithoutSpec(responder: HTTPResponder) {
+  public processBodyWithoutSpec(responder: CustomResponder) {
     this.processBody(responder);
   }
 

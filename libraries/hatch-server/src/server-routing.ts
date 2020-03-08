@@ -23,13 +23,18 @@ export interface RouteDefiner {
 const routeDefinersKey = Symbol('routeDefiners');
 const rootContainerKey = Symbol('rootContainer');
 const wsRoutesKey = Symbol('wsEnabled');
+const requestContainerKey = Symbol('requestContainer');
 
 const custom = (routeDefiner: RouteDefiner) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
     const requestHandler = async (ctlr: any, req: Request, res: Response, next: NextFunction) => {
-      const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
-      const container = rootContainer.createChildContainer();
+      let container = req[requestContainerKey];
+      if (container == null) {
+        const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
+        container = rootContainer.createChildContainer();
+        req[requestContainerKey] = container;
+      }
       container.registerInstance('Request', req);
       container.registerInstance('Response', res);
       container.registerInstance('NextFunction', next);

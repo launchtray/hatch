@@ -21,6 +21,7 @@ commander
   .command(...commandForTemplate('controller', 'controller module'))
   .command(...commandForTemplate('manager', 'manager module'))
   .command(...commandForTemplate('reducer', 'reducer module'))
+  .command(...commandForTemplate('injectable', 'injectable module'))
 ;
 
 runCommander();

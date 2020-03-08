@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.7",
+      "tag": "@launchtray/hatch-cli_v0.4.7",
+      "date": "Sun, 08 Mar 2020 01:52:16 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Actually register codegen template for injectables"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.6",
       "tag": "@launchtray/hatch-cli_v0.4.6",
       "date": "Tue, 18 Feb 2020 18:10:03 GMT",

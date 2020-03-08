@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Sat, 07 Mar 2020 23:54:53 GMT and should not be manually modified.
+This log was last generated on Sun, 08 Mar 2020 01:41:06 GMT and should not be manually modified.
+
+## 0.3.4
+Sun, 08 Mar 2020 01:41:06 GMT
+
+### Patches
+
+- Make request containers truly per-request and not per-handler
 
 ## 0.3.3
 Sat, 07 Mar 2020 23:54:53 GMT

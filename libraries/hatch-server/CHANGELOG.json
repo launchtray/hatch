@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.3.4",
+      "tag": "@launchtray/hatch-server_v0.3.4",
+      "date": "Sun, 08 Mar 2020 01:41:06 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Make request containers truly per-request and not per-handler"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.3",
       "tag": "@launchtray/hatch-server_v0.3.3",
       "date": "Sat, 07 Mar 2020 23:54:53 GMT",

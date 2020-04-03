@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/%40launchtray%2Fhatch-cli.svg)](https://badge.fury.io/js/%40launchtray%2Fhatch-cli)
+
 <p align="center"> 
   <img src="https://github.com/launchtray/hatch/raw/assets/hatch_eyes.png" width="10%">
 </p>

@@ -1,4 +1,4 @@
-import {inject, containerSingleton, Logger} from '@launchtray/hatch-util';
+import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import {NextFunction, Request, Response} from 'express';
 
 @containerSingleton()

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.3.1",
+      "tag": "@launchtray/hatch-server-middleware_v0.3.1",
+      "date": "Wed, 08 Apr 2020 05:24:39 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed lint issue with ordered imports"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.0",
       "tag": "@launchtray/hatch-server-middleware_v0.3.0",
       "date": "Wed, 22 Jan 2020 07:53:10 GMT",

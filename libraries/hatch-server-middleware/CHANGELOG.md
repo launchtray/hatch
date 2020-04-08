@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-middleware
 
-This log was last generated on Wed, 22 Jan 2020 07:53:10 GMT and should not be manually modified.
+This log was last generated on Wed, 08 Apr 2020 05:24:39 GMT and should not be manually modified.
+
+## 0.3.1
+Wed, 08 Apr 2020 05:24:39 GMT
+
+### Patches
+
+- Fixed lint issue with ordered imports
 
 ## 0.3.0
 Wed, 22 Jan 2020 07:53:10 GMT

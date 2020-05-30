@@ -34,11 +34,6 @@ export default class UserManagementController {
     this.authWhitelist.concat(customAuthWhitelist);
   }
   
-  @route.get('/')
-  public redirect(params: BasicRouteParams) {
-    params.res.redirect('/api');
-  }
-  
   @route.post('/api/authenticate', AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');

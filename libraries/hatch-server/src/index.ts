@@ -11,6 +11,7 @@ import {
   ServerComposition,
 } from './ServerComposer';
 import {
+  APIMetadataParameters,
   registerServerMiddleware,
   resolveServerMiddleware,
   Server,
@@ -34,4 +35,5 @@ export {
   CreateServerOptions,
   Server,
   createMicroservice,
+  APIMetadataParameters,
 };

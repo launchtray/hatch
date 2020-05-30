@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "serialize-javascript": "^2.1.0"

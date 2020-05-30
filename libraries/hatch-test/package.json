@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "devDependencies": {
     "typescript": "^3.7.3",

@@ -7,7 +7,7 @@
     "build": ""
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "razzle-plugin-typescript": "^3.0.0"

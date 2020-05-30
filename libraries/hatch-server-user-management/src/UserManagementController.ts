@@ -11,7 +11,10 @@ import {
   ConfirmUserRequest,
   SignUpUserRequest,
   RefreshTokenRequest,
-  ForgotPasswordRequest, ConfirmForgotPasswordRequest, SignOutRequest, ReSendSignUpUserRequest
+  ForgotPasswordRequest,
+  ConfirmForgotPasswordRequest,
+  SignOutRequest,
+  ReSendSignUpUserRequest
 } from './UserManagementRequests';
 
 @controller()

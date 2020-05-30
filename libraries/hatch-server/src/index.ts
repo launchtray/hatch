@@ -20,6 +20,7 @@ import {
 } from './ServerMiddleware';
 
 export {
+  APIMetadataParameters,
   route,
   controller,
   createServer,
@@ -35,5 +36,4 @@ export {
   CreateServerOptions,
   Server,
   createMicroservice,
-  APIMetadataParameters,
 };

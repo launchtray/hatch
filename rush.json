@@ -375,6 +375,11 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@launchtray/hatch-server-user-management",
+      "projectFolder": "libraries/hatch-server-user-management",
+      "shouldPublish": true
+    },
+    {
       "packageName": "@launchtray/hatch-test",
       "projectFolder": "libraries/hatch-test",
       "shouldPublish": true

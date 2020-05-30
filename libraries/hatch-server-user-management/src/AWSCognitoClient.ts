@@ -61,6 +61,13 @@ export default class AWSCognitoClient implements UserServiceClient {
     }).promise();
   }
   
+  public async resendSignUp(username: string) {
+    await this.cognitoProvider.resendConfirmationCode({
+      ClientId: AWS_CLIENT_ID as string,
+      Username: username,
+    }).promise();
+  }
+  
   public async confirmUser(username: string, confirmationCode: string) {
     await this.cognitoProvider.confirmSignUp({
       ClientId: AWS_CLIENT_ID as string,
@@ -69,10 +76,19 @@ export default class AWSCognitoClient implements UserServiceClient {
     }).promise();
   }
   
-  public async resetPassword(username: string) {
+  public async forgotPasswordRequest(username: string) {
     await this.cognitoProvider.adminResetUserPassword({
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
+    }).promise();
+  }
+  
+  public async confirmForgotPasswordRequest(username: string, confirmationCode: string, password: string) {
+    await this.cognitoProvider.confirmForgotPassword({
+      ClientId: AWS_CLIENT_ID as string,
+      Username: username,
+      ConfirmationCode: confirmationCode,
+      Password: password,
     }).promise();
   }
   
@@ -89,6 +105,13 @@ export default class AWSCognitoClient implements UserServiceClient {
       accessToken: response.AuthenticationResult?.AccessToken,
       refreshToken: response.AuthenticationResult?.RefreshToken,
     }
+  }
+  
+  public async signOutUser(username: string) {
+    await this.cognitoProvider.adminUserGlobalSignOut({
+      UserPoolId: AWS_USER_POOL_ID as string,
+      Username: username,
+    }).promise();
   }
   
   public async getUserAttrsBySubjectId(subjectId: string) {

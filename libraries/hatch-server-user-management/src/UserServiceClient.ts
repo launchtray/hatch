@@ -13,8 +13,11 @@ export class AuthTokens {
 export default interface UserServiceClient {
   authenticate(username: string, password: string): Promise<AuthTokens>;
   signUpUser(username: string, password: string, userAttributes?: {[key: string]: any}): Promise<void>;
+  resendSignUp(username: string): Promise<void>;
   confirmUser(username: string, confirmationCode: string): Promise<void>;
-  resetPassword(username: string): Promise<void>;
+  forgotPasswordRequest(username: string): Promise<void>;
+  confirmForgotPasswordRequest(username: string, confirmationCode: string, password: string): Promise<void>;
   verifyToken(token: string): Promise<UserInfo>;
   refreshToken(refreshToken: string): Promise<AuthTokens>;
+  signOutUser(username: string): Promise<void>;
 }

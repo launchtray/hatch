@@ -3,15 +3,8 @@ import {containerSingleton, Logger} from '@launchtray/hatch-util';
 import cookie from 'cookie';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import AWSCognitoClient from './AWSCognitoClient';
+import {UserInfo} from './UserServiceClient';
 
-export class UserInfo {
-  public username?: string;
-  public userId?: string;
-  public token?: string;
-  public isAuthenticated: boolean = false;
-}
-
-// tslint:disable-next-line:max-classes-per-file
 @containerSingleton()
 export default class UserInfoRequest {
   private userInfo: UserInfo | undefined;

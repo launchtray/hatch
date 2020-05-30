@@ -27,10 +27,10 @@ export class AuthenticateRequest {
   };
 }
 
-export class CreateUserRequest {
+export class SignUpUserRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
-      description: 'Creates a user account',
+      description: 'Sign\'s up a user account',
       content: {
         'application/json': {
           schema: {
@@ -49,6 +49,29 @@ export class CreateUserRequest {
               userAttributes: {
                 type: 'object'
               }
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
+export class ReSendSignUpUserRequest {
+  public static apiMetadata: APIMetadataParameters = {
+    requestBody: {
+      description: 'Creates a user account',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: [
+              'username',
+            ],
+            properties: {
+              username: {
+                type: 'string'
+              },
             }
           }
         }
@@ -84,7 +107,7 @@ export class ConfirmUserRequest {
   };
 }
 
-export class ResetPasswordRequest {
+export class ForgotPasswordRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Resets a user account password',
@@ -97,6 +120,37 @@ export class ResetPasswordRequest {
             ],
             properties: {
               username: {
+                type: 'string'
+              },
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
+export class ConfirmForgotPasswordRequest {
+  public static apiMetadata: APIMetadataParameters = {
+    requestBody: {
+      description: 'Resets a user account password',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: [
+              'username',
+              'confirmationCode',
+              'password',
+            ],
+            properties: {
+              username: {
+                type: 'string'
+              },
+              confirmationCode: {
+                type: 'string'
+              },
+              password: {
                 type: 'string'
               },
             }
@@ -120,6 +174,29 @@ export class RefreshTokenRequest {
             ],
             properties: {
               refreshToken: {
+                type: 'string'
+              },
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
+export class SignOutRequest {
+  public static apiMetadata: APIMetadataParameters = {
+    requestBody: {
+      description: 'Sign\'s out a user',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: [
+              'username',
+            ],
+            properties: {
+              username: {
                 type: 'string'
               },
             }

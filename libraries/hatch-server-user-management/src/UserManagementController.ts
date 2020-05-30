@@ -3,15 +3,15 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import AWSCognitoClient from './AWSCognitoClient';
+import UserServiceClient from './UserServiceClient';
 import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
   AuthenticateRequest,
   ConfirmUserRequest,
-  CreateUserRequest,
+  SignUpUserRequest,
   RefreshTokenRequest,
-  ResetPasswordRequest
+  ForgotPasswordRequest, ConfirmForgotPasswordRequest, SignOutRequest, ReSendSignUpUserRequest
 } from './UserManagementRequests';
 
 @controller()
@@ -25,15 +25,13 @@ export default class UserManagementController {
   ];
   
   constructor(
-    private readonly userService: AWSCognitoClient,
+    @inject('UserServiceClient') private readonly userService: UserServiceClient,
     @inject('Logger') private readonly logger: Logger,
     @inject('customAuthWhitelist') private readonly customAuthWhitelist: string[]) {
     this.authWhitelist.concat(customAuthWhitelist);
   }
   
-  @route.custom((app, server, handler) => {
-    app.get('/', handler);
-  })
+  @route.get('/')
   public redirect(params: BasicRouteParams) {
     params.res.redirect('/api');
   }
@@ -63,7 +61,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/signUpUser', CreateUserRequest.apiMetadata)
+  @route.post('/api/signUpUser', SignUpUserRequest.apiMetadata)
   public async signUpUser(params: BasicRouteParams) {
     this.logger.debug('Creating user...');
     try {
@@ -81,6 +79,30 @@ export default class UserManagementController {
       }
     } catch (err) {
       this.logger.error('Error creating user: ', err);
+      params.res.status(500).send({
+        error: err,
+      });
+    }
+  }
+  
+  @route.post('/api/resendSignUp', ReSendSignUpUserRequest.apiMetadata)
+  public async resendSignUp(params: BasicRouteParams) {
+    this.logger.debug('Resending user sign up...');
+    try {
+      const {username} = params.req.body;
+      if (!username || username.length === 0) {
+        const errMsg = 'Missing required field, username is required';
+        this.logger.debug(errMsg);
+        params.res.status(400).send({
+          error: errMsg,
+        });
+      } else {
+        await this.userService.resendSignUp(username);
+        this.logger.debug('User sign up email resent');
+        params.res.sendStatus(200);
+      }
+    } catch (err) {
+      this.logger.error('Error resending user sign up email: ', err);
       params.res.status(500).send({
         error: err,
       });
@@ -111,7 +133,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/resetPassword', ResetPasswordRequest.apiMetadata)
+  @route.post('/api/forgotPassword', ForgotPasswordRequest.apiMetadata)
   public async resetPassword(params: BasicRouteParams) {
     this.logger.debug('Resetting user password...');
     try {
@@ -123,12 +145,37 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.resetPassword(username);
-        this.logger.debug('User password reset');
+        await this.userService.forgotPasswordRequest(username);
+        this.logger.debug('User password reset request sent');
         params.res.sendStatus(200);
       }
     } catch (err) {
       this.logger.error('Error resetting user password: ', err);
+      params.res.status(500).send({
+        error: err,
+      });
+    }
+  }
+  
+  @route.post('/api/confirmForgotPassword', ConfirmForgotPasswordRequest.apiMetadata)
+  public async confirmForgotPassword(params: BasicRouteParams) {
+    this.logger.debug('Confirming forgot user password...');
+    try {
+      const {username, confirmationCode, password} = params.req.body;
+      if (!username || username.length === 0 || !confirmationCode || confirmationCode.length === 0 || !password ||
+        password.length === 0) {
+        const errMsg = 'Missing required field(s), username, confirmation code, and password are required';
+        this.logger.debug(errMsg);
+        params.res.status(400).send({
+          error: errMsg,
+        });
+      } else {
+        await this.userService.confirmForgotPasswordRequest(username, confirmationCode, password);
+        this.logger.debug('User password reset confirmed');
+        params.res.sendStatus(200);
+      }
+    } catch (err) {
+      this.logger.error('Error confirming resetting user password: ', err);
       params.res.status(500).send({
         error: err,
       });
@@ -201,6 +248,31 @@ export default class UserManagementController {
       this.logger.error('Error verifying user: ', err);
       params.res.status(500).send({
         error: err.message,
+      });
+    }
+  }
+  
+  @route.post('/api/signOut', SignOutRequest.apiMetadata)
+  public async signOut(userInfoRequest: UserInfoRequest) {
+    const params = userInfoRequest.params;
+    this.logger.debug('Signing out user...');
+    try {
+      const {username} = params.req.body;
+      if (!username || username.length === 0) {
+        const errMsg = 'Missing required field, username is required';
+        this.logger.debug(errMsg);
+        params.res.status(400).send({
+          error: errMsg,
+        });
+      } else {
+        await this.userService.signOutUser(username);
+        this.logger.debug('User signed out');
+        params.res.sendStatus(200);
+      }
+    } catch (err) {
+      this.logger.error('Error signing out user: ', err);
+      params.res.status(500).send({
+        error: err,
       });
     }
   }

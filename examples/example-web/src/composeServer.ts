@@ -5,7 +5,7 @@ import {
   RouteNotFound,
 } from '@launchtray/hatch-server-middleware';
 import {UserManagementController} from '@launchtray/hatch-server-user-management';
-import {AWSCognitoClient} from '@launchtray/hatch-server-user-management/dist';
+import {AWSCognitoClient} from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {WebServerComposition} from '@launchtray/hatch-web-server';
 import composeCommon from './composeCommon';

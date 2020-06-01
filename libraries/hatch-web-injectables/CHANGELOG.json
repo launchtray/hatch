@@ -2,6 +2,26 @@
   "name": "@launchtray/hatch-web-injectables",
   "entries": [
     {
+      "version": "0.1.2",
+      "tag": "@launchtray/hatch-web-injectables_v0.1.2",
+      "date": "Mon, 01 Jun 2020 03:26:54 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update publish config to public"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.4` to `^0.1.7`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-web\" from `^0.2.0` to `^0.2.3`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.1",
       "tag": "@launchtray/hatch-web-injectables_v0.1.1",
       "date": "Wed, 22 Jan 2020 07:53:10 GMT",

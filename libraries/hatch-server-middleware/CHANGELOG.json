@@ -2,6 +2,26 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.3.2",
+      "tag": "@launchtray/hatch-server-middleware_v0.3.2",
+      "date": "Mon, 01 Jun 2020 03:26:54 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update publish config to public"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-server\" from `^0.3.0` to `^0.3.5`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.4` to `^0.1.7`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.1",
       "tag": "@launchtray/hatch-server-middleware_v0.3.1",
       "date": "Wed, 08 Apr 2020 05:24:39 GMT",

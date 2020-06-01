@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web-server
 
-This log was last generated on Tue, 28 Jan 2020 04:47:08 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Jun 2020 03:26:54 GMT and should not be manually modified.
+
+## 0.3.3
+Mon, 01 Jun 2020 03:26:54 GMT
+
+### Patches
+
+- Update publish config to public
 
 ## 0.3.2
 Tue, 28 Jan 2020 04:47:08 GMT

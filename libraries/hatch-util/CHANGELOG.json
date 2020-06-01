@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-util",
   "entries": [
     {
+      "version": "0.1.7",
+      "tag": "@launchtray/hatch-util_v0.1.7",
+      "date": "Mon, 01 Jun 2020 03:26:54 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update publish config to public"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.6",
       "tag": "@launchtray/hatch-util_v0.1.6",
       "date": "Tue, 28 Jan 2020 04:47:08 GMT",

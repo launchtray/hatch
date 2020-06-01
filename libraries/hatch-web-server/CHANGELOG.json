@@ -2,6 +2,29 @@
   "name": "@launchtray/hatch-web-server",
   "entries": [
     {
+      "version": "0.3.3",
+      "tag": "@launchtray/hatch-web-server_v0.3.3",
+      "date": "Mon, 01 Jun 2020 03:26:54 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update publish config to public"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.6` to `^0.1.7`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-server\" from `^0.3.2` to `^0.3.5`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-web\" from `^0.2.2` to `^0.2.3`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.2",
       "tag": "@launchtray/hatch-web-server_v0.3.2",
       "date": "Tue, 28 Jan 2020 04:47:08 GMT",

@@ -45,7 +45,7 @@ export default class AWSCognitoClient implements UserServiceClient {
     }
   }
   
-  public async signUpUser(username: string, password: string, userAttributes?: {[key: string]: any}) {
+  public async startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}) {
     let cognitoUserAttributes: AttributeListType = [];
     for (const key in userAttributes) {
       cognitoUserAttributes.push({
@@ -61,14 +61,14 @@ export default class AWSCognitoClient implements UserServiceClient {
     }).promise();
   }
   
-  public async resendSignUp(username: string) {
+  public async resendUserRegistrationCode(username: string) {
     await this.cognitoProvider.resendConfirmationCode({
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
     }).promise();
   }
   
-  public async confirmUser(username: string, confirmationCode: string) {
+  public async confirmUserRegistration(username: string, confirmationCode: string) {
     await this.cognitoProvider.confirmSignUp({
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
@@ -76,14 +76,14 @@ export default class AWSCognitoClient implements UserServiceClient {
     }).promise();
   }
   
-  public async forgotPasswordRequest(username: string) {
+  public async startPasswordReset(username: string) {
     await this.cognitoProvider.adminResetUserPassword({
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
     }).promise();
   }
   
-  public async confirmForgotPasswordRequest(username: string, confirmationCode: string, password: string) {
+  public async confirmPasswordReset(username: string, confirmationCode: string, password: string) {
     await this.cognitoProvider.confirmForgotPassword({
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
@@ -92,7 +92,7 @@ export default class AWSCognitoClient implements UserServiceClient {
     }).promise();
   }
   
-  public async refreshToken(refreshToken: string) {
+  public async refreshAuthentication(refreshToken: string) {
     const response = await this.cognitoProvider.adminInitiateAuth({
       UserPoolId: AWS_USER_POOL_ID as string,
       ClientId: AWS_CLIENT_ID as string,
@@ -114,7 +114,7 @@ export default class AWSCognitoClient implements UserServiceClient {
     }).promise();
   }
   
-  public async getUserAttrsBySubjectId(subjectId: string) {
+  public async getUserAttributesById(subjectId: string) {
     const filter = 'sub = "' + subjectId + '"';
     const response = await this.cognitoProvider.listUsers({
       Filter: filter,
@@ -129,7 +129,36 @@ export default class AWSCognitoClient implements UserServiceClient {
     return userAttrsResp;
   }
   
-  public async verifyToken(accessToken: string) {
+  public async getUserAttributes(username: string) {
+    const response = await this.cognitoProvider.adminGetUser({
+      UserPoolId: AWS_USER_POOL_ID as string,
+      Username: username,
+    }).promise();
+    this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
+    const userAttrsResp: {[key: string]: any} = {};
+    if (response && response.UserAttributes) {
+      response.UserAttributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+    }
+    return userAttrsResp;
+  }
+  
+  public async setUserAttributes(username: string, userAttributes: {[key: string]: any}) {
+    const userAttributesList: AttributeListType = [];
+    Object.keys(userAttributes).map((key) => {
+      userAttributesList.push({
+        Name: key,
+        Value: userAttributes[key]
+      });
+      return userAttributesList;
+    });
+    await this.cognitoProvider.adminUpdateUserAttributes({
+      UserPoolId: AWS_USER_POOL_ID as string,
+      Username: username,
+      UserAttributes: userAttributesList,
+    }).promise();
+  }
+  
+  public async getUserInfo(accessToken: string) {
     await this.requirePublicKeys();
     if (!this.pemCerts) {
       throw new Error('Missing public keys from AWS Cognito to verify token');
@@ -156,12 +185,11 @@ export default class AWSCognitoClient implements UserServiceClient {
       this.logger.error('Error verifying token: ', err);
       throw err;
     }
-    
-    const userInfo = new UserInfo();
-    userInfo.isAuthenticated = true;
-    userInfo.accessToken = accessToken;
-    userInfo.username = decodedJwt.payload && decodedJwt.payload.username;
-    userInfo.userId = decodedJwt.payload && decodedJwt.payload.sub;
+  
+    const isAuthenticated = true;
+    const username = decodedJwt.payload && decodedJwt.payload.username;
+    const userId = decodedJwt.payload && decodedJwt.payload.sub;
+    const userInfo = new UserInfo(userId, username, accessToken, isAuthenticated);
     return userInfo;
   }
   

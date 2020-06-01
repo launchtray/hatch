@@ -8,14 +8,15 @@ import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
   AuthenticateRequest,
-  ConfirmUserRequest,
-  SignUpUserRequest,
-  RefreshTokenRequest,
-  ForgotPasswordRequest,
-  ConfirmForgotPasswordRequest,
-  SignOutRequest,
-  ReSendSignUpUserRequest
+  ConfirmUserRegistrationRequest,
+  StartUserRegistrationRequest,
+  RefreshAuthenticationRequest,
+  StartPasswordResetRequest,
+  ConfirmPasswordResetRequest,
+  SignOutUserRequest,
+  ResendUserRegistrationCodeRequest
 } from './UserManagementRequests';
+import {ROOT_CONTAINER} from '@launchtray/hatch-util/dist';
 
 @controller()
 export default class UserManagementController {
@@ -29,9 +30,13 @@ export default class UserManagementController {
   
   constructor(
     @inject('UserServiceClient') private readonly userService: UserServiceClient,
-    @inject('Logger') private readonly logger: Logger,
-    @inject('customAuthWhitelist') private readonly customAuthWhitelist: string[]) {
-    this.authWhitelist.concat(customAuthWhitelist);
+    @inject('Logger') private readonly logger: Logger) {
+    if (ROOT_CONTAINER.isRegistered('customAuthWhitelist')) {
+      const customAuthWhitelist = ROOT_CONTAINER.resolve<string[]>('customAuthWhitelist');
+      this.logger.debug('Custom auth whitelist found, updating with: ' + customAuthWhitelist);
+      this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
+      this.logger.debug('Auth whitelist updated: ' + this.authWhitelist);
+    }
   }
   
   @route.post('/api/authenticate', AuthenticateRequest.apiMetadata)
@@ -39,7 +44,7 @@ export default class UserManagementController {
     this.logger.debug('Authenticating...');
     try {
       const {username, password} = params.req.body;
-      if (!username || !password || username.length === 0 || password.length === 0) {
+      if (!username || !password) {
         const errMsg = 'Missing required field(s), username and password are required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
@@ -59,20 +64,20 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/signUpUser', SignUpUserRequest.apiMetadata)
-  public async signUpUser(params: BasicRouteParams) {
-    this.logger.debug('Creating user...');
+  @route.post('/api/startUserRegistration', StartUserRegistrationRequest.apiMetadata)
+  public async startUserRegistration(params: BasicRouteParams) {
+    this.logger.debug('Starting user registration...');
     try {
       const {username, password, userAttributes} = params.req.body;
-      if (!username || !password || username.length === 0 || password.length === 0) {
+      if (!username || !password) {
         const errMsg = 'Missing required field(s), username and password are required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
           error: errMsg,
         });
       } else {
-        await this.userService.signUpUser(username, password, userAttributes);
-        this.logger.debug('User created');
+        await this.userService.startUserRegistration(username, password, userAttributes);
+        this.logger.debug('User registration started');
         params.res.sendStatus(200);
       }
     } catch (err) {
@@ -83,20 +88,20 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/resendSignUp', ReSendSignUpUserRequest.apiMetadata)
-  public async resendSignUp(params: BasicRouteParams) {
-    this.logger.debug('Resending user sign up...');
+  @route.post('/api/resendUserRegistrationCode', ResendUserRegistrationCodeRequest.apiMetadata)
+  public async resendUserRegistrationCode(params: BasicRouteParams) {
+    this.logger.debug('Resending user registration code...');
     try {
       const {username} = params.req.body;
-      if (!username || username.length === 0) {
+      if (!username) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
           error: errMsg,
         });
       } else {
-        await this.userService.resendSignUp(username);
-        this.logger.debug('User sign up email resent');
+        await this.userService.resendUserRegistrationCode(username);
+        this.logger.debug('User registration code resent');
         params.res.sendStatus(200);
       }
     } catch (err) {
@@ -107,20 +112,20 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/confirmUser', ConfirmUserRequest.apiMetadata)
-  public async confirmUser(params: BasicRouteParams) {
-    this.logger.debug('Confirming user...');
+  @route.post('/api/confirmUserRegistration', ConfirmUserRegistrationRequest.apiMetadata)
+  public async confirmUserRegistration(params: BasicRouteParams) {
+    this.logger.debug('Confirming user registration...');
     try {
       const {username, confirmationCode} = params.req.body;
-      if (!username || !confirmationCode || username.length === 0 || confirmationCode.length === 0) {
+      if (!username || !confirmationCode) {
         const errMsg = 'Missing required field(s), username and confirmationCode are required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
           error: errMsg,
         });
       } else {
-        await this.userService.confirmUser(username,confirmationCode);
-        this.logger.debug('User confirmed');
+        await this.userService.confirmUserRegistration(username,confirmationCode);
+        this.logger.debug('User registration confirmed');
         params.res.sendStatus(200);
       }
     } catch (err) {
@@ -131,20 +136,20 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/forgotPassword', ForgotPasswordRequest.apiMetadata)
-  public async resetPassword(params: BasicRouteParams) {
-    this.logger.debug('Resetting user password...');
+  @route.post('/api/startPasswordReset', StartPasswordResetRequest.apiMetadata)
+  public async startPasswordReset(params: BasicRouteParams) {
+    this.logger.debug('Starting user password reset...');
     try {
       const {username} = params.req.body;
-      if (!username || username.length === 0) {
+      if (!username) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
           error: errMsg,
         });
       } else {
-        await this.userService.forgotPasswordRequest(username);
-        this.logger.debug('User password reset request sent');
+        await this.userService.startPasswordReset(username);
+        this.logger.debug('User password reset started');
         params.res.sendStatus(200);
       }
     } catch (err) {
@@ -155,20 +160,19 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/confirmForgotPassword', ConfirmForgotPasswordRequest.apiMetadata)
-  public async confirmForgotPassword(params: BasicRouteParams) {
-    this.logger.debug('Confirming forgot user password...');
+  @route.post('/api/confirmPasswordReset', ConfirmPasswordResetRequest.apiMetadata)
+  public async confirmPasswordReset(params: BasicRouteParams) {
+    this.logger.debug('Confirming user password reset...');
     try {
       const {username, confirmationCode, password} = params.req.body;
-      if (!username || username.length === 0 || !confirmationCode || confirmationCode.length === 0 || !password ||
-        password.length === 0) {
+      if (!username || !confirmationCode || !password) {
         const errMsg = 'Missing required field(s), username, confirmation code, and password are required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
           error: errMsg,
         });
       } else {
-        await this.userService.confirmForgotPasswordRequest(username, confirmationCode, password);
+        await this.userService.confirmPasswordReset(username, confirmationCode, password);
         this.logger.debug('User password reset confirmed');
         params.res.sendStatus(200);
       }
@@ -180,10 +184,10 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/refreshToken', RefreshTokenRequest.apiMetadata)
-  public async refreshToken(userInfoRequest: UserInfoRequest) {
+  @route.post('/api/refreshAuthentication', RefreshAuthenticationRequest.apiMetadata)
+  public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
-    this.logger.debug('Refreshing user tokens...');
+    this.logger.debug('Refreshing user authentication tokens...');
     try {
       await userInfoRequest.getUserInfo();
     } catch (err) {
@@ -199,20 +203,20 @@ export default class UserManagementController {
     }
     try {
       const {refreshToken} = params.req.body;
-      if (!refreshToken || refreshToken.length === 0) {
+      if (!refreshToken) {
         const errMsg = 'Missing required field, refreshToken is required';
         this.logger.debug(errMsg);
         params.res.status(400).send({
           error: errMsg,
         });
       } else {
-        const authTokens = await this.userService.refreshToken(refreshToken);
+        const authTokens = await this.userService.refreshAuthentication(refreshToken);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
-        this.logger.debug('User tokens refreshed and cookie set');
+        this.logger.debug('User authentication tokens refreshed and cookie set');
         params.res.status(200).send(authTokens);
       }
     } catch (err) {
-      this.logger.error('Error refreshing user tokens: ', err);
+      this.logger.error('Error refreshing user authentication tokens: ', err);
       params.res.status(500).send({
         error: err,
       });
@@ -250,8 +254,8 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/signOut', SignOutRequest.apiMetadata)
-  public async signOut(userInfoRequest: UserInfoRequest) {
+  @route.post('/api/signOutUser', SignOutUserRequest.apiMetadata)
+  public async signOutUser(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
     this.logger.debug('Signing out user...');
     try {

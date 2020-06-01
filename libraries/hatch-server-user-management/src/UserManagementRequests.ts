@@ -27,7 +27,7 @@ export class AuthenticateRequest {
   };
 }
 
-export class SignUpUserRequest {
+export class StartUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Sign\'s up a user account',
@@ -57,7 +57,7 @@ export class SignUpUserRequest {
   };
 }
 
-export class ReSendSignUpUserRequest {
+export class ResendUserRegistrationCodeRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Creates a user account',
@@ -80,7 +80,7 @@ export class ReSendSignUpUserRequest {
   };
 }
 
-export class ConfirmUserRequest {
+export class ConfirmUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Confirms a user account',
@@ -107,7 +107,7 @@ export class ConfirmUserRequest {
   };
 }
 
-export class ForgotPasswordRequest {
+export class StartPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Resets a user account password',
@@ -130,7 +130,7 @@ export class ForgotPasswordRequest {
   };
 }
 
-export class ConfirmForgotPasswordRequest {
+export class ConfirmPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Resets a user account password',
@@ -161,7 +161,7 @@ export class ConfirmForgotPasswordRequest {
   };
 }
 
-export class RefreshTokenRequest {
+export class RefreshAuthenticationRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Refreshes a user\'s access token',
@@ -184,7 +184,7 @@ export class RefreshTokenRequest {
   };
 }
 
-export class SignOutRequest {
+export class SignOutUserRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
       description: 'Sign\'s out a user',

@@ -10,7 +10,7 @@
     "build": "rimraf dist && tsc"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",

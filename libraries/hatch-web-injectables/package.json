@@ -10,7 +10,7 @@
     "build": "rimraf dist && tsc"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "devDependencies": {
     "rimraf": "3.0.0"

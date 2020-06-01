@@ -11,6 +11,7 @@ import {
   ServerComposition,
 } from './ServerComposer';
 import {
+  APIMetadataParameters,
   registerServerMiddleware,
   resolveServerMiddleware,
   Server,
@@ -19,6 +20,7 @@ import {
 } from './ServerMiddleware';
 
 export {
+  APIMetadataParameters,
   route,
   controller,
   createServer,

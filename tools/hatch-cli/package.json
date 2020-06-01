@@ -15,7 +15,7 @@
     "access": "restricted"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.1.6",
+    "@launchtray/hatch-util": "^0.1.7",
     "@sentry/types": "^5",
     "@types/fs-extra": "^8",
     "@types/node": "^12",

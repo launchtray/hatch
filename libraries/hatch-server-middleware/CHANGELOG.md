@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-middleware
 
-This log was last generated on Wed, 08 Apr 2020 05:24:39 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Jun 2020 03:26:54 GMT and should not be manually modified.
+
+## 0.3.2
+Mon, 01 Jun 2020 03:26:54 GMT
+
+### Patches
+
+- Update publish config to public
 
 ## 0.3.1
 Wed, 08 Apr 2020 05:24:39 GMT

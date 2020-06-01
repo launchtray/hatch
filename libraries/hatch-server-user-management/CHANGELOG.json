@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-user-management",
   "entries": [
     {
+      "version": "0.1.2",
+      "tag": "@launchtray/hatch-server-user-management_v0.1.2",
+      "date": "Mon, 01 Jun 2020 04:42:06 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix authentication"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.1",
       "tag": "@launchtray/hatch-server-user-management_v0.1.1",
       "date": "Mon, 01 Jun 2020 03:26:54 GMT",

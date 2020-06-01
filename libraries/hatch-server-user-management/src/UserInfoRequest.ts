@@ -15,7 +15,7 @@ export default class UserInfoRequest {
   }
   
   public async getUserInfo() {
-    if (this.userInfo != null) {
+    if (this.userInfo == null) {
       await this.authenticateUser();
     }
     return this.userInfo;

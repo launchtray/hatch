@@ -10,7 +10,7 @@ script:
   - echo -en 'travis_fold:end:change\\r'
 
   - echo 'Installing...' && echo -en 'travis_fold:start:install\\r'
-  - node common/scripts/install-run-rush.js install
+  - node common/scripts/install-run-rush.js install --purge
   - echo -en 'travis_fold:end:install\\r'
 
   - echo 'Building...' && echo -en 'travis_fold:start:build\\r'

@@ -128,7 +128,7 @@ export const createSagaForWebAppManagers = async (
       const handleLocationChangeSagas: Effect[] = [];
       for (const manager of webAppManagers) {
         const target = manager.constructor.prototype;
-        forEachPathMatcher(manager, async (propertyKey, pathMatcher) => {
+        yield forEachPathMatcher(manager, async (propertyKey, pathMatcher) => {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
             const container = rootContainer.createChildContainer();

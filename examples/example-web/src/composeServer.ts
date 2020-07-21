@@ -22,8 +22,10 @@ export default async (): Promise<WebServerComposition> => {
   ROOT_CONTAINER.register('serverLogFile', {useValue: 'server.log'});
   ROOT_CONTAINER.register('logLevel', {useValue: 'debug'});
   ROOT_CONTAINER.register('UserServiceClient', AWSCognitoClient);
-  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/open1'});
-  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/open2'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hello'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hi'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/example'});
 
   const commonComposition = await composeCommon();
 

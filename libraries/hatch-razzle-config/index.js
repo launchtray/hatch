@@ -58,6 +58,12 @@ const patchWebpackConfig = (config, isServer) => {
   delete config.externals;
   config.resolve.alias['react-native'] = 'react-native-web';
   config.resolve.alias['react-native-svg'] = 'react-native-svg/lib/commonjs/ReactNativeSVG.web';
+
+  config.performance = {
+    maxAssetSize: 5000000,
+    maxEntrypointSize: 5000000,
+  };
+  
   return config;
 };
 

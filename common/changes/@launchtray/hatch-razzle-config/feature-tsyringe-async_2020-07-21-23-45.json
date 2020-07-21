@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "comment": "Increased default bundle size limits",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-razzle-config",
+  "email": "kiltyj@gmail.com"
+}

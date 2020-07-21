@@ -4,17 +4,24 @@ import {
   ServerMiddleware,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
-import {containerSingleton, delay, inject, Logger} from '@launchtray/hatch-util';
+import {containerSingleton, delay, initializer, inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import WebSocket from 'ws';
 
 @containerSingleton()
 class CustomResponder {
   public params: BasicRouteParams;
+  public testField!: string;
 
   constructor(@inject('Logger') private readonly logger: Logger, public readonly responder: HTTPResponder) {
     logger.info('Instantiating CustomResponder');
     this.params = responder.params;
+  }
+
+  @initializer()
+  private async init() {
+    this.logger.info('Initializing CustomResponder');
+    this.testField = 'CustomResponder';
   }
 
   public ok(body?: any) {
@@ -63,9 +70,9 @@ export default class ExampleController implements ServerMiddleware {
   public parseQueryParam(responder: CustomResponder) {
     const name = responder.params.req.query.name;
     if (name) {
-      responder.ok(`Hello, ${responder.params.req.query.name}!`);
+      responder.ok(responder.testField + `: Hello, ${responder.params.req.query.name}!`);
     } else {
-      responder.ok('Hello!');
+      responder.ok(responder.testField + ': Hello!');
     }
   }
 

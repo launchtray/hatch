@@ -10,11 +10,11 @@
     "access": "public"
   },
   "dependencies": {
-    "razzle-plugin-typescript": "^3.0.0"
+    "razzle-plugin-typescript": "3.0.0"
   },
   "peerDependencies": {
     "tslint": "^5",
     "webpack": "^4",
-    "razzle-dev-utils": "^3.0.0"
+    "razzle-dev-utils": "3.0.0"
   }
 }

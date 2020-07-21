@@ -41,13 +41,11 @@ export const registerServerMiddleware = (
   }
 };
 
-export const resolveServerMiddleware = (container: DependencyContainer, logger?: Logger): ServerMiddleware[] => {
-  let middlewareList: ServerMiddleware[];
-  if (container.isRegistered(serverMiddlewareKey)) {
-    middlewareList = container.resolveAll<ServerMiddleware>(serverMiddlewareKey);
-  } else {
-    middlewareList = [];
-  }
+export const resolveServerMiddleware = async (
+  container: DependencyContainer,
+  logger?: Logger
+): Promise<ServerMiddleware[]> => {
+  const middlewareList = await container.resolveAll<ServerMiddleware>(serverMiddlewareKey);
   logger?.debug('Total server middleware count: ' + middlewareList.length);
   for (const middleware of middlewareList) {
     logger?.debug('- ' + middleware.constructor.name);

@@ -2,11 +2,15 @@ import 'reflect-metadata';
 import {
   container as tsyringe_container,
   DependencyContainer as TSyringeDependencyContainer,
-  injectable as tsyringe_injectable, InjectionToken,
+  initializer as tsyringe_initializer,
+  inject as tsyringe_inject,
+  injectAll as tsyringe_injectAll,
+  injectable as tsyringe_injectable,
+  InjectionToken,
   Lifecycle as tsyringe_Lifecycle,
+  resolveParams as tsyringe_resolveParams,
   scoped as tsyringe_scoped,
-} from 'tsyringe';
-import {Dictionary} from 'tsyringe/dist/typings/types';
+} from '@launchtray/tsyringe-async';
 import {NonLogger} from './NonLogger';
 
 export type TokenKey = string | symbol;
@@ -56,55 +60,6 @@ const getToken = (tokenUsedByDependency: TokenKey, dependency: any, propertyKey?
   return resolvedToken ?? tokenUsedByDependency;
 };
 
-// The following is a patch of tsyringe's inject decorator to support method parameters
-const INJECTION_TOKEN_METADATA_KEY = 'injectionTokens';
-const injectHelper = (token: InjectionToken<any>) => {
-  return (
-    target: any,
-    propertyKey: string | symbol,
-    parameterIndex: number
-  ): any => {
-    let injectionTokens: Dictionary<InjectionToken<any>>;
-    injectionTokens = propertyKey
-      ? Reflect.getOwnMetadata(INJECTION_TOKEN_METADATA_KEY, target, propertyKey) || {}
-      : Reflect.getOwnMetadata(INJECTION_TOKEN_METADATA_KEY, target) || {};
-    injectionTokens[parameterIndex] = token;
-
-    if (propertyKey) {
-      Reflect.defineMetadata(
-        INJECTION_TOKEN_METADATA_KEY,
-        injectionTokens,
-        target,
-        propertyKey
-      );
-    } else {
-      Reflect.defineMetadata(
-        INJECTION_TOKEN_METADATA_KEY,
-        injectionTokens,
-        target
-      );
-    }
-  };
-};
-
-// The following is a patch of tsyringe's internal getParamInfo to support method parameters
-export const getParamInfo = (target: any, propertyKey: string | symbol | undefined = undefined): any[] => {
-  let params: any[] = [];
-  params = propertyKey
-    ? Reflect.getMetadata('design:paramtypes', target, propertyKey) || []
-    : Reflect.getMetadata('design:paramtypes', target) || [];
-
-  let injectionTokens: Dictionary<InjectionToken<any>>;
-  injectionTokens = propertyKey
-    ? Reflect.getOwnMetadata(INJECTION_TOKEN_METADATA_KEY, target, propertyKey) || {}
-    : Reflect.getOwnMetadata(INJECTION_TOKEN_METADATA_KEY, target) || {};
-
-  Object.keys(injectionTokens).forEach((key) => {
-    params[+key] = injectionTokens[key];
-  });
-  return params;
-};
-
 interface TokenDescriptor {
   token: InjectionToken<any>;
   multiple: boolean;
@@ -122,59 +77,15 @@ const isTokenDescriptor = (
 
 export interface DependencyContainer extends TSyringeDependencyContainer {}
 
-const resolveAll = (container: DependencyContainer, token: InjectionToken<any>) => {
-  if (container.isRegistered(token)) {
-    return container.resolveAll(token)
-  } else {
-    return [];
-  }
+export const inject = (token: TokenKey): (target: any, propertyKey: string | symbol, paramIndex: number) => any => {
+  return (target: any, propertyKey: string | symbol, paramIndex: number) => {
+    return tsyringe_inject(getToken(token, target, propertyKey))(target, propertyKey, paramIndex);
+  };
 };
 
-// This is adapted from tsyringe's autoInjectable
-export const resolveArgs = (
-  container: DependencyContainer,
-  target: any,
-  propertyKey: string | symbol | undefined = undefined,
-  ...args: any[]
-) => {
-  const paramInfo = getParamInfo(target, propertyKey);
-  const resolvedArgs = [
-    ...args.concat(
-      paramInfo.slice(args.length).map((type, index) => {
-        try {
-          if (isTokenDescriptor(type)) {
-            return type.multiple
-              ? resolveAll(container, type.token)
-              : container.resolve(type.token);
-          }
-          return container.resolve(type);
-        } catch (e) {
-          const argIndex = index + args.length;
-          let params;
-          let targetName;
-          if (propertyKey) {
-            const methodName = String(propertyKey);
-            [, params] = target.constructor.toString().match(new RegExp(`${methodName}\\(([\\w, ]+)\\)`)) || [];
-            targetName = `${target.constructor.name}.${methodName}`;
-          } else {
-            [, params] = target.toString().match(/constructor\(([\w, ]+)\)/) || [];
-            targetName = `${target.name} constructor`;
-          }
-          const argName = params
-            ? params.split(',')[argIndex]
-            : `#${argIndex}`;
-
-          throw new Error(`Failed to inject parameter '${argName}' of ${targetName}: ${e}`);
-        }
-      })
-    )
-  ];
-  return resolvedArgs;
-};
-
-export const inject = (token: TokenKey): (target: any, propertyKey: string | symbol, parameterIndex: number) => any => {
-  return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
-    return injectHelper(getToken(token, target, propertyKey))(target, propertyKey, parameterIndex);
+export const injectAll = (token: TokenKey): (target: any, propertyKey: string | symbol, paramIndex: number) => any => {
+  return (target: any, propertyKey: string | symbol, paramIndex: number) => {
+    return tsyringe_injectAll(getToken(token, target, propertyKey))(target, propertyKey, paramIndex);
   };
 };
 
@@ -193,3 +104,14 @@ export const ROOT_CONTAINER: DependencyContainer = tsyringe_container;
 export const containerSingleton = <T>() => (target: Class<T>) => {
   return tsyringe_scoped(tsyringe_Lifecycle.ContainerScoped)(target);
 };
+export const resolveParams: (
+  container: DependencyContainer,
+  target: any,
+  propertyKey: string | symbol | undefined,
+  ...args: any[]
+) => Promise<any[]> = tsyringe_resolveParams;
+export const initializer: () => (
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor
+) => any = tsyringe_initializer;

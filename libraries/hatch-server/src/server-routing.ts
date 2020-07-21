@@ -2,7 +2,7 @@ import {
   Class,
   DependencyContainer,
   injectable,
-  resolveArgs,
+  resolveParams,
 } from '@launchtray/hatch-util';
 import express, {Application, NextFunction, Request, RequestHandler, Response} from 'express';
 import {
@@ -40,7 +40,7 @@ const custom = (routeDefiner: RouteDefiner) => {
       container.registerInstance('NextFunction', next);
       container.registerInstance('cookie', req.headers.cookie ?? '');
       container.registerInstance('authHeader', req.headers.authorization ?? '');
-      const args = resolveArgs(container, target, propertyKey);
+      const args = await resolveParams(container, target, propertyKey);
       await originalMethod.apply(ctlr, args);
     };
 
@@ -48,10 +48,10 @@ const custom = (routeDefiner: RouteDefiner) => {
       target[routeDefinersKey] = [];
     }
     const ctlrRouteDefiner = (
-        ctlr: any,
-        app: Application,
-        server: Server,
-        apiMetadataConsumer: APIMetadataConsumer
+      ctlr: any,
+      app: Application,
+      server: Server,
+      apiMetadataConsumer: APIMetadataConsumer
     ) => {
       routeDefiner(app, server, (req: Request<any>, res: Response, next: NextFunction) => {
         requestHandler(ctlr, req, res, next).catch(next);
@@ -64,7 +64,7 @@ const custom = (routeDefiner: RouteDefiner) => {
 const websocket = (path: PathParams) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
-    const requestHandler = (ctlr: any, webSocket: WebSocket, req: Request, webSocketServer: WebSocket.Server) => {
+    const requestHandler = async (ctlr: any, webSocket: WebSocket, req: Request, webSocketServer: WebSocket.Server) => {
       const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
       const socketContainer = rootContainer.createChildContainer();
       socketContainer.registerInstance('Request', req);
@@ -72,7 +72,7 @@ const websocket = (path: PathParams) => {
       socketContainer.registerInstance('WebSocketServer', webSocketServer);
       socketContainer.registerInstance('cookie', req.headers.cookie ?? '');
       socketContainer.registerInstance('authHeader', req.headers.authorization ?? '');
-      const args = resolveArgs(socketContainer, target, propertyKey);
+      const args = await resolveParams(socketContainer, target, propertyKey);
       originalMethod.apply(ctlr, args);
     };
 
@@ -99,8 +99,11 @@ const websocket = (path: PathParams) => {
         });
       }
       const wss = new WebSocket.Server({noServer: true});
-      wss.on('connection', (webSocket: WebSocket, req: Request) => {
-        requestHandler(ctlr, webSocket, req, wss);
+      wss.on('connection',  (webSocket: WebSocket, req: Request) => {
+        requestHandler(ctlr, webSocket, req, wss)
+          .catch(() => {
+            webSocket.terminate();
+          });
       });
       server[wsRoutesKey].push({
         matches: (req: Request) => {

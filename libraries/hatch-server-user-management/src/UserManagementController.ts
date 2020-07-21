@@ -1,6 +1,6 @@
 import {controller, route} from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
-import {inject, Logger} from '@launchtray/hatch-util';
+import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import UserServiceClient from './UserServiceClient';
@@ -16,7 +16,8 @@ import {
   SignOutUserRequest,
   ResendUserRegistrationCodeRequest
 } from './UserManagementRequests';
-import {ROOT_CONTAINER} from '@launchtray/hatch-util/dist';
+
+export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 
 @controller()
 export default class UserManagementController {
@@ -30,13 +31,13 @@ export default class UserManagementController {
   
   constructor(
     @inject('UserServiceClient') private readonly userService: UserServiceClient,
-    @inject('Logger') private readonly logger: Logger) {
-    if (ROOT_CONTAINER.isRegistered('customAuthWhitelist')) {
-      const customAuthWhitelist = ROOT_CONTAINER.resolve<string[]>('customAuthWhitelist');
-      this.logger.debug('Custom auth whitelist found, updating with: ' + customAuthWhitelist);
+    @inject('Logger') private readonly logger: Logger,
+    @injectAll(AUTH_WHITELIST_KEY) customAuthWhitelist: string[],
+  ) {
+    if (customAuthWhitelist.length > 0) {
       this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
-      this.logger.debug('Auth whitelist updated: ' + this.authWhitelist);
     }
+    this.logger.debug('Auth whitelist:', this.authWhitelist);
   }
   
   @route.post('/api/authenticate', AuthenticateRequest.apiMetadata)

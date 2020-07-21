@@ -6,7 +6,7 @@ describe('example-service', () => {
   let service: ExampleService;
 
   beforeAll(async () => {
-    service = ROOT_CONTAINER.resolve(ExampleService);
+    service = await ROOT_CONTAINER.resolve(ExampleService);
   });
 
   test('test', async () => {

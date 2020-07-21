@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "comment": "Added alias for react-native-svg",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-razzle-config",
+  "email": "kiltyj@gmail.com"
+}

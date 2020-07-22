@@ -4,6 +4,7 @@ import {
   ServerMiddleware,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
+import {UserContext} from '@launchtray/hatch-server-user-management';
 import {containerSingleton, delay, initializer, inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import WebSocket from 'ws';
@@ -51,6 +52,11 @@ export default class ExampleController implements ServerMiddleware {
   public exampleEndpoint(responder: CustomResponder) {
     this.logger.info('Example endpoint called');
     responder.ok('Example GET');
+  }
+
+  @route.get('/api/whoami')
+  public whoAmI(responder: CustomResponder, userContext: UserContext) {
+    responder.ok(userContext.username);
   }
 
   @route.custom((app, server, handler) => {

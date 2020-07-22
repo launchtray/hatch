@@ -1,10 +1,10 @@
 import commander from 'commander';
-import {moduleCreator, runCommander} from '../../util';
+import {componentCreator, runCommander} from '../../util';
 
 commander
   .name('hatch component')
   .arguments('[name]')
   .description('Creates a React component module')
-  .action(moduleCreator(__dirname, 'tsx'));
+  .action(componentCreator(__dirname));
 
 runCommander();

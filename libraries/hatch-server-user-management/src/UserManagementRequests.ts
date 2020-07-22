@@ -187,19 +187,11 @@ export class RefreshAuthenticationRequest {
 export class SignOutUserRequest {
   public static apiMetadata: APIMetadataParameters = {
     requestBody: {
-      description: 'Sign\'s out a user',
+      description: 'Signs out a user',
       content: {
         'application/json': {
           schema: {
             type: 'object',
-            required: [
-              'username',
-            ],
-            properties: {
-              username: {
-                type: 'string'
-              },
-            }
           }
         }
       }

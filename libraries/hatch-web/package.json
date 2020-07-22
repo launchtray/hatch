@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Utilities for composing apps using dependency injection",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -23,7 +23,7 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.1.7",
+    "@launchtray/hatch-util": "^0.1.8",
     "react": "^16",
     "react-dom": "^16",
     "react-native-web": "^0",

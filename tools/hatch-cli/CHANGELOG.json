@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.4.8",
+      "tag": "@launchtray/hatch-cli_v0.4.8",
+      "date": "Wed, 22 Jul 2020 06:33:22 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Froze Razzle version"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.7` to `^0.1.8`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.7",
       "tag": "@launchtray/hatch-cli_v0.4.7",
       "date": "Sun, 08 Mar 2020 01:52:16 GMT",

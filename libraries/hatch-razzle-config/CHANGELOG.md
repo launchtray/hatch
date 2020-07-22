@@ -1,6 +1,14 @@
 # Change Log - @launchtray/hatch-razzle-config
 
-This log was last generated on Mon, 01 Jun 2020 03:26:54 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+
+## 0.1.5
+Wed, 22 Jul 2020 06:33:22 GMT
+
+### Patches
+
+- Added alias for react-native-svg
+- Increased default bundle size limits
 
 ## 0.1.4
 Mon, 01 Jun 2020 03:26:54 GMT

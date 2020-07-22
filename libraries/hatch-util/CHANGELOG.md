@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-util
 
-This log was last generated on Mon, 01 Jun 2020 03:26:54 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+
+## 0.1.8
+Wed, 22 Jul 2020 06:33:22 GMT
+
+### Patches
+
+- Migrated to tsyringe-async
 
 ## 0.1.7
 Mon, 01 Jun 2020 03:26:54 GMT

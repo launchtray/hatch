@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.2.4",
+      "tag": "@launchtray/hatch-web_v0.2.4",
+      "date": "Wed, 22 Jul 2020 06:33:22 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Migrated to tsyringe-async"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.7` to `^0.1.8`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.2.3",
       "tag": "@launchtray/hatch-web_v0.2.3",
       "date": "Mon, 01 Jun 2020 03:26:54 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-user-management
 
-This log was last generated on Mon, 01 Jun 2020 04:42:06 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+
+## 0.1.3
+Wed, 22 Jul 2020 06:33:22 GMT
+
+### Patches
+
+- Added auth whitelist injection key
 
 ## 0.1.2
 Mon, 01 Jun 2020 04:42:06 GMT

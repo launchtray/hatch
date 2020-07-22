@@ -2,6 +2,29 @@
   "name": "@launchtray/hatch-web-server",
   "entries": [
     {
+      "version": "0.3.4",
+      "tag": "@launchtray/hatch-web-server_v0.3.4",
+      "date": "Wed, 22 Jul 2020 06:33:22 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Migrated to tsyringe-async"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.7` to `^0.1.8`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-server\" from `^0.3.5` to `^0.3.6`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-web\" from `^0.2.3` to `^0.2.4`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.3",
       "tag": "@launchtray/hatch-web-server_v0.3.3",
       "date": "Mon, 01 Jun 2020 03:26:54 GMT",

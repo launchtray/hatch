@@ -2,6 +2,21 @@
   "name": "@launchtray/hatch-razzle-config",
   "entries": [
     {
+      "version": "0.1.5",
+      "tag": "@launchtray/hatch-razzle-config_v0.1.5",
+      "date": "Wed, 22 Jul 2020 06:33:22 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added alias for react-native-svg"
+          },
+          {
+            "comment": "Increased default bundle size limits"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.4",
       "tag": "@launchtray/hatch-razzle-config_v0.1.4",
       "date": "Mon, 01 Jun 2020 03:26:54 GMT",

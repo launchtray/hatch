@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Sun, 08 Mar 2020 01:52:16 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+
+## 0.4.8
+Wed, 22 Jul 2020 06:33:22 GMT
+
+### Patches
+
+- Froze Razzle version
 
 ## 0.4.7
 Sun, 08 Mar 2020 01:52:16 GMT

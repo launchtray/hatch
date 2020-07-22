@@ -185,11 +185,10 @@ export default class AWSCognitoClient implements UserServiceClient {
       this.logger.error('Error verifying token: ', err);
       throw err;
     }
-  
-    const isAuthenticated = true;
+
     const username = decodedJwt.payload && decodedJwt.payload.username;
     const userId = decodedJwt.payload && decodedJwt.payload.sub;
-    const userInfo = new UserInfo(userId, username, accessToken, isAuthenticated);
+    const userInfo = new UserInfo(userId, username, accessToken);
     return userInfo;
   }
   

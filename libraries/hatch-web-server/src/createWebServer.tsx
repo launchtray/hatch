@@ -61,8 +61,8 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
     clientContainer,
     ...webAppManagers,
   );
-  const webAppManagerInstances = resolveWebAppManagers(clientContainer);
-  const rootSaga = createSagaForWebAppManagers(
+  const webAppManagerInstances = await resolveWebAppManagers(clientContainer);
+  const rootSaga = await createSagaForWebAppManagers(
     logger, webAppManagerInstances, store, clientContainer, cookie, authHeader, true
   );
 

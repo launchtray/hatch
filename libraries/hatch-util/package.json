@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
-    "tsyringe": "4.0.1"
+    "@launchtray/tsyringe-async": "4.3.2"
   },
   "devDependencies": {
     "typescript": "^3.7.3",

@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-util",
+      "comment": "Migrated to tsyringe-async",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-util",
+  "email": "kiltyj@gmail.com"
+}

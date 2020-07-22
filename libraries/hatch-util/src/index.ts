@@ -6,11 +6,13 @@ import {
   containerSingleton,
   DependencyContainer,
   initializeInjection,
+  initializer,
   inject,
+  injectAll,
   injectable,
   InjectionInitializationContext,
-  resolveArgs,
-  ROOT_CONTAINER
+  resolveParams,
+  ROOT_CONTAINER,
 } from './injection';
 import {Logger} from './Logger';
 import {NON_LOGGER, NonLogger} from './NonLogger';
@@ -21,7 +23,9 @@ import CompletableFuture from './CompletableFuture';
 export {
   delay,
   inject,
+  injectAll,
   initializeInjection,
+  initializer,
   injectable,
   ROOT_CONTAINER,
   DependencyContainer,
@@ -32,7 +36,7 @@ export {
   Logger,
   InjectionInitializationContext,
   Class,
-  resolveArgs,
+  resolveParams,
   ErrorReporter,
   SentryMonitor,
   SentryReporter,

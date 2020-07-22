@@ -1,4 +1,4 @@
-import {Class, DependencyContainer, injectable, Logger, resolveArgs} from '@launchtray/hatch-util';
+import {Class, DependencyContainer, injectable, Logger, resolveParams} from '@launchtray/hatch-util';
 import {match, matchPath, RouteProps} from 'react-router';
 import {AnyAction, Store} from 'redux';
 import {Saga} from 'redux-saga';
@@ -24,12 +24,8 @@ export const registerWebAppManagers = (container: DependencyContainer, ...webApp
   }
 };
 
-export const resolveWebAppManagers = (container: DependencyContainer): any[] => {
-  if (container.isRegistered(webAppManagerKey)) {
-    return container.resolveAll<Class<any>>(webAppManagerKey);
-  } else {
-    return [];
-  }
+export const resolveWebAppManagers = async (container: DependencyContainer): Promise<any[]> => {
+  return await container.resolveAll<Class<any>>(webAppManagerKey);
 };
 
 export const onLocationChange = <Params extends { [K in keyof Params]?: string }>(
@@ -55,31 +51,31 @@ export const onClientLoad = () => {
   };
 };
 
-const forEachPathMatcher = (
+const forEachPathMatcher = async (
   target: any,
-  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => void
+  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => Promise<void>
 ) => {
   const pathMatchers: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher}> = target?.[pathMatchersKey] ?? [];
-  pathMatchers.forEach(({propertyKey, pathMatcher}) => {
-    iterator(propertyKey, pathMatcher);
-  });
+  for (const {propertyKey, pathMatcher} of pathMatchers) {
+    await iterator(propertyKey, pathMatcher);
+  }
 };
 
-const forEachClientLoader = (
+const forEachClientLoader = async (
   target: any,
-  iterator: (propertyKey: string | symbol) => void
+  iterator: (propertyKey: string | symbol) => Promise<void>
 ) => {
   const clientLoaders: Array<{propertyKey: string | symbol}> = target?.[clientLoadersKey] ?? [];
-  clientLoaders.forEach(({propertyKey}) => {
-    iterator(propertyKey);
-  });
+  for (const {propertyKey} of clientLoaders) {
+    await iterator(propertyKey);
+  }
 };
 
 const hasWebAppManagerMethods = (target: any): boolean => {
   return (target[clientLoadersKey] != null) || (target[pathMatchersKey] != null);
 };
 
-export const createSagaForWebAppManagers = (
+export const createSagaForWebAppManagers = async (
   logger: Logger,
   webAppManagers: any[],
   store: Store,
@@ -88,7 +84,7 @@ export const createSagaForWebAppManagers = (
   authHeader?: string,
   isServer = false,
   ssrEnabled = true,
-): Saga => {
+): Promise<Saga> => {
   const sagas: Effect[] = [];
   logger.debug('Total web app manager count: ' + webAppManagers.length);
   webAppManagers.forEach((manager: any) => {
@@ -104,13 +100,13 @@ export const createSagaForWebAppManagers = (
     container.registerInstance('Store', store);
     container.registerInstance('cookie', cookie ?? '');
     container.registerInstance('authHeader', authHeader ?? '');
-    webAppManagers.forEach((manager: any) => {
+    for (const manager of webAppManagers) {
       const target = manager.constructor.prototype;
-      forEachClientLoader(target, (propertyKey) => {
-        const args = resolveArgs(container, target, propertyKey);
+      await forEachClientLoader(target, async (propertyKey) => {
+        const args = await resolveParams(container, target, propertyKey);
         handleClientLoadSagas.push(effects.fork([manager, manager[propertyKey]], ...args));
       });
-    });
+    }
     sagas.push(...handleClientLoadSagas);
   }
   const navigateActions = [
@@ -130,9 +126,9 @@ export const createSagaForWebAppManagers = (
 
     if (!ssrEnabled || !isFirstRendering || location.fragment) {
       const handleLocationChangeSagas: Effect[] = [];
-      webAppManagers.forEach((manager: any) => {
+      for (const manager of webAppManagers) {
         const target = manager.constructor.prototype;
-        forEachPathMatcher(manager, (propertyKey, pathMatcher) => {
+        yield forEachPathMatcher(manager, async (propertyKey, pathMatcher) => {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
             const container = rootContainer.createChildContainer();
@@ -144,12 +140,12 @@ export const createSagaForWebAppManagers = (
             container.registerInstance('cookie', cookie ?? '');
             container.registerInstance('authHeader', authHeader ?? '');
 
-            const args = resolveArgs(container, target, propertyKey);
+            const args = await resolveParams(container, target, propertyKey);
             handleLocationChangeSagas.push(call(
               [manager, manager[propertyKey]], ...args));
           }
         });
-      });
+      }
       logger.info('Calling web app managers with location change:', action);
       yield effects.all(handleLocationChangeSagas);
       yield effects.put(navActions.locationChangeApplied({location}));

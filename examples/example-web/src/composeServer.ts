@@ -4,7 +4,11 @@ import {
   RequestLogger,
   RouteNotFound,
 } from '@launchtray/hatch-server-middleware';
-import {AWSCognitoClient, UserManagementController} from '@launchtray/hatch-server-user-management';
+import {
+  AUTH_WHITELIST_KEY,
+  AWSCognitoClient,
+  UserManagementController
+} from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {WebServerComposition} from '@launchtray/hatch-web-server';
 import composeCommon from './composeCommon';
@@ -18,6 +22,10 @@ export default async (): Promise<WebServerComposition> => {
   ROOT_CONTAINER.register('serverLogFile', {useValue: 'server.log'});
   ROOT_CONTAINER.register('logLevel', {useValue: 'debug'});
   ROOT_CONTAINER.register('UserServiceClient', AWSCognitoClient);
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hello'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hi'});
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/example'});
 
   const commonComposition = await composeCommon();
 

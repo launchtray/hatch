@@ -79,12 +79,12 @@ const customLogFormat = (tag: string) => {
   );
 };
 
-const createServerLogger = (errorReporter: ErrorReporter): Logger => {
+const createServerLogger = async (errorReporter: ErrorReporter): Promise<Logger> => {
   const rootContainer = ROOT_CONTAINER;
   const logger = createLogger({});
-  const appName = rootContainer.resolve<string>('appName');
-  const serverLogFile = rootContainer.resolve<string>('serverLogFile');
-  const logLevel = rootContainer.resolve<string>('logLevel');
+  const appName = await rootContainer.resolve<string>('appName');
+  const serverLogFile = await rootContainer.resolve<string>('serverLogFile');
+  const logLevel = await rootContainer.resolve<string>('logLevel');
   if (process.env.NODE_ENV !== 'production') {
     logger.add(new transports.Console({
       level: logLevel,
@@ -144,20 +144,20 @@ const createServerAsync = async <T extends ServerComposition>(
   const errorReporter = new SentryReporter(sentryMonitor, {dsn});
   rootContainer.registerInstance('ErrorReporter', errorReporter);
 
-  const logger = createServerLogger(errorReporter);
+  const logger = await createServerLogger(errorReporter);
 
   registerServerMiddleware(
     rootContainer,
     ...serverMiddlewareClasses,
   );
 
-  const appName = rootContainer.resolve<string>('appName');
+  const appName = await rootContainer.resolve<string>('appName');
   const appVersion = rootContainer.isRegistered('appVersion')
-      ? rootContainer.resolve<string>('appVersion')
+      ? await rootContainer.resolve<string>('appVersion')
       : '0.0.0';
 
   const apiSpecBuilder = new OpenAPISpecBuilder(appName, appVersion);
-  const serverMiddlewareList = resolveServerMiddleware(rootContainer, logger);
+  const serverMiddlewareList = await resolveServerMiddleware(rootContainer, logger);
   const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
   for (const serverMiddleware of serverMiddlewareList) {
     await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);

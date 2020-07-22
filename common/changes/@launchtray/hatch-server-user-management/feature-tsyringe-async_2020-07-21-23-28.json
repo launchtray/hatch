@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-user-management",
+      "comment": "Added auth whitelist injection key",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-user-management",
+  "email": "kiltyj@gmail.com"
+}

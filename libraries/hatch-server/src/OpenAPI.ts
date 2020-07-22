@@ -1,4 +1,4 @@
-import {APIMetadata} from "./ServerMiddleware";
+import {APIMetadata} from './ServerMiddleware';
 
 // This file defines types per https://swagger.io/specification
 

@@ -102,7 +102,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const sentry = new SentryReporter(sentryMonitor, {dsn, integrations: consoleBreadcrumbs});
   container.registerInstance('ErrorReporter', sentry);
 
-  const appName = container.resolve<string>('appName');
+  const appName = await container.resolve<string>('appName');
   const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger(appName);
   container.registerInstance('Logger', logger);
   let onSagaError: ((error: Error) => void) | null = null;
@@ -131,8 +131,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     ...webAppManagers,
   );
 
-  const webAppManagerInstances = resolveWebAppManagers(container);
-  const rootSaga = createSagaForWebAppManagers(
+  const webAppManagerInstances = await resolveWebAppManagers(container);
+  const rootSaga = await createSagaForWebAppManagers(
     logger, webAppManagerInstances, store, container, document.cookie
   );
 

@@ -1,6 +1,6 @@
 import {controller, route} from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
-import {inject, Logger} from '@launchtray/hatch-util';
+import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import UserServiceClient from './UserServiceClient';
@@ -16,7 +16,9 @@ import {
   SignOutUserRequest,
   ResendUserRegistrationCodeRequest
 } from './UserManagementRequests';
-import {ROOT_CONTAINER} from '@launchtray/hatch-util/dist';
+import UserContext from './UserContext';
+
+export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 
 @controller()
 export default class UserManagementController {
@@ -30,13 +32,13 @@ export default class UserManagementController {
   
   constructor(
     @inject('UserServiceClient') private readonly userService: UserServiceClient,
-    @inject('Logger') private readonly logger: Logger) {
-    if (ROOT_CONTAINER.isRegistered('customAuthWhitelist')) {
-      const customAuthWhitelist = ROOT_CONTAINER.resolve<string[]>('customAuthWhitelist');
-      this.logger.debug('Custom auth whitelist found, updating with: ' + customAuthWhitelist);
+    @inject('Logger') private readonly logger: Logger,
+    @injectAll(AUTH_WHITELIST_KEY) customAuthWhitelist: string[],
+  ) {
+    if (customAuthWhitelist.length > 0) {
       this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
-      this.logger.debug('Auth whitelist updated: ' + this.authWhitelist);
     }
+    this.logger.debug('Auth whitelist:', this.authWhitelist);
   }
   
   @route.post('/api/authenticate', AuthenticateRequest.apiMetadata)
@@ -236,18 +238,18 @@ export default class UserManagementController {
     
     try {
       const userInfo = await userInfoRequest.getUserInfo();
-      if (userInfo && userInfo.isAuthenticated) {
-        this.logger.debug('User authorized {username:' + userInfo.username + '}');
+      if (userInfo) {
+        this.logger.debug('User authenticated {username:' + userInfo.username + '}');
         return params.next();
       } else {
-        const errMsg = 'User not authorized';
+        const errMsg = 'User not authenticated';
         this.logger.debug(errMsg);
         params.res.status(401).send({
           error: errMsg,
         });
       }
     } catch (err) {
-      this.logger.error('Error verifying user: ', err);
+      this.logger.error('Error authenticating user: ', err);
       params.res.status(500).send({
         error: err.message,
       });
@@ -255,11 +257,11 @@ export default class UserManagementController {
   }
   
   @route.post('/api/signOutUser', SignOutUserRequest.apiMetadata)
-  public async signOutUser(userInfoRequest: UserInfoRequest) {
-    const params = userInfoRequest.params;
+  public async signOutUser(userContext: UserContext) {
+    const params = userContext.params;
     this.logger.debug('Signing out user...');
     try {
-      const {username} = params.req.body;
+      const {username} = userContext;
       if (!username || username.length === 0) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);

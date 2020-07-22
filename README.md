@@ -115,28 +115,38 @@ necessary if you just want to use hatch.
     $ brew link --force --overwrite node@12
     ```
 
-2. Install [Rush](https://rushjs.io/pages/intro/welcome/):
+1. Install [Rush](https://rushjs.io/pages/intro/welcome/):
 
     ```
     $ npm install -g @microsoft/rush
     ```
     
-3. Install package dependencies:
+1. Install package dependencies:
 
     ```
     $ rush install
     ```
     
-4. Build hatch libraries:
+1. Build hatch libraries:
 
     ```
     $ rush build
     ```
     
-4. Run an example app:
+1. Run an example app:
 
     ```
     $ cd examples/example-web
     $ rushx start
     ```
     
+## Release process
+
+1. Run `rush unlink && rush update --purge && rush rebuild` to ensure that everything is building as-is.
+1. Run `rush change` and answer all prompts to generate change files.
+1. Review the change files to ensure that they are accurate.
+1. Commit the change files to your pull request.
+1. Once all pull requests for a release are merged, run the following:
+   - `rush unlink && rush update --purge && rush rebuild && rush publish -a -b master -p`
+1. Merge master back into develop.
+1. Update your local installation of `hatch-cli` and hatch an app to make use of your new features.

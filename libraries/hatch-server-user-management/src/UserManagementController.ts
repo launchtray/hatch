@@ -16,6 +16,7 @@ import {
   SignOutUserRequest,
   ResendUserRegistrationCodeRequest
 } from './UserManagementRequests';
+import UserContext from './UserContext';
 
 export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 
@@ -256,11 +257,11 @@ export default class UserManagementController {
   }
   
   @route.post('/api/signOutUser', SignOutUserRequest.apiMetadata)
-  public async signOutUser(userInfoRequest: UserInfoRequest) {
-    const params = userInfoRequest.params;
+  public async signOutUser(userContext: UserContext) {
+    const params = userContext.params;
     this.logger.debug('Signing out user...');
     try {
-      const {username} = params.req.body;
+      const {username} = userContext;
       if (!username || username.length === 0) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);

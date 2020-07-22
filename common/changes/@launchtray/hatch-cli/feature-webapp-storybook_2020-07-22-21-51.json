@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "Added storybook to webapp template",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "kiltyj@gmail.com"
+}

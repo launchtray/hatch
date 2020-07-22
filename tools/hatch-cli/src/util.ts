@@ -65,6 +65,13 @@ export const moduleCreator = (parentDirectory: string, extension = 'ts') => {
   }
 };
 
+export const componentCreator = (parentDirectory: string) => {
+  return async (moduleName: string) => {
+    await createModule(parentDirectory, moduleName, 'tsx');
+    await createModule(path.resolve(parentDirectory, '../story/'), moduleName, 'stories.tsx');
+  }
+};
+
 export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   if (fs.existsSync(dstPath)) {
@@ -123,6 +130,10 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
         const dotIdeaPath = path.resolve(tempFilePath, 'dot-idea');
         if (fs.existsSync(dotIdeaPath)) {
           await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+        }
+        const dotStorybookPath = path.resolve(tempFilePath, 'dot-storybook');
+        if (fs.existsSync(dotStorybookPath)) {
+          await fs.move(dotStorybookPath, path.resolve(tempFilePath, '.storybook'));
         }
         const dotGitIgnorePath = path.resolve(tempFilePath, 'dot-gitignore');
         if (fs.existsSync(dotGitIgnorePath)) {

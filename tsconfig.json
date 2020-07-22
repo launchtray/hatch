@@ -37,7 +37,9 @@
     "**/razzle.config.js",
     "**/template",
     "**/template.ts",
-    "**/template.tsx"
+    "**/template.tsx",
+    "**/template.stories.ts",
+    "**/template.stories.tsx"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

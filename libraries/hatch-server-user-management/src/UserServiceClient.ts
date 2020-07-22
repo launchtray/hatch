@@ -1,8 +1,7 @@
 export class UserInfo {
   constructor(public readonly userId?: string,
               public readonly username?: string,
-              public readonly accessToken?: string,
-              public readonly isAuthenticated?: boolean) {
+              public readonly accessToken?: string) {
   }
 }
 

@@ -5,10 +5,9 @@ import UserInfoRequest from './UserInfoRequest';
 @containerSingleton()
 export default class UserContext {
   public readonly logger: Logger;
-  public userId?: string;
-  public username?: string;
-  public accessToken?: string;
-  public isAuthenticated?: boolean;
+  public userId: string = '';
+  public username: string = '';
+  public accessToken: string = '';
   public error?: Error;
 
   constructor(public readonly params: BasicRouteParams, private readonly request: UserInfoRequest) {
@@ -19,13 +18,11 @@ export default class UserContext {
   private async init() {
     try {
       const userInfo = await this.request.getUserInfo();
-      this.userId = userInfo?.userId;
-      this.username = userInfo?.username;
-      this.accessToken = userInfo?.accessToken;
-      this.isAuthenticated = userInfo?.isAuthenticated;
+      this.userId = userInfo?.userId ?? '';
+      this.username = userInfo?.username ?? '';
+      this.accessToken = userInfo?.accessToken ?? '';
     } catch (error) {
       // We should never get here, as UserManagementController will have already retrieved userInfo
-      this.isAuthenticated = false;
       this.error = error;
       this.params.res.status(500).send({
         error,

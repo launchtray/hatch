@@ -238,18 +238,18 @@ export default class UserManagementController {
     
     try {
       const userInfo = await userInfoRequest.getUserInfo();
-      if (userInfo && userInfo.isAuthenticated) {
-        this.logger.debug('User authorized {username:' + userInfo.username + '}');
+      if (userInfo) {
+        this.logger.debug('User authenticated {username:' + userInfo.username + '}');
         return params.next();
       } else {
-        const errMsg = 'User not authorized';
+        const errMsg = 'User not authenticated';
         this.logger.debug(errMsg);
         params.res.status(401).send({
           error: errMsg,
         });
       }
     } catch (err) {
-      this.logger.error('Error verifying user: ', err);
+      this.logger.error('Error authenticating user: ', err);
       params.res.status(500).send({
         error: err.message,
       });

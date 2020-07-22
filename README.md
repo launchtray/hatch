@@ -148,5 +148,5 @@ necessary if you just want to use hatch.
 1. Commit the change files to your pull request.
 1. Once all pull requests for a release are merged, run the following:
    - `rush unlink && rush update --purge && rush rebuild && rush publish -a -b master -p`
-1. Merge master back into develop.
+1. Merge `master` back into `develop` to clear out change files from the latter.
 1. Update your local installation of `hatch-cli` and hatch an app to make use of your new features.

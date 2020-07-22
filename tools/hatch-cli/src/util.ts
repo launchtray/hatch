@@ -68,7 +68,7 @@ export const moduleCreator = (parentDirectory: string, extension = 'ts') => {
 export const componentCreator = (parentDirectory: string) => {
   return async (moduleName: string) => {
     await createModule(parentDirectory, moduleName, 'tsx');
-    await createModule(path.resolve(parentDirectory, '../story/'), moduleName + '.stories', 'tsx');
+    await createModule(path.resolve(parentDirectory, '../story/'), moduleName, 'stories.tsx');
   }
 };
 

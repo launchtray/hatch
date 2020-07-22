@@ -5,6 +5,6 @@ commander
   .name('hatch story')
   .arguments('[name]')
   .description('Creates a Storybook story module')
-  .action(moduleCreator(__dirname, 'tsx'));
+  .action(moduleCreator(__dirname, 'stories.tsx'));
 
 runCommander();

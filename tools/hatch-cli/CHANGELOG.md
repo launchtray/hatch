@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+This log was last generated on Wed, 22 Jul 2020 22:31:23 GMT and should not be manually modified.
+
+## 0.5.0
+Wed, 22 Jul 2020 22:31:23 GMT
+
+### Minor changes
+
+- Added storybook to webapp template
 
 ## 0.4.8
 Wed, 22 Jul 2020 06:33:22 GMT

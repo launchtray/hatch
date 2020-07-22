@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.5.0",
+      "tag": "@launchtray/hatch-cli_v0.5.0",
+      "date": "Wed, 22 Jul 2020 22:31:23 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added storybook to webapp template"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.8",
       "tag": "@launchtray/hatch-cli_v0.4.8",
       "date": "Wed, 22 Jul 2020 06:33:22 GMT",

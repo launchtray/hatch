@@ -4,8 +4,7 @@ import {CognitoIdentityServiceProvider, config} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
-import {inject, Logger} from '@launchtray/hatch-util';
-import {injectable} from '@launchtray/hatch-util/dist';
+import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import {UserManagementError, UserManagementErrorCodes} from './UserManagementError';
 import {AWSError} from 'aws-sdk';
@@ -274,7 +273,8 @@ export default class AWSCognitoClient implements UserServiceClient {
         return new UserManagementError(UserManagementErrorCodes.USER_NOT_FOUND, awsError.message);
       }
       default: {
-        return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, awsError.message);
+        const message = awsError.code + ' - ' + awsError.message;
+        return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, message);
       }
     }
   };

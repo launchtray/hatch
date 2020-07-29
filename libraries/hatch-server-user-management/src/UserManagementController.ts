@@ -63,13 +63,21 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error authenticating user: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.ACCOUNT_LOCKED) {
-        params.res.sendStatus(HttpStatus.FORBIDDEN);
+        params.res.status(HttpStatus.FORBIDDEN).send({
+          error: err.code,
+        });
       } else if (err.code === UserManagementErrorCodes.UNAUTHORIZED) {
-        params.res.sendStatus(HttpStatus.UNAUTHORIZED);
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: err.code,
+        });
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -94,9 +102,13 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error starting user registration: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USERNAME_EXISTS) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -121,9 +133,13 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error resending user registration: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -148,9 +164,13 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error confirming user: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.INVALID_CODE) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -175,9 +195,13 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error resetting user password: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -204,9 +228,13 @@ export default class UserManagementController {
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||
         err.code === UserManagementErrorCodes.INVALID_PASSWORD ||
         err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -222,7 +250,9 @@ export default class UserManagementController {
         this.logger.debug('Token signature verified but expired at ', err.expiredAt)
       } else {
         this.logger.error('Error refreshing user authentication tokens: Invalid token');
-        params.res.sendStatus(HttpStatus.UNAUTHORIZED);
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Invalid token',
+        });
         return;
       }
     }
@@ -246,9 +276,13 @@ export default class UserManagementController {
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||
         err.code === UserManagementErrorCodes.INVALID_PASSWORD ||
         err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
@@ -276,7 +310,9 @@ export default class UserManagementController {
       }
     } catch (err) {
       this.logger.error('Error authenticating user: ', err);
-      params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+        error: err.message,
+      });
     }
   }
   
@@ -301,11 +337,14 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error signing out user: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
       } else {
-        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
       }
     }
   }
-  
 }

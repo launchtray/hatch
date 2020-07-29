@@ -63,6 +63,7 @@ dependencies:
   fs-extra: 8.1.0
   geckodriver: 1.19.1
   history: 4.10.1
+  http-status-codes: 1.4.0
   inquirer: 7.0.4
   invariant: 2.2.4
   isarray: 2.0.5
@@ -10981,6 +10982,10 @@ packages:
       npm: '>=1.3.7'
     resolution:
       integrity: sha1-muzZJRFHcvPZW2WmCruPfBj7rOE=
+  /http-status-codes/1.4.0:
+    dev: false
+    resolution:
+      integrity: sha512-JrT3ua+WgH8zBD3HEJYbeEgnuQaAnUeRRko/YojPAJjGmIfGD3KPU/asLdsLwKjfxOmQe5nXMQ0pt/7MyapVbQ==
   /https-browserify/1.0.0:
     dev: false
     resolution:
@@ -20127,12 +20132,13 @@ packages:
       aws-sdk: 2.684.0
       cookie: 0.4.1
       cross-fetch: 3.0.4
+      http-status-codes: 1.4.0
       jsonwebtoken: 8.5.1
       jwk-to-pem: 2.0.3
     dev: false
     name: '@rush-temp/hatch-server-user-management'
     resolution:
-      integrity: sha512-SL+AXBfBIdiE2xH65Qt2/V2W17WVVwhL/bI1huNvKjAdotn9UR3fnmy9b63LwNWuFQQtUbGD2cjPjU93eGFOqw==
+      integrity: sha512-PnCM7IGILxQ5hKFTlPbdYuAU8MKSrb2Q41+VGtGMrou2v0a/6G4VuqhkvMSszbYwrnOgGY0qkE+sOSMX7Ll9UA==
       tarball: 'file:projects/hatch-server-user-management.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -20479,6 +20485,7 @@ specifiers:
   fs-extra: ^8
   geckodriver: ^1.19.1
   history: ^4.10.1
+  http-status-codes: ^1.4.0
   inquirer: ^7
   invariant: ^2
   isarray: ^2.0.5

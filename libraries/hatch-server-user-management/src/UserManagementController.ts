@@ -17,13 +17,14 @@ import {
   ResendUserRegistrationCodeRequest
 } from './UserManagementRequests';
 import UserContext from './UserContext';
-
+import {UserManagementErrorCodes} from './UserManagementError';
+import * as HttpStatus from 'http-status-codes'
 export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 
 @controller()
 export default class UserManagementController {
   
-  private authWhitelist = [
+  private readonly authWhitelist = [
     // default whitelist for swagger
     '/favicon.ico',
     '/api',
@@ -49,20 +50,27 @@ export default class UserManagementController {
       if (!username || !password) {
         const errMsg = 'Missing required field(s), username and password are required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         const authTokens = await this.userService.authenticate(username, password);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
         this.logger.debug('User authenticated and cookie set');
-        params.res.status(200).send(authTokens);
+        params.res.status(HttpStatus.OK).send(authTokens);
       }
     } catch (err) {
-      this.logger.error('Error authenticating user: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error authenticating user: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.ACCOUNT_LOCKED) {
+        params.res.sendStatus(HttpStatus.FORBIDDEN);
+      } else if (err.code === UserManagementErrorCodes.UNAUTHORIZED) {
+        params.res.sendStatus(HttpStatus.UNAUTHORIZED);
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -74,19 +82,22 @@ export default class UserManagementController {
       if (!username || !password) {
         const errMsg = 'Missing required field(s), username and password are required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         await this.userService.startUserRegistration(username, password, userAttributes);
         this.logger.debug('User registration started');
-        params.res.sendStatus(200);
+        params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      this.logger.error('Error creating user: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error starting user registration: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USERNAME_EXISTS) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -98,19 +109,22 @@ export default class UserManagementController {
       if (!username) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         await this.userService.resendUserRegistrationCode(username);
         this.logger.debug('User registration code resent');
-        params.res.sendStatus(200);
+        params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      this.logger.error('Error resending user sign up email: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error resending user registration: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -122,19 +136,22 @@ export default class UserManagementController {
       if (!username || !confirmationCode) {
         const errMsg = 'Missing required field(s), username and confirmationCode are required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         await this.userService.confirmUserRegistration(username,confirmationCode);
         this.logger.debug('User registration confirmed');
-        params.res.sendStatus(200);
+        params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      this.logger.error('Error confirming user: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error confirming user: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.INVALID_CODE) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -146,19 +163,22 @@ export default class UserManagementController {
       if (!username) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         await this.userService.startPasswordReset(username);
         this.logger.debug('User password reset started');
-        params.res.sendStatus(200);
+        params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      this.logger.error('Error resetting user password: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error resetting user password: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -170,19 +190,24 @@ export default class UserManagementController {
       if (!username || !confirmationCode || !password) {
         const errMsg = 'Missing required field(s), username, confirmation code, and password are required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         await this.userService.confirmPasswordReset(username, confirmationCode, password);
         this.logger.debug('User password reset confirmed');
-        params.res.sendStatus(200);
+        params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      this.logger.error('Error confirming resetting user password: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error confirming resetting user password: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||
+        err.code === UserManagementErrorCodes.INVALID_PASSWORD ||
+        err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -196,11 +221,9 @@ export default class UserManagementController {
       if (err instanceof TokenExpiredError) {
         this.logger.debug('Token signature verified but expired at ', err.expiredAt)
       } else {
-        const errMsg = 'User not authorized';
-        this.logger.debug(errMsg);
-        params.res.status(401).send({
-          error: errMsg,
-        });
+        this.logger.error('Error refreshing user authentication tokens: Invalid token');
+        params.res.sendStatus(HttpStatus.UNAUTHORIZED);
+        return;
       }
     }
     try {
@@ -208,20 +231,25 @@ export default class UserManagementController {
       if (!refreshToken) {
         const errMsg = 'Missing required field, refreshToken is required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         const authTokens = await this.userService.refreshAuthentication(refreshToken);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
         this.logger.debug('User authentication tokens refreshed and cookie set');
-        params.res.status(200).send(authTokens);
+        params.res.status(HttpStatus.OK).send(authTokens);
       }
     } catch (err) {
-      this.logger.error('Error refreshing user authentication tokens: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error refreshing user authentication tokens: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||
+        err.code === UserManagementErrorCodes.INVALID_PASSWORD ||
+        err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   
@@ -244,15 +272,11 @@ export default class UserManagementController {
       } else {
         const errMsg = 'User not authenticated';
         this.logger.debug(errMsg);
-        params.res.status(401).send({
-          error: errMsg,
-        });
+        params.res.sendStatus(HttpStatus.UNAUTHORIZED);
       }
     } catch (err) {
       this.logger.error('Error authenticating user: ', err);
-      params.res.status(500).send({
-        error: err.message,
-      });
+      params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   
@@ -265,19 +289,22 @@ export default class UserManagementController {
       if (!username || username.length === 0) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
-        params.res.status(400).send({
+        params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
         await this.userService.signOutUser(username);
         this.logger.debug('User signed out');
-        params.res.sendStatus(200);
+        params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      this.logger.error('Error signing out user: ', err);
-      params.res.status(500).send({
-        error: err,
-      });
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error signing out user: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.sendStatus(HttpStatus.PRECONDITION_FAILED);
+      } else {
+        params.res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   }
   

@@ -1,18 +1,14 @@
 import UserServiceClient, {UserInfo} from './UserServiceClient';
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_CLIENT_ID,
-  AWS_USER_POOL_ID,
-  AWS_REGION,
-  AWS_SECRET_ACCESS_KEY
-} from './constants';
-import {config, CognitoIdentityServiceProvider} from 'aws-sdk';
+import {AWS_ACCESS_KEY_ID, AWS_CLIENT_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_USER_POOL_ID} from './constants';
+import {CognitoIdentityServiceProvider, config} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import {inject, Logger} from '@launchtray/hatch-util';
 import {injectable} from '@launchtray/hatch-util/dist';
 import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import {UserManagementError, UserManagementErrorCodes} from './UserManagementError';
+import {AWSError} from 'aws-sdk';
 
 @injectable()
 export default class AWSCognitoClient implements UserServiceClient {
@@ -38,7 +34,9 @@ export default class AWSCognitoClient implements UserServiceClient {
         USERNAME: username,
         PASSWORD: password,
       },
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
     return {
       accessToken: response.AuthenticationResult?.AccessToken,
       refreshToken: response.AuthenticationResult?.RefreshToken,
@@ -48,24 +46,30 @@ export default class AWSCognitoClient implements UserServiceClient {
   public async startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}) {
     let cognitoUserAttributes: AttributeListType = [];
     for (const key in userAttributes) {
-      cognitoUserAttributes.push({
-        Name: key,
-        Value: userAttributes[key],
-      });
-    };
+      if (userAttributes) {
+        cognitoUserAttributes.push({
+          Name: key,
+          Value: userAttributes[key],
+        });
+      }
+    }
     await this.cognitoProvider.signUp({
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
       Password: password,
       UserAttributes: cognitoUserAttributes,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async resendUserRegistrationCode(username: string) {
     await this.cognitoProvider.resendConfirmationCode({
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async confirmUserRegistration(username: string, confirmationCode: string) {
@@ -73,14 +77,18 @@ export default class AWSCognitoClient implements UserServiceClient {
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
       ConfirmationCode: confirmationCode,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async startPasswordReset(username: string) {
     await this.cognitoProvider.adminResetUserPassword({
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async confirmPasswordReset(username: string, confirmationCode: string, password: string) {
@@ -89,7 +97,9 @@ export default class AWSCognitoClient implements UserServiceClient {
       Username: username,
       ConfirmationCode: confirmationCode,
       Password: password,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async refreshAuthentication(refreshToken: string) {
@@ -100,7 +110,9 @@ export default class AWSCognitoClient implements UserServiceClient {
       AuthParameters: {
         REFRESH_TOKEN: refreshToken,
       },
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
     return {
       accessToken: response.AuthenticationResult?.AccessToken,
       refreshToken: response.AuthenticationResult?.RefreshToken,
@@ -111,7 +123,9 @@ export default class AWSCognitoClient implements UserServiceClient {
     await this.cognitoProvider.adminUserGlobalSignOut({
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async getUserAttributesById(subjectId: string) {
@@ -119,7 +133,9 @@ export default class AWSCognitoClient implements UserServiceClient {
     const response = await this.cognitoProvider.listUsers({
       Filter: filter,
       UserPoolId: AWS_USER_POOL_ID as string
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
     this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
     const user = response.Users && response.Users[0];
     const userAttrsResp: {[key: string]: any} = {};
@@ -133,7 +149,9 @@ export default class AWSCognitoClient implements UserServiceClient {
     const response = await this.cognitoProvider.adminGetUser({
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
     this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
     const userAttrsResp: {[key: string]: any} = {};
     if (response && response.UserAttributes) {
@@ -155,7 +173,9 @@ export default class AWSCognitoClient implements UserServiceClient {
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
       UserAttributes: userAttributesList,
-    }).promise();
+    }).promise().catch((err) => {
+      throw this.convertAWSErrorToUserManagementError(err);
+    });
   }
   
   public async getUserInfo(accessToken: string) {
@@ -188,8 +208,7 @@ export default class AWSCognitoClient implements UserServiceClient {
 
     const username = decodedJwt.payload && decodedJwt.payload.username;
     const userId = decodedJwt.payload && decodedJwt.payload.sub;
-    const userInfo = new UserInfo(userId, username, accessToken);
-    return userInfo;
+    return new UserInfo(userId, username, accessToken);
   }
   
   private async requirePublicKeys() {
@@ -223,5 +242,41 @@ export default class AWSCognitoClient implements UserServiceClient {
     }
     return pemCerts;
   }
+  
+  private convertAWSErrorToUserManagementError(awsError: AWSError) {
+    switch (awsError.code) {
+      case 'CodeMismatchException' || 'ExpiredCodeException': {
+        return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, awsError.message);
+      }
+      case 'InvalidPasswordException': {
+        return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD, awsError.message);
+      }
+      case 'NotAuthorizedException': {
+        if (awsError.message.includes('Password attempts exceeded')) {
+          return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
+        } else {
+          return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, awsError.message);
+        }
+      }
+      case 'PasswordResetRequiredException': {
+        return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
+      }
+      case 'TokenExpiredException': {
+        return new UserManagementError(UserManagementErrorCodes.EXPIRED_TOKEN, awsError.message);
+      }
+      case 'UsernameExistsException': {
+        return new UserManagementError(UserManagementErrorCodes.USERNAME_EXISTS, awsError.message);
+      }
+      case 'UserNotConfirmedException': {
+        return new UserManagementError(UserManagementErrorCodes.USER_NOT_CONFIRMED, awsError.message);
+      }
+      case 'UserNotFoundException': {
+        return new UserManagementError(UserManagementErrorCodes.USER_NOT_FOUND, awsError.message);
+      }
+      default: {
+        return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, awsError.message);
+      }
+    }
+  };
   
 }

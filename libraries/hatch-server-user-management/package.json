@@ -19,6 +19,7 @@
     "aws-sdk": "^2.684.0",
     "cookie": "^0.4.1",
     "cross-fetch": "^3.0.4",
+    "http-status-codes": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.3"
   },

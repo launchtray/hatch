@@ -9,31 +9,31 @@ import {UserServiceClient, UserInfo, UserManagementError, UserManagementErrorCod
 import {AWSError} from 'aws-sdk';
 
 const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
+  const message = awsError.code + ' - ' + awsError.message;
   switch (awsError.code) {
     case 'CodeMismatchException':
-      return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);
     case 'ExpiredCodeException':
-      return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);
     case 'InvalidPasswordException':
-      return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD, message);
     case 'NotAuthorizedException':
       if (awsError.message.includes('Password attempts exceeded')) {
-        return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
+        return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);
       } else {
-        return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, awsError.message);
+        return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, message);
       }
     case 'PasswordResetRequiredException':
-      return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);
     case 'TokenExpiredException':
-      return new UserManagementError(UserManagementErrorCodes.EXPIRED_TOKEN, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.EXPIRED_TOKEN, message);
     case 'UsernameExistsException':
-      return new UserManagementError(UserManagementErrorCodes.USERNAME_EXISTS, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.USERNAME_EXISTS, message);
     case 'UserNotConfirmedException':
-      return new UserManagementError(UserManagementErrorCodes.USER_NOT_CONFIRMED, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.USER_NOT_CONFIRMED, message);
     case 'UserNotFoundException':
-      return new UserManagementError(UserManagementErrorCodes.USER_NOT_FOUND, awsError.message);
+      return new UserManagementError(UserManagementErrorCodes.USER_NOT_FOUND, message);
     default:
-      const message = awsError.code + ' - ' + awsError.message;
       return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, message);
   }
 };

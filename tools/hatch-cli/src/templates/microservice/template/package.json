@@ -30,7 +30,7 @@
     "ws": "^7",
     "bufferutil": "^4",
     "utf-8-validate": "^5",
-    "swagger-ui": "^3.25.0",
+    "swagger-ui": "3.25.0",
     "isarray": "^2.0.5",
     "regenerator-runtime": "^0.13.3"
   },
@@ -41,6 +41,8 @@
     "@types/superagent": "^4.1.4",
     "@types/webpack-env": "^1",
     "@types/jest": "^24.0.22",
+    "@types/source-map": "0.5.2",
+    "ajv": "^6.9.1",
     "jest": "^24.9.0",
     "superagent": "^5.1.1",
     "supertest": "^4.0.2",
@@ -51,9 +53,10 @@
     "typescript": "^3.7.3",
     "rimraf": "3.0.0",
     "webpack": "^4",
-    "razzle": "3.0.0",
+    "razzle": "3.1.6",
+    "resolve": "^1.17.0",
     "@babel/core": "^7",
-    "razzle-dev-utils": "3.0.0"
+    "razzle-dev-utils": "3.1.6"
   },
   "jest": {
     "transform": {

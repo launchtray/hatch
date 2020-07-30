@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "comment": "Upgraded Razzle to 3.1.6",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-razzle-config",
+  "email": "kiltyj@gmail.com"
+}

@@ -19,6 +19,7 @@ import {
 } from './UserManagementRequests';
 import UserContext from './UserContext';
 import * as HttpStatus from 'http-status-codes'
+
 export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 
 @controller()
@@ -70,9 +71,13 @@ export default class UserManagementController {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: err.code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
+        });
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Unauthorized',
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -133,8 +138,8 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error resending user registration: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Unauthorized',
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -163,9 +168,13 @@ export default class UserManagementController {
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error confirming user: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.INVALID_CODE) {
+      if (err.code === UserManagementErrorCodes.INVALID_CODE) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
+        });
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Unauthorized',
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -195,8 +204,8 @@ export default class UserManagementController {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error resetting user password: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Unauthorized',
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -225,11 +234,13 @@ export default class UserManagementController {
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error confirming resetting user password: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||
-        err.code === UserManagementErrorCodes.INVALID_PASSWORD ||
-        err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      if (err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
+        });
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Unauthorized',
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -273,11 +284,13 @@ export default class UserManagementController {
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error refreshing user authentication tokens: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||
-        err.code === UserManagementErrorCodes.INVALID_PASSWORD ||
-        err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      if (err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
+        });
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: 'Unauthorized',
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({

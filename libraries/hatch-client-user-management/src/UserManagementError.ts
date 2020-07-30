@@ -2,7 +2,7 @@ export enum UserManagementErrorCodes {
   ACCOUNT_LOCKED = 'AccountLocked',
   EXPIRED_TOKEN = 'ExpiredToken',
   INVALID_CODE = 'InvalidCode',
-  INVALID_PASSWORD = 'InvalidPassword',
+  INVALID_PASSWORD_FORMAT = 'InvalidPasswordFormat',
   INTERNAL_ERROR = 'InternalError',
   UNAUTHORIZED = 'Unauthorized',
   USERNAME_EXISTS = 'UsernameExists',

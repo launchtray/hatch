@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-client",
+      "comment": "Upgraded Razzle to 3.1.6",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-client",
+  "email": "kiltyj@gmail.com"
+}

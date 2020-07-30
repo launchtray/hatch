@@ -34,7 +34,8 @@
     "**/acceptance-tests",
     "**/webpack",
     "**/jest",
-    "**/razzle.config.js"
+    "**/razzle.config.js",
+    "**/main.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

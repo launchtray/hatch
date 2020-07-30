@@ -89,6 +89,7 @@
     "react-error-overlay": "^6",
     "rimraf": "3.0.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
+    "sockjs-client": "^1.4.0",
     "superagent": "^5.1.1",
     "supertest": "^4.0.2",
     "tiny-warning": "^1.0.3",
@@ -97,7 +98,8 @@
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^4.1.0",
     "typescript": "^3.7.3",
-    "webpack": "^4"
+    "webpack": "^4",
+    "webpack-dev-server": "^3.11.0"
   },
   "jest": {
     "transform": {

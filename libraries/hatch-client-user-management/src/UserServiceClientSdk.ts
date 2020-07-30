@@ -205,7 +205,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const responseBody = await response.json();
     this.logger.debug('Request to get user attributes response body: ' + JSON.stringify(responseBody));
     if (!response.ok) {
-      throw new Error(responseBody.error);
+      throw new UserManagementError(responseBody.error, 'Error getting user attributes');
     }
     return responseBody;
   }
@@ -227,7 +227,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const responseBody = await response.json();
     this.logger.debug('Request to set user attributes response body: ' + JSON.stringify(responseBody));
     if (!response.ok) {
-      throw new Error(responseBody.error);
+      throw new UserManagementError(responseBody.error, 'Error setting user attributes');
     }
     return responseBody;
   }

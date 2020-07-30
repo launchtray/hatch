@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web-client
 
-This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+This log was last generated on Thu, 30 Jul 2020 21:21:04 GMT and should not be manually modified.
+
+## 0.3.0
+Thu, 30 Jul 2020 21:21:04 GMT
+
+### Minor changes
+
+- Upgraded Razzle to 3.1.6
 
 ## 0.2.4
 Wed, 22 Jul 2020 06:33:22 GMT

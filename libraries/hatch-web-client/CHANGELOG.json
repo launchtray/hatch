@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web-client",
   "entries": [
     {
+      "version": "0.3.0",
+      "tag": "@launchtray/hatch-web-client_v0.3.0",
+      "date": "Thu, 30 Jul 2020 21:21:04 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Upgraded Razzle to 3.1.6"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.2.4",
       "tag": "@launchtray/hatch-web-client_v0.2.4",
       "date": "Wed, 22 Jul 2020 06:33:22 GMT",

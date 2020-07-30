@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-razzle-config",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -10,11 +10,13 @@
     "access": "public"
   },
   "dependencies": {
-    "razzle-plugin-typescript": "3.0.0"
+    "razzle-plugin-typescript": "3.1.6"
   },
   "peerDependencies": {
     "tslint": "^5",
     "webpack": "^4",
-    "razzle-dev-utils": "3.0.0"
+    "razzle-dev-utils": "3.1.6",
+    "sockjs-client": "^1.4.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }

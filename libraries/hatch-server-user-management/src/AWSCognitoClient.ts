@@ -75,8 +75,8 @@ export default class AWSCognitoClient implements UserServiceClient {
   
   public async startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}) {
     let cognitoUserAttributes: AttributeListType = [];
-    for (const key in userAttributes) {
-      if (userAttributes) {
+    if (userAttributes) {
+      for (const key in userAttributes) {
         cognitoUserAttributes.push({
           Name: key,
           Value: userAttributes[key],

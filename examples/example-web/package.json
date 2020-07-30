@@ -18,7 +18,7 @@
     "@launchtray/hatch-web": "^0.2.4",
     "@launchtray/hatch-web-injectables": "^0.1.2",
     "@launchtray/hatch-web-server": "^0.3.4",
-    "@launchtray/hatch-web-client": "^0.2.4",
+    "@launchtray/hatch-web-client": "^0.3.0",
     "@launchtray/hatch-server-middleware": "^0.3.2",
     "@launchtray/hatch-server-user-management": "^0.1.3",
     "@redux-saga/core": "^1",
@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.1.3",
-    "@launchtray/hatch-razzle-config": "^0.1.5",
+    "@launchtray/hatch-razzle-config": "^0.2.0",
     "@types/chromedriver": "^2.38.0",
     "@types/selenium-webdriver": "^4.0.5",
     "@types/supertest": "^2.0.8",

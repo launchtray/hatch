@@ -70,7 +70,7 @@ export default class UserManagementController {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: err.code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND ||err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
         });

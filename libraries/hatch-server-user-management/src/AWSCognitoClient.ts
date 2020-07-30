@@ -54,20 +54,22 @@ export default class AWSCognitoClient implements UserServiceClient {
   }
   
   public async authenticate(username: string, password: string) {
-    const response = await this.cognitoProvider.adminInitiateAuth({
-      UserPoolId: AWS_USER_POOL_ID as string,
-      ClientId: AWS_CLIENT_ID as string,
-      AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
-      AuthParameters: {
-        USERNAME: username,
-        PASSWORD: password,
-      },
-    }).promise().catch((err) => {
+    try {
+      const response = await this.cognitoProvider.adminInitiateAuth({
+        UserPoolId: AWS_USER_POOL_ID as string,
+        ClientId: AWS_CLIENT_ID as string,
+        AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+        AuthParameters: {
+          USERNAME: username,
+          PASSWORD: password,
+        },
+      }).promise();
+      return {
+        accessToken: response.AuthenticationResult?.AccessToken,
+        refreshToken: response.AuthenticationResult?.RefreshToken,
+      }
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
-    return {
-      accessToken: response.AuthenticationResult?.AccessToken,
-      refreshToken: response.AuthenticationResult?.RefreshToken,
     }
   }
   
@@ -81,111 +83,129 @@ export default class AWSCognitoClient implements UserServiceClient {
         });
       }
     }
-    await this.cognitoProvider.signUp({
-      ClientId: AWS_CLIENT_ID as string,
-      Username: username,
-      Password: password,
-      UserAttributes: cognitoUserAttributes,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.signUp({
+        ClientId: AWS_CLIENT_ID as string,
+        Username: username,
+        Password: password,
+        UserAttributes: cognitoUserAttributes,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async resendUserRegistrationCode(username: string) {
-    await this.cognitoProvider.resendConfirmationCode({
-      ClientId: AWS_CLIENT_ID as string,
-      Username: username,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.resendConfirmationCode({
+        ClientId: AWS_CLIENT_ID as string,
+        Username: username,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async confirmUserRegistration(username: string, confirmationCode: string) {
-    await this.cognitoProvider.confirmSignUp({
-      ClientId: AWS_CLIENT_ID as string,
-      Username: username,
-      ConfirmationCode: confirmationCode,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.confirmSignUp({
+        ClientId: AWS_CLIENT_ID as string,
+        Username: username,
+        ConfirmationCode: confirmationCode,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async startPasswordReset(username: string) {
-    await this.cognitoProvider.adminResetUserPassword({
-      UserPoolId: AWS_USER_POOL_ID as string,
-      Username: username,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.adminResetUserPassword({
+        UserPoolId: AWS_USER_POOL_ID as string,
+        Username: username,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async confirmPasswordReset(username: string, confirmationCode: string, password: string) {
-    await this.cognitoProvider.confirmForgotPassword({
-      ClientId: AWS_CLIENT_ID as string,
-      Username: username,
-      ConfirmationCode: confirmationCode,
-      Password: password,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.confirmForgotPassword({
+        ClientId: AWS_CLIENT_ID as string,
+        Username: username,
+        ConfirmationCode: confirmationCode,
+        Password: password,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async refreshAuthentication(refreshToken: string) {
-    const response = await this.cognitoProvider.adminInitiateAuth({
-      UserPoolId: AWS_USER_POOL_ID as string,
-      ClientId: AWS_CLIENT_ID as string,
-      AuthFlow: 'REFRESH_TOKEN',
-      AuthParameters: {
-        REFRESH_TOKEN: refreshToken,
-      },
-    }).promise().catch((err) => {
+    try {
+      const response = await this.cognitoProvider.adminInitiateAuth({
+        UserPoolId: AWS_USER_POOL_ID as string,
+        ClientId: AWS_CLIENT_ID as string,
+        AuthFlow: 'REFRESH_TOKEN',
+        AuthParameters: {
+          REFRESH_TOKEN: refreshToken,
+        },
+      }).promise();
+      return {
+        accessToken: response.AuthenticationResult?.AccessToken,
+        refreshToken: response.AuthenticationResult?.RefreshToken,
+      }
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
-    return {
-      accessToken: response.AuthenticationResult?.AccessToken,
-      refreshToken: response.AuthenticationResult?.RefreshToken,
     }
   }
   
   public async signOutUser(username: string) {
-    await this.cognitoProvider.adminUserGlobalSignOut({
-      UserPoolId: AWS_USER_POOL_ID as string,
-      Username: username,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.adminUserGlobalSignOut({
+        UserPoolId: AWS_USER_POOL_ID as string,
+        Username: username,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async getUserAttributesById(subjectId: string) {
     const filter = 'sub = "' + subjectId + '"';
-    const response = await this.cognitoProvider.listUsers({
-      Filter: filter,
-      UserPoolId: AWS_USER_POOL_ID as string
-    }).promise().catch((err) => {
+    try {
+      const response = await this.cognitoProvider.listUsers({
+        Filter: filter,
+        UserPoolId: AWS_USER_POOL_ID as string
+      }).promise();
+      this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
+      const user = response.Users && response.Users[0];
+      const userAttrsResp: {[key: string]: any} = {};
+      if (user && user.Attributes) {
+        user.Attributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+      }
+      return userAttrsResp;
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
-    this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
-    const user = response.Users && response.Users[0];
-    const userAttrsResp: {[key: string]: any} = {};
-    if (user && user.Attributes) {
-      user.Attributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
     }
-    return userAttrsResp;
   }
   
   public async getUserAttributes(username: string) {
-    const response = await this.cognitoProvider.adminGetUser({
-      UserPoolId: AWS_USER_POOL_ID as string,
-      Username: username,
-    }).promise().catch((err) => {
+    try {
+      const response = await this.cognitoProvider.adminGetUser({
+        UserPoolId: AWS_USER_POOL_ID as string,
+        Username: username,
+      }).promise();
+      this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
+      const userAttrsResp: {[key: string]: any} = {};
+      if (response && response.UserAttributes) {
+        response.UserAttributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+      }
+      return userAttrsResp;
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
-    this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
-    const userAttrsResp: {[key: string]: any} = {};
-    if (response && response.UserAttributes) {
-      response.UserAttributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
     }
-    return userAttrsResp;
   }
   
   public async setUserAttributes(username: string, userAttributes: {[key: string]: any}) {
@@ -197,13 +217,15 @@ export default class AWSCognitoClient implements UserServiceClient {
       });
       return userAttributesList;
     });
-    await this.cognitoProvider.adminUpdateUserAttributes({
-      UserPoolId: AWS_USER_POOL_ID as string,
-      Username: username,
-      UserAttributes: userAttributesList,
-    }).promise().catch((err) => {
+    try {
+      await this.cognitoProvider.adminUpdateUserAttributes({
+        UserPoolId: AWS_USER_POOL_ID as string,
+        Username: username,
+        UserAttributes: userAttributesList,
+      }).promise();
+    } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
-    });
+    }
   }
   
   public async getUserInfo(accessToken: string) {

@@ -1,7 +1,7 @@
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {WEB_SERVICES_URL} from './constants';
 import fetch from 'cross-fetch';
-import {UserServiceClient, UserServiceClientEndpoint} from './UserServiceClient';
+import {UserServiceClient, UserServiceClientEndpoints} from './UserServiceClient';
 import {UserManagementError} from './UserManagementError';
 
 @injectable()
@@ -13,12 +13,12 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
   }
   
   public async authenticate(username: string, password: string) {
-    this.logger.debug('Authenticating user...');
+    this.logger.debug('Requesting user authentication...');
     const post = {
       username,
       password,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.AUTHENTICATE, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.AUTHENTICATE, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -27,7 +27,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Authentication of user response body: ' + JSON.stringify(responseBody));
+    this.logger.debug('Request user authentication response body: ' + JSON.stringify(responseBody));
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error authenticating user');
     }
@@ -35,13 +35,13 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
   }
   
   public async startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}) {
-    this.logger.debug('Starting user registration...');
+    this.logger.debug('Requesting to start user registration...');
     const post = {
       username,
       password,
       userAttributes,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.START_USER_REGISTRATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.START_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -50,7 +50,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Start user registration response body: ' + JSON.stringify(responseBody));
+    this.logger.debug('Request to start user registration response body: ' + JSON.stringify(responseBody));
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error starting user registration');
     }
@@ -62,7 +62,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.RESEND_USER_REGISTRATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.RESEND_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -84,7 +84,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
       username,
       confirmationCode,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.CONFIRM_USER_REGISTRATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.CONFIRM_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -105,7 +105,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.START_PASSWORD_RESET, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.START_PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -128,7 +128,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
       confirmationCode,
       password,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.CONFIRM_PASSWORD_RESET, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.CONFIRM_PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -149,7 +149,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const post = {
       refreshToken,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.REFRESH_AUTHENTICATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.REFRESH_AUTHENTICATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -171,7 +171,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.SIGN_OUT_USER, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.SIGN_OUT_USER, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -193,7 +193,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.GET_USER_ATTRIBUTES, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.GET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -215,7 +215,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
     const post = {
       userAttributes,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.SET_USER_ATTRIBUTES, {
+    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.SET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

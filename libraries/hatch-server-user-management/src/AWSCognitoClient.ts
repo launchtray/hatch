@@ -16,7 +16,7 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
     case 'ExpiredCodeException':
       return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);
     case 'InvalidPasswordException':
-      return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD, message);
+      return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD_FORMAT, message);
     case 'NotAuthorizedException':
       if (awsError.message.includes('Password attempts exceeded')) {
         return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);

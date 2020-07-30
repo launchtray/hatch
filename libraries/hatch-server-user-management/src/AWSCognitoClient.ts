@@ -1,4 +1,3 @@
-import UserServiceClient, {UserInfo} from './UserServiceClient';
 import {AWS_ACCESS_KEY_ID, AWS_CLIENT_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_USER_POOL_ID} from './constants';
 import {CognitoIdentityServiceProvider, config} from 'aws-sdk';
 import fetch from 'cross-fetch';
@@ -6,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
-import {UserManagementError, UserManagementErrorCodes} from './UserManagementError';
+import {UserServiceClient, UserInfo, UserManagementError, UserManagementErrorCodes} from '@launchtray/hatch-client-user-management';
 import {AWSError} from 'aws-sdk';
 
 @injectable()

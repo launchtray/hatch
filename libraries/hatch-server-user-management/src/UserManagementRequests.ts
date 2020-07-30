@@ -199,3 +199,27 @@ export class SignOutUserRequest {
   };
 }
 
+export class SetUserAttributesRequest {
+  public static apiMetadata: APIMetadataParameters = {
+    requestBody: {
+      description: 'Set\'s a user\'s attributes',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            userAttributes: [
+              'username',
+              'password',
+            ],
+            properties: {
+              userAttributes: {
+                type: 'object'
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+}
+

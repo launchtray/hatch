@@ -3,7 +3,7 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import UserServiceClient from './UserServiceClient';
+import {UserManagementErrorCodes, UserServiceClient, UserServiceClientEndpoint} from '@launchtray/hatch-client-user-management';
 import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
@@ -14,10 +14,10 @@ import {
   StartPasswordResetRequest,
   ConfirmPasswordResetRequest,
   SignOutUserRequest,
-  ResendUserRegistrationCodeRequest
+  ResendUserRegistrationCodeRequest,
+  SetUserAttributesRequest,
 } from './UserManagementRequests';
 import UserContext from './UserContext';
-import {UserManagementErrorCodes} from './UserManagementError';
 import * as HttpStatus from 'http-status-codes'
 export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 
@@ -39,10 +39,10 @@ export default class UserManagementController {
     if (customAuthWhitelist.length > 0) {
       this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
     }
-    this.logger.debug('Auth whitelist:', this.authWhitelist);
+    this.logger.debug('Auth whitelist: ', this.authWhitelist);
   }
   
-  @route.post('/api/authenticate', AuthenticateRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.AUTHENTICATE, AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');
     try {
@@ -82,7 +82,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/startUserRegistration', StartUserRegistrationRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.START_USER_REGISTRATION, StartUserRegistrationRequest.apiMetadata)
   public async startUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Starting user registration...');
     try {
@@ -113,7 +113,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/resendUserRegistrationCode', ResendUserRegistrationCodeRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.RESEND_USER_REGISTRATION, ResendUserRegistrationCodeRequest.apiMetadata)
   public async resendUserRegistrationCode(params: BasicRouteParams) {
     this.logger.debug('Resending user registration code...');
     try {
@@ -144,7 +144,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/confirmUserRegistration', ConfirmUserRegistrationRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.CONFIRM_USER_REGISTRATION, ConfirmUserRegistrationRequest.apiMetadata)
   public async confirmUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Confirming user registration...');
     try {
@@ -175,7 +175,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/startPasswordReset', StartPasswordResetRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.START_PASSWORD_RESET, StartPasswordResetRequest.apiMetadata)
   public async startPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Starting user password reset...');
     try {
@@ -206,7 +206,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/confirmPasswordReset', ConfirmPasswordResetRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
   public async confirmPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Confirming user password reset...');
     try {
@@ -239,7 +239,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/refreshAuthentication', RefreshAuthenticationRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
     this.logger.debug('Refreshing user authentication tokens...');
@@ -316,7 +316,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post('/api/signOutUser', SignOutUserRequest.apiMetadata)
+  @route.post(UserServiceClientEndpoint.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
   public async signOutUser(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Signing out user...');
@@ -347,4 +347,72 @@ export default class UserManagementController {
       }
     }
   }
+  
+  @route.post(UserServiceClientEndpoint.GET_USER_ATTRIBUTES)
+  public async getUserAttributes(userContext: UserContext) {
+    const params = userContext.params;
+    this.logger.debug('Getting user attributes...');
+    try {
+      const {username} = userContext;
+      if (!username) {
+        const errMsg = 'Missing required field, username is required';
+        this.logger.debug(errMsg);
+        params.res.status(HttpStatus.BAD_REQUEST).send({
+          error: errMsg,
+        });
+      } else {
+        const userAttributes = await this.userService.getUserAttributes(username);
+        this.logger.debug('User attributes fetched: ' + userAttributes);
+        params.res.status(HttpStatus.OK).send({
+          userAttributes,
+        });
+      }
+    } catch (err) {
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error getting user attributes: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
+      } else {
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
+      }
+    }
+  }
+  
+  @route.post(UserServiceClientEndpoint.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
+  public async setUserAttributes(userContext: UserContext) {
+    const params = userContext.params;
+    this.logger.debug('Setting user attributes...');
+    try {
+      const {username} = userContext;
+      const {userAttributes} = params.req.body;
+      if (!username || !userAttributes) {
+        const errMsg = 'Missing required field, username and userAttributes are required';
+        this.logger.debug(errMsg);
+        params.res.status(HttpStatus.BAD_REQUEST).send({
+          error: errMsg,
+        });
+      } else {
+        await this.userService.setUserAttributes(username, userAttributes);
+        this.logger.debug('User attributes set');
+        params.res.sendStatus(HttpStatus.OK);
+      }
+    } catch (err) {
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.error('Error setting user attributes: ' + errorMessage);
+      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
+          error: err.code,
+        });
+      } else {
+        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+          error: err.code,
+        });
+      }
+    }
+  }
+  
 }

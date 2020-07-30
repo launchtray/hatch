@@ -1,0 +1,21 @@
+{
+  "name": "@launchtray/hatch-client-user-management",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@types/node": "^12",
+    "cross-fetch": "^3.0.4"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "^0.1.8"
+  }
+}

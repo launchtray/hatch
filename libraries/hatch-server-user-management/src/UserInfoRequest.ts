@@ -2,7 +2,7 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import cookie from 'cookie';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import UserServiceClient, {UserInfo} from './UserServiceClient';
+import {UserInfo, UserServiceClient} from '@launchtray/hatch-client-user-management';
 
 @containerSingleton()
 export default class UserInfoRequest {

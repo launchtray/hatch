@@ -213,7 +213,7 @@ export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInf
   public async setUserAttributes(username: string, userAttributes: {[key: string]: any}, accessToken: string) {
     this.logger.debug('Requesting to set user attributes...');
     const post = {
-      username,
+      userAttributes,
     };
     let response = await fetch(this.baseAPIURL + UserServiceClientEndpoint.SET_USER_ATTRIBUTES, {
       method: 'POST',

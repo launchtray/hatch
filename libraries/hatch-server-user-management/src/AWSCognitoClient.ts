@@ -8,6 +8,36 @@ import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider'
 import {UserServiceClient, UserInfo, UserManagementError, UserManagementErrorCodes} from '@launchtray/hatch-client-user-management';
 import {AWSError} from 'aws-sdk';
 
+const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
+  switch (awsError.code) {
+    case 'CodeMismatchException':
+      return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, awsError.message);
+    case 'ExpiredCodeException':
+      return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, awsError.message);
+    case 'InvalidPasswordException':
+      return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD, awsError.message);
+    case 'NotAuthorizedException':
+      if (awsError.message.includes('Password attempts exceeded')) {
+        return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
+      } else {
+        return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, awsError.message);
+      }
+    case 'PasswordResetRequiredException':
+      return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
+    case 'TokenExpiredException':
+      return new UserManagementError(UserManagementErrorCodes.EXPIRED_TOKEN, awsError.message);
+    case 'UsernameExistsException':
+      return new UserManagementError(UserManagementErrorCodes.USERNAME_EXISTS, awsError.message);
+    case 'UserNotConfirmedException':
+      return new UserManagementError(UserManagementErrorCodes.USER_NOT_CONFIRMED, awsError.message);
+    case 'UserNotFoundException':
+      return new UserManagementError(UserManagementErrorCodes.USER_NOT_FOUND, awsError.message);
+    default:
+      const message = awsError.code + ' - ' + awsError.message;
+      return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, message);
+  }
+};
+
 @injectable()
 export default class AWSCognitoClient implements UserServiceClient {
   private readonly iss: string;
@@ -33,7 +63,7 @@ export default class AWSCognitoClient implements UserServiceClient {
         PASSWORD: password,
       },
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
     return {
       accessToken: response.AuthenticationResult?.AccessToken,
@@ -57,7 +87,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       Password: password,
       UserAttributes: cognitoUserAttributes,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -66,7 +96,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       ClientId: AWS_CLIENT_ID as string,
       Username: username,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -76,7 +106,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       Username: username,
       ConfirmationCode: confirmationCode,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -85,7 +115,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -96,7 +126,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       ConfirmationCode: confirmationCode,
       Password: password,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -109,7 +139,7 @@ export default class AWSCognitoClient implements UserServiceClient {
         REFRESH_TOKEN: refreshToken,
       },
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
     return {
       accessToken: response.AuthenticationResult?.AccessToken,
@@ -122,7 +152,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -132,7 +162,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       Filter: filter,
       UserPoolId: AWS_USER_POOL_ID as string
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
     this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
     const user = response.Users && response.Users[0];
@@ -148,7 +178,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       UserPoolId: AWS_USER_POOL_ID as string,
       Username: username,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
     this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
     const userAttrsResp: {[key: string]: any} = {};
@@ -172,7 +202,7 @@ export default class AWSCognitoClient implements UserServiceClient {
       Username: username,
       UserAttributes: userAttributesList,
     }).promise().catch((err) => {
-      throw this.convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err);
     });
   }
   
@@ -240,42 +270,5 @@ export default class AWSCognitoClient implements UserServiceClient {
     }
     return pemCerts;
   }
-  
-  private convertAWSErrorToUserManagementError(awsError: AWSError) {
-    switch (awsError.code) {
-      case 'CodeMismatchException' || 'ExpiredCodeException': {
-        return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, awsError.message);
-      }
-      case 'InvalidPasswordException': {
-        return new UserManagementError(UserManagementErrorCodes.INVALID_PASSWORD, awsError.message);
-      }
-      case 'NotAuthorizedException': {
-        if (awsError.message.includes('Password attempts exceeded')) {
-          return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
-        } else {
-          return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, awsError.message);
-        }
-      }
-      case 'PasswordResetRequiredException': {
-        return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, awsError.message);
-      }
-      case 'TokenExpiredException': {
-        return new UserManagementError(UserManagementErrorCodes.EXPIRED_TOKEN, awsError.message);
-      }
-      case 'UsernameExistsException': {
-        return new UserManagementError(UserManagementErrorCodes.USERNAME_EXISTS, awsError.message);
-      }
-      case 'UserNotConfirmedException': {
-        return new UserManagementError(UserManagementErrorCodes.USER_NOT_CONFIRMED, awsError.message);
-      }
-      case 'UserNotFoundException': {
-        return new UserManagementError(UserManagementErrorCodes.USER_NOT_FOUND, awsError.message);
-      }
-      default: {
-        const message = awsError.code + ' - ' + awsError.message;
-        return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, message);
-      }
-    }
-  };
   
 }

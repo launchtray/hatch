@@ -10,9 +10,6 @@ import {AWSError} from 'aws-sdk';
 
 const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
   const message = awsError.code + ' - ' + awsError.message;
-  console.log('*** code: ' + awsError.code);
-  console.log('*** message: ' + awsError.message);
-  console.log('*** name: ' + awsError.name);
   switch (awsError.code) {
     case 'CodeMismatchException':
       return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);

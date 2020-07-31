@@ -1,12 +1,12 @@
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import fetch from 'cross-fetch';
-import {UserManagementClient, UserServiceManagementEndpoints} from './UserManagementClient';
+import {UserManagementClient, UserManagementEndpoints} from './UserManagementClient';
 import {UserManagementError} from './UserManagementError';
 
 @injectable()
 export class UserManagementClientSdk implements UserManagementClient {
   
-  constructor(@inject('Logger') private readonly logger: Logger, @inject('baseAPIURL') private readonly baseAPIURL: string) {
+  constructor(@inject('Logger') private readonly logger: Logger, @inject('userManagementBaseAPIURL') private readonly userManagementBaseAPIURL: string) {
   }
   
   public async authenticate(username: string, password: string) {
@@ -15,7 +15,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       username,
       password,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.AUTHENTICATE, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.AUTHENTICATE, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -38,7 +38,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       password,
       userAttributes,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.START_USER_REGISTRATION, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -59,7 +59,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.RESEND_USER_REGISTRATION, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.RESEND_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -81,7 +81,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       username,
       confirmationCode,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.CONFIRM_USER_REGISTRATION, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -102,7 +102,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.START_PASSWORD_RESET, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -125,7 +125,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       confirmationCode,
       password,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.CONFIRM_PASSWORD_RESET, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -146,7 +146,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       refreshToken,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.REFRESH_AUTHENTICATION, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.REFRESH_AUTHENTICATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -168,7 +168,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.SIGN_OUT_USER, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SIGN_OUT_USER, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -190,7 +190,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.GET_USER_ATTRIBUTES, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -212,7 +212,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       userAttributes,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.SET_USER_ATTRIBUTES, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -231,7 +231,7 @@ export class UserManagementClientSdk implements UserManagementClient {
   
   public async getUserInfo(accessToken: string) {
     this.logger.debug('Requesting to get user info...');
-    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.GET_USER_INFO, {
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_INFO, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

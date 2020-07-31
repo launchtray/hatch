@@ -3,7 +3,7 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import {UserManagementErrorCodes, UserManagementClient, UserServiceManagementEndpoints} from '@launchtray/hatch-user-management-client';
+import {UserManagementErrorCodes, UserManagementClient, UserManagementEndpoints} from '@launchtray/hatch-user-management-client';
 import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
@@ -43,7 +43,7 @@ export default class UserManagementController {
     this.logger.debug('Auth whitelist:', this.authWhitelist);
   }
   
-  @route.post(UserServiceManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');
     try {
@@ -77,7 +77,7 @@ export default class UserManagementController {
         });
       } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Unauthorized',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -87,7 +87,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.START_USER_REGISTRATION, StartUserRegistrationRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.START_USER_REGISTRATION, StartUserRegistrationRequest.apiMetadata)
   public async startUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Starting user registration...');
     try {
@@ -118,7 +118,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.RESEND_USER_REGISTRATION, ResendUserRegistrationCodeRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.RESEND_USER_REGISTRATION, ResendUserRegistrationCodeRequest.apiMetadata)
   public async resendUserRegistrationCode(params: BasicRouteParams) {
     this.logger.debug('Resending user registration code...');
     try {
@@ -139,7 +139,7 @@ export default class UserManagementController {
       this.logger.error('Error resending user registration: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Unauthorized',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -149,7 +149,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmUserRegistrationRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmUserRegistrationRequest.apiMetadata)
   public async confirmUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Confirming user registration...');
     try {
@@ -174,7 +174,7 @@ export default class UserManagementController {
         });
       } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Unauthorized',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -184,7 +184,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.START_PASSWORD_RESET, StartPasswordResetRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.START_PASSWORD_RESET, StartPasswordResetRequest.apiMetadata)
   public async startPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Starting user password reset...');
     try {
@@ -205,7 +205,7 @@ export default class UserManagementController {
       this.logger.error('Error resetting user password: ' + errorMessage);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Unauthorized',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -215,7 +215,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
   public async confirmPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Confirming user password reset...');
     try {
@@ -240,7 +240,7 @@ export default class UserManagementController {
         });
       } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Unauthorized',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -250,7 +250,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
     this.logger.debug('Refreshing user authentication tokens...');
@@ -290,7 +290,7 @@ export default class UserManagementController {
         });
       } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Unauthorized',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -329,7 +329,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
   public async signOutUser(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Signing out user...');
@@ -361,7 +361,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.GET_USER_ATTRIBUTES)
+  @route.post(UserManagementEndpoints.GET_USER_ATTRIBUTES)
   public async getUserAttributes(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Getting user attributes...');
@@ -395,7 +395,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
   public async setUserAttributes(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Setting user attributes...');
@@ -428,7 +428,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceManagementEndpoints.GET_USER_INFO)
+  @route.post(UserManagementEndpoints.GET_USER_INFO)
   public async getUserInfo(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Getting user info...');

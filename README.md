@@ -101,6 +101,10 @@ own outside of a project created by `hatch`.
   [Razzle](https://github.com/jaredpalmer/razzle) config file that is compatible with the design of the 
   [webapp](tools/hatch-cli/src/templates/webapp) template
 * [hatch-web-injectables](libraries/hatch-web-injectables) -- a library used for injecting useful web parameters
+* [hatch-user-management-client](libraries/hatch-user-management-client) -- a library for client-side user management
+* [hatch-server-user-management](libraries/hatch-server-user-management) -- a library for server-side user management 
+  such as authentication, user registration, and password resetting that adheres to the interface defined in 
+  [hatch-user-management-client](libraries/hatch-user-management-client)
 
 
 ## Developer setup

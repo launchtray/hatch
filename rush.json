@@ -405,6 +405,11 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@launchtray/hatch-user-management-client",
+      "projectFolder": "libraries/hatch-user-management-client",
+      "shouldPublish": true
+    },
+    {
       "packageName": "@launchtray/hatch-cli",
       "projectFolder": "tools/hatch-cli",
       "shouldPublish": true

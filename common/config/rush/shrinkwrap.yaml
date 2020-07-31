@@ -5,7 +5,6 @@ dependencies:
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-web': 'file:projects/example-web.tgz'
   '@rush-temp/hatch-cli': 'file:projects/hatch-cli.tgz'
-  '@rush-temp/hatch-client-user-management': 'file:projects/hatch-client-user-management.tgz'
   '@rush-temp/hatch-razzle-config': 'file:projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz'
@@ -13,6 +12,7 @@ dependencies:
   '@rush-temp/hatch-template-microservice': 'file:projects/hatch-template-microservice.tgz'
   '@rush-temp/hatch-template-webapp': 'file:projects/hatch-template-webapp.tgz'
   '@rush-temp/hatch-test': 'file:projects/hatch-test.tgz'
+  '@rush-temp/hatch-user-management-client': 'file:projects/hatch-user-management-client.tgz'
   '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz'
   '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz'
@@ -8262,6 +8262,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MSHgpjQqgbT/94D4CyADeNoYh52zMkCX4pcJvPP5WqPsLFMKjr2TCMg381ox5qI0ii2dPwaLx/00477knXqXVw==
+  /cross-fetch/3.0.5:
+    dependencies:
+      node-fetch: 2.6.0
+    dev: false
+    resolution:
+      integrity: sha512-FFLcLtraisj5eteosnX1gf01qYDCOc4fDy0+euOt8Kn9YBY2NtXL/pCoYPavw24NIQkQqm5ZOLsGD5Zzj0gyew==
   /cross-spawn/6.0.5:
     dependencies:
       nice-try: 1.0.5
@@ -19294,16 +19300,6 @@ packages:
       integrity: sha512-4PWrZmynXL631ob2jC7PS6cZjhgxXpqYVl/aaTbkpmX/htlmPKN3YcJ9vQ12aOKQo78OeSH2DgRnzrv++vLraA==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
-  'file:projects/hatch-client-user-management.tgz':
-    dependencies:
-      '@types/node': 12.12.53
-      cross-fetch: 3.0.4
-    dev: false
-    name: '@rush-temp/hatch-client-user-management'
-    resolution:
-      integrity: sha512-Q4TkxWiX+0LcEQRXW8kDtLtZP6QXXlreZYhKSM0vV9k19W8czfABZvXnZSHagRbEy3KR6hStrSWbDYo2TumLeA==
-      tarball: 'file:projects/hatch-client-user-management.tgz'
-    version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
     dependencies:
       razzle-dev-utils: 3.1.6
@@ -19350,7 +19346,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-user-management'
     resolution:
-      integrity: sha512-V1sti/zRu8YFm6DAwPWM1UjC63TJMbuRlcYzF/jhSdKRkjx0LwzhiE+Qli89Dia3f89MKzNJr6Qlbf0rTMAoSQ==
+      integrity: sha512-2LvH6YvUM6uXo3XXEiTdF8n9ZTcgWlFwxYv69E1z+lAAYO0ibWgVeCe6Zql6Y8efm0eVbOEn2mp6itauapndDw==
       tarball: 'file:projects/hatch-server-user-management.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -19517,6 +19513,16 @@ packages:
       integrity: sha512-Tc5K4u1zsRiUH5BuV3nFUs2B9QNqT6I0T2HTQP+sZwTDuCiJ6JEDTlWH8/LKFQMBbZaVuKGR7q1CnHDuJ6mHYA==
       tarball: 'file:projects/hatch-test.tgz'
     version: 0.0.0
+  'file:projects/hatch-user-management-client.tgz':
+    dependencies:
+      '@types/node': 12.12.53
+      cross-fetch: 3.0.5
+    dev: false
+    name: '@rush-temp/hatch-user-management-client'
+    resolution:
+      integrity: sha512-XFFBAG9j5/dtiir5hSz/S4BmlAdZPHaEbgEG2RH/cNefmDdNM+XmruLP69OFaQBRG6fVpQ4f4NiqZ99Gf/6RWw==
+      tarball: 'file:projects/hatch-user-management-client.tgz'
+    version: 0.0.0
   'file:projects/hatch-util.tgz':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
@@ -19653,7 +19659,6 @@ specifiers:
   '@redux-saga/core': ^1
   '@rush-temp/example-web': 'file:./projects/example-web.tgz'
   '@rush-temp/hatch-cli': 'file:./projects/hatch-cli.tgz'
-  '@rush-temp/hatch-client-user-management': 'file:./projects/hatch-client-user-management.tgz'
   '@rush-temp/hatch-razzle-config': 'file:./projects/hatch-razzle-config.tgz'
   '@rush-temp/hatch-server': 'file:./projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:./projects/hatch-server-middleware.tgz'
@@ -19661,6 +19666,7 @@ specifiers:
   '@rush-temp/hatch-template-microservice': 'file:./projects/hatch-template-microservice.tgz'
   '@rush-temp/hatch-template-webapp': 'file:./projects/hatch-template-webapp.tgz'
   '@rush-temp/hatch-test': 'file:./projects/hatch-test.tgz'
+  '@rush-temp/hatch-user-management-client': 'file:./projects/hatch-user-management-client.tgz'
   '@rush-temp/hatch-util': 'file:./projects/hatch-util.tgz'
   '@rush-temp/hatch-web': 'file:./projects/hatch-web.tgz'
   '@rush-temp/hatch-web-client': 'file:./projects/hatch-web-client.tgz'

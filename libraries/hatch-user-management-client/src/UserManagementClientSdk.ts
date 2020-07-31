@@ -1,15 +1,16 @@
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {WEB_SERVICES_URL} from './constants';
 import fetch from 'cross-fetch';
-import {UserServiceClient, UserServiceClientEndpoints} from './UserServiceClient';
+import {UserManagementClient, UserServiceClientEndpoints} from './UserManagementClient';
 import {UserManagementError} from './UserManagementError';
 
 @injectable()
-export class UserServiceClientSdk implements Omit<UserServiceClient, 'getUserInfo'> {
+export class UserManagementClientSdk implements Omit<UserManagementClient, 'getUserInfo'> {
   private readonly baseAPIURL: string;
   
   constructor(@inject('Logger') private readonly logger: Logger) {
-    this.baseAPIURL = WEB_SERVICES_URL as string;
+    // this.baseAPIURL = WEB_SERVICES_URL as string;
+    this.baseAPIURL = 'http://192.168.4.23:3000';
   }
   
   public async authenticate(username: string, password: string) {

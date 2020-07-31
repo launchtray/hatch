@@ -24,7 +24,7 @@
     "jwk-to-pem": "^2.0.3"
   },
   "peerDependencies": {
-    "@launchtray/hatch-client-user-management": "^0.1.0",
+    "@launchtray/hatch-user-management-client": "^0.1.0",
     "@launchtray/hatch-server": "^0.3.6",
     "@launchtray/hatch-server-middleware": "^0.3.2",
     "@launchtray/hatch-util": "^0.1.8"

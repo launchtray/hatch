@@ -24,7 +24,7 @@ export enum UserServiceClientEndpoints {
   SET_USER_ATTRIBUTES = '/api/setUserAttributes',
 }
 
-export interface UserServiceClient {
+export interface UserManagementClient {
   authenticate(username: string, password: string): Promise<AuthTokens>;
   startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}): Promise<void>;
   resendUserRegistrationCode(username: string): Promise<void>;

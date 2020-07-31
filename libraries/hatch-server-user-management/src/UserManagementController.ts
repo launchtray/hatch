@@ -3,7 +3,7 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import {UserManagementErrorCodes, UserServiceClient, UserServiceClientEndpoints} from '@launchtray/hatch-client-user-management';
+import {UserManagementErrorCodes, UserManagementClient, UserServiceClientEndpoints} from '@launchtray/hatch-user-management-client';
 import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
@@ -33,7 +33,7 @@ export default class UserManagementController {
   ];
   
   constructor(
-    @inject('UserServiceClient') private readonly userService: UserServiceClient,
+    @inject('UserManagementClient') private readonly userService: UserManagementClient,
     @inject('Logger') private readonly logger: Logger,
     @injectAll(AUTH_WHITELIST_KEY) customAuthWhitelist: string[],
   ) {

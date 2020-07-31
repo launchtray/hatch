@@ -405,8 +405,8 @@
       "shouldPublish": true
     },
     {
-      "packageName": "@launchtray/hatch-client-user-management",
-      "projectFolder": "libraries/hatch-client-user-management",
+      "packageName": "@launchtray/hatch-user-management-client",
+      "projectFolder": "libraries/hatch-user-management-client",
       "shouldPublish": true
     },
     {

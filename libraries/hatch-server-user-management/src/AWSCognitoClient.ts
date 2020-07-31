@@ -5,11 +5,14 @@ import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
-import {UserServiceClient, UserInfo, UserManagementError, UserManagementErrorCodes} from '@launchtray/hatch-client-user-management';
+import {UserManagementClient, UserInfo, UserManagementError, UserManagementErrorCodes} from '@launchtray/hatch-user-management-client';
 import {AWSError} from 'aws-sdk';
 
 const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
   const message = awsError.code + ' - ' + awsError.message;
+  console.log('*** code: ' + awsError.code);
+  console.log('*** message: ' + awsError.message);
+  console.log('*** name: ' + awsError.name);
   switch (awsError.code) {
     case 'CodeMismatchException':
       return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);
@@ -39,7 +42,7 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
 };
 
 @injectable()
-export default class AWSCognitoClient implements UserServiceClient {
+export default class AWSCognitoClient implements UserManagementClient {
   private readonly iss: string;
   private pemCerts: {} | undefined;
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();

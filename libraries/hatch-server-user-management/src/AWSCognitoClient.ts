@@ -1,4 +1,3 @@
-import {AWS_ACCESS_KEY_ID, AWS_CLIENT_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_USER_POOL_ID} from './constants';
 import {CognitoIdentityServiceProvider, config} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
@@ -44,20 +43,25 @@ export default class AWSCognitoClient implements UserManagementClient {
   private pemCerts: {} | undefined;
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
   
-  constructor(@inject('Logger') private readonly logger: Logger) {
-    this.iss = 'https://cognito-idp.' + AWS_REGION + '.amazonaws.com/' + AWS_USER_POOL_ID;
+  constructor(@inject('Logger') private readonly logger: Logger, 
+              @inject('awsAccessKeyId') private readonly awsAccessKeyId: string,
+              @inject('awsSecretAccessKey') private readonly awsSecretAccessKey: string,
+              @inject('awsRegion') private readonly awsRegion: string,
+              @inject('awsUserPoolId') private readonly awsUserPoolId: string,
+              @inject('awsClientId') private readonly awsClientId: string) {
+    this.iss = 'https://cognito-idp.' + awsRegion + '.amazonaws.com/' + this.awsUserPoolId;
     config.update({
-      accessKeyId: AWS_ACCESS_KEY_ID,
-      secretAccessKey: AWS_SECRET_ACCESS_KEY,
-      region: AWS_REGION,
+      accessKeyId: awsAccessKeyId,
+      secretAccessKey: awsSecretAccessKey,
+      region: awsRegion,
     });
   }
   
   public async authenticate(username: string, password: string) {
     try {
       const response = await this.cognitoProvider.adminInitiateAuth({
-        UserPoolId: AWS_USER_POOL_ID as string,
-        ClientId: AWS_CLIENT_ID as string,
+        UserPoolId: this.awsUserPoolId,
+        ClientId: this.awsClientId,
         AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
         AuthParameters: {
           USERNAME: username,
@@ -85,7 +89,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
     try {
       await this.cognitoProvider.signUp({
-        ClientId: AWS_CLIENT_ID as string,
+        ClientId: this.awsClientId,
         Username: username,
         Password: password,
         UserAttributes: cognitoUserAttributes,
@@ -98,7 +102,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async resendUserRegistrationCode(username: string) {
     try {
       await this.cognitoProvider.resendConfirmationCode({
-        ClientId: AWS_CLIENT_ID as string,
+        ClientId: this.awsClientId,
         Username: username,
       }).promise();
     } catch (err) {
@@ -109,7 +113,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async confirmUserRegistration(username: string, confirmationCode: string) {
     try {
       await this.cognitoProvider.confirmSignUp({
-        ClientId: AWS_CLIENT_ID as string,
+        ClientId: this.awsClientId,
         Username: username,
         ConfirmationCode: confirmationCode,
       }).promise();
@@ -121,7 +125,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async startPasswordReset(username: string) {
     try {
       await this.cognitoProvider.adminResetUserPassword({
-        UserPoolId: AWS_USER_POOL_ID as string,
+        UserPoolId: this.awsUserPoolId,
         Username: username,
       }).promise();
     } catch (err) {
@@ -132,7 +136,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async confirmPasswordReset(username: string, confirmationCode: string, password: string) {
     try {
       await this.cognitoProvider.confirmForgotPassword({
-        ClientId: AWS_CLIENT_ID as string,
+        ClientId: this.awsClientId,
         Username: username,
         ConfirmationCode: confirmationCode,
         Password: password,
@@ -145,8 +149,8 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async refreshAuthentication(refreshToken: string) {
     try {
       const response = await this.cognitoProvider.adminInitiateAuth({
-        UserPoolId: AWS_USER_POOL_ID as string,
-        ClientId: AWS_CLIENT_ID as string,
+        UserPoolId: this.awsUserPoolId,
+        ClientId: this.awsClientId,
         AuthFlow: 'REFRESH_TOKEN',
         AuthParameters: {
           REFRESH_TOKEN: refreshToken,
@@ -164,7 +168,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async signOutUser(username: string) {
     try {
       await this.cognitoProvider.adminUserGlobalSignOut({
-        UserPoolId: AWS_USER_POOL_ID as string,
+        UserPoolId: this.awsUserPoolId,
         Username: username,
       }).promise();
     } catch (err) {
@@ -177,7 +181,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     try {
       const response = await this.cognitoProvider.listUsers({
         Filter: filter,
-        UserPoolId: AWS_USER_POOL_ID as string
+        UserPoolId: this.awsUserPoolId
       }).promise();
       this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
       const user = response.Users && response.Users[0];
@@ -194,7 +198,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   public async getUserAttributes(username: string) {
     try {
       const response = await this.cognitoProvider.adminGetUser({
-        UserPoolId: AWS_USER_POOL_ID as string,
+        UserPoolId: this.awsUserPoolId,
         Username: username,
       }).promise();
       this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
@@ -219,7 +223,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     });
     try {
       await this.cognitoProvider.adminUpdateUserAttributes({
-        UserPoolId: AWS_USER_POOL_ID as string,
+        UserPoolId: this.awsUserPoolId,
         Username: username,
         UserAttributes: userAttributesList,
       }).promise();

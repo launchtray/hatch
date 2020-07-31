@@ -1,5 +1,5 @@
 import {UserManagementClientSdk} from './UserManagementClientSdk';
-import {AuthTokens, UserInfo, UserManagementClient, UserServiceClientEndpoints} from './UserManagementClient';
+import {AuthTokens, UserInfo, UserManagementClient, UserServiceManagementEndpoints} from './UserManagementClient';
 import {UserManagementError, UserManagementErrorCodes} from './UserManagementError';
 
 export {
@@ -8,6 +8,6 @@ export {
   UserManagementError,
   UserManagementErrorCodes,
   UserManagementClient,
-  UserServiceClientEndpoints,
+  UserServiceManagementEndpoints,
   UserManagementClientSdk,
 };

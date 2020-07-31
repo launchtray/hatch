@@ -1,16 +1,12 @@
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
-import {WEB_SERVICES_URL} from './constants';
 import fetch from 'cross-fetch';
-import {UserManagementClient, UserServiceClientEndpoints} from './UserManagementClient';
+import {UserManagementClient, UserServiceManagementEndpoints} from './UserManagementClient';
 import {UserManagementError} from './UserManagementError';
 
 @injectable()
-export class UserManagementClientSdk implements Omit<UserManagementClient, 'getUserInfo'> {
-  private readonly baseAPIURL: string;
+export class UserManagementClientSdk implements UserManagementClient {
   
-  constructor(@inject('Logger') private readonly logger: Logger) {
-    // this.baseAPIURL = WEB_SERVICES_URL as string;
-    this.baseAPIURL = 'http://192.168.4.23:3000';
+  constructor(@inject('Logger') private readonly logger: Logger, @inject('baseAPIURL') private readonly baseAPIURL: string) {
   }
   
   public async authenticate(username: string, password: string) {
@@ -19,7 +15,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
       username,
       password,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.AUTHENTICATE, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.AUTHENTICATE, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -42,7 +38,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
       password,
       userAttributes,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.START_USER_REGISTRATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.START_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -63,7 +59,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.RESEND_USER_REGISTRATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.RESEND_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -85,7 +81,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
       username,
       confirmationCode,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.CONFIRM_USER_REGISTRATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.CONFIRM_USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -106,7 +102,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.START_PASSWORD_RESET, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.START_PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -129,7 +125,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
       confirmationCode,
       password,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.CONFIRM_PASSWORD_RESET, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.CONFIRM_PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -150,7 +146,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     const post = {
       refreshToken,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.REFRESH_AUTHENTICATION, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.REFRESH_AUTHENTICATION, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -172,7 +168,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.SIGN_OUT_USER, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.SIGN_OUT_USER, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -194,7 +190,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     const post = {
       username,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.GET_USER_ATTRIBUTES, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.GET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -216,7 +212,7 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     const post = {
       userAttributes,
     };
-    let response = await fetch(this.baseAPIURL + UserServiceClientEndpoints.SET_USER_ATTRIBUTES, {
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.SET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -229,6 +225,24 @@ export class UserManagementClientSdk implements Omit<UserManagementClient, 'getU
     this.logger.debug('Request to set user attributes response body: ' + JSON.stringify(responseBody));
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error setting user attributes');
+    }
+    return responseBody;
+  }
+  
+  public async getUserInfo(accessToken: string) {
+    this.logger.debug('Requesting to get user info...');
+    let response = await fetch(this.baseAPIURL + UserServiceManagementEndpoints.GET_USER_INFO, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      },
+    });
+    const responseBody = await response.json();
+    this.logger.debug('Request to get user info response body: ' + JSON.stringify(responseBody));
+    if (!response.ok) {
+      throw new UserManagementError(responseBody.error, 'Error getting user info');
     }
     return responseBody;
   }

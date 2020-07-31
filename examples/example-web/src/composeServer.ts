@@ -21,11 +21,17 @@ export default async (): Promise<WebServerComposition> => {
   ROOT_CONTAINER.register('appName', {useValue: appName});
   ROOT_CONTAINER.register('serverLogFile', {useValue: 'server.log'});
   ROOT_CONTAINER.register('logLevel', {useValue: 'debug'});
-  ROOT_CONTAINER.register('UserServiceClient', AWSCognitoClient);
+  ROOT_CONTAINER.register('UserManagementClient', AWSCognitoClient);
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/'});
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hello'});
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hi'});
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/example'});
+
+  ROOT_CONTAINER.register('awsAccessKeyId', {useValue: process.env.AWS_USER_POOL_ID});
+  ROOT_CONTAINER.register('awsSecretAccessKey', {useValue: process.env.AWS_ACCESS_KEY_ID});
+  ROOT_CONTAINER.register('awsRegion', {useValue: process.env.AWS_REGION});
+  ROOT_CONTAINER.register('awsUserPoolId', {useValue: process.env.AWS_USER_POOL_ID});
+  ROOT_CONTAINER.register('awsClientId', {useValue: process.env.AWS_CLIENT_ID});
 
   const commonComposition = await composeCommon();
 

@@ -11,7 +11,7 @@ export class AuthTokens {
   }
 }
 
-export enum UserServiceClientEndpoints {
+export enum UserServiceManagementEndpoints {
   AUTHENTICATE = '/api/authenticate',
   START_USER_REGISTRATION = '/api/startUserRegistration',
   RESEND_USER_REGISTRATION = '/api/resendUserRegistrationCode',
@@ -22,6 +22,7 @@ export enum UserServiceClientEndpoints {
   SIGN_OUT_USER = '/api/signOutUser',
   GET_USER_ATTRIBUTES = '/api/getUserAttributes',
   SET_USER_ATTRIBUTES = '/api/setUserAttributes',
+  GET_USER_INFO = '/api/getUserInfo',
 }
 
 export interface UserManagementClient {

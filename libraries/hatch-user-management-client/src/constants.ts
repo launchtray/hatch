@@ -1,1 +1,0 @@
-export const WEB_SERVICES_URL = process.env.WEB_SERVICES_URL;

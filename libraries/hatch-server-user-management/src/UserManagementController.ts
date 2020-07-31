@@ -3,7 +3,7 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import {UserManagementErrorCodes, UserManagementClient, UserServiceClientEndpoints} from '@launchtray/hatch-user-management-client';
+import {UserManagementErrorCodes, UserManagementClient, UserServiceManagementEndpoints} from '@launchtray/hatch-user-management-client';
 import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
@@ -40,10 +40,10 @@ export default class UserManagementController {
     if (customAuthWhitelist.length > 0) {
       this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
     }
-    this.logger.debug('Auth whitelist: ', this.authWhitelist);
+    this.logger.debug('Auth whitelist:', this.authWhitelist);
   }
   
-  @route.post(UserServiceClientEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');
     try {
@@ -87,7 +87,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.START_USER_REGISTRATION, StartUserRegistrationRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.START_USER_REGISTRATION, StartUserRegistrationRequest.apiMetadata)
   public async startUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Starting user registration...');
     try {
@@ -118,7 +118,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.RESEND_USER_REGISTRATION, ResendUserRegistrationCodeRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.RESEND_USER_REGISTRATION, ResendUserRegistrationCodeRequest.apiMetadata)
   public async resendUserRegistrationCode(params: BasicRouteParams) {
     this.logger.debug('Resending user registration code...');
     try {
@@ -149,7 +149,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.CONFIRM_USER_REGISTRATION, ConfirmUserRegistrationRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmUserRegistrationRequest.apiMetadata)
   public async confirmUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Confirming user registration...');
     try {
@@ -184,7 +184,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.START_PASSWORD_RESET, StartPasswordResetRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.START_PASSWORD_RESET, StartPasswordResetRequest.apiMetadata)
   public async startPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Starting user password reset...');
     try {
@@ -215,7 +215,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
   public async confirmPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Confirming user password reset...');
     try {
@@ -250,7 +250,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
     this.logger.debug('Refreshing user authentication tokens...');
@@ -329,7 +329,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
   public async signOutUser(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Signing out user...');
@@ -361,7 +361,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.GET_USER_ATTRIBUTES)
+  @route.post(UserServiceManagementEndpoints.GET_USER_ATTRIBUTES)
   public async getUserAttributes(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Getting user attributes...');
@@ -395,7 +395,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserServiceClientEndpoints.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
+  @route.post(UserServiceManagementEndpoints.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
   public async setUserAttributes(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Setting user attributes...');
@@ -425,6 +425,33 @@ export default class UserManagementController {
           error: err.code,
         });
       }
+    }
+  }
+  
+  @route.post(UserServiceManagementEndpoints.GET_USER_INFO)
+  public async getUserInfo(userContext: UserContext) {
+    const params = userContext.params;
+    this.logger.debug('Getting user info...');
+    try {
+      const {username} = userContext;
+      if (!username) {
+        const errMsg = 'Missing required field, username is required';
+        this.logger.debug(errMsg);
+        params.res.status(HttpStatus.BAD_REQUEST).send({
+          error: errMsg,
+        });
+      } else {
+        const userInfo = await this.userService.getUserInfo(userContext.accessToken);
+        this.logger.debug('User info extracted');
+        params.res.status(HttpStatus.OK).send({
+          userInfo,
+        });
+      }
+    } catch (err) {
+      this.logger.debug('Error getting user info: ' + err);
+      params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+        error: err,
+      });
     }
   }
   

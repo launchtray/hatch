@@ -14,18 +14,14 @@ import {WebServerComposition} from '@launchtray/hatch-web-server';
 import composeCommon from './composeCommon';
 import ExampleController from './controllers/ExampleController';
 
-const appName = process.env.APP_NAME || 'hatch-server';
-
 export default async (): Promise<WebServerComposition> => {
 
-  ROOT_CONTAINER.register('appName', {useValue: appName});
-  ROOT_CONTAINER.register('serverLogFile', {useValue: 'server.log'});
-  ROOT_CONTAINER.register('logLevel', {useValue: 'debug'});
   ROOT_CONTAINER.register('UserManagementClient', AWSCognitoClient);
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/'});
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hello'});
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hi'});
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/example'});
+  ROOT_CONTAINER.register('appName', {useValue: 'example-web'});
 
   ROOT_CONTAINER.register('awsAccessKeyId', {useValue: process.env.AWS_USER_POOL_ID});
   ROOT_CONTAINER.register('awsSecretAccessKey', {useValue: process.env.AWS_ACCESS_KEY_ID});

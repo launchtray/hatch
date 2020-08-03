@@ -15,7 +15,9 @@ import {
   WebCommonComposition,
   runtimeConfig,
 } from '@launchtray/hatch-web';
-import express from 'express';
+import express, {Application} from 'express';
+import fs from 'fs';
+import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {HelmetProvider} from 'react-helmet-async';
@@ -31,7 +33,6 @@ const SSR_TIMEOUT_MS = 5000;
 
 interface ClientRenderRequestContext {
   requestURL: string;
-  clientJS: string;
   composition: WebCommonComposition;
   stateOnly?: boolean;
   prettify: boolean;
@@ -42,9 +43,12 @@ interface ClientRenderRequestContext {
 }
 
 let assets: any;
+let assetsPrefix: string;
 
 const syncLoadAssets = () => {
-  assets = require(process.env.RAZZLE_ASSETS_MANIFEST!);
+  assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './assets.json')) as any);
+  assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
+  __webpack_public_path__ = `${assetsPrefix}/`;
 };
 syncLoadAssets();
 
@@ -105,22 +109,27 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   const css = ReactDOMServer.renderToStaticMarkup(getStyleElement());
 
   const {helmet} = helmetContext;
+  const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
+  const faviconPath = assetsPrefix + '/favicon.ico';
 
   return (`<!doctype html>
     <html lang="" ${helmet.htmlAttributes.toString()}>
     <head>
+      <script>
+        window.__STATIC_ASSETS_BASE_URL__ = '${assetsPrefix}/';
+      </script>
       ${helmet.title.toString()}
       ${helmet.meta.toString()}
       ${helmet.link.toString()}
+      <link rel="shortcut icon" href="${faviconPath}">
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
-      ${assets.client.css ? `<link rel="stylesheet" href="${assets.client.css}">` : ''}
-      ${
-        process.env.NODE_ENV === 'production'
-          ? `<script src="${requestContext.clientJS}" defer></script>`
-          : `<script src="${requestContext.clientJS}" defer crossorigin></script>`
+      ${assets.client.css ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${crossOrigin
+        ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
+        : `<script src="${assetsPrefix + assets.client.js}" defer></script>`
       }
     </head>
     <body ${helmet.bodyAttributes.toString()}>
@@ -134,36 +143,48 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   );
 };
 
+const addRedirect = (app: Application, path: string) => {
+  app.get(path, (req, res) => {
+    res.redirect(assetsPrefix + req.path);
+  });
+};
+
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
   createServer(options, (server, app, composition, logger, errorReporter) => {
-    app
-      .disable('x-powered-by')
-      .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
-      .get('/*', (req, res, next) => {
-        const stateOnly = req.query.state !== undefined;
-        const prettify = req.query.state === 'pretty';
-        if (stateOnly) {
-          // Note: do not remove this without also removing the 'unsafe' option to serialization of state to JSON
-          // in renderClient, as user input could otherwise be serialized as HTML.
-          res.setHeader('Content-Type', 'application/json');
-        }
-        const requestContext: ClientRenderRequestContext = {
-          clientJS: assets.client.js,
-          composition,
-          requestURL: req.url,
-          stateOnly,
-          prettify,
-          logger,
-          errorReporter,
-          cookie: req.headers.cookie,
-          authHeader: req.headers.authorization,
-        };
-        renderClient(requestContext).then((body) => {
-          res.status(200).send(body);
-        }).catch((err: Error) => {
-          next?.(err);
-        });
+    app.disable('x-powered-by');
+    if (assetsPrefix.length === 0) {
+      const publicPath = process.env.NODE_ENV === 'development' ? '../public' : '../build/public';
+      const publicDir = path.resolve(__dirname, publicPath);
+      app.use(express.static(publicDir));
+    } else {
+      addRedirect(app, '/favicon.ico');
+      addRedirect(app, '/robots.txt');
+      addRedirect(app, '/static/*');
+    }
+    app.get('/*', (req, res, next) => {
+      const stateOnly = req.query.state !== undefined;
+      const prettify = req.query.state === 'pretty';
+      if (stateOnly) {
+        // Note: do not remove this without also removing the 'unsafe' option to serialization of state to JSON
+        // in renderClient, as user input could otherwise be serialized as HTML.
+        res.setHeader('Content-Type', 'application/json');
+      }
+      const requestContext: ClientRenderRequestContext = {
+        composition,
+        requestURL: req.url,
+        stateOnly,
+        prettify,
+        logger,
+        errorReporter,
+        cookie: req.headers.cookie,
+        authHeader: req.headers.authorization,
+      };
+      renderClient(requestContext).then((body) => {
+        res.status(200).send(body);
+      }).catch((err: Error) => {
+        next?.(err);
       });
+    });
   });
 };

@@ -37,11 +37,10 @@ const requestLogger = (tag: string, serverLogFile: string) => {
 
 @injectable()
 export default class RequestLogger implements ServerMiddleware {
-  constructor(@inject('appName') private readonly appName: string,
-              @inject('serverLogFile') private readonly serverLogFile: string) {
-    this.appName = appName;
-    this.serverLogFile = serverLogFile;
-  }
+  constructor(
+    @inject('appName') private readonly appName: string,
+    @inject('serverLogFile') private readonly serverLogFile: string
+  ) {}
 
   public async register(app: Application) {
     app.use(requestLogger(this.appName, this.serverLogFile));

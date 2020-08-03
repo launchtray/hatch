@@ -1,3 +1,4 @@
+__webpack_public_path__ = (window as any).__STATIC_ASSETS_BASE_URL__;
 import {
   ConsoleLogger,
   initializeInjection,

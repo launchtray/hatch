@@ -1,6 +1,6 @@
-import {Button, navActions} from '@launchtray/hatch-web';
+import {Button, Image, navActions} from '@launchtray/hatch-web';
 import React from 'react';
-import {Image, View} from 'react-native';
+import {View} from 'react-native';
 import {connect} from 'react-redux';
 
 interface PropTypes {
@@ -14,8 +14,6 @@ class Home extends React.Component<PropTypes> {
         <Image
           style={{height: 100, width: 68, alignSelf: 'center'}}
           source={require('../assets/hatch_eyes.png')}
-          // See https://github.com/necolas/react-native-web/issues/543#issuecomment-310844971
-          defaultSource={require('../assets/hatch_eyes.png')}
         />
         <Button testID={'helloButton'} onPressRoute={'/hello?a=1#b'} title={'Hello!'}/>
         <Button testID={'helloButton2'} onPress={this.props.onButtonPress} title={'Hello2!'}/>

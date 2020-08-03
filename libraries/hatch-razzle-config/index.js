@@ -5,7 +5,7 @@ const path = require('path');
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-const patchWebpackConfig = (config, isServer) => {
+const patchWebpackConfig = (config, isServer, webpack) => {
   if (!isServer) {
     if (config.node == null) {
       config.node = {};
@@ -64,6 +64,28 @@ const patchWebpackConfig = (config, isServer) => {
     maxEntrypointSize: 10000000,
   };
 
+  if (webpack) {
+    const definePluginIndex = config.plugins.findIndex(
+      plugin => plugin instanceof webpack.DefinePlugin && plugin.definitions,
+    );
+    if (typeof definePluginIndex !== 'undefined') {
+      const razzleDefinitions = config.plugins[definePluginIndex].definitions;
+      const hatchDefinitions = {};
+      const keysToAllowAtRuntime = [
+        'PORT',
+        'HOSTNAME',
+      ].map(key => `process.env.${key}`);
+      Object.keys(razzleDefinitions).forEach((key) => {
+        if (keysToAllowAtRuntime.includes(key)) {
+          const updatedKey = key.replace('process.env.', 'process.env.HATCH_BUILDTIME_');
+          hatchDefinitions[updatedKey] = razzleDefinitions[key];
+        } else {
+          hatchDefinitions[key] = razzleDefinitions[key];
+        }
+      });
+      config.plugins[definePluginIndex] = new webpack.DefinePlugin(hatchDefinitions);
+    }
+  }
   return config;
 };
 
@@ -71,6 +93,6 @@ module.exports = {
   plugins: ['typescript'],
   patchWebpackConfig,
   modify(config, {target, dev}, webpack) {
-    return patchWebpackConfig(config, target !== 'web');
+    return patchWebpackConfig(config, target !== 'web', webpack);
   },
 };

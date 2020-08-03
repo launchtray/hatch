@@ -1,9 +1,14 @@
-import {controller, route} from '@launchtray/hatch-server';
+import {controller, requestMatchesRouteList, route} from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
-import {inject, injectAll, Logger} from '@launchtray/hatch-util';
+import {inject, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
-import {UserManagementErrorCodes, UserManagementClient, UserManagementEndpoints} from '@launchtray/hatch-user-management-client';
+import {
+  UserManager,
+  UserManagementErrorCodes,
+  UserManagementClient,
+  UserManagementEndpoints
+} from '@launchtray/hatch-user-management-client';
 import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
 import {
@@ -18,29 +23,16 @@ import {
   SetUserAttributesRequest,
 } from './UserManagementRequests';
 import UserContext from './UserContext';
-import * as HttpStatus from 'http-status-codes'
-
-export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
+import * as HttpStatus from 'http-status-codes';
 
 @controller()
 export default class UserManagementController {
-  
-  private readonly authWhitelist = [
-    // default whitelist for swagger
-    '/favicon.ico',
-    '/api',
-    '/api.json',
-  ];
-  
+
   constructor(
-    @inject('UserManagementClient') private readonly userService: UserManagementClient,
+    @inject('UserManagementClient') private readonly userManagementClient: UserManagementClient,
+    @inject('UserManager') private readonly userManager: UserManager,
     @inject('Logger') private readonly logger: Logger,
-    @injectAll(AUTH_WHITELIST_KEY) customAuthWhitelist: string[],
   ) {
-    if (customAuthWhitelist.length > 0) {
-      this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
-    }
-    this.logger.debug('Auth whitelist:', this.authWhitelist);
   }
   
   @route.post(UserManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
@@ -55,7 +47,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        const authTokens = await this.userService.authenticate(username, password);
+        const authTokens = await this.userManagementClient.authenticate(username, password);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
         this.logger.debug('User authenticated and cookie set');
         params.res.status(HttpStatus.OK).send(authTokens);
@@ -99,7 +91,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.startUserRegistration(username, password, userAttributes);
+        await this.userManagementClient.startUserRegistration(username, password, userAttributes);
         this.logger.debug('User registration started');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -130,7 +122,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.resendUserRegistrationCode(username);
+        await this.userManagementClient.resendUserRegistrationCode(username);
         this.logger.debug('User registration code resent');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -161,7 +153,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.confirmUserRegistration(username,confirmationCode);
+        await this.userManagementClient.confirmUserRegistration(username,confirmationCode);
         this.logger.debug('User registration confirmed');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -196,7 +188,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.startPasswordReset(username);
+        await this.userManagementClient.startPasswordReset(username);
         this.logger.debug('User password reset started');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -215,7 +207,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.CONFIRM_PASSWORD_RESET, ConfirmPasswordResetRequest.apiMetadata)
   public async confirmPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Confirming user password reset...');
     try {
@@ -227,14 +219,17 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.confirmPasswordReset(username, confirmationCode, password);
+        await this.userManagementClient.confirmPasswordReset(username, confirmationCode, password);
         this.logger.debug('User password reset confirmed');
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error confirming resetting user password: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      if (
+        err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
+        || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED
+      ) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
         });
@@ -258,11 +253,11 @@ export default class UserManagementController {
       await userInfoRequest.getUserInfo();
     } catch (err) {
       if (err instanceof TokenExpiredError) {
-        this.logger.debug('Token signature verified but expired at ', err.expiredAt)
+        this.logger.debug('Token signature verified but expired at', err.expiredAt)
       } else {
         this.logger.error('Error refreshing user authentication tokens: Invalid token');
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: 'Invalid token',
+          error: UserManagementErrorCodes.UNAUTHORIZED,
         });
         return;
       }
@@ -276,7 +271,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        const authTokens = await this.userService.refreshAuthentication(refreshToken);
+        const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
+        const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
         this.logger.debug('User authentication tokens refreshed and cookie set');
         params.res.status(HttpStatus.OK).send(authTokens);
@@ -284,7 +280,10 @@ export default class UserManagementController {
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error refreshing user authentication tokens: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      if (
+        err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
+        || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED
+      ) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
         });
@@ -304,10 +303,11 @@ export default class UserManagementController {
   @route.all('*')
   public async verifyUser(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
-    this.logger.debug('Validating token for url: ', params.req.url);
-    
-    if (this.authWhitelist && this.authWhitelist.includes(params.req.url)) {
-      this.logger.debug('Url whitelisted: ', (params.req.url));
+    let whitelisted = requestMatchesRouteList(params.req, userInfoRequest.authWhitelist);
+    let blacklisted = requestMatchesRouteList(params.req, userInfoRequest.authBlacklist);
+
+    this.logger.debug('Validating token', {url: params.req.url, whitelisted, blacklisted});
+    if (whitelisted && !blacklisted) {
       return params.next();
     }
     
@@ -319,45 +319,52 @@ export default class UserManagementController {
       } else {
         const errMsg = 'User not authenticated';
         this.logger.debug(errMsg);
-        params.res.sendStatus(HttpStatus.UNAUTHORIZED);
+        params.res.status(HttpStatus.UNAUTHORIZED).send({
+          error: UserManagementErrorCodes.UNAUTHORIZED,
+        });
       }
     } catch (err) {
-      this.logger.error('Error authenticating user: ', err);
-      params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-        error: err.message,
+      this.logger.info('Failed to authenticate user:', err.message);
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
       });
     }
+  }
+
+  private async extractUserIds(userContext: UserContext): Promise<{clientUserId: string, queriedUserId: string}> {
+    const params = userContext.params;
+    const clientUserId = userContext.userId;
+    let queriedUserId = params.req.body.userId;
+    const queriedUsername = params.req.body.username;
+
+    if (queriedUserId == null) {
+      if (queriedUsername != null) {
+        if (this.userManagementClient.getUserId != null) {
+          queriedUserId = await this.userManagementClient.getUserId(queriedUsername, userContext.accessToken);
+        } else {
+          throw new Error('User ID lookup is not supported');
+        }
+      } else {
+        queriedUserId = clientUserId;
+      }
+    }
+    return {clientUserId, queriedUserId};
   }
   
   @route.post(UserManagementEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
   public async signOutUser(userContext: UserContext) {
     const params = userContext.params;
-    this.logger.debug('Signing out user...');
     try {
-      const {username} = userContext;
-      if (!username || username.length === 0) {
-        const errMsg = 'Missing required field, username is required';
-        this.logger.debug(errMsg);
-        params.res.status(HttpStatus.BAD_REQUEST).send({
-          error: errMsg,
-        });
-      } else {
-        await this.userService.signOutUser(username);
-        this.logger.debug('User signed out');
-        params.res.sendStatus(HttpStatus.OK);
-      }
+      const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
+      await this.userManager.signOutUser(clientUserId, queriedUserId, userContext.accessToken);
+      this.logger.debug('User signed out');
+      params.res.sendStatus(HttpStatus.OK);
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
-      this.logger.error('Error signing out user: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
-        });
-      } else {
-        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
-        });
-      }
+      this.logger.info('Failed to sign out user: ' + errorMessage);
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
+      });
     }
   }
   
@@ -366,32 +373,18 @@ export default class UserManagementController {
     const params = userContext.params;
     this.logger.debug('Getting user attributes...');
     try {
-      const {username} = userContext;
-      if (!username) {
-        const errMsg = 'Missing required field, username is required';
-        this.logger.debug(errMsg);
-        params.res.status(HttpStatus.BAD_REQUEST).send({
-          error: errMsg,
-        });
-      } else {
-        const userAttributes = await this.userService.getUserAttributes(username);
-        this.logger.debug('User attributes fetched: ' + userAttributes);
-        params.res.status(HttpStatus.OK).send({
-          userAttributes,
-        });
-      }
+      const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
+      const attributes = await this.userManager.getUserAttributes(clientUserId, queriedUserId, userContext.accessToken);
+      this.logger.debug('User attributes fetched:', attributes);
+      params.res.status(HttpStatus.OK).send({
+        userAttributes: attributes,
+      });
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
-      this.logger.error('Error getting user attributes: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
-        });
-      } else {
-        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
-        });
-      }
+      this.logger.info('Failed to read user attributes: ' + errorMessage);
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
+      });
     }
   }
   
@@ -400,59 +393,66 @@ export default class UserManagementController {
     const params = userContext.params;
     this.logger.debug('Setting user attributes...');
     try {
-      const {username} = userContext;
+      const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
       const {userAttributes} = params.req.body;
-      if (!username || !userAttributes) {
-        const errMsg = 'Missing required field, username and userAttributes are required';
+      if (!userAttributes) {
+        const errMsg = 'Missing required field: userAttributes is required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
           error: errMsg,
         });
       } else {
-        await this.userService.setUserAttributes(username, userAttributes);
-        this.logger.debug('User attributes set');
+        const attributes = await this.userManager.setUserAttributes(clientUserId, queriedUserId,
+          userAttributes, userContext.accessToken);
+        this.logger.debug('User attributes set:', attributes);
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
-      this.logger.error('Error setting user attributes: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
-        params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
-        });
-      } else {
-        params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
-        });
-      }
-    }
-  }
-  
-  @route.post(UserManagementEndpoints.GET_USER_INFO)
-  public async getUserInfo(userContext: UserContext) {
-    const params = userContext.params;
-    this.logger.debug('Getting user info...');
-    try {
-      const {username} = userContext;
-      if (!username) {
-        const errMsg = 'Missing required field, username is required';
-        this.logger.debug(errMsg);
-        params.res.status(HttpStatus.BAD_REQUEST).send({
-          error: errMsg,
-        });
-      } else {
-        const userInfo = await this.userService.getUserInfo(userContext.accessToken);
-        this.logger.debug('User info extracted');
-        params.res.status(HttpStatus.OK).send({
-          userInfo,
-        });
-      }
-    } catch (err) {
-      this.logger.debug('Error getting user info: ' + err);
-      params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-        error: err,
+      this.logger.info('Failed to set user attributes: ' + errorMessage);
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
       });
     }
   }
-  
+
+  @route.get(UserManagementEndpoints.GET_USER_INFO)
+  public async getUserInfo(userContext: UserContext) {
+    this.logger.debug('Getting user info...');
+    userContext.params.res.status(HttpStatus.OK).send({
+      userInfo: {
+        userId: userContext.userId,
+        username: userContext.username,
+        accessToken: userContext.accessToken,
+      }
+    });
+  }
+
+  @route.post(UserManagementEndpoints.GET_USER_ID)
+  public async getUserId(userContext: UserContext) {
+    const params = userContext.params;
+    this.logger.debug('Getting user ID...');
+    try {
+      const clientUserId = userContext.userId;
+      const queriedUsername = params.req.body.username;
+      if (queriedUsername != null) {
+        const userId = await this.userManager.getUserId(clientUserId, queriedUsername, userContext.accessToken);
+        this.logger.debug('User ID fetched:', userId);
+        params.res.status(HttpStatus.OK).send({
+          userId,
+        });
+      } else {
+        this.logger.debug('Returning own user ID:', clientUserId);
+        params.res.status(HttpStatus.OK).send({
+          userId: clientUserId,
+        });
+      }
+    } catch (err) {
+      const errorMessage = err.code ? err.code + ' - ' + err.message : err;
+      this.logger.info('Failed to read user ID: ' + errorMessage);
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
+      });
+    }
+  }
 }

@@ -1,13 +1,6 @@
 # Change Log - @launchtray/hatch-server-user-management
 
-This log was last generated on Fri, 31 Jul 2020 22:03:01 GMT and should not be manually modified.
-
-## 1.0.0
-Fri, 31 Jul 2020 22:03:01 GMT
-
-### Breaking changes
-
-- Updated to use user management client library
+This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
 
 ## 0.1.3
 Wed, 22 Jul 2020 06:33:22 GMT

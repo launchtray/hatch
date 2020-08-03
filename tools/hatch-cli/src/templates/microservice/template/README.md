@@ -96,3 +96,30 @@ Utilities should live in the [utilities](src/utilities) directory (see more info
     ```
     npm test
     ```
+   
+## Environment variables
+The following environment variables can be set to impact the application:
+
+`PORT`
+- If set, the application will be served via the port specified. Otherwise, it will default to 3000.
+- This can be set at build time or at run time. The run-time value will override the build-time value.
+
+`STATIC_ASSETS_BASE_URL`
+- If set, the contents of the public directory will not be served, with the expectation that they will be separately served at `$STATIC_ASSETS_BASE_URL` (e.g. via a CDN)
+- If unset, the contents of the public directory (`$PROJECT_ROOT/public` for development `$PROJECT_ROOT/build/public` for production) will be served at `/`.
+
+`STATIC_ASSETS_CROSS_ORIGIN`
+- If set, the static JS bundle will be served with a `crossorigin` attribute.
+
+`LOG_FILE`
+- Specifies the file name that the application should log to on the server.
+- The application can override how the log file is determined by injecting a filename using the `serverLogFile` token. If this is done, `LOG_FILE` will only be obeyed if the application makes use of it via the value injected as `serverLogFile`.
+- If `serverLogFile` is not registered by the application, `LOG_FILE` will be used if set. Otherwise, `{app name}.log` will be used.
+
+`LOG_LEVEL`
+- Specifies the log level the application (via winston) should use for logging.
+- The application can override how the logging level is determined by injecting a filename using the `logLevel` token. If this is done, `LOG_LEVEL` will only be obeyed if the application makes use of it via the value injected as `logLevel`.
+- If `logLevel` is not registered by the application, `LOG_LEVEL` will be used if it set. Otherwise, `debug` will be used for development and `info` will be used for production.
+
+`LOG_TO_CONSOLE`
+- If set, production builds will log to stdout rather than the log file. 

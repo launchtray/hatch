@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web",
+      "comment": "Initial user management release, improvement to environment variables and hosting of static content",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web",
+  "email": "kiltyj@gmail.com"
+}

@@ -1,13 +1,22 @@
-import {CognitoIdentityServiceProvider, config} from 'aws-sdk';
+import {CognitoIdentityServiceProvider} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
-import {UserManagementClient, UserInfo, UserManagementError, UserManagementErrorCodes} from '@launchtray/hatch-user-management-client';
+import {
+  UserAttributes,
+  UserManagementClient,
+  UserInfo,
+  UserManagementError,
+  UserManagementErrorCodes
+} from '@launchtray/hatch-user-management-client';
 import {AWSError} from 'aws-sdk';
 
 const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
+  if (awsError.code == null) {
+    return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, awsError.message);
+  }
   const message = awsError.code + ' - ' + awsError.message;
   switch (awsError.code) {
     case 'CodeMismatchException':
@@ -43,18 +52,19 @@ export default class AWSCognitoClient implements UserManagementClient {
   private pemCerts: {} | undefined;
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
   
-  constructor(@inject('Logger') private readonly logger: Logger, 
+  constructor(@inject('Logger') private readonly logger: Logger,
               @inject('awsAccessKeyId') private readonly awsAccessKeyId: string,
               @inject('awsSecretAccessKey') private readonly awsSecretAccessKey: string,
               @inject('awsRegion') private readonly awsRegion: string,
               @inject('awsUserPoolId') private readonly awsUserPoolId: string,
               @inject('awsClientId') private readonly awsClientId: string) {
     this.iss = 'https://cognito-idp.' + awsRegion + '.amazonaws.com/' + this.awsUserPoolId;
-    config.update({
+    this.cognitoProvider.config.update({
       accessKeyId: awsAccessKeyId,
       secretAccessKey: awsSecretAccessKey,
       region: awsRegion,
     });
+    logger.debug('Created AWS cognito client');
   }
   
   public async authenticate(username: string, password: string) {
@@ -77,7 +87,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
   
-  public async startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}) {
+  public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes) {
     let cognitoUserAttributes: AttributeListType = [];
     if (userAttributes) {
       Object.keys(userAttributes).forEach((key) => {
@@ -176,52 +186,58 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
   
-  public async getUserAttributesById(subjectId: string) {
-    const filter = 'sub = "' + subjectId + '"';
+  public async getUserAttributes(userId: string) {
     try {
       const response = await this.cognitoProvider.listUsers({
-        Filter: filter,
-        UserPoolId: this.awsUserPoolId
-      }).promise();
-      this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
-      const user = response.Users && response.Users[0];
-      const userAttrsResp: {[key: string]: any} = {};
-      if (user && user.Attributes) {
-        user.Attributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
-      }
-      return userAttrsResp;
-    } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
-    }
-  }
-  
-  public async getUserAttributes(username: string) {
-    try {
-      const response = await this.cognitoProvider.adminGetUser({
         UserPoolId: this.awsUserPoolId,
-        Username: username,
+        Limit: 1,
+        Filter: 'sub = "' + userId + '"',
       }).promise();
       this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
       const userAttrsResp: {[key: string]: any} = {};
-      if (response && response.UserAttributes) {
-        response.UserAttributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+      if (response && response.Users && response.Users.length > 0 && response.Users[0].Attributes) {
+        response.Users[0].Attributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+      } else {
+        throw new Error('User not found: ' + userId);
       }
       return userAttrsResp;
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
+
+  private async getUserAttributesByUsername(username: string): Promise<UserAttributes> {
+    this.logger.debug('Getting user by username:', username);
+    const response = await this.cognitoProvider.adminGetUser({
+      UserPoolId: this.awsUserPoolId,
+      Username: username,
+    }).promise();
+    this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
+    const userAttrsResp: {[key: string]: any} = {};
+    if (response && response.UserAttributes) {
+      response.UserAttributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+    } else {
+      throw new Error('User not found: ' + username);
+    }
+    return userAttrsResp;
+  }
+
+  public async getUserId(username: string) {
+    return (await this.getUserAttributesByUsername(username))!.sub;
+  }
   
-  public async setUserAttributes(username: string, userAttributes: {[key: string]: any}) {
+  public async setUserAttributes(userId: string, userAttributes: UserAttributes) {
     const userAttributesList: AttributeListType = [];
-    Object.keys(userAttributes).map((key) => {
+    const attributes = userAttributes || {};
+    Object.keys(attributes).map((key) => {
       userAttributesList.push({
         Name: key,
-        Value: userAttributes[key]
+        Value: attributes[key]
       });
       return userAttributesList;
     });
     try {
+      const username = (await this.getUserAttributes(userId)).email;
       await this.cognitoProvider.adminUpdateUserAttributes({
         UserPoolId: this.awsUserPoolId,
         Username: username,

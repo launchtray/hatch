@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-razzle-config",
+      "comment": "Improvement to environment variables and hosting of static content",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-razzle-config",
+  "email": "kiltyj@gmail.com"
+}

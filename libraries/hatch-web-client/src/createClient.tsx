@@ -1,3 +1,7 @@
+const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
+if (staticAssetsBaseURL !== '/') {
+  __webpack_public_path__ = staticAssetsBaseURL;
+}
 import {
   ConsoleLogger,
   initializeInjection,

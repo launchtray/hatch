@@ -4,7 +4,7 @@ import {
   ServerMiddleware,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
-import {UserContext} from '@launchtray/hatch-server-user-management';
+import {AUTH_BLACKLIST_KEY, AUTH_WHITELIST_KEY, UserContext} from '@launchtray/hatch-server-user-management';
 import {containerSingleton, delay, initializer, inject, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import WebSocket from 'ws';
@@ -42,7 +42,7 @@ export default class ExampleController implements ServerMiddleware {
     this.testVar = 'A';
   }
 
-  @route.all('/api/*')
+  @route.all('/api/example*', {tokens: [AUTH_WHITELIST_KEY]})
   public catchallEndpoint(responder: CustomResponder) {
     this.logger.info('Catch-all endpoint called');
     responder.next();
@@ -52,6 +52,12 @@ export default class ExampleController implements ServerMiddleware {
   public exampleEndpoint(responder: CustomResponder) {
     this.logger.info('Example endpoint called');
     responder.ok('Example GET');
+  }
+
+  @route.get('/api/example/blacklisted', {tokens: [AUTH_BLACKLIST_KEY]})
+  public exampleBlacklistedEndpoint(responder: CustomResponder) {
+    this.logger.info('Blacklisted endpoint called');
+    responder.ok('Example blacklisted GET');
   }
 
   @route.get('/api/whoami')
@@ -66,7 +72,7 @@ export default class ExampleController implements ServerMiddleware {
     responder.ok(this.testVar);
   }
 
-  @route.get('/api/greeting', {
+  @route.get('/api/example/greeting', {
     parameters: {
       name: {
         description: 'Example greeting endpoint using a query param',
@@ -82,7 +88,7 @@ export default class ExampleController implements ServerMiddleware {
     }
   }
 
-  @route.post('/api/processBody', {
+  @route.post('/api/example/processBody', {
     requestBody: {
       description: 'Example request body',
       content: { // Note: the following below could be defined as a constant for reuse, etc.
@@ -117,12 +123,12 @@ export default class ExampleController implements ServerMiddleware {
     }
   }
 
-  @route.post('/api/processBodyWithoutSpec')
+  @route.post('/api/example/processBodyWithoutSpec')
   public processBodyWithoutSpec(responder: CustomResponder) {
     this.processBody(responder);
   }
 
-  @route.get('/api/person/:id', {
+  @route.get('/api/example/person/:id', {
     parameters: {
       id: {
         description: 'The person\'s identifier',
@@ -133,7 +139,7 @@ export default class ExampleController implements ServerMiddleware {
     params.res.status(200).send('Person: ' + params.req.params.id);
   }
 
-  @route.get('/api/error')
+  @route.get('/api/example/error')
   public async errorEndpoint(params: BasicRouteParams) {
     await delay(1000);
     throw new Error('Test error');

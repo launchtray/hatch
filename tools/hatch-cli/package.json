@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "@launchtray/hatch-util": "^0.1.8",

@@ -3,6 +3,7 @@ import {createErrorReporterMiddleware} from './createErrorReporterMiddleware';
 import defineAction, {resetDefinedActions} from './defineAction';
 import defineReducer from './defineReducer';
 import effects from './effects';
+import Image from './Image';
 import Link from './Link';
 import NavProvider, {createNavMiddleware, createNavReducers, Location, navActions} from './NavProvider';
 import {
@@ -36,6 +37,7 @@ export {
   resolveWebAppManagers,
   Button,
   Link,
+  Image,
   createErrorReporterMiddleware,
   runtimeConfig,
   createReactNativeElement,

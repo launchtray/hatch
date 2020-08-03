@@ -1,4 +1,5 @@
 import {
+  DependencyContainer,
   ErrorReporter,
   initializeInjection,
   InjectionInitializationContext,
@@ -80,12 +81,21 @@ const customLogFormat = (tag: string) => {
 };
 
 const createServerLogger = async (errorReporter: ErrorReporter): Promise<Logger> => {
-  const rootContainer = ROOT_CONTAINER;
+  const rootContainer: DependencyContainer = ROOT_CONTAINER;
   const logger = createLogger({});
   const appName = await rootContainer.resolve<string>('appName');
+  const defaultServerLogFile = process.env.LOG_FILE ?? (appName + '.log');
+  if (!rootContainer.isRegistered('serverLogFile')) {
+    rootContainer.register('serverLogFile', {useValue: defaultServerLogFile});
+  }
   const serverLogFile = await rootContainer.resolve<string>('serverLogFile');
+  const defaultLogLevel = process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development' ? 'debug' : 'info';
+  if (!rootContainer.isRegistered('logLevel')) {
+    rootContainer.register('logLevel', {useValue: defaultLogLevel});
+  }
   const logLevel = await rootContainer.resolve<string>('logLevel');
-  if (process.env.NODE_ENV !== 'production') {
+
+  if (process.env.NODE_ENV !== 'production' || process.env.LOG_TO_CONSOLE === 'true') {
     logger.add(new transports.Console({
       level: logLevel,
       format: format.combine(
@@ -160,10 +170,10 @@ const createServerAsync = async <T extends ServerComposition>(
   const serverMiddlewareList = await resolveServerMiddleware(rootContainer, logger);
   const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
   for (const serverMiddleware of serverMiddlewareList) {
-    await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);
     }
+    await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);
   }
 
   const apiSpec = apiSpecBuilder.build();
@@ -179,8 +189,11 @@ const createServerAsync = async <T extends ServerComposition>(
   serverExtension?.(runningServer, runningServerApp, composition, logger, errorReporter);
 
   if (newRunningServer) {
+    const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
+    const port = (portString && parseInt(portString)) || 3000;
+    const hostname = process.env.HOSTNAME || process.env.HATCH_BUILDTIME_HOSTNAME;
     runningServer
-      .listen(process.env.PORT || 3000)
+      .listen(port, hostname)
       .on('error', (err: Error) => {
         console.error(err);
       });

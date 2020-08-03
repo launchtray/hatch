@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-user-management-client",
+      "comment": "Initial user management release, improvement to environment variables and hosting of static content",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-user-management-client",
+  "email": "kiltyj@gmail.com"
+}

@@ -4,7 +4,10 @@ import route, {
   assignRootContainerToController,
   controller,
   hasControllerRoutes,
-  middlewareFor
+  HTTPMethod,
+  middlewareFor,
+  requestMatchesRouteList,
+  Route,
 } from './server-routing';
 import {
   ServerComposer,
@@ -27,8 +30,11 @@ export {
   ServerMiddleware,
   ServerMiddlewareClass,
   middlewareFor,
+  requestMatchesRouteList,
+  Route,
   assignRootContainerToController,
   hasControllerRoutes,
+  HTTPMethod,
   registerServerMiddleware,
   resolveServerMiddleware,
   ServerComposer,

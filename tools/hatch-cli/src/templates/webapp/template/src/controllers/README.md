@@ -70,6 +70,48 @@ public exampleEndpoint(responder: HTTPResponder) {
   responder.ok('Example GET');
 }
 ```
+#### Route metadata
+Metadata about a route can be provided via a second parameter to the route. 
+
+##### OpenAPI definitions
+Route metadata is primarily used for providing OpenAPI documentation and a Swagger interface. For example, parameters
+for a route can be documented:
+```typescript
+  @route.get('/api/example/person/:id', {
+    parameters: {
+      id: {
+        description: 'The person\'s identifier',
+      },
+    },
+  })
+  public personEndpoint(params: BasicRouteParams) {
+    params.res.status(200).send('Person: ' + params.req.params.id);
+  }
+```
+
+See `APIMetadataParameters` in `hatch-server` for what OpenAPI metadata can be defined for a route.
+
+##### Route tokens
+Routes can be marked with "tokens" so that metadata about them can be retrieved at runtime via the dependency injection 
+system. For example, marking a route with the `AUTH_WHITELIST_KEY` token from `hatch-server-user-management` will result
+in the route being whitelisted for user authentication:
+
+```typescript
+import {AUTH_WHITELIST_KEY} from '@launchtray/hatch-server-user-management';
+
+...
+
+  @route.get('/api/authWhitelistExample', {tokens: [AUTH_WHITELIST_KEY]})
+  public exampleEndpoint(responder: HTTPResponder) {
+    this.logger.info('Example whitelisted endpoint called');
+    responder.ok('Example GET');
+  }
+
+...
+```
+
+Note that tokens are not registered until after the controllers are created. As such, resolving routes by their tokens
+should typically be done at a point well-past application initialization, e.g. via objects injected during requests. 
 
 ### WebSockets
 In addition to HTTP method routes, WebSocket server routes can be defined. These routes make use of the 

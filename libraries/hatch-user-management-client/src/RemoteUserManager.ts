@@ -5,14 +5,14 @@ import {UserManagementClientSdk} from './UserManagementClientSdk';
 
 @injectable()
 export default class RemoteUserManager implements UserManager {
-  constructor(private readonly userService: UserManagementClientSdk) {}
+  constructor(private readonly userManagementClient: UserManagementClientSdk) {}
 
   async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string): Promise<UserAttributes> {
-    return await this.userService.getUserAttributes(queriedUserId, accessToken);
+    return await this.userManagementClient.getUserAttributes(queriedUserId, accessToken);
   }
 
   async getUserId(clientUserId: string, queriedUsername: string, accessToken: string): Promise<string> {
-    return await this.userService.getUserId(queriedUsername, accessToken);
+    return await this.userManagementClient.getUserId(queriedUsername, accessToken);
   }
 
   async setUserAttributes(
@@ -21,10 +21,10 @@ export default class RemoteUserManager implements UserManager {
     attributes: UserAttributes,
     accessToken: string
   ): Promise<UserAttributes> {
-    return await this.userService.setUserAttributes(queriedUserId, attributes, accessToken);
+    return await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken);
   }
 
   async signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string) {
-    return await this.userService.signOutUser(userIdToSignOut, accessToken);
+    return await this.userManagementClient.signOutUser(userIdToSignOut, accessToken);
   }
 }

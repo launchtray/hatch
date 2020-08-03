@@ -29,7 +29,7 @@ import * as HttpStatus from 'http-status-codes';
 export default class UserManagementController {
 
   constructor(
-    @inject('UserManagementClient') private readonly userService: UserManagementClient,
+    @inject('UserManagementClient') private readonly userManagementClient: UserManagementClient,
     @inject('UserManager') private readonly userManager: UserManager,
     @inject('Logger') private readonly logger: Logger,
   ) {
@@ -47,7 +47,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        const authTokens = await this.userService.authenticate(username, password);
+        const authTokens = await this.userManagementClient.authenticate(username, password);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
         this.logger.debug('User authenticated and cookie set');
         params.res.status(HttpStatus.OK).send(authTokens);
@@ -91,7 +91,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.startUserRegistration(username, password, userAttributes);
+        await this.userManagementClient.startUserRegistration(username, password, userAttributes);
         this.logger.debug('User registration started');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -122,7 +122,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.resendUserRegistrationCode(username);
+        await this.userManagementClient.resendUserRegistrationCode(username);
         this.logger.debug('User registration code resent');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -153,7 +153,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.confirmUserRegistration(username,confirmationCode);
+        await this.userManagementClient.confirmUserRegistration(username,confirmationCode);
         this.logger.debug('User registration confirmed');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -188,7 +188,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.startPasswordReset(username);
+        await this.userManagementClient.startPasswordReset(username);
         this.logger.debug('User password reset started');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -219,14 +219,17 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userService.confirmPasswordReset(username, confirmationCode, password);
+        await this.userManagementClient.confirmPasswordReset(username, confirmationCode, password);
         this.logger.debug('User password reset confirmed');
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error confirming resetting user password: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      if (
+        err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
+        || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED
+      ) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
         });
@@ -269,7 +272,7 @@ export default class UserManagementController {
         });
       } else {
         const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
-        const authTokens = await this.userService.refreshAuthentication(refreshToken, accessToken);
+        const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken);
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
         this.logger.debug('User authentication tokens refreshed and cookie set');
         params.res.status(HttpStatus.OK).send(authTokens);
@@ -277,7 +280,10 @@ export default class UserManagementController {
     } catch (err) {
       const errorMessage = err.code ? err.code + ' - ' + err.message : err;
       this.logger.error('Error refreshing user authentication tokens: ' + errorMessage);
-      if (err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      if (
+        err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
+        || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED
+      ) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
           error: err.code,
         });
@@ -333,8 +339,8 @@ export default class UserManagementController {
 
     if (queriedUserId == null) {
       if (queriedUsername != null) {
-        if (this.userService.getUserId != null) {
-          queriedUserId = await this.userService.getUserId(queriedUsername, userContext.accessToken);
+        if (this.userManagementClient.getUserId != null) {
+          queriedUserId = await this.userManagementClient.getUserId(queriedUsername, userContext.accessToken);
         } else {
           throw new Error('User ID lookup is not supported');
         }

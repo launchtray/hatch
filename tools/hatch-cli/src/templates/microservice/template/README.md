@@ -113,7 +113,7 @@ The following environment variables can be set to impact the application:
 
 `LOG_FILE`
 - Specifies the file name that the application should log to on the server.
-- The application can override how the logfile is determined by injecting a filename using the `serverLogFile` token. If this is done, `LOG_FILE` will only be obeyed if the application makes use of it via the value injected as `serverLogFile`.
+- The application can override how the log file is determined by injecting a filename using the `serverLogFile` token. If this is done, `LOG_FILE` will only be obeyed if the application makes use of it via the value injected as `serverLogFile`.
 - If `serverLogFile` is not registered by the application, `LOG_FILE` will be used if set. Otherwise, `{app name}.log` will be used.
 
 `LOG_LEVEL`

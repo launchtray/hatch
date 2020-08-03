@@ -9,7 +9,7 @@ export default class LocalUserManager implements UserManager {
   private readonly permissionsManager: UserPermissionsManager;
 
   constructor(
-    @inject('UserManagementClient') private readonly userService: UserManagementClient,
+    @inject('UserManagementClient') private readonly userManagementClient: UserManagementClient,
     @injectAll('UserPermissionsManager') permissionsManagers: UserPermissionsManager[]
   ) {
     if (permissionsManagers.length == 0) {
@@ -23,7 +23,7 @@ export default class LocalUserManager implements UserManager {
   }
 
   async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string): Promise<UserAttributes> {
-    const allAttributes = await this.userService.getUserAttributes(queriedUserId, accessToken);
+    const allAttributes = await this.userManagementClient.getUserAttributes(queriedUserId, accessToken);
     const attributes = await this.permissionsManager.getReadableAttributes(clientUserId, queriedUserId, allAttributes);
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to read any permissions for queried user');
@@ -42,15 +42,15 @@ export default class LocalUserManager implements UserManager {
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to set any permissions for queried user');
     } else {
-      await this.userService.setUserAttributes(queriedUserId, attributes, accessToken);
+      await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken);
     }
     return writableAttributes;
   }
 
   async getUserId(clientUserId: string, queriedUsername: string, accessToken: string) {
     let userId;
-    if (this.userService.getUserId != null) {
-      userId = await this.userService.getUserId(queriedUsername, accessToken);
+    if (this.userManagementClient.getUserId != null) {
+      userId = await this.userManagementClient.getUserId(queriedUsername, accessToken);
     } else {
       throw new Error('User ID lookup is not supported');
     }
@@ -67,6 +67,6 @@ export default class LocalUserManager implements UserManager {
     if (!allowed) {
       throw new Error('User is not allowed to read user ID for queried user');
     }
-    await this.userService.signOutUser(userIdToSignOut, accessToken);
+    await this.userManagementClient.signOutUser(userIdToSignOut, accessToken);
   }
 }

@@ -93,7 +93,9 @@ See `APIMetadataParameters` in `hatch-server` for what OpenAPI metadata can be d
 
 ##### Route tokens
 Routes can be marked with "tokens" so that metadata about them can be retrieved at runtime via the dependency injection 
-system. For example, marking a route with the `AUTH_WHITELIST_KEY` token from `hatch-server-user-management` will result
+system. 
+
+For example, marking a route with the `AUTH_WHITELIST_KEY` token from `hatch-server-user-management` will result
 in the route being whitelisted for user authentication:
 
 ```typescript
@@ -110,8 +112,14 @@ import {AUTH_WHITELIST_KEY} from '@launchtray/hatch-server-user-management';
 ...
 ```
 
-Note that tokens are not registered until after the controllers are created. As such, resolving routes by their tokens
-should typically be done at a point well-past application initialization, e.g. via objects injected during requests. 
+This works because `UserManagementController` has a catch-all endpoint which resolves all routes registered with the 
+`AUTH_WHITELIST_KEY` token and adds those routes to the whitelist. More specifically, `UserManagementController`
+resolves this whitelist by taking in `UserInfoRequest`, which has all `AUTH_WHITELIST_KEY` values injected as 
+constructor parameters.
+
+Note that route tokens are not registered until after the controllers are created. As such, resolving routes by their 
+tokens should typically be done at a point well-past application initialization, e.g. via objects injected during
+requests similar to the `UserInfoRequest` example above. 
 
 ### WebSockets
 In addition to HTTP method routes, WebSocket server routes can be defined. These routes make use of the 

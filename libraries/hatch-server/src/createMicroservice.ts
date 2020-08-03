@@ -10,8 +10,14 @@ let assetsPrefix: string;
 
 const syncLoadAssets = () => {
   assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './assets.json')) as any);
-  assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
-  __webpack_public_path__ = `${assetsPrefix}/`;
+  if (process.env.NODE_ENV === 'development') {
+    assetsPrefix = '';
+  } else {
+    assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
+  }
+  if (assetsPrefix !== '') {
+    __webpack_public_path__ = `${assetsPrefix}/`;
+  }
 };
 syncLoadAssets();
 
@@ -21,6 +27,9 @@ const renderClient = async (): Promise<string> => {
   return (`<!doctype html>
     <html lang="">
     <head>
+      <script>
+        window.__STATIC_ASSETS_BASE_URL__ = '${assetsPrefix}/';
+      </script>
       <link rel="shortcut icon" href="${faviconPath}">
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />

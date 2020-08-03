@@ -47,8 +47,14 @@ let assetsPrefix: string;
 
 const syncLoadAssets = () => {
   assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './assets.json')) as any);
-  assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
-  __webpack_public_path__ = `${assetsPrefix}/`;
+  if (process.env.NODE_ENV === 'development') {
+    assetsPrefix = '';
+  } else {
+    assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
+  }
+  if (assetsPrefix !== '') {
+    __webpack_public_path__ = `${assetsPrefix}/`;
+  }
 };
 syncLoadAssets();
 

@@ -23,8 +23,8 @@ export default async (): Promise<WebServerComposition> => {
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/example'});
   ROOT_CONTAINER.register('appName', {useValue: 'example-web'});
 
-  ROOT_CONTAINER.register('awsAccessKeyId', {useValue: process.env.AWS_USER_POOL_ID});
-  ROOT_CONTAINER.register('awsSecretAccessKey', {useValue: process.env.AWS_ACCESS_KEY_ID});
+  ROOT_CONTAINER.register('awsAccessKeyId', {useValue: process.env.AWS_ACCESS_KEY_ID});
+  ROOT_CONTAINER.register('awsSecretAccessKey', {useValue: process.env.AWS_SECRET_ACCESS_KEY});
   ROOT_CONTAINER.register('awsRegion', {useValue: process.env.AWS_REGION});
   ROOT_CONTAINER.register('awsUserPoolId', {useValue: process.env.AWS_USER_POOL_ID});
   ROOT_CONTAINER.register('awsClientId', {useValue: process.env.AWS_CLIENT_ID});

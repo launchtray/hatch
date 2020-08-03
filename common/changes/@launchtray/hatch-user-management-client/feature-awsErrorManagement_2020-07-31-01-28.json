@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-user-management-client",
+      "comment": "Initial user management client library",
+      "type": "major"
+    }
+  ],
+  "packageName": "@launchtray/hatch-user-management-client",
+  "email": "rosshnaylor@gmail.com"
+}

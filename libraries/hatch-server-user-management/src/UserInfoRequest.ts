@@ -1,19 +1,45 @@
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
-import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
+import {containerSingleton, inject, injectAll, Logger} from '@launchtray/hatch-util';
 import cookie from 'cookie';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import {UserInfo, UserManagementClient} from '@launchtray/hatch-user-management-client';
+import {Route} from '@launchtray/hatch-server';
+
+export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
+export const AUTH_BLACKLIST_KEY = 'AUTH_BLACKLIST_KEY';
 
 @containerSingleton()
 export default class UserInfoRequest {
   private userInfo?: UserInfo;
   private logger: Logger;
-  
+
+  public readonly authWhitelist: Route[] = [
+    // default whitelist for swagger and static assets
+    '/api',
+    '/api.json',
+    '/static/*',
+    '/favicon.ico',
+    '/robots.txt',
+  ];
+
+  public readonly authBlacklist: Route[] = [];
+
   constructor(
     public readonly params: BasicRouteParams,
-    @inject('UserManagementClient') private readonly userService: UserManagementClient
+    @inject('UserManagementClient') private readonly userService: UserManagementClient,
+    // Resolving these here ensures they are always up to date per-request
+    @injectAll(AUTH_WHITELIST_KEY) customAuthWhitelist: string[],
+    @injectAll(AUTH_BLACKLIST_KEY) customAuthBlacklist: string[],
   ) {
     this.logger = params.logger;
+    if (customAuthWhitelist.length > 0) {
+      this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
+    }
+    this.logger.debug('Auth whitelist:', this.authWhitelist);
+    if (customAuthBlacklist.length > 0) {
+      this.authBlacklist = this.authBlacklist.concat(customAuthBlacklist);
+    }
+    this.logger.debug('Auth blacklist:', this.authBlacklist);
   }
   
   public async getUserInfo() {

@@ -5,6 +5,7 @@ import {
   RouteNotFound,
 } from '@launchtray/hatch-server-middleware';
 import {
+  AUTH_BLACKLIST_KEY,
   AUTH_WHITELIST_KEY,
   AWSCognitoClient,
   UserManagementController
@@ -16,12 +17,10 @@ import ExampleController from './controllers/ExampleController';
 
 export default async (): Promise<WebServerComposition> => {
 
-  ROOT_CONTAINER.register('UserManagementClient', AWSCognitoClient);
-  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/'});
-  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hello'});
-  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/hi'});
-  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: '/example'});
   ROOT_CONTAINER.register('appName', {useValue: 'example-web'});
+  ROOT_CONTAINER.registerSingleton('UserManagementClient', AWSCognitoClient);
+  ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: /^\/(?!api\/).*/}); // All non-/api routes
+  ROOT_CONTAINER.register(AUTH_BLACKLIST_KEY, {useValue: {path: '/static/private/*'}});
 
   ROOT_CONTAINER.register('awsAccessKeyId', {useValue: process.env.AWS_ACCESS_KEY_ID});
   ROOT_CONTAINER.register('awsSecretAccessKey', {useValue: process.env.AWS_SECRET_ACCESS_KEY});
@@ -36,8 +35,8 @@ export default async (): Promise<WebServerComposition> => {
     serverMiddleware: [
       JSONBodyParser,
       RequestLogger,
-      middlewareFor(ExampleController),
       middlewareFor(UserManagementController), // this should go before all controllers that require authentication
+      middlewareFor(ExampleController),
       RouteNotFound, // Catch-all 404 for unimplemented APIs
     ],
   };

@@ -1,4 +1,4 @@
-import {controller, route} from '@launchtray/hatch-server';
+import {controller, requestMatchesRouteList, route} from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, injectAll, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
@@ -18,29 +18,15 @@ import {
   SetUserAttributesRequest,
 } from './UserManagementRequests';
 import UserContext from './UserContext';
-import * as HttpStatus from 'http-status-codes'
-
-export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
+import * as HttpStatus from 'http-status-codes';
 
 @controller()
 export default class UserManagementController {
-  
-  private readonly authWhitelist = [
-    // default whitelist for swagger
-    '/favicon.ico',
-    '/api',
-    '/api.json',
-  ];
-  
+
   constructor(
     @inject('UserManagementClient') private readonly userService: UserManagementClient,
     @inject('Logger') private readonly logger: Logger,
-    @injectAll(AUTH_WHITELIST_KEY) customAuthWhitelist: string[],
   ) {
-    if (customAuthWhitelist.length > 0) {
-      this.authWhitelist = this.authWhitelist.concat(customAuthWhitelist);
-    }
-    this.logger.debug('Auth whitelist:', this.authWhitelist);
   }
   
   @route.post(UserManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
@@ -304,10 +290,11 @@ export default class UserManagementController {
   @route.all('*')
   public async verifyUser(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
-    this.logger.debug('Validating token for url: ', params.req.url);
-    
-    if (this.authWhitelist && this.authWhitelist.includes(params.req.url)) {
-      this.logger.debug('Url whitelisted: ', (params.req.url));
+    let whitelisted = requestMatchesRouteList(params.req, userInfoRequest.authWhitelist);
+    let blacklisted = requestMatchesRouteList(params.req, userInfoRequest.authBlacklist);
+
+    this.logger.debug('Validating token', {url: params.req.url, whitelisted, blacklisted});
+    if (whitelisted && !blacklisted) {
       return params.next();
     }
     

@@ -4,7 +4,7 @@ import {
   injectable,
   resolveParams,
 } from '@launchtray/hatch-util';
-import express, {Application, NextFunction, Request, RequestHandler, Response} from 'express';
+import express, {Application, NextFunction, Request, RequestHandler, Response, Router} from 'express';
 import {
   APIMetadataConsumer,
   APIMetadataParameters,
@@ -17,8 +17,41 @@ import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody} from './OpenAPI';
 export type PathParams = string | RegExp | Array<string | RegExp>;
 
 export interface RouteDefiner {
-  (app: Application, server: Server, handler: RequestHandler, apiMetadataConsumer: APIMetadataConsumer): void;
+  (
+    app: Application,
+    server: Server,
+    handler: RequestHandler,
+    apiMetadataConsumer: APIMetadataConsumer,
+    controller: any
+  ): void;
 }
+
+export type Route = {method?: HTTPMethod, path: PathParams} | PathParams;
+
+const isRouteObject = (route: Route): route is {method?: HTTPMethod, path: PathParams} => {
+  return route != null && route['path'] != null;
+};
+
+export const requestMatchesRouteList = (req: {url: string, method: string}, routeList: Route[]) => {
+  let matches = false;
+  if (routeList && routeList.length > 0) {
+    let matchesSetter = () => {matches = true};
+    const router = Router();
+    routeList.forEach((item) => {
+      if (isRouteObject(item)) {
+        if (item.method != null) {
+          router[item.method](item.path, matchesSetter);
+        } else {
+          router.all(item.path, matchesSetter);
+        }
+      } else {
+        router.all(item, matchesSetter);
+      }
+    });
+    router({url: req.url, method: req.method} as any, {} as any, () => {});
+  }
+  return matches;
+};
 
 const routeDefinersKey = Symbol('routeDefiners');
 const rootContainerKey = Symbol('rootContainer');
@@ -55,13 +88,48 @@ const custom = (routeDefiner: RouteDefiner) => {
     ) => {
       routeDefiner(app, server, (req: Request<any>, res: Response, next: NextFunction) => {
         requestHandler(ctlr, req, res, next).catch(next);
-      }, apiMetadataConsumer);
+      }, apiMetadataConsumer, ctlr);
     };
     target[routeDefinersKey].push(ctlrRouteDefiner);
   };
 };
 
-const websocket = (path: PathParams) => {
+const registerRouteTokens = (ctlr: any, metadata: APIMetadataParameters, route: Route) => {
+  const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
+  if (metadata.tokens != null && metadata.tokens.length > 0) {
+    metadata.tokens.forEach((token) => {
+      rootContainer.register(token, {useValue: route});
+    });
+  }
+};
+
+const consumeAPIMetadata = (
+  metadata: APIMetadataParameters,
+  method: keyof RouteDefiners,
+  path: PathParams,
+  apiMetadataConsumer: APIMetadataConsumer
+) => {
+  const apiMethod = convertExpressMethodToOpenAPIMethod(method);
+  const parameters: OpenAPIParameter[] = [];
+  const apiPath = convertExpressPathToOpenAPIPath(path, metadata.parameters ?? {}, parameters);
+  if (apiMethod && apiPath) {
+    const apiMetadata = {
+      description: metadata.description ?? '',
+      method: apiMethod,
+      path: apiPath,
+      requestBody: metadata.requestBody ?? defaultRequestBody(apiMethod, metadata),
+      parameters,
+      responses: metadata.responses ?? {
+        default: {
+          description: '',
+        },
+      },
+    };
+    apiMetadataConsumer(apiMetadata);
+  }
+};
+
+const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
     const requestHandler = async (ctlr: any, webSocket: WebSocket, req: Request, webSocketServer: WebSocket.Server) => {
@@ -79,7 +147,9 @@ const websocket = (path: PathParams) => {
     if (target[routeDefinersKey] == null) {
       target[routeDefinersKey] = [];
     }
-    target[routeDefinersKey].push((ctlr: any, app: Application, server: Server) => {
+    const routeDefiner = (ctlr: any, app: Application, server: Server, apiMetadataConsumer: APIMetadataConsumer) => {
+      registerRouteTokens(ctlr, metadata, {path, method: 'get'});
+      consumeAPIMetadata(metadata, 'get', path, apiMetadataConsumer);
       if (!server[wsRoutesKey]) {
         server[wsRoutesKey] = [];
         server.on('upgrade', (req, socket, head) => {
@@ -117,7 +187,8 @@ const websocket = (path: PathParams) => {
         },
         wss,
       });
-    });
+    };
+    target[routeDefinersKey].push(routeDefiner);
   };
 };
 
@@ -167,7 +238,7 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
   return target;
 };
 
-type HTTPMethodUnion =
+export type HTTPMethod =
   | 'all'
   | 'checkout'
   | 'copy'
@@ -193,7 +264,7 @@ type HTTPMethodUnion =
   | 'unsubscribe';
 
 export type StandardRouteDefiners = {
-  [method in HTTPMethodUnion]:
+  [method in HTTPMethod]:
     (path: PathParams, metadata?: APIMetadataParameters) => any;
 };
 
@@ -275,27 +346,11 @@ const proxy = {
       adjustedMethod = 'm-search';
     }
     return (path: PathParams, metadata: APIMetadataParameters = {}) => {
-      const routeDefiner: RouteDefiner = (app, server, handler, apiMetadataConsumer: APIMetadataConsumer) => {
+      const routeDefiner: RouteDefiner = (app, server, handler, apiMetadataConsumer: APIMetadataConsumer, ctlr: any) => {
         const definer = app[adjustedMethod].bind(app) as (path: PathParams, handler: any) => void;
         definer(path, handler);
-        const apiMethod = convertExpressMethodToOpenAPIMethod(method);
-        const parameters: OpenAPIParameter[] = [];
-        const apiPath = convertExpressPathToOpenAPIPath(path, metadata.parameters ?? {}, parameters);
-        if (apiMethod && apiPath) {
-          const apiMetadata = {
-            description: metadata.description ?? '',
-            method: apiMethod,
-            path: apiPath,
-            requestBody: metadata.requestBody ?? defaultRequestBody(apiMethod, metadata),
-            parameters,
-            responses: metadata.responses ?? {
-              default: {
-                description: '',
-              },
-            },
-          };
-          apiMetadataConsumer(apiMetadata);
-        }
+        registerRouteTokens(ctlr, metadata, {path, method: adjustedMethod as HTTPMethod});
+        consumeAPIMetadata(metadata, method, path, apiMetadataConsumer);
       };
       return custom(routeDefiner);
     };

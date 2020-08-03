@@ -12,6 +12,7 @@ export interface APIMetadataParameters {
   };
   responses?: Partial<OpenAPIResponses>;
   requestBody?: OpenAPIRequestBody;
+  tokens?: Array<string | symbol>;
 }
 
 export interface APIMetadata {

@@ -170,10 +170,10 @@ const createServerAsync = async <T extends ServerComposition>(
   const serverMiddlewareList = await resolveServerMiddleware(rootContainer, logger);
   const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
   for (const serverMiddleware of serverMiddlewareList) {
-    await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);
     }
+    await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);
   }
 
   const apiSpec = apiSpecBuilder.build();

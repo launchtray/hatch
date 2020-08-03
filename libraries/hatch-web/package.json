@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Utilities for composing apps using dependency injection",
   "main": "dist/index.js",
   "types": "dist/index.d.js",

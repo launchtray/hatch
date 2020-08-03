@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-client",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-web": "^0.2.4",
+    "@launchtray/hatch-web": "^0.3.0",
     "@launchtray/hatch-util": "^0.1.8",
     "react-helmet-async": "^1",
     "react": "^16",

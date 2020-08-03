@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.4.0",
+      "tag": "@launchtray/hatch-server_v0.4.0",
+      "date": "Mon, 03 Aug 2020 22:50:55 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Initial user management release, improvement to environment variables and hosting of static content"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.3.6",
       "tag": "@launchtray/hatch-server_v0.3.6",
       "date": "Wed, 22 Jul 2020 06:33:22 GMT",

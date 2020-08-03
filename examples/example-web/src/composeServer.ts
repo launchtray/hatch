@@ -8,6 +8,7 @@ import {
   AUTH_BLACKLIST_KEY,
   AUTH_WHITELIST_KEY,
   AWSCognitoClient,
+  LocalUserManager,
   UserManagementController
 } from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
@@ -19,6 +20,7 @@ export default async (): Promise<WebServerComposition> => {
 
   ROOT_CONTAINER.register('appName', {useValue: 'example-web'});
   ROOT_CONTAINER.registerSingleton('UserManagementClient', AWSCognitoClient);
+  ROOT_CONTAINER.registerSingleton('UserManager', LocalUserManager);
   ROOT_CONTAINER.register(AUTH_WHITELIST_KEY, {useValue: /^\/(?!api\/).*/}); // All non-/api routes
   ROOT_CONTAINER.register(AUTH_BLACKLIST_KEY, {useValue: {path: '/static/private/*'}});
 

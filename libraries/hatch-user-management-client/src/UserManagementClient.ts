@@ -1,3 +1,5 @@
+import UserAttributes from './UserAttributes';
+
 export class UserInfo {
   constructor(public readonly userId?: string,
               public readonly username?: string,
@@ -23,18 +25,20 @@ export enum UserManagementEndpoints {
   GET_USER_ATTRIBUTES = '/api/getUserAttributes',
   SET_USER_ATTRIBUTES = '/api/setUserAttributes',
   GET_USER_INFO = '/api/getUserInfo',
+  GET_USER_ID = '/api/getUserId',
 }
 
 export interface UserManagementClient {
   authenticate(username: string, password: string): Promise<AuthTokens>;
-  startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}): Promise<void>;
+  startUserRegistration(username: string, password: string, userAttributes: UserAttributes): Promise<void>;
   resendUserRegistrationCode(username: string): Promise<void>;
   confirmUserRegistration(username: string, confirmationCode: string): Promise<void>;
   startPasswordReset(username: string): Promise<void>;
   confirmPasswordReset(username: string, confirmationCode: string, password: string): Promise<void>;
-  refreshAuthentication(refreshToken: string, accessToken?: string): Promise<AuthTokens>;
-  signOutUser(username: string, accessToken?: string): Promise<void>;
-  getUserAttributes(username: string, accessToken?: string): Promise<{[key: string]: any}>;
-  setUserAttributes(username: string, userAttributes: {[key: string]: any}, accessToken?: string): Promise<void>;
-  getUserInfo(token: string): Promise<UserInfo>;
+  refreshAuthentication(refreshToken: string, accessToken: string): Promise<AuthTokens>;
+  signOutUser(userId: string, accessToken: string): Promise<void>;
+  getUserAttributes(userId: string, accessToken: string): Promise<UserAttributes>;
+  setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string): Promise<void>;
+  getUserInfo(accessToken: string): Promise<UserInfo>;
+  getUserId?(username: string, accessToken: string): Promise<string>;
 }

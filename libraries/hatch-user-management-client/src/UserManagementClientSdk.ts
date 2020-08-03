@@ -2,12 +2,15 @@ import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import fetch from 'cross-fetch';
 import {UserManagementClient, UserManagementEndpoints} from './UserManagementClient';
 import {UserManagementError} from './UserManagementError';
+import UserAttributes from './UserAttributes';
 
 @injectable()
 export class UserManagementClientSdk implements UserManagementClient {
-  
-  constructor(@inject('Logger') private readonly logger: Logger, @inject('userManagementBaseAPIURL') private readonly userManagementBaseAPIURL: string) {
-  }
+
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+    @inject('userManagementBaseAPIURL') private readonly userManagementBaseAPIURL: string
+  ) {}
   
   public async authenticate(username: string, password: string) {
     this.logger.debug('Requesting user authentication...');
@@ -31,7 +34,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
   
-  public async startUserRegistration(username: string, password: string, userAttributes?: {[key: string]: any}) {
+  public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes) {
     this.logger.debug('Requesting to start user registration...');
     const post = {
       username,
@@ -151,7 +154,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + accessToken,
       },
       body: JSON.stringify(post),
     });
@@ -163,17 +166,17 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
   
-  public async signOutUser(username: string, accessToken: string) {
+  public async signOutUser(userId: string, accessToken: string) {
     this.logger.debug('Requesting to sign out user...');
     const post = {
-      username,
+      userId,
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SIGN_OUT_USER, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + accessToken,
       },
       body: JSON.stringify(post),
     });
@@ -185,17 +188,17 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
   
-  public async getUserAttributes(username: string, accessToken: string) {
+  public async getUserAttributes(userId: string, accessToken: string) {
     this.logger.debug('Requesting to get user attributes...');
     const post = {
-      username,
+      userId,
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + accessToken,
       },
       body: JSON.stringify(post),
     });
@@ -207,9 +210,10 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
   
-  public async setUserAttributes(username: string, userAttributes: {[key: string]: any}, accessToken: string) {
+  public async setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string) {
     this.logger.debug('Requesting to set user attributes...');
     const post = {
+      userId,
       userAttributes,
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SET_USER_ATTRIBUTES, {
@@ -217,7 +221,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + accessToken,
       },
       body: JSON.stringify(post),
     });
@@ -228,15 +232,15 @@ export class UserManagementClientSdk implements UserManagementClient {
     }
     return responseBody;
   }
-  
+
   public async getUserInfo(accessToken: string) {
     this.logger.debug('Requesting to get user info...');
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_INFO, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': 'Bearer ' + accessToken,
       },
     });
     const responseBody = await response.json();
@@ -246,5 +250,27 @@ export class UserManagementClientSdk implements UserManagementClient {
     }
     return responseBody;
   }
-  
+
+
+  public async getUserId(username: string, accessToken: string) {
+    this.logger.debug('Requesting to get user ID...');
+    const post = {
+      username,
+    };
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken,
+      },
+      body: JSON.stringify(post),
+    });
+    const responseBody = await response.json();
+    this.logger.debug('Request to get user ID response body: ' + JSON.stringify(responseBody));
+    if (!response.ok) {
+      throw new UserManagementError(responseBody.error, 'Error getting user ID');
+    }
+    return responseBody;
+  }
 }

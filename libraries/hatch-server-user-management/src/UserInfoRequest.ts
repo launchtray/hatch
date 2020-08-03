@@ -48,9 +48,13 @@ export default class UserInfoRequest {
     }
     return this.userInfo;
   }
+
+  public getUnverifiedAccessToken() {
+    return this.extractAuthenticationCookie() ?? this.extractAuthenticationHeader();
+  }
   
   private async authenticateUser() {
-    const token = this.extractAuthenticationCookie() ?? this.extractAuthenticationHeader();
+    const token = this.getUnverifiedAccessToken();
     if (token) {
       this.userInfo = await this.userService.getUserInfo(token);
     } else {

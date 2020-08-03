@@ -1,4 +1,4 @@
-import {CognitoIdentityServiceProvider, config} from 'aws-sdk';
+import {CognitoIdentityServiceProvider} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
@@ -46,18 +46,19 @@ export default class AWSCognitoClient implements UserManagementClient {
   private pemCerts: {} | undefined;
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
   
-  constructor(@inject('Logger') private readonly logger: Logger, 
+  constructor(@inject('Logger') private readonly logger: Logger,
               @inject('awsAccessKeyId') private readonly awsAccessKeyId: string,
               @inject('awsSecretAccessKey') private readonly awsSecretAccessKey: string,
               @inject('awsRegion') private readonly awsRegion: string,
               @inject('awsUserPoolId') private readonly awsUserPoolId: string,
               @inject('awsClientId') private readonly awsClientId: string) {
     this.iss = 'https://cognito-idp.' + awsRegion + '.amazonaws.com/' + this.awsUserPoolId;
-    config.update({
+    this.cognitoProvider.config.update({
       accessKeyId: awsAccessKeyId,
       secretAccessKey: awsSecretAccessKey,
       region: awsRegion,
     });
+    logger.debug('Created AWS cognito client');
   }
   
   public async authenticate(username: string, password: string) {

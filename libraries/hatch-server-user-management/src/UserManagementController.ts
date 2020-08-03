@@ -201,7 +201,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmPasswordResetRequest.apiMetadata)
+  @route.post(UserManagementEndpoints.CONFIRM_PASSWORD_RESET, ConfirmPasswordResetRequest.apiMetadata)
   public async confirmPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Confirming user password reset...');
     try {

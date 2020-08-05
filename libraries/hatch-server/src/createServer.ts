@@ -80,10 +80,9 @@ const customLogFormat = (tag: string) => {
   );
 };
 
-const createServerLogger = async (errorReporter: ErrorReporter): Promise<Logger> => {
+const createServerLogger = async (appName: string) => {
   const rootContainer: DependencyContainer = ROOT_CONTAINER;
   const logger = createLogger({});
-  const appName = await rootContainer.resolve<string>('appName');
   const defaultServerLogFile = process.env.LOG_FILE ?? (appName + '.log');
   if (!rootContainer.isRegistered('serverLogFile')) {
     rootContainer.register('serverLogFile', {useValue: defaultServerLogFile});
@@ -114,7 +113,6 @@ const createServerLogger = async (errorReporter: ErrorReporter): Promise<Logger>
       tailable: true
     }));
   }
-  logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
   rootContainer.registerInstance('Logger', logger);
   return logger;
 };
@@ -151,17 +149,17 @@ const createServerAsync = async <T extends ServerComposition>(
   const serverMiddlewareClasses = composition.serverMiddleware ?? [];
   const rootContainer = ROOT_CONTAINER;
 
-  const errorReporter = new SentryReporter(sentryMonitor, {dsn});
+  const appName = await rootContainer.resolve<string>('appName');
+  const logger = await createServerLogger(appName);
+  const errorReporter = new SentryReporter(sentryMonitor, logger, {dsn});
   rootContainer.registerInstance('ErrorReporter', errorReporter);
-
-  const logger = await createServerLogger(errorReporter);
+  logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
 
   registerServerMiddleware(
     rootContainer,
     ...serverMiddlewareClasses,
   );
 
-  const appName = await rootContainer.resolve<string>('appName');
   const appVersion = rootContainer.isRegistered('appVersion')
       ? await rootContainer.resolve<string>('appVersion')
       : '0.0.0';

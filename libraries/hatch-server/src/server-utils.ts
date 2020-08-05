@@ -31,7 +31,7 @@ const addNotFound = (app: Application, path: string) => {
 export const addStaticRoutes = (app: Application, assetsPrefix: string) => {
   app.disable('x-powered-by');
   if (assetsPrefix.length === 0 && process.env.NO_STATIC_HOSTING !== 'true') {
-    const publicPath = process.env.NODE_ENV === 'development' ? '../public' : '../build/public';
+    const publicPath = process.env.NODE_ENV === 'development' ? '../public' : './public';
     const publicDir = path.resolve(__dirname, publicPath);
     app.use(express.static(publicDir));
   } else {

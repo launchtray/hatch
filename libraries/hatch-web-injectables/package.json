@@ -16,8 +16,8 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.1.7",
-    "@launchtray/hatch-web": "^0.2.3",
+    "@launchtray/hatch-util": "^0.1.8",
+    "@launchtray/hatch-web": "^0.3.0",
     "react-router": "^5",
     "react-router-dom": "^5",
     "redux": "^4",

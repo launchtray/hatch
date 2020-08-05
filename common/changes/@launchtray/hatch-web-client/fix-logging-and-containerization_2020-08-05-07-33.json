@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-client",
+      "comment": "Fix static hosting",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-client",
+  "email": "kiltyj@gmail.com"
+}

@@ -102,12 +102,12 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
-  const sentry = new SentryReporter(sentryMonitor, {dsn, integrations: consoleBreadcrumbs});
-  container.registerInstance('ErrorReporter', sentry);
-
   const appName = await container.resolve<string>('appName');
   const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger(appName);
+  const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
+  const sentry = new SentryReporter(sentryMonitor, logger, {dsn, integrations: consoleBreadcrumbs});
+  container.registerInstance('ErrorReporter', sentry);
+
   container.registerInstance('Logger', logger);
   let onSagaError: ((error: Error) => void) | null = null;
   if (store == null) {

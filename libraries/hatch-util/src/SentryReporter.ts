@@ -1,19 +1,20 @@
 import {Breadcrumb, Options,  Severity} from '@sentry/types';
 import {Action, ErrorReporter} from './ErrorReporter';
 import {SentryMonitor} from './SentryMonitor';
+import {Logger} from './Logger';
 
 export default class SentryReporter implements ErrorReporter {
-  private readonly initialized: boolean = false;
+  private readonly initialized?: boolean;
   private initializedWarningShown: boolean = false;
 
-  constructor(private readonly sentry: SentryMonitor, options: Options) {
+  constructor(private readonly sentry: SentryMonitor, private readonly logger: Logger, options: Options) {
     if (options && options.dsn) {
       this.sentry.init({dsn: options.dsn, integrations: options.integrations});
       this.initialized = true;
     } else {
       this.initialized = false;
     }
-    console.log('Error reporting initialized: ' + this.initialized);
+    this.logger.info('Error reporting initialized:', this.initialized);
   }
 
   public captureAction(action: Action, prevState: any) {
@@ -30,11 +31,11 @@ export default class SentryReporter implements ErrorReporter {
         }
         this.sentry.addBreadcrumb(breadcrumb);
       } catch (error) {
-        console.error('Error reporting action: ' + error.message);
+        this.logger.error('Error reporting action:', error.message);
       }
-    } else if (!this.initializedWarningShown) {
+    } else if (this.initialized == null && !this.initializedWarningShown) {
       this.initializedWarningShown = true;
-      console.error('Error reporting actions: Sentry not initialized');
+      this.logger.error('Error reporting actions: Sentry not initialized');
     }
   }
 
@@ -46,7 +47,7 @@ export default class SentryReporter implements ErrorReporter {
         }
         this.sentry.captureException(exception);
       } catch (error) {
-        console.error('Error reporting exception: ' + error.message);
+        this.logger.error('Error reporting exception: ' + error.message);
       }
     }
   }

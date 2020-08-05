@@ -13,9 +13,7 @@
     "build": "rimraf dist && tsc"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.1.8",
-    "@types/node": "^12",
-    "@sentry/types": "^5"
+    "@types/node": "^12"
   },
   "devDependencies": {
     "@types/jest": "^24.0.22",

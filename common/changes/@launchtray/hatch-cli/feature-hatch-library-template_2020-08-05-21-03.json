@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "Initial library template cli",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "rosshnaylor@gmail.com"
+}

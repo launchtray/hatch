@@ -10,6 +10,10 @@ import route, {
   Route,
 } from './server-routing';
 import {
+  addStaticRoutes,
+  loadStaticAssetsMetadata,
+} from './server-utils';
+import {
   ServerComposer,
   ServerComposition,
 } from './ServerComposer';
@@ -23,6 +27,7 @@ import {
 } from './ServerMiddleware';
 
 export {
+  addStaticRoutes,
   APIMetadataParameters,
   route,
   controller,
@@ -42,4 +47,5 @@ export {
   CreateServerOptions,
   Server,
   createMicroservice,
+  loadStaticAssetsMetadata,
 };

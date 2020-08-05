@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-server",
+      "comment": "Fix static hosting, remove console clutter",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-server",
+  "email": "kiltyj@gmail.com"
+}

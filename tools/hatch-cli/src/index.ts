@@ -23,6 +23,7 @@ commander
   .command(...commandForTemplate('reducer', 'reducer module'))
   .command(...commandForTemplate('injectable', 'injectable module'))
   .command(...commandForTemplate('story', 'storybook story'))
+  .command(...commandForTemplate('library', 'library project'))
 ;
 
 runCommander();

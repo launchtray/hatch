@@ -423,6 +423,11 @@
       "packageName": "@launchtray/hatch-template-microservice",
       "projectFolder": "tools/hatch-cli/src/templates/microservice/template",
       "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/hatch-template-library",
+      "projectFolder": "tools/hatch-cli/src/templates/library/template",
+      "shouldPublish": false
     }
   ]
 }

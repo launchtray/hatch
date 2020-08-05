@@ -1,6 +1,8 @@
 import {
+  addStaticRoutes,
   createServer,
   CreateServerOptions,
+  loadStaticAssetsMetadata,
 } from '@launchtray/hatch-server';
 import {ErrorReporter, Logger, ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {
@@ -15,9 +17,6 @@ import {
   WebCommonComposition,
   runtimeConfig,
 } from '@launchtray/hatch-web';
-import express, {Application} from 'express';
-import fs from 'fs';
-import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {HelmetProvider} from 'react-helmet-async';
@@ -42,21 +41,7 @@ interface ClientRenderRequestContext {
   authHeader?: string;
 }
 
-let assets: any;
-let assetsPrefix: string;
-
-const syncLoadAssets = () => {
-  assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './assets.json')) as any);
-  if (process.env.NODE_ENV === 'development') {
-    assetsPrefix = '';
-  } else {
-    assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
-  }
-  if (assetsPrefix !== '') {
-    __webpack_public_path__ = `${assetsPrefix}/`;
-  }
-};
-syncLoadAssets();
+const {assets, assetsPrefix} = loadStaticAssetsMetadata();
 
 const renderClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
   const clientContainer = ROOT_CONTAINER.createChildContainer();
@@ -149,25 +134,10 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   );
 };
 
-const addRedirect = (app: Application, path: string) => {
-  app.get(path, (req, res) => {
-    res.redirect(assetsPrefix + req.path);
-  });
-};
-
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
   createServer(options, (server, app, composition, logger, errorReporter) => {
-    app.disable('x-powered-by');
-    if (assetsPrefix.length === 0) {
-      const publicPath = process.env.NODE_ENV === 'development' ? '../public' : '../build/public';
-      const publicDir = path.resolve(__dirname, publicPath);
-      app.use(express.static(publicDir));
-    } else {
-      addRedirect(app, '/favicon.ico');
-      addRedirect(app, '/robots.txt');
-      addRedirect(app, '/static/*');
-    }
+    addStaticRoutes(app, assetsPrefix);
     app.get('/*', (req, res, next) => {
       const stateOnly = req.query.state !== undefined;
       const prettify = req.query.state === 'pretty';

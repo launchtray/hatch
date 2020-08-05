@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-injectables",
+      "comment": "Manually update dependencies",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-injectables",
+  "email": "kiltyj@gmail.com"
+}

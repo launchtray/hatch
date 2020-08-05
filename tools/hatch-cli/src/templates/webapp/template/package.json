@@ -15,13 +15,13 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@launchtray/hatch-server": "^0.4.0",
+    "@launchtray/hatch-server": "^0.4.1",
     "@launchtray/hatch-server-middleware": "^0.4.0",
-    "@launchtray/hatch-util": "^0.1.8",
+    "@launchtray/hatch-util": "^0.1.9",
     "@launchtray/hatch-web": "^0.3.0",
-    "@launchtray/hatch-web-client": "^0.4.0",
-    "@launchtray/hatch-web-injectables": "^0.1.2",
-    "@launchtray/hatch-web-server": "^0.4.0",
+    "@launchtray/hatch-web-client": "^0.4.1",
+    "@launchtray/hatch-web-injectables": "^0.1.3",
+    "@launchtray/hatch-web-server": "^0.4.1",
     "@redux-saga/core": "^1",
     "@sentry/browser": "^5",
     "@sentry/node": "^5",

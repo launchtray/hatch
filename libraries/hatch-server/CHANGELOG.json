@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.4.1",
+      "tag": "@launchtray/hatch-server_v0.4.1",
+      "date": "Wed, 05 Aug 2020 21:27:25 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix static hosting, remove console clutter"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-util\" from `^0.1.8` to `^0.1.9`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.0",
       "tag": "@launchtray/hatch-server_v0.4.0",
       "date": "Mon, 03 Aug 2020 22:50:55 GMT",

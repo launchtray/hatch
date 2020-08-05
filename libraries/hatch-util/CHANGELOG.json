@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-util",
   "entries": [
     {
+      "version": "0.1.9",
+      "tag": "@launchtray/hatch-util_v0.1.9",
+      "date": "Wed, 05 Aug 2020 21:27:25 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Remove console clutter"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.8",
       "tag": "@launchtray/hatch-util_v0.1.8",
       "date": "Wed, 22 Jul 2020 06:33:22 GMT",

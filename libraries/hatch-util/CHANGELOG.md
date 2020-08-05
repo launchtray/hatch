@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-util
 
-This log was last generated on Wed, 22 Jul 2020 06:33:22 GMT and should not be manually modified.
+This log was last generated on Wed, 05 Aug 2020 21:27:25 GMT and should not be manually modified.
+
+## 0.1.9
+Wed, 05 Aug 2020 21:27:25 GMT
+
+### Patches
+
+- Remove console clutter
 
 ## 0.1.8
 Wed, 22 Jul 2020 06:33:22 GMT

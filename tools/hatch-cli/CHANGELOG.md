@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Mon, 03 Aug 2020 22:50:55 GMT and should not be manually modified.
+This log was last generated on Wed, 05 Aug 2020 21:27:25 GMT and should not be manually modified.
+
+## 0.7.1
+Wed, 05 Aug 2020 21:27:25 GMT
+
+### Patches
+
+- Initial library template cli
 
 ## 0.7.0
 Mon, 03 Aug 2020 22:50:55 GMT

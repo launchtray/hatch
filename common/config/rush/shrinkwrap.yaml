@@ -86,7 +86,7 @@ dependencies:
   react-dom: 16.12.0
   react-error-overlay: 6.0.4
   react-helmet-async: 1.0.4
-  react-native-web: 0.12.0
+  react-native-web: 0.12.3
   react-redux: 7.1.3
   react-router: 5.1.2
   react-router-dom: 5.1.2
@@ -8371,7 +8371,7 @@ packages:
       integrity: sha512-Z8hnfsZu4o/kt+AuFzeGpLVhFOGO9mluyHBaA2bA8aCGTwah5sT3WV/fTHH8UNZUytOIImuGPrl/prlb4oX4qQ==
   /css-in-js-utils/2.0.1:
     dependencies:
-      hyphenate-style-name: 1.0.3
+      hyphenate-style-name: 1.0.4
       isobject: 3.0.1
     dev: false
     resolution:
@@ -10817,10 +10817,10 @@ packages:
       node: '>= 6.0.0'
     resolution:
       integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==
-  /hyphenate-style-name/1.0.3:
+  /hyphenate-style-name/1.0.4:
     dev: false
     resolution:
-      integrity: sha512-EcuixamT82oplpoJ2XU4pDtKGWQ7b00CD9f1ug9IaQ3p1bkHMiKCZ9ut9QDI6qsa6cpUuB+A/I+zLtdNK4n2DQ==
+      integrity: sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
   /iconv-lite/0.4.24:
     dependencies:
       safer-buffer: 2.1.2
@@ -10950,12 +10950,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
-  /inline-style-prefixer/5.1.0:
+  /inline-style-prefixer/5.1.2:
     dependencies:
       css-in-js-utils: 2.0.1
     dev: false
     resolution:
-      integrity: sha512-giteQHPMrApQOSjNSjteO5ZGSGMRf9gas14fRy2lg2buSc1nRnj6o6xuNds5cMTKrkncyrTu3gJn/yflFMVdmg==
+      integrity: sha512-PYUF+94gDfhy+LsQxM0g3d6Hge4l1pAqOSOiZuHWzMvQEGsbRQ/ck2WioLqrY2ZkHyPgVUXxn+hrkF7D6QUGbA==
   /inquirer/6.5.0:
     dependencies:
       ansi-escapes: 3.2.0
@@ -15471,15 +15471,15 @@ packages:
       react: ^0.14.9 || ^15.3.0 || ^16.0.0
     resolution:
       integrity: sha512-9q3YAvHoUiWlP3cK0v+w1N5Z23HXMj4IF4YuvjvWegWqNPfLXsOBE/V7UvQGpXxHFKRQQcNcVQE31g9SB/6qgQ==
-  /react-native-web/0.12.0:
+  /react-native-web/0.12.3:
     dependencies:
       array-find-index: 1.0.2
       create-react-class: 15.6.3
       debounce: 1.2.0
       deep-assign: 3.0.0
       fbjs: 1.0.0
-      hyphenate-style-name: 1.0.3
-      inline-style-prefixer: 5.1.0
+      hyphenate-style-name: 1.0.4
+      inline-style-prefixer: 5.1.2
       normalize-css-color: 1.0.2
       prop-types: 15.7.2
       react-timer-mixin: 0.13.4
@@ -15488,28 +15488,28 @@ packages:
       react: '>=16.5.1'
       react-dom: '>=16.5.1'
     resolution:
-      integrity: sha512-O7Jb4XN8ficbCDIj6fOx+dVqh6jswuxM1Q+W3Q+iTET/pFCQ8jGFOKkjW0WoO7IFjHGuIwrqC3JzzRaZbDMu0Q==
-  /react-native-web/0.12.0/react-dom@16.12.0+react@16.12.0:
+      integrity: sha512-6evhZl3tzYz5IUesbHEC4/ooUkXJPIAtrmDJWe3CdpDrV6rvBNNa1Utq192YKbHPzGtETuw+5X59K0O1n5EjWQ==
+  /react-native-web/0.12.3/react-dom@16.12.0+react@16.12.0:
     dependencies:
       array-find-index: 1.0.2
       create-react-class: 15.6.3
       debounce: 1.2.0
       deep-assign: 3.0.0
       fbjs: 1.0.0
-      hyphenate-style-name: 1.0.3
-      inline-style-prefixer: 5.1.0
+      hyphenate-style-name: 1.0.4
+      inline-style-prefixer: 5.1.2
       normalize-css-color: 1.0.2
       prop-types: 15.7.2
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-timer-mixin: 0.13.4
     dev: false
-    id: registry.npmjs.org/react-native-web/0.12.0
+    id: registry.npmjs.org/react-native-web/0.12.3
     peerDependencies:
       react: '>=16.5.1'
       react-dom: '>=16.5.1'
     resolution:
-      integrity: sha512-O7Jb4XN8ficbCDIj6fOx+dVqh6jswuxM1Q+W3Q+iTET/pFCQ8jGFOKkjW0WoO7IFjHGuIwrqC3JzzRaZbDMu0Q==
+      integrity: sha512-6evhZl3tzYz5IUesbHEC4/ooUkXJPIAtrmDJWe3CdpDrV6rvBNNa1Utq192YKbHPzGtETuw+5X59K0O1n5EjWQ==
   /react-popper-tooltip/2.11.1/react-dom@16.13.1+react@16.13.1:
     dependencies:
       '@babel/runtime': 7.10.5
@@ -19345,7 +19345,7 @@ packages:
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-error-overlay: 6.0.4
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
-      react-native-web: /react-native-web/0.12.0/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.12.3/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -19353,6 +19353,7 @@ packages:
       redux-devtools-extension: /redux-devtools-extension/2.13.8/redux@4.0.5
       redux-saga: 1.1.3
       regenerator-runtime: 0.13.3
+      resize-observer-polyfill: 1.5.1
       resolve: 1.17.0
       rimraf: 3.0.0
       sockjs-client: 1.4.0
@@ -19374,7 +19375,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-doeqmYVAl81moi8k53weNrBk4w4kUB9ne+kYLNrn+lFFkzsrAEL7lkJ5UxEKDCVDZmj2t5cRJSAywUJea8QBpA==
+      integrity: sha512-mtXgKBYYM+D5tpuAEs65v8KH0ZCYh9XWStF8cAShVEXNQ3JaH3ll4Rgb5IY8ZaTkIot2WQQYi0UXIjeErfv5Kw==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -19396,7 +19397,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-4PWrZmynXL631ob2jC7PS6cZjhgxXpqYVl/aaTbkpmX/htlmPKN3YcJ9vQ12aOKQo78OeSH2DgRnzrv++vLraA==
+      integrity: sha512-pzF2+wZjL3FNC5IAITFmN1lssdLeWFnW/ZAxPS837pyyKXMMjfyVRH4vunxg5dvPRz+aRm6i3ouIdGGVZ0ufzQ==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -19427,7 +19428,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-/3/1ZmL5ISFARvir33Dn42mmbsldS6zbGEXRJz3Cv2ORlwvGiNWNnnfqmr2NgO9pehTWvrtCwVeBzfbwciCNmw==
+      integrity: sha512-srAv95qSV2XJD2Yt7G6d6XPQS7oSpOkOWS7Nza+7Bt8xQOXZB4LTkN2iw36xqY48kZ2pvh6wFX0SGFBjxql92A==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server-user-management.tgz':
@@ -19445,7 +19446,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-user-management'
     resolution:
-      integrity: sha512-jpWccj31cOP/aPA2Qw/5tl1RKnVlWFV5zP7YTgsHLAiVgqvT8jBEqK4apTtRbJtw0cAyc2moik//muZwJiA/sA==
+      integrity: sha512-8I++Mfktfxpv4fvNRL7YLS1OE8shHdKhdzTW0gNuLpbz5ylz2YR8LOmUf7PXygaO0NCbDjhZZYmg8gXQ54Bu4g==
       tarball: 'file:projects/hatch-server-user-management.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -19468,7 +19469,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-DOAGn5vK5YRgAre0JG8Rg5Lf9VWngyl1KHaAeSLR4Qt0TYPjJ8+NGg/PpZYWGk1vnpDiJsWT9qJK5u+05s2IqA==
+      integrity: sha512-CyDYVUoYNxfEp5peYIgyTnkKNF++4fvn+j21inin2Wf0h+9+NOyiw9IfTmBWBzGTMN7oSZCLM+mR/u7rmHEulw==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-template-library.tgz':
@@ -19488,7 +19489,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-library'
     resolution:
-      integrity: sha512-g18Z4MRj8ZlJslMC7+lNpd4CrZ6rrc/E4iHHn1Oe98OArnt5PMsTg+Kp/39fbaA0F08qkjzFhjhaqba94qzMig==
+      integrity: sha512-SIAhx5StszdzBSyv+0EhrMjdbiNqePQgvzdaWrHRE8z2Nsx6SWZEJynFQpvrm9/s4ChIBPTMyZpsE1GuCclRwQ==
       tarball: 'file:projects/hatch-template-library.tgz'
     version: 0.0.0
   'file:projects/hatch-template-microservice.tgz':
@@ -19535,7 +19536,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-microservice'
     resolution:
-      integrity: sha512-4eBW56VYfxl6bE95PVK499FhYYM81Z6Fi9zoHTxtEI3gPgz2dbl3C1+ES4oEmV+xQhB6+OzM13OYmbH2kYKj+Q==
+      integrity: sha512-wsHPJ6OsTyJF59l2pT8X/vu4SOuu2UL6ansa1Yah4ILpRD/OcWL93A4z4I4RlWx2se0xkJ8WjG3EQYcdZ1HeCQ==
       tarball: 'file:projects/hatch-template-microservice.tgz'
     version: 0.0.0
   'file:projects/hatch-template-webapp.tgz':
@@ -19587,7 +19588,7 @@ packages:
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-error-overlay: 6.0.4
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
-      react-native-web: /react-native-web/0.12.0/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.12.3/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -19617,7 +19618,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-webapp'
     resolution:
-      integrity: sha512-Cg88cgc2JK0ufS1ZPgcE7PuQ5dfMeZjVixijzF34LxtfLkLp1PGxEA2G16zxww/ABLl9tJRjZJCw+1loTyoQkA==
+      integrity: sha512-/hsVf/3LjUmzsMqgnHlx1i9Niufe1+A/DiC7Q+f0HmO1PqB1J7yYcgYQIGen4yKK7rrYsrniDsGuWyl5XC7Y7Q==
       tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -19639,7 +19640,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-user-management-client'
     resolution:
-      integrity: sha512-XFFBAG9j5/dtiir5hSz/S4BmlAdZPHaEbgEG2RH/cNefmDdNM+XmruLP69OFaQBRG6fVpQ4f4NiqZ99Gf/6RWw==
+      integrity: sha512-KmT3H3I3WV7elFf3RGS/ReKFTpe1ii2wxZQxJtKvGUniR386w7hmWpwa8WfuBRbiPXw2F+hiZ/tSJCo4vllY7A==
       tarball: 'file:projects/hatch-user-management-client.tgz'
     version: 0.0.0
   'file:projects/hatch-util.tgz':
@@ -19675,7 +19676,7 @@ packages:
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
-      react-native-web: /react-native-web/0.12.0/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.12.3/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -19687,7 +19688,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-1yyIo2KWX0jF/pDGkbT/Up4Lx6mMhWJ9vawvaSmddm6kqGIbJQPCmhyjXFyVxLpvu3tiVzBjkEN5lDd4dARjsQ==
+      integrity: sha512-HfeVOfjbId4ko6ezU7ev5uMfrH7+QQvZ6ZibbdUTzRhGrtVy+7FOlke4TSR9TbZtIiMNBTzY3s/EWRlBUVnX/Q==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-injectables.tgz':
@@ -19702,7 +19703,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-injectables'
     resolution:
-      integrity: sha512-s5bLyiuybCWsL2q52LDK2gYOK2cjR4ykWOH6tPK/MsvCRjlhATPk7Xs5tYw4cO3rYcxPKCH8eiX1ARXyeIWhbg==
+      integrity: sha512-LcdErlEFADRldf050efeAD9VKhYNmXUu1iakCQ8jhs6tPh3xgtiyiz/Vs7992rcdZaiTEXKG8umB7WVJO1uHUg==
       tarball: 'file:projects/hatch-web-injectables.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -19724,7 +19725,7 @@ packages:
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
       react-helmet-async: /react-helmet-async/1.0.4/react-dom@16.12.0+react@16.12.0
-      react-native-web: /react-native-web/0.12.0/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.12.3/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -19735,7 +19736,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-2NNvf9w+BlqxfvMyckJpxTneODXoUGERjeaxhKI+iGNJxeHTIyvKFG3JyJ5DjrE6nSE3/vKkt8LYpS1LGmVYWg==
+      integrity: sha512-Af1T8kxG20g1Xk7fHtPjSU6VoRoVoyM2LOeLMXI9Xwl2KDvdyrWKebZqH7oNWzb+/WUY3OGrzgfGIpbHDbsUEQ==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
@@ -19755,7 +19756,7 @@ packages:
       prop-types: 15.7.2
       react: 16.12.0
       react-dom: /react-dom/16.12.0/react@16.12.0
-      react-native-web: /react-native-web/0.12.0/react-dom@16.12.0+react@16.12.0
+      react-native-web: /react-native-web/0.12.3/react-dom@16.12.0+react@16.12.0
       react-redux: /react-redux/7.1.3/react@16.12.0+redux@4.0.5
       react-router: /react-router/5.1.2/react@16.12.0
       react-router-dom: /react-router-dom/5.1.2/react@16.12.0
@@ -19765,7 +19766,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-fop/IbesQGG4dxzG54rlIKHeFejSNWVo/MaQnQjpyYVZ7bk7k3+1hHBRh8xgXc9NeJEycUIcvz0/vTXYIvw00A==
+      integrity: sha512-Gf1KN3TjnoNO4PCVfNrRgSGAoREqOwPWIw6+iP2qxCYZh4rssraV6YcKmlpxEkR7z7fK3qslZFmsHZH0Fvv0cw==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: 'https://registry.npmjs.org/'
@@ -19859,7 +19860,7 @@ specifiers:
   react-dom: ^16
   react-error-overlay: ^6
   react-helmet-async: ^1
-  react-native-web: ^0
+  react-native-web: 0.12.3
   react-redux: ^7
   react-router: ^5
   react-router-dom: ^5

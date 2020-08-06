@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "Fix client-side routing using Button",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "kiltyj@gmail.com"
+}

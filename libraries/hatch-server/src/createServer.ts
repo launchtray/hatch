@@ -94,7 +94,7 @@ const createServerLogger = async (appName: string) => {
   }
   const logLevel = await rootContainer.resolve<string>('logLevel');
 
-  if (process.env.NODE_ENV !== 'production' || process.env.LOG_TO_CONSOLE === 'true') {
+  if (process.env.NODE_ENV === 'development' || process.env.LOG_TO_CONSOLE === 'true') {
     logger.add(new transports.Console({
       level: logLevel,
       format: format.combine(

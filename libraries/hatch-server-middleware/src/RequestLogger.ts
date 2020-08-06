@@ -15,8 +15,8 @@ const formatObjectForLog = (obj: any) => {
 const requestLogger = (tag: string, serverLogFile: string) => {
   return expressWinston.logger({
     transports: [
-      process.env.NODE_ENV ===
-      'development' ? new transports.Console() : new transports.File({filename: serverLogFile}),
+      process.env.NODE_ENV === 'development' || process.env.LOG_TO_CONSOLE === 'true'
+        ? new transports.Console() : new transports.File({filename: serverLogFile}),
     ],
     format: format.combine(
       format.label({label: tag}),

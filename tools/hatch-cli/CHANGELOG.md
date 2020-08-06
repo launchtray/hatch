@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Wed, 05 Aug 2020 21:27:25 GMT and should not be manually modified.
+This log was last generated on Thu, 06 Aug 2020 07:25:27 GMT and should not be manually modified.
+
+## 0.7.2
+Thu, 06 Aug 2020 07:25:26 GMT
+
+### Patches
+
+- Fix client-side routing using Button
 
 ## 0.7.1
 Wed, 05 Aug 2020 21:27:25 GMT

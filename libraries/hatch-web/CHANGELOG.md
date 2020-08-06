@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Thu, 06 Aug 2020 04:24:31 GMT and should not be manually modified.
+This log was last generated on Thu, 06 Aug 2020 07:25:27 GMT and should not be manually modified.
+
+## 0.3.2
+Thu, 06 Aug 2020 07:25:27 GMT
+
+### Patches
+
+- Fix client-side routing using Button
 
 ## 0.3.1
 Thu, 06 Aug 2020 04:24:31 GMT

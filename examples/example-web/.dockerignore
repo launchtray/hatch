@@ -1,0 +1,8 @@
+node_modules
+build
+.rush
+.git
+.idea
+.storybook
+README.md
+*.log

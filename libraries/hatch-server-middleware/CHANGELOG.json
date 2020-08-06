@@ -2,6 +2,23 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.4.1",
+      "tag": "@launchtray/hatch-server-middleware_v0.4.1",
+      "date": "Thu, 06 Aug 2020 04:07:46 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Made request logging consistent with logging elsewhere"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-server\" from `^0.4.0` to `^0.4.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.0",
       "tag": "@launchtray/hatch-server-middleware_v0.4.0",
       "date": "Mon, 03 Aug 2020 22:50:55 GMT",

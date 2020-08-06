@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.4.2",
+      "tag": "@launchtray/hatch-server_v0.4.2",
+      "date": "Thu, 06 Aug 2020 04:07:46 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed 404 for non-existent static assets, made request logging consistent with logging elsewhere"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.1",
       "tag": "@launchtray/hatch-server_v0.4.1",
       "date": "Wed, 05 Aug 2020 21:27:25 GMT",

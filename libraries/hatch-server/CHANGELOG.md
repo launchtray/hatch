@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Wed, 05 Aug 2020 21:27:25 GMT and should not be manually modified.
+This log was last generated on Thu, 06 Aug 2020 04:07:46 GMT and should not be manually modified.
+
+## 0.4.2
+Thu, 06 Aug 2020 04:07:46 GMT
+
+### Patches
+
+- Fixed 404 for non-existent static assets, made request logging consistent with logging elsewhere
 
 ## 0.4.1
 Wed, 05 Aug 2020 21:27:25 GMT

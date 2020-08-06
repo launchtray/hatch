@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server",
+      "comment": "Fixed 404 for non-existent static assets, made request logging consistent with logging elsewhere",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server",
+  "email": "kiltyj@gmail.com"
+}

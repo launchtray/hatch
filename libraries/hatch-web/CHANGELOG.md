@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Mon, 03 Aug 2020 22:50:55 GMT and should not be manually modified.
+This log was last generated on Thu, 06 Aug 2020 04:24:31 GMT and should not be manually modified.
+
+## 0.3.1
+Thu, 06 Aug 2020 04:24:31 GMT
+
+### Patches
+
+- Updated package versions to be in sync with latest releases
 
 ## 0.3.0
 Mon, 03 Aug 2020 22:50:55 GMT

@@ -2,6 +2,26 @@
   "name": "@launchtray/hatch-server-user-management",
   "entries": [
     {
+      "version": "0.2.1",
+      "tag": "@launchtray/hatch-server-user-management_v0.2.1",
+      "date": "Thu, 06 Aug 2020 04:24:31 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated package versions to be in sync with latest releases"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-user-management-client\" from `^0.2.0` to `^0.2.1`"
+          },
+          {
+            "comment": "Updating dependency \"@launchtray/hatch-server-middleware\" from `^0.4.1` to `^0.4.2`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.2.0",
       "tag": "@launchtray/hatch-server-user-management_v0.2.0",
       "date": "Mon, 03 Aug 2020 22:50:55 GMT",

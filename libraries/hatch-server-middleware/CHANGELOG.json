@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.4.2",
+      "tag": "@launchtray/hatch-server-middleware_v0.4.2",
+      "date": "Thu, 06 Aug 2020 04:24:31 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated package versions to be in sync with latest releases"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.1",
       "tag": "@launchtray/hatch-server-middleware_v0.4.1",
       "date": "Thu, 06 Aug 2020 04:07:46 GMT",

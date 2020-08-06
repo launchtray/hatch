@@ -23,7 +23,7 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.1.8",
+    "@launchtray/hatch-util": "^0.1.9",
     "react": "^16",
     "react-dom": "^16",
     "react-native-web": "^0",

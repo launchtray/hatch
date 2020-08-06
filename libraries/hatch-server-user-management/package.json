@@ -25,8 +25,8 @@
   },
   "peerDependencies": {
     "@launchtray/hatch-user-management-client": "^0.2.0",
-    "@launchtray/hatch-server": "^0.4.0",
-    "@launchtray/hatch-server-middleware": "^0.4.0",
-    "@launchtray/hatch-util": "^0.1.8"
+    "@launchtray/hatch-server": "^0.4.2",
+    "@launchtray/hatch-server-middleware": "^0.4.1",
+    "@launchtray/hatch-util": "^0.1.9"
   }
 }

@@ -16,6 +16,6 @@
     "cross-fetch": "^3.0.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.1.8"
+    "@launchtray/hatch-util": "^0.1.9"
   }
 }

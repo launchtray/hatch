@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "comment": "Updated package versions to be in sync with latest releases",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-middleware",
+  "email": "kiltyj@gmail.com"
+}

@@ -43,6 +43,6 @@ export const addStaticRoutes = (app: Application, assetsPrefix: string) => {
       addRedirect(app, '/favicon.ico', assetsPrefix);
       addRedirect(app, '/robots.txt', assetsPrefix);
     }
-    addNotFound(app, '/static/*');
   }
+  addNotFound(app, '/static/*');
 };

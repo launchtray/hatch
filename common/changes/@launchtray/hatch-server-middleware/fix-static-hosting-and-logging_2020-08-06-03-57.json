@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "comment": "Made request logging consistent with logging elsewhere",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-middleware",
+  "email": "kiltyj@gmail.com"
+}

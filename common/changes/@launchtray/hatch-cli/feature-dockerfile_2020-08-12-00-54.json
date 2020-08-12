@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "Added dockerfiles to applicable templates",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "kiltyj@gmail.com"
+}

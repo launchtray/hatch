@@ -38,7 +38,10 @@ class CustomResponder {
 @controller()
 export default class ExampleController implements ServerMiddleware {
   private readonly testVar: string;
-  constructor(@inject('Logger') private readonly logger: Logger) {
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+    @inject('awsRegion') private readonly awsRegion: string,
+  ) {
     this.testVar = 'A';
   }
 
@@ -51,7 +54,29 @@ export default class ExampleController implements ServerMiddleware {
   @route.get('/api/example')
   public exampleEndpoint(responder: CustomResponder) {
     this.logger.info('Example endpoint called');
-    responder.ok('Example GET');
+    responder.ok(`Example GET for region: ${this.awsRegion}`);
+  }
+
+  @route.get('/api/example/date')
+  public getCurrentDate(responder: CustomResponder) {
+    this.logger.info('Time endpoint called');
+    responder.ok(`${new Date().toISOString()}`);
+  }
+
+  @route.get('/api/example/cachedDate')
+  public getCachedDate(responder: CustomResponder) {
+    responder.params.res.set('Cache-Control', 'max-age=60');
+    this.logger.info('Time endpoint called');
+    responder.ok(`${new Date().toISOString()}`);
+  }
+
+  @route.get('/api/example/echo')
+  public echo(responder: CustomResponder) {
+    responder.ok(`${JSON.stringify({
+      headers: responder.params.req.headers,
+      params: responder.params.req.params,
+      cookie: responder.params.cookie,
+    })}`);
   }
 
   @route.get('/api/example/blacklisted', {tokens: [AUTH_BLACKLIST_KEY]})

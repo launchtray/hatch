@@ -139,6 +139,10 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
         if (fs.existsSync(dotGitIgnorePath)) {
           await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
         }
+        const dotDockerIgnorePath = path.resolve(tempFilePath, 'dot-dockerignore');
+        if (fs.existsSync(dotDockerIgnorePath)) {
+          await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
+        }
         const testPath = path.resolve(tempFilePath, 'src', '__test__', 'HATCH_CLI_TEMPLATE_VAR_projectName.test.ts');
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${name}.test.ts`));

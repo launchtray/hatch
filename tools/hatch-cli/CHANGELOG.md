@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Thu, 06 Aug 2020 07:25:27 GMT and should not be manually modified.
+This log was last generated on Wed, 12 Aug 2020 01:31:45 GMT and should not be manually modified.
+
+## 0.8.0
+Wed, 12 Aug 2020 01:31:45 GMT
+
+### Minor changes
+
+- Added dockerfiles to applicable templates
 
 ## 0.7.2
 Thu, 06 Aug 2020 07:25:26 GMT

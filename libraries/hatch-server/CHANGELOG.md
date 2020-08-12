@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Thu, 06 Aug 2020 04:07:46 GMT and should not be manually modified.
+This log was last generated on Wed, 12 Aug 2020 01:31:45 GMT and should not be manually modified.
+
+## 0.5.0
+Wed, 12 Aug 2020 01:31:45 GMT
+
+### Minor changes
+
+- Made caching opt-in for app-defined endpoints
 
 ## 0.4.2
 Thu, 06 Aug 2020 04:07:46 GMT

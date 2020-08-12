@@ -146,6 +146,12 @@ const createServerAsync = async <T extends ServerComposition>(
     newRunningServer = false;
   }
 
+  // Make caching opt-in for app-defined endpoints
+  runningServerApp.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'max-age=0');
+    next();
+  });
+
   const serverMiddlewareClasses = composition.serverMiddleware ?? [];
   const rootContainer = ROOT_CONTAINER;
 

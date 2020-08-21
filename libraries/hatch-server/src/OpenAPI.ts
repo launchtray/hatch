@@ -54,7 +54,7 @@ export type OpenAPIRequestBodyContent = {
 };
 
 export interface OpenAPIRequestBody {
-  description: string;
+  description?: string;
   required?: boolean;
   content: OpenAPIRequestBodyContent;
 }
@@ -75,12 +75,14 @@ export interface OpenAPIParameter {
   required: boolean;
   description?: string;
   allowEmptyValue?: boolean;
+  schema?: OpenAPISchemaObject;
 }
 
 export interface OpenAPIOperation {
   responses: OpenAPIResponses;
   parameters: OpenAPIParameter[];
   requestBody?: OpenAPIRequestBody;
+  description?: string;
 }
 
 export type OpenAPIOperations = {
@@ -118,8 +120,9 @@ export class OpenAPISpecBuilder {
 
   addAPIMetadata(apiMetadata: APIMetadata) {
     this.spec.paths[apiMetadata.path] = {
-      description: apiMetadata.description ?? '',
+      ...this.spec.paths[apiMetadata.path],
       [apiMetadata.method]: {
+        description: apiMetadata.description,
         responses: apiMetadata.responses,
         parameters: apiMetadata.parameters,
         requestBody: apiMetadata.requestBody,

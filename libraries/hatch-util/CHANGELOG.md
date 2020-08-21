@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-util
 
-This log was last generated on Fri, 21 Aug 2020 21:24:25 GMT and should not be manually modified.
+This log was last generated on Fri, 21 Aug 2020 22:37:38 GMT and should not be manually modified.
+
+## 0.9.1
+Fri, 21 Aug 2020 22:37:38 GMT
+
+*Version update only*
 
 ## 0.9.0
 Fri, 21 Aug 2020 21:24:25 GMT

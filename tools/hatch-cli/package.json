@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-cli",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "",
   "bin": {
     "hatch": "./dist/index.js"
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.9.0",
+    "@launchtray/hatch-util": "^0.9.1",
     "@sentry/types": "^5",
     "@types/fs-extra": "^8",
     "@types/node": "^12",

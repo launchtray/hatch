@@ -149,12 +149,13 @@ necessary if you just want to use hatch.
 1. Run `rush unlink && rush update --purge && rush rebuild` to ensure that everything is building as-is.
 1. Run `rush change` and answer all prompts to generate change files.
 1. Review the change files to ensure that they are accurate.
-1. Update `nextBump` in `commonconfig/rush/version-policies.json` to reflect the largest version bump from the change files.
+1. Update `nextBump` in `common/config/rush/version-policies.json` to reflect the largest version bump size from the change files.
 1. Commit the change files to your pull request.
 1. Once all pull requests for a release are merged, run the following:
    - `rush unlink && rush update --purge && rush rebuild && rush version --bump`
 1. Review the locally generated version changes and changelog updates.
-1. If everything looks good, commit the changes to `master`
-1. Run `rush publish --include-all -p`
+1. If everything looks right, commit the changes to a release branch e.g. `release/0.10.0`
+1. Merge release branch into `master` and pull the latest from `master` locally
+1. Run `rush publish --include-all -b master -p`
 1. Merge `master` back into `develop` to clear out change files from the latter.
 1. Update your local installation of `hatch-cli` and hatch an app to make use of your new features.

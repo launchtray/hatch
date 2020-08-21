@@ -87,4 +87,10 @@
   //    */
   //   "exemptFromRushChange": false
   // }
+  {
+    "definitionName": "lockStepVersion",
+    "policyName": "hatchVersionPolicy",
+    "version": "0.8.0",
+    "nextBump": "minor"
+  }
 ]

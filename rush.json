@@ -352,67 +352,68 @@
     // },
     {
       "packageName": "@launchtray/example-web",
-      "projectFolder": "examples/example-web"
+      "projectFolder": "examples/example-web",
+      "shouldPublish": false
     },
     {
       "packageName": "@launchtray/hatch-util",
       "projectFolder": "libraries/hatch-util",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-server",
       "projectFolder": "libraries/hatch-server",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-razzle-config",
       "projectFolder": "libraries/hatch-razzle-config",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-server-middleware",
       "projectFolder": "libraries/hatch-server-middleware",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-server-user-management",
       "projectFolder": "libraries/hatch-server-user-management",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-test",
       "projectFolder": "libraries/hatch-test",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-web",
       "projectFolder": "libraries/hatch-web",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-web-client",
       "projectFolder": "libraries/hatch-web-client",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-web-injectables",
       "projectFolder": "libraries/hatch-web-injectables",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-web-server",
       "projectFolder": "libraries/hatch-web-server",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-user-management-client",
       "projectFolder": "libraries/hatch-user-management-client",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-cli",
       "projectFolder": "tools/hatch-cli",
-      "shouldPublish": true
+      "versionPolicyName": "hatchVersionPolicy"
     },
     {
       "packageName": "@launchtray/hatch-template-webapp",

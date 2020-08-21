@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Wed, 12 Aug 2020 01:31:45 GMT and should not be manually modified.
+This log was last generated on Fri, 21 Aug 2020 21:24:25 GMT and should not be manually modified.
+
+## 0.9.0
+Fri, 21 Aug 2020 21:24:25 GMT
+
+### Minor changes
+
+- Added CSRF check, OpenAPI spec fixes
 
 ## 0.5.0
 Wed, 12 Aug 2020 01:31:45 GMT

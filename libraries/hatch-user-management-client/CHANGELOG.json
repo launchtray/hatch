@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-user-management-client",
   "entries": [
     {
+      "version": "0.9.0",
+      "tag": "@launchtray/hatch-user-management-client_v0.9.0",
+      "date": "Fri, 21 Aug 2020 21:24:25 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "API cleanup"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.2.1",
       "tag": "@launchtray/hatch-user-management-client_v0.2.1",
       "date": "Thu, 06 Aug 2020 04:24:31 GMT",

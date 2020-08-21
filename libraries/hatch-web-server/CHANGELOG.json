@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web-server",
   "entries": [
     {
+      "version": "0.9.0",
+      "tag": "@launchtray/hatch-web-server_v0.9.0",
+      "date": "Fri, 21 Aug 2020 21:24:25 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added CSRF check"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.4.3",
       "tag": "@launchtray/hatch-web-server_v0.4.3",
       "date": "Thu, 06 Aug 2020 07:25:27 GMT",

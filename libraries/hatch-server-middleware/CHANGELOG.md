@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-middleware
 
-This log was last generated on Thu, 06 Aug 2020 04:24:31 GMT and should not be manually modified.
+This log was last generated on Fri, 21 Aug 2020 21:24:25 GMT and should not be manually modified.
+
+## 0.9.0
+Fri, 21 Aug 2020 21:24:25 GMT
+
+### Minor changes
+
+- Update dependencies
 
 ## 0.4.2
 Thu, 06 Aug 2020 04:24:31 GMT

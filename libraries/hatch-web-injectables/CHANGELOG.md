@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-web-injectables
 
-This log was last generated on Wed, 05 Aug 2020 21:27:25 GMT and should not be manually modified.
+This log was last generated on Fri, 21 Aug 2020 21:24:25 GMT and should not be manually modified.
+
+## 0.9.0
+Fri, 21 Aug 2020 21:24:25 GMT
+
+*Version update only*
 
 ## 0.1.3
 Wed, 05 Aug 2020 21:27:25 GMT

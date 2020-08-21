@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.9.0",
+      "tag": "@launchtray/hatch-web_v0.9.0",
+      "date": "Fri, 21 Aug 2020 21:24:25 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.3.2",
       "tag": "@launchtray/hatch-web_v0.3.2",
       "date": "Thu, 06 Aug 2020 07:25:27 GMT",

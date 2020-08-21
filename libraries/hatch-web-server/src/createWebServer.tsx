@@ -17,6 +17,7 @@ import {
   WebCommonComposition,
   runtimeConfig,
 } from '@launchtray/hatch-web';
+import crypto from 'crypto';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {HelmetProvider} from 'react-helmet-async';
@@ -156,10 +157,17 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         cookie: req.headers.cookie,
         authHeader: req.headers.authorization,
       };
-      renderClient(requestContext).then((body) => {
-        res.status(200).send(body);
-      }).catch((err: Error) => {
-        next?.(err);
+      crypto.randomBytes(32, (err, buf) => {
+        if (err) {
+          next(err);
+          return;
+        }
+        renderClient(requestContext).then((body) => {
+          res.cookie('double_submit', buf.toString('hex'));
+          res.status(200).send(body);
+        }).catch((err: Error) => {
+          next?.(err);
+        });
       });
     });
   });

@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import createServer, {CreateServerOptions} from './createServer';
 import {ServerComposition} from './ServerComposer';
 import {
@@ -36,10 +38,17 @@ export default (options: CreateServerOptions<ServerComposition>) => {
   createServer(options, (server, app) => {
     addStaticRoutes(app, assetsPrefix);
     app.get('/api', (req, res, next) => {
-      renderClient().then((body) => {
-        res.status(200).send(body);
-      }).catch((err: Error) => {
-        next?.(err);
+      crypto.randomBytes(32, (err, buf) => {
+        if (err) {
+          next(err);
+          return;
+        }
+        renderClient().then((body) => {
+          res.cookie('double_submit', buf.toString('hex'));
+          res.status(200).send(body);
+        }).catch((err: Error) => {
+          next?.(err);
+        });
       });
     });
   });

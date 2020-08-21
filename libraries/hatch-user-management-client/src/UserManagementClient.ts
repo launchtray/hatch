@@ -22,10 +22,10 @@ export enum UserManagementEndpoints {
   CONFIRM_PASSWORD_RESET = '/api/confirmPasswordReset',
   REFRESH_AUTHENTICATION = '/api/refreshAuthentication',
   SIGN_OUT_USER = '/api/signOutUser',
-  GET_USER_ATTRIBUTES = '/api/getUserAttributes',
-  SET_USER_ATTRIBUTES = '/api/setUserAttributes',
-  GET_USER_INFO = '/api/getUserInfo',
-  GET_USER_ID = '/api/getUserId',
+  GET_USER_ATTRIBUTES = '/api/userAttributes',
+  SET_USER_ATTRIBUTES = '/api/userAttributes',
+  GET_USER_INFO = '/api/userInfo',
+  GET_USER_ID = '/api/userId',
 }
 
 export interface UserManagementClient {

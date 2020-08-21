@@ -4,8 +4,10 @@ import UserInfoRequest, {AUTH_BLACKLIST_KEY, AUTH_WHITELIST_KEY} from './UserInf
 import UserManagementController from './UserManagementController';
 import UserPermissionsManager from './UserPermissionsManager';
 import LocalUserManager from './LocalUserManager';
+import {addCsrfCheckApiMetadata} from './UserManagementRequests';
 
 export {
+  addCsrfCheckApiMetadata,
   AUTH_BLACKLIST_KEY,
   AUTH_WHITELIST_KEY,
   AWSCognitoClient,

@@ -24,6 +24,40 @@ import {
 } from './UserManagementRequests';
 import UserContext from './UserContext';
 import * as HttpStatus from 'http-status-codes';
+import cookie from 'cookie';
+
+const isMethodSideEffectSafe = (method: string): boolean => {
+  return ['GET', 'HEAD', 'OPTIONS'].includes(method.toUpperCase());
+}
+
+const isCsrfSafe = (params: BasicRouteParams): boolean => {
+  // If the auth header is set, this cannot be CSRF, since an attacker cannot set headers
+  if (params.authHeader != null && params.authHeader !== '') {
+    return true;
+  }
+  // If bypass header is set, this cannot be CSRF, since an attacker cannot set headers
+  const bypassDSCHeader = params.req.header('x-bypass-csrf-check');
+  const bypassDSC = (bypassDSCHeader != null && bypassDSCHeader.toLocaleLowerCase() === 'true');
+  if (bypassDSC) {
+    return true;
+  }
+  // Method is (supposed to be) safe. If the request has side effects, the application is flawed.
+  if (isMethodSideEffectSafe(params.req.method)) {
+    return true;
+  }
+  // Otherwise, guard against CRSF via a double-submit cookie
+  let cookies = null;
+  if (params.req.headers.cookie) {
+    cookies = cookie.parse(params.req.headers.cookie);
+  }
+  const doubleSubmitCookie = cookies?.double_submit;
+  const doubleSubmitParam = params.req.body.doubleSubmitCookie;
+  return (
+    doubleSubmitCookie != null
+    && doubleSubmitCookie != ''
+    && doubleSubmitCookie === doubleSubmitParam
+  );
+};
 
 @controller()
 export default class UserManagementController {
@@ -38,6 +72,13 @@ export default class UserManagementController {
   @route.post(UserManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');
+    if (!isCsrfSafe(params)) {
+      this.logger.error('Rejecting request due to CSRF check');
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
+      });
+      return;
+    }
     try {
       const {username, password} = params.req.body;
       if (!username || !password) {
@@ -249,6 +290,13 @@ export default class UserManagementController {
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
     this.logger.debug('Refreshing user authentication tokens...');
+    if (!isCsrfSafe(params)) {
+      this.logger.error('Rejecting request due to CSRF check');
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
+      });
+      return;
+    }
     try {
       await userInfoRequest.getUserInfo();
     } catch (err) {
@@ -310,24 +358,30 @@ export default class UserManagementController {
     if (whitelisted && !blacklisted) {
       return params.next();
     }
-    
-    try {
-      const userInfo = await userInfoRequest.getUserInfo();
-      if (userInfo) {
-        this.logger.debug('User authenticated {username:' + userInfo.username + '}');
-        return params.next();
-      } else {
-        const errMsg = 'User not authenticated';
-        this.logger.debug(errMsg);
+    if (!isCsrfSafe(params)) {
+      this.logger.error('Rejecting request due to CSRF check');
+      params.res.status(HttpStatus.UNAUTHORIZED).send({
+        error: UserManagementErrorCodes.UNAUTHORIZED,
+      });
+    } else {
+      try {
+        const userInfo = await userInfoRequest.getUserInfo();
+        if (userInfo) {
+          this.logger.debug('User authenticated {username:' + userInfo.username + '}');
+          params.next();
+        } else {
+          const errMsg = 'User not authenticated';
+          this.logger.debug(errMsg);
+          params.res.status(HttpStatus.UNAUTHORIZED).send({
+            error: UserManagementErrorCodes.UNAUTHORIZED,
+          });
+        }
+      } catch (err) {
+        this.logger.info('Failed to authenticate user:', err.message);
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       }
-    } catch (err) {
-      this.logger.info('Failed to authenticate user:', err.message);
-      params.res.status(HttpStatus.UNAUTHORIZED).send({
-        error: UserManagementErrorCodes.UNAUTHORIZED,
-      });
     }
   }
 

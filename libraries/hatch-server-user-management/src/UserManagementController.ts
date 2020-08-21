@@ -21,6 +21,8 @@ import {
   SignOutUserRequest,
   ResendUserRegistrationCodeRequest,
   SetUserAttributesRequest,
+  GetUserAttributesRequest,
+  GetUserIdRequest,
 } from './UserManagementRequests';
 import UserContext from './UserContext';
 import * as HttpStatus from 'http-status-codes';
@@ -68,7 +70,7 @@ export default class UserManagementController {
     @inject('Logger') private readonly logger: Logger,
   ) {
   }
-  
+
   @route.post(UserManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');
@@ -396,8 +398,10 @@ export default class UserManagementController {
   private async extractUserIds(userContext: UserContext): Promise<{clientUserId: string, queriedUserId: string}> {
     const params = userContext.params;
     const clientUserId = userContext.userId;
-    let queriedUserId = params.req.body.userId;
-    const queriedUsername = params.req.body.username;
+    const useQueryParams = isMethodSideEffectSafe(params.req.method);
+    const paramsSource = (useQueryParams ? params.req.query : params.req.body);
+    let queriedUserId = paramsSource.userId;
+    const queriedUsername = paramsSource.username;
 
     if (queriedUserId == null) {
       if (queriedUsername != null) {
@@ -430,7 +434,7 @@ export default class UserManagementController {
     }
   }
   
-  @route.post(UserManagementEndpoints.GET_USER_ATTRIBUTES)
+  @route.get(UserManagementEndpoints.GET_USER_ATTRIBUTES, GetUserAttributesRequest.apiMetadata)
   public async getUserAttributes(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Getting user attributes...');
@@ -490,13 +494,13 @@ export default class UserManagementController {
     });
   }
 
-  @route.post(UserManagementEndpoints.GET_USER_ID)
+  @route.get(UserManagementEndpoints.GET_USER_ID, GetUserIdRequest.apiMetadata)
   public async getUserId(userContext: UserContext) {
     const params = userContext.params;
     this.logger.debug('Getting user ID...');
     try {
       const clientUserId = userContext.userId;
-      const queriedUsername = params.req.body.username;
+      const queriedUsername = params.req.query.username;
       if (queriedUsername != null) {
         const userId = await this.userManager.getUserId(clientUserId, queriedUsername, userContext.accessToken);
         this.logger.debug('User ID fetched:', userId);

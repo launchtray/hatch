@@ -190,17 +190,14 @@ export class UserManagementClientSdk implements UserManagementClient {
   
   public async getUserAttributes(userId: string, accessToken: string) {
     this.logger.debug('Requesting to get user attributes...');
-    const post = {
-      userId,
-    };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES, {
-      method: 'POST',
+    const params = '?userId=' + encodeURIComponent(userId);
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES + params, {
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + accessToken,
       },
-      body: JSON.stringify(post),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user attributes response body: ' + JSON.stringify(responseBody));
@@ -251,20 +248,16 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-
   public async getUserId(username: string, accessToken: string) {
     this.logger.debug('Requesting to get user ID...');
-    const post = {
-      username,
-    };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID, {
-      method: 'POST',
+    const params = '?username=' + encodeURIComponent(username);
+    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID + params, {
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + accessToken,
       },
-      body: JSON.stringify(post),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user ID response body: ' + JSON.stringify(responseBody));

@@ -89,7 +89,11 @@ export default class UserManagementController {
         });
       } else {
         const authTokens = await this.userManagementClient.authenticate(username, password);
-        params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
+        params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV !== 'development',
+          httpOnly: true,
+        });
         this.logger.debug('User authenticated and cookie set');
         params.res.status(HttpStatus.OK).send(authTokens);
       }
@@ -321,7 +325,11 @@ export default class UserManagementController {
       } else {
         const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
         const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken);
-        params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken);
+        params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV !== 'development',
+          httpOnly: true,
+        });
         this.logger.debug('User authentication tokens refreshed and cookie set');
         params.res.status(HttpStatus.OK).send(authTokens);
       }

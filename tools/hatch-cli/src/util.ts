@@ -151,6 +151,10 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(rushGitIgnorePath)) {
           await fs.remove(rushGitIgnorePath);
         }
+        const rushConfigPath = path.resolve(tempFilePath, 'rush.json');
+        if (fs.existsSync(rushConfigPath)) {
+          await fs.remove(rushConfigPath);
+        }
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {
@@ -222,12 +226,13 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${name}.test.ts`));
         }
-        if (rushConfigPath) {
+        if (rushConfigPath && projectFolder) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
+          const projectRelativePath = path.join(projectFolder, name);
           rushConfigParsed.projects.push({
               packageName: name,
-              projectFolder: dstPath,
+              projectFolder: projectRelativePath,
               shouldPublish: true,
             },
           );

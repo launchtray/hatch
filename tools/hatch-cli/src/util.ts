@@ -231,9 +231,9 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
           const rushConfigParsed = parse(rushConfigRaw);
           const projectRelativePath = path.join(projectFolder, name);
           rushConfigParsed.projects.push({
-              packageName: name,
-              projectFolder: projectRelativePath,
-              shouldPublish: true,
+            packageName: name,
+            projectFolder: projectRelativePath,
+            shouldPublish: true,
             },
           );
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);

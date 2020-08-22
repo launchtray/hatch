@@ -106,9 +106,9 @@ export const componentCreator = (parentDirectory: string) => {
 export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isMonorepo, projectFolder}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
-  if (isProject) {
+  if (isProject && projectFolder) {
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
-    if (rushConfigPath && projectFolder) {
+    if (rushConfigPath) {
       const rushConfigDir = path.dirname(rushConfigPath);
       dstPath = path.resolve(rushConfigDir, projectFolder, name);
     }
@@ -219,7 +219,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${name}.test.ts`));
         }
-        if (rushConfigPath && projectFolder) {
+        if (rushConfigPath) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
           rushConfigParsed.projects.push({

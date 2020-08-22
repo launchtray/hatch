@@ -11,6 +11,10 @@ import {spawnSync} from "child_process";
 import {RushConfiguration} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
 
+type TemplateType =
+  | 'monorepo'
+  | 'project';
+
 type ProjectFolder =
   | 'apps'
   | 'libraries'
@@ -20,8 +24,7 @@ interface CopyDirOptions {
   srcPath: string;
   dstPath: string;
   name: string;
-  isProject?: boolean;
-  isMonorepo?: boolean;
+  templateType?: TemplateType;
   projectFolder?: ProjectFolder;
 }
 
@@ -44,7 +47,7 @@ export const createMonorepo = async (parentDirectory: string, monorepoName: stri
     srcPath: templateDir(parentDirectory),
     dstPath: monorepoPath,
     name: monorepoName,
-    isMonorepo: true,
+    templateType: 'monorepo',
   });
   console.log(chalk.green('Created \'' + monorepoPath + '\' monorepo'));
 }
@@ -64,7 +67,7 @@ export const createProject = async (parentDirectory: string, projectName: string
     srcPath: templateDir(parentDirectory),
     dstPath: projectPath,
     name: projectName,
-    isProject: true,
+    templateType: 'project',
     projectFolder: projectFolder,
   });
   console.log(chalk.green('Created \'' + finalProjectPath + '\''));
@@ -103,10 +106,10 @@ export const componentCreator = (parentDirectory: string) => {
   }
 };
 
-export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isMonorepo, projectFolder}: CopyDirOptions) => {
+export const createFromTemplate = async ({srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
-  if (isProject && projectFolder) {
+  if (templateType === 'project' && projectFolder) {
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
     if (rushConfigPath) {
       const rushConfigDir = path.dirname(rushConfigPath);
@@ -118,7 +121,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
   }
   await withSpinner('Creating \'' + name + '\'', async () => {
     const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
-    if (isProject || isMonorepo) {
+    if (templateType === 'monorepo' || templateType === 'project') {
       tmp.dir({unsafeCleanup: true}, (err, path, cleanUp) => {
         if (err) {
           cleanUp();
@@ -137,7 +140,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
     }
     const [tempFilePath, cleanUp] = await tempFileFuture.get();
     try {
-      if (isMonorepo) {
+      if (templateType === 'monorepo') {
         const rushExecutable = path.resolve(__dirname, '../node_modules/.bin/rush')
         const rushInitCmd = spawnSync(rushExecutable, ['init'], {encoding : 'utf8', cwd: tempFilePath});
         if (rushInitCmd.error) {
@@ -150,7 +153,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
         }
       }
       await fs.copy(srcPath, tempFilePath);
-      if (isMonorepo) {
+      if (templateType === 'monorepo') {
         // Replace template names with generated project name
         await replace({
           files: tempFilePath + '/**/*',
@@ -171,7 +174,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
         if (fs.existsSync(dotGitIgnorePath)) {
           await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
         }
-      } else if (isProject) {
+      } else if (templateType === 'project') {
         // Delete files that might be copied over if this is a local dev install
         const nodeModulesPath = path.resolve(tempFilePath, 'node_modules');
         if (fs.existsSync(nodeModulesPath)) {

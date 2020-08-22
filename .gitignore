@@ -66,6 +66,7 @@ common/temp/**
 .DS_Store
 .jest-*
 node_modules
+tools/hatch-cli/package-lock.json
 dist
 build
 coverage

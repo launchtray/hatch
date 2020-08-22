@@ -1,0 +1,2 @@
+# HATCH_CLI_TEMPLATE_VAR_monorepoName libraries
+This directory contains Typescript libraries for the HATCH_CLI_TEMPLATE_VAR_monorepoName monorepo.

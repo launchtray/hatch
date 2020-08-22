@@ -24,6 +24,7 @@ commander
   .command(...commandForTemplate('injectable', 'injectable module'))
   .command(...commandForTemplate('story', 'storybook story'))
   .command(...commandForTemplate('library', 'library project'))
+  .command(...commandForTemplate('monorepo', 'monorepo project'))
 ;
 
 runCommander();

@@ -7,12 +7,14 @@ import commander from 'commander';
 import tmp from 'tmp';
 import {CompletableFuture} from '@launchtray/hatch-util';
 import replace from 'replace-in-file';
+import {spawnSync} from "child_process";
 
 interface CopyDirOptions {
   srcPath: string;
   dstPath: string;
   name: string;
   isProject?: boolean;
+  isMonorepo?: boolean;
 }
 
 export const withSpinner = async (message: string, task: () => Promise<void>): Promise<void> => {
@@ -22,6 +24,26 @@ export const withSpinner = async (message: string, task: () => Promise<void>): P
   } finally {
     spinner.stop();
     process.stdout.write(eraseLine);
+  }
+};
+
+export const createMonorepo = async (parentDirectory: string, monorepoName: string) => {
+  if (!monorepoName) {
+    throw new Error('Monorepo name must be specified');
+  }
+  const monorepoPath = process.cwd() + '/' + monorepoName;
+  await createFromTemplate({
+    srcPath: templateDir(parentDirectory),
+    dstPath: monorepoPath,
+    name: monorepoName,
+    isMonorepo: true,
+  });
+  console.log(chalk.green('Created \'' + monorepoPath + '\' monorepo'));
+}
+
+export const monorepoCreator = (parentDirectory: string) => {
+  return (monorepoName: string) => {
+    return createMonorepo(parentDirectory, monorepoName);
   }
 };
 
@@ -72,14 +94,14 @@ export const componentCreator = (parentDirectory: string) => {
   }
 };
 
-export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: CopyDirOptions) => {
+export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isMonorepo}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   if (fs.existsSync(dstPath)) {
     throw new Error('Failed to create ' + dstPath + ' as it already exits!');
   }
   await withSpinner('Creating \'' + name + '\'', async () => {
     const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
-    if (isProject) {
+    if (isProject || isMonorepo) {
       tmp.dir({unsafeCleanup: true}, (err, path, cleanUp) => {
         if (err) {
           cleanUp();
@@ -98,8 +120,41 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject}: Co
     }
     const [tempFilePath, cleanUp] = await tempFileFuture.get();
     try {
+      if (isMonorepo) {
+        const rushExecutable = path.resolve(__dirname, '../node_modules/.bin/rush')
+        const rushInitCmd = spawnSync(rushExecutable, ['init'], {encoding : 'utf8', cwd: tempFilePath});
+        if (rushInitCmd.error) {
+          throw new Error('Error initializing monorepo: ' + rushInitCmd.error.message);
+        }
+        // remove files that will be replaced by template
+        const rushGitIgnorePath = path.resolve(tempFilePath, '.gitignore');
+        if (fs.existsSync(rushGitIgnorePath)) {
+          await fs.remove(rushGitIgnorePath);
+        }
+      }
       await fs.copy(srcPath, tempFilePath);
-      if (isProject) {
+      if (isMonorepo) {
+        // Replace template names with generated project name
+        await replace({
+          files: tempFilePath + '/**/*',
+          from: /HATCH_CLI_TEMPLATE_VAR_monorepoName/g,
+          to: name,
+        });
+
+        // Rename hidden / project files
+        const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_monorepoName.iml');
+        if (fs.existsSync(imlPath)) {
+          await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${name}.iml`));
+        }
+        const dotIdeaPath = path.resolve(tempFilePath, 'dot-idea');
+        if (fs.existsSync(dotIdeaPath)) {
+          await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+        }
+        const dotGitIgnorePath = path.resolve(tempFilePath, 'dot-gitignore');
+        if (fs.existsSync(dotGitIgnorePath)) {
+          await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
+        }
+      } else if (isProject) {
         // Delete files that might be copied over if this is a local dev install
         const nodeModulesPath = path.resolve(tempFilePath, 'node_modules');
         if (fs.existsSync(nodeModulesPath)) {

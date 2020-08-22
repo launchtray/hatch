@@ -3,6 +3,7 @@ dependencies:
   '@babel/runtime': 7.11.0
   '@launchtray/tsyringe-async': 4.3.2
   '@microsoft/rush': 5.33.2
+  '@microsoft/rush-lib': 5.33.2
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-web': 'file:projects/example-web.tgz'
   '@rush-temp/hatch-cli': 'file:projects/hatch-cli.tgz'
@@ -61,6 +62,7 @@ dependencies:
   chalk: 3.0.0
   chromedriver: 78.0.1
   commander: 4.1.0
+  comment-json: 3.0.3
   connected-react-router: 6.5.2
   cookie: 0.4.1
   cross-fetch: 3.0.4
@@ -78,7 +80,7 @@ dependencies:
   jest: 24.9.0
   jsonwebtoken: 8.5.1
   jwk-to-pem: 2.0.3
-  ora: 4.0.3
+  ora: 4.1.1
   prop-types: 15.7.2
   razzle: 3.1.6
   razzle-dev-utils: 3.1.6
@@ -7971,12 +7973,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-I/zHAwsKf9FqGoXM4WWRACob9+SNukZTd94DWF57E4toouRulbCxcUh6RKUEOQlYTHJnzkPMySvPNaaSLNfLZw==
-  /cli-spinners/2.2.0:
+  /cli-spinners/2.4.0:
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-tgU3fKwzYjiLEQgPMD9Jt+JjHVL9kW93FiIMX/l7rivvOD4/LL0Mf7gda3+4U2KJBloybwgj5KEoQgGRioMiKQ==
+      integrity: sha512-sJAofoarcm76ZGpuooaO0eDy8saEy+YoZBLjC4h8srt4jeBnkYeOgqxgsJQTpyt2LjI5PTfLJHSL+41Yu4fEJA==
   /cli-table/0.3.1:
     dependencies:
       colors: 1.0.3
@@ -8197,6 +8199,17 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+  /comment-json/3.0.3:
+    dependencies:
+      core-util-is: 1.0.2
+      esprima: 4.0.1
+      has-own-prop: 2.0.0
+      repeat-string: 1.6.1
+    dev: false
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-P7XwYkC3qjIK45EAa9c5Y3lR7SMXhJqwFdWg3niAIAcbk3zlpKDdajV8Hyz/Y3sGNn3l+YNMl8A2N/OubSArHg==
   /commondir/1.0.1:
     dev: false
     resolution:
@@ -10769,6 +10782,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
+  /has-own-prop/2.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-Pq0h+hvsVm6dDEa8x82GnLSYHOzNDt7f0ddFa3FqcQlgzEiptPqL+XrOJNavjOzSYiYWIrgeVYYgGlLmnxwilQ==
   /has-symbols/1.0.1:
     dev: false
     engines:
@@ -13960,11 +13979,11 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha512-+IW9pACdk3XWmmTXG8m3upGUJst5XRGzxMRjXzAuJ1XnIFNvfhjjIuYkDvysnPQ7qzqVzLt78BCruntqRhWQbA==
-  /ora/4.0.3:
+  /ora/4.1.1:
     dependencies:
       chalk: 3.0.0
       cli-cursor: 3.1.0
-      cli-spinners: 2.2.0
+      cli-spinners: 2.4.0
       is-interactive: 1.0.0
       log-symbols: 3.0.0
       mute-stream: 0.0.8
@@ -13974,7 +13993,7 @@ packages:
     engines:
       node: '>=8'
     resolution:
-      integrity: sha512-fnDebVFyz309A73cqCipVL1fBZewq4vwgSHfxh43vVy31mbyoQ8sCH3Oeaog/owYOs/lLlGVPCISQonTneg6Pg==
+      integrity: sha512-sjYP8QyVWBpBZWD6Vr1M/KwknSw6kJOz41tvGMlwWeClHBtYKTbHMki1PsLZnxKpXMPbTKv9b3pjQu3REib96A==
   /original/1.0.2:
     dependencies:
       url-parse: 1.4.7
@@ -20038,6 +20057,7 @@ packages:
   'file:projects/hatch-cli.tgz':
     dependencies:
       '@microsoft/rush': 5.33.2
+      '@microsoft/rush-lib': 5.33.2
       '@sentry/types': 5.11.0
       '@types/fs-extra': 8.0.1
       '@types/node': 12.12.25
@@ -20045,9 +20065,10 @@ packages:
       ansi-escapes: 4.3.0
       chalk: 3.0.0
       commander: 4.1.0
+      comment-json: 3.0.3
       fs-extra: 8.1.0
       inquirer: 7.0.4
-      ora: 4.0.3
+      ora: 4.1.1
       replace-in-file: 5.0.2
       rimraf: 3.0.0
       tmp: 0.1.0
@@ -20055,7 +20076,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-jbd2+A4fc4QAAkf6po2cCWv9YEee8uJV1navri6cs0bQ39ygLmDbU6Gsy6zv977VkiHyHQYF7U3aTSIictvBGg==
+      integrity: sha512-9nt4KWS09AIRYyIDzx0AbAFSUymIav6xWTiKahVB2mc66Yt5BmzNcUMqWeOohuNfMfiXQbx9RrDASxlZZBGPWw==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz':
@@ -20435,6 +20456,7 @@ specifiers:
   '@babel/runtime': ^7
   '@launchtray/tsyringe-async': 4.3.2
   '@microsoft/rush': ^5.32.2
+  '@microsoft/rush-lib': ^5.32.2
   '@redux-saga/core': ^1
   '@rush-temp/example-web': 'file:./projects/example-web.tgz'
   '@rush-temp/hatch-cli': 'file:./projects/hatch-cli.tgz'
@@ -20493,6 +20515,7 @@ specifiers:
   chalk: ^3
   chromedriver: ^78.0.1
   commander: ^4
+  comment-json: ^3.0.3
   connected-react-router: 6.5.2
   cookie: ^0.4.1
   cross-fetch: ^3.0.4

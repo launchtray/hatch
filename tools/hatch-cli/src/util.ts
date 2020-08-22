@@ -8,6 +8,13 @@ import tmp from 'tmp';
 import {CompletableFuture} from '@launchtray/hatch-util';
 import replace from 'replace-in-file';
 import {spawnSync} from "child_process";
+import {RushConfiguration} from '@microsoft/rush-lib';
+import {parse, stringify} from 'comment-json';
+
+type ProjectFolder =
+  | 'apps'
+  | 'libraries'
+  | 'tools';
 
 interface CopyDirOptions {
   srcPath: string;
@@ -15,6 +22,7 @@ interface CopyDirOptions {
   name: string;
   isProject?: boolean;
   isMonorepo?: boolean;
+  projectFolder?: ProjectFolder;
 }
 
 export const withSpinner = async (message: string, task: () => Promise<void>): Promise<void> => {
@@ -47,24 +55,25 @@ export const monorepoCreator = (parentDirectory: string) => {
   }
 };
 
-export const createProject = async (parentDirectory: string, projectName: string) => {
+export const createProject = async (parentDirectory: string, projectName: string, projectFolder?: ProjectFolder) => {
   if (!projectName) {
     throw new Error('Project name must be specified');
   }
   const projectPath = process.cwd() + '/' + projectName;
-  await createFromTemplate({
+  const finalProjectPath = await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: projectPath,
     name: projectName,
     isProject: true,
+    projectFolder: projectFolder,
   });
-  console.log(chalk.green('Created \'' + projectPath + '\''));
+  console.log(chalk.green('Created \'' + finalProjectPath + '\''));
   console.log('Now would be a good time to cd into the project and install dependencies (e.g. via npm, yarn, or rush)');
 };
 
-export const projectCreator = (parentDirectory: string) => {
+export const projectCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
   return (projectName: string) => {
-    return createProject(parentDirectory, projectName);
+    return createProject(parentDirectory, projectName, projectFolder);
   }
 };
 
@@ -94,8 +103,16 @@ export const componentCreator = (parentDirectory: string) => {
   }
 };
 
-export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isMonorepo}: CopyDirOptions) => {
+export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isMonorepo, projectFolder}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
+  let rushConfigPath: string | undefined;
+  if (isProject) {
+    rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
+    if (rushConfigPath && projectFolder) {
+      const rushConfigDir = path.dirname(rushConfigPath);
+      dstPath = path.resolve(rushConfigDir, projectFolder, name);
+    }
+  }
   if (fs.existsSync(dstPath)) {
     throw new Error('Failed to create ' + dstPath + ' as it already exits!');
   }
@@ -202,6 +219,18 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${name}.test.ts`));
         }
+        if (rushConfigPath && projectFolder) {
+          const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
+          const rushConfigParsed = parse(rushConfigRaw);
+          rushConfigParsed.projects.push({
+              packageName: name,
+              projectFolder: dstPath,
+              shouldPublish: true,
+            },
+          );
+          const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
+          fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
+        }
       } else {
         await replace({
           files: tempFilePath,
@@ -214,6 +243,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, isProject, isM
       cleanUp();
     }
   });
+  return dstPath;
 };
 
 export const templatePath = (parentDirectory: string, templateFile: string) => {

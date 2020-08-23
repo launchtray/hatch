@@ -17,11 +17,22 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-web": "^0.10.0",
     "@launchtray/hatch-util": "^0.10.0",
-    "react-helmet-async": "^1",
+    "@launchtray/hatch-web": "^0.10.0",
+    "@redux-saga/core": "^1",
+    "@sentry/browser": "^5",
+    "@sentry/types": "^5",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "@types/react-native": "^0",
+    "@types/react-redux": "^7",
+    "@types/react-router": "^5",
+    "@types/react-router-dom": "^5",
+    "@types/swagger-ui-react": "3.23.0",
+    "prop-types": "^15",
     "react": "^16",
     "react-dom": "^16",
+    "react-helmet-async": "^1",
     "react-native-web": "0.12.3",
     "react-redux": "^7",
     "react-router": "^5",
@@ -29,17 +40,6 @@
     "redux": "^4",
     "redux-devtools-extension": "^2",
     "redux-saga": "^1",
-    "@redux-saga/core": "^1",
-    "@types/react": "^16",
-    "@types/react-dom": "^16",
-    "@types/react-native": "^0",
-    "@types/react-redux": "^7",
-    "@types/react-router": "^5",
-    "@types/react-router-dom": "^5",
-    "prop-types": "^15",
-    "@sentry/browser": "^5",
-    "@sentry/types": "^5",
-    "swagger-ui-react": "3.25.0",
-    "@types/swagger-ui-react": "3.23.0"
+    "swagger-ui-react": "3.25.0"
   }
 }

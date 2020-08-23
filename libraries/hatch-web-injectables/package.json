@@ -18,11 +18,11 @@
   "peerDependencies": {
     "@launchtray/hatch-util": "^0.10.0",
     "@launchtray/hatch-web": "^0.10.0",
-    "react-router": "^5",
-    "react-router-dom": "^5",
-    "redux": "^4",
     "@types/react-dom": "^16",
     "@types/react-router": "^5",
-    "@types/react-router-dom": "^5"
+    "@types/react-router-dom": "^5",
+    "react-router": "^5",
+    "react-router-dom": "^5",
+    "redux": "^4"
   }
 }

@@ -12,8 +12,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "typescript": "^3.7.3",
-    "rimraf": "3.0.0"
+    "rimraf": "3.0.0",
+    "typescript": "^3.7.3"
   },
   "peerDependencies": {
     "@types/selenium-webdriver": "^4.0.5",

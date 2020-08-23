@@ -13,13 +13,13 @@
     "access": "public"
   },
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
-    "@launchtray/tsyringe-async": "4.3.2"
+    "@launchtray/tsyringe-async": "4.3.2",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "typescript": "^3.7.3",
+    "@types/node": "^12",
     "rimraf": "3.0.0",
-    "@types/node": "^12"
+    "typescript": "^3.7.3"
   },
   "peerDependencies": {
     "@sentry/types": "^5"

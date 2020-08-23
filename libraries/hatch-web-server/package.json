@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-server",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "license": "MIT",
@@ -23,9 +23,9 @@
   "peerDependencies": {
     "@types/express": "^4",
     "@types/express-serve-static-core": "^4",
-    "@launchtray/hatch-util": "^0.9.2",
-    "@launchtray/hatch-server": "^0.9.2",
-    "@launchtray/hatch-web": "^0.9.2",
+    "@launchtray/hatch-util": "^0.10.0",
+    "@launchtray/hatch-server": "^0.10.0",
+    "@launchtray/hatch-web": "^0.10.0",
     "express": "^4",
     "react-helmet-async": "^1",
     "react-native-web": "0.12.3",

@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-user-management-client",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -16,6 +16,6 @@
     "cross-fetch": "^3.0.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.10.0"
+    "@launchtray/hatch-util": "^0.10.1"
   }
 }

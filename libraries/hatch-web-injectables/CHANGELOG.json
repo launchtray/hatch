@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web-injectables",
   "entries": [
     {
+      "version": "0.10.1",
+      "tag": "@launchtray/hatch-web-injectables_v0.10.1",
+      "date": "Sun, 23 Aug 2020 17:43:47 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Import fixes"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.0",
       "tag": "@launchtray/hatch-web-injectables_v0.10.0",
       "date": "Sun, 23 Aug 2020 07:05:36 GMT",

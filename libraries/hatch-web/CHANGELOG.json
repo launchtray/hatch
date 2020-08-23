@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.10.2",
+      "tag": "@launchtray/hatch-web_v0.10.2",
+      "date": "Sun, 23 Aug 2020 18:44:09 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix tsyringe exports"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.1",
       "tag": "@launchtray/hatch-web_v0.10.1",
       "date": "Sun, 23 Aug 2020 17:43:47 GMT",

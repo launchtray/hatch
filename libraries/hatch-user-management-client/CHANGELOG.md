@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-user-management-client
 
-This log was last generated on Sun, 23 Aug 2020 17:43:47 GMT and should not be manually modified.
+This log was last generated on Sun, 23 Aug 2020 18:44:09 GMT and should not be manually modified.
+
+## 0.10.2
+Sun, 23 Aug 2020 18:44:09 GMT
+
+### Updates
+
+- Fix tsyringe exports
 
 ## 0.10.1
 Sun, 23 Aug 2020 17:43:47 GMT

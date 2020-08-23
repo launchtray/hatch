@@ -22,6 +22,7 @@
     "@launchtray/hatch-web-client": "^0.10.1",
     "@launchtray/hatch-web-injectables": "^0.10.1",
     "@launchtray/hatch-web-server": "^0.10.1",
+    "@launchtray/tsyringe-async": "4.3.2",
     "@redux-saga/core": "^1",
     "@sentry/browser": "^5",
     "@sentry/node": "^5",

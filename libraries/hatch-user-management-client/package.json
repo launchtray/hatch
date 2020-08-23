@@ -16,6 +16,7 @@
     "cross-fetch": "^3.0.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.10.1"
+    "@launchtray/hatch-util": "^0.10.1",
+    "@launchtray/tsyringe-async": "4.3.2"
   }
 }

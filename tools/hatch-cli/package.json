@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@launchtray/hatch-util": "^0.10.1",
+    "@launchtray/tsyringe-async": "4.3.2",
     "@microsoft/rush": "^5.29.1",
     "@microsoft/rush-lib": "^5.29.1",
     "@sentry/types": "^5",

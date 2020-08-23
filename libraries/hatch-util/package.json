@@ -13,7 +13,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/tsyringe-async": "4.3.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
@@ -22,6 +21,7 @@
     "typescript": "^3.7.3"
   },
   "peerDependencies": {
+    "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/types": "^5"
   }
 }

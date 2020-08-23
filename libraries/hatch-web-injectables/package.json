@@ -18,6 +18,7 @@
   "peerDependencies": {
     "@launchtray/hatch-util": "^0.10.1",
     "@launchtray/hatch-web": "^0.10.1",
+    "@launchtray/tsyringe-async": "4.3.2",
     "@types/react-dom": "^16",
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",

@@ -57,6 +57,7 @@
     "resolve": "^1.17.0",
     "@babel/core": "^7",
     "razzle-dev-utils": "3.1.6",
+    "razzle-plugin-typescript": "3.1.6",
     "sockjs-client": "^1.4.0",
     "webpack-dev-server": "^3.11.0"
   },

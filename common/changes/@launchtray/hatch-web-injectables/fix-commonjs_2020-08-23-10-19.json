@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-injectables",
+      "comment": "Import fixes",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-injectables",
+  "email": "kiltyj@gmail.com"
+}

@@ -2,8 +2,8 @@
   "name": "@launchtray/hatch-util",
   "version": "0.10.0",
   "description": "Utilities used by several other hatch modules",
-  "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",

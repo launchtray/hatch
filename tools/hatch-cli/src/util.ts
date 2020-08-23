@@ -234,8 +234,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
             packageName: name,
             projectFolder: projectRelativePath,
             shouldPublish: true,
-            },
-          );
+          });
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
         }

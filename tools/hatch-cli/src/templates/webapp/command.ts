@@ -5,6 +5,6 @@ commander
   .name('hatch webapp')
   .arguments('[name]')
   .description('Creates a web application project, according to the hatch architecture')
-  .action(projectCreator(__dirname));
+  .action(projectCreator(__dirname, 'apps'));
 
 runCommander();

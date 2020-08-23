@@ -24,10 +24,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "preserveSymlinks": true,
-    "declaration": true,
-    "rootDir": "src",
-    "outDir": "dist"
+    "preserveSymlinks": true
   },
   "exclude": [
     "**/node_modules",
@@ -36,7 +33,8 @@
     "**/scripts",
     "**/acceptance-tests",
     "**/webpack",
-    "**/jest"
+    "**/jest",
+    "**/razzle.config.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

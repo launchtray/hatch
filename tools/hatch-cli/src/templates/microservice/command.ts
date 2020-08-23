@@ -5,6 +5,6 @@ commander
   .name('hatch microservice')
   .arguments('[name]')
   .description('Creates a microservice project, according to the hatch architecture')
-  .action(projectCreator(__dirname));
+  .action(projectCreator(__dirname, 'apps'));
 
 runCommander();

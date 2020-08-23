@@ -5,6 +5,6 @@ commander
   .name('hatch library')
   .arguments('[name]')
   .description('Creates a library project')
-  .action(projectCreator(__dirname));
+  .action(projectCreator(__dirname, 'libraries'));
 
 runCommander();

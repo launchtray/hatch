@@ -1,0 +1,2 @@
+# HATCH_CLI_TEMPLATE_VAR_monorepoName tools
+This directory contains Typescript tools for the HATCH_CLI_TEMPLATE_VAR_monorepoName monorepo.

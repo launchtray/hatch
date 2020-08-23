@@ -2,8 +2,8 @@
   "name": "@launchtray/hatch-web",
   "version": "0.10.0",
   "description": "Utilities for composing apps using dependency injection",
-  "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",

@@ -16,7 +16,7 @@
    * path segment in the "$schema" field for all your Rush config files.  This will ensure
    * correct error-underlining and tab-completion for editors such as VS Code.
    */
-  "rushVersion": "5.33.2",
+  "rushVersion": "5.29.1",
 
   /**
    * The next field selects which package manager should be installed and determines its version.
@@ -62,7 +62,8 @@
      * The default value is false to avoid legacy compatibility issues.
      * It is strongly recommended to set strictPeerDependencies=true.
      */
-     "strictPeerDependencies": true,
+    "strictPeerDependencies": true,
+
 
     /**
      * Configures the strategy used to select versions during installation.
@@ -76,7 +77,7 @@
      * After modifying this field, it's recommended to run "rush update --full" so that the package manager
      * will recalculate all version selections.
      */
-     "resolutionStrategy": "fewer-dependencies"
+    "resolutionStrategy": "fewer-dependencies"
 
     /**
      * If true, then `rush install` will report an error if manual modifications
@@ -147,7 +148,7 @@
    * version. In those cases, you will need to add an entry to the "allowedAlternativeVersions"
    * section of the common-versions.json.
    */
-  // "ensureConsistentVersions": true,
+  "ensureConsistentVersions": true,
 
   /**
    * Large monorepos can become intimidating for newcomers if project folder paths don't follow
@@ -172,8 +173,8 @@
    * To remove these restrictions, you could set projectFolderMinDepth=1
    * and set projectFolderMaxDepth to a large number.
    */
-   "projectFolderMinDepth": 2,
-   "projectFolderMaxDepth": 2,
+  "projectFolderMinDepth": 2,
+  "projectFolderMaxDepth": 2,
 
   /**
    * Today the npmjs.com registry enforces fairly strict naming rules for packages, but in the early

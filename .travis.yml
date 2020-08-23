@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - '12.14.1'
+  - '8.9.4'
 script:
   - set -e
 
@@ -10,9 +10,9 @@ script:
   - echo -en 'travis_fold:end:change\\r'
 
   - echo 'Installing...' && echo -en 'travis_fold:start:install\\r'
-  - node common/scripts/install-run-rush.js install --purge
+  - node common/scripts/install-run-rush.js install
   - echo -en 'travis_fold:end:install\\r'
 
   - echo 'Building...' && echo -en 'travis_fold:start:build\\r'
-  - CI=false node common/scripts/install-run-rush.js rebuild --verbose
+  - node common/scripts/install-run-rush.js rebuild --verbose
   - echo -en 'travis_fold:end:build\\r'

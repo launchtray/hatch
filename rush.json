@@ -16,7 +16,7 @@
    * path segment in the "$schema" field for all your Rush config files.  This will ensure
    * correct error-underlining and tab-completion for editors such as VS Code.
    */
-  "rushVersion": "5.17.2",
+  "rushVersion": "5.29.1",
 
   /**
    * The next field selects which package manager should be installed and determines its version.
@@ -26,7 +26,7 @@
    * Specify one of: "pnpmVersion", "npmVersion", or "yarnVersion".  See the Rush documentation
    * for details about these alternatives.
    */
-  "pnpmVersion": "2.15.1",
+  "pnpmVersion": "4.14.4",
 
   // "npmVersion": "4.5.0",
   // "yarnVersion": "1.9.4",
@@ -35,6 +35,22 @@
    * Options that are only used when the PNPM package manager is selected
    */
   "pnpmOptions": {
+    /**
+     * Specifies the location of the PNPM store.  There are two possible values:
+     *
+     * - "local" - use the "pnpm-store" folder in the current configured temp folder:
+     *   "common/temp/pnpm-store" by default.
+     * - "global" - use PNPM's global store, which has the benefit of being shared
+     *    across multiple repo folders, but the disadvantage of less isolation for builds
+     *    (e.g. bugs or incompatibilities when two repos use different releases of PNPM)
+     *
+     * RUSH_PNPM_STORE_PATH will override the directory that will be used as the store
+     *
+     * In all cases, the store path will be overridden by the environment variable RUSH_PNPM_STORE_PATH.
+     *
+     * The default value is "local".
+     */
+    // "pnpmStore": "local",
 
     /**
      * If true, then Rush will add the "--strict-peer-dependencies" option when invoking PNPM.
@@ -62,6 +78,40 @@
      * will recalculate all version selections.
      */
     "resolutionStrategy": "fewer-dependencies"
+
+    /**
+     * If true, then `rush install` will report an error if manual modifications
+     * were made to the PNPM shrinkwrap file without running "rush update" afterwards.
+     *
+     * This feature protects against accidental inconsistencies that may be introduced
+     * if the PNPM shrinkwrap file ("pnpm-lock.yaml") is manually edited.  When this
+     * feature is enabled, "rush update" will append a hash to the file as a YAML comment,
+     * and then "rush update" and "rush install" will validate the hash.  Note that this does not prohibit
+     * manual modifications, but merely requires "rush update" be run
+     * afterwards, ensuring that PNPM can report or repair any potential inconsistencies.
+     *
+     * To temporarily disable this validation when invoking "rush install", use the
+     * "--bypass-policy" command-line parameter.
+     *
+     * The default value is false.
+     */
+    // "preventManualShrinkwrapChanges": true,
+
+    /**
+     * If true, then `rush install` will use the PNPM workspaces feature to perform the
+     * install.
+     *
+     * This feature uses PNPM to peform the entire monorepo install. When using workspaces, Rush will
+     * generate a "pnpm-workspace.yaml" file referencing all local projects to install. Rush will
+     * also generate a "pnpmfile.js" which is used to provide preferred versions support. When install
+     * is run, this pnpmfile will be used to replace dependency version ranges with a smaller subset
+     * of the original range. If the preferred version is not fully a subset of the original version
+     * range, it will be left as-is. After this, the pnpmfile.js provided in the repository (if one
+     * exists) will be called to further modify package dependencies.
+     *
+     * This option is experimental. The default value is false.
+     */
+    // "useWorkspaces": true
   },
 
   /**
@@ -72,19 +122,19 @@
    * Specify a SemVer range to ensure developers use a Node.js version that is appropriate
    * for your repo.
    */
-  "nodeSupportedVersionRange": ">=12.14.1 <13.0.0",
+  "nodeSupportedVersionRange": ">=12.13.0 <13.0.0",
 
   /**
-  * Odd-numbered major versions of Node.js are experimental.  Even-numbered releases
-  * spend six months in a stabilization period before the first Long Term Support (LTS) version.
-  * For example, 8.9.0 was the first LTS version of Node.js 8.  Pre-LTS versions are not recommended
-  * for production usage because they frequently have bugs.  They may cause Rush itself
-  * to malfunction.
-  *
-  * Rush normally prints a warning if it detects a pre-LTS Node.js version.  If you are testing
-  * pre-LTS versions in preparation for supporting the first LTS version, you can use this setting
-  * to disable Rush's warning.
-  */
+   * Odd-numbered major versions of Node.js are experimental.  Even-numbered releases
+   * spend six months in a stabilization period before the first Long Term Support (LTS) version.
+   * For example, 8.9.0 was the first LTS version of Node.js 8.  Pre-LTS versions are not recommended
+   * for production usage because they frequently have bugs.  They may cause Rush itself
+   * to malfunction.
+   *
+   * Rush normally prints a warning if it detects a pre-LTS Node.js version.  If you are testing
+   * pre-LTS versions in preparation for supporting the first LTS version, you can use this setting
+   * to disable Rush's warning.
+   */
   // "suppressNodeLtsWarning": false,
 
   /**
@@ -127,6 +177,19 @@
   "projectFolderMaxDepth": 6, // Should be 2 for everything but templates
 
   /**
+   * Today the npmjs.com registry enforces fairly strict naming rules for packages, but in the early
+   * days there was no standard and hardly any enforcement.  A few large legacy projects are still using
+   * nonstandard package names, and private registries sometimes allow it.  Set "allowMostlyStandardPackageNames"
+   * to true to relax Rush's enforcement of package names.  This allows upper case letters and in the future may
+   * relax other rules, however we want to minimize these exceptions.  Many popular tools use certain punctuation
+   * characters as delimiters, based on the assumption that they will never appear in a package name; thus if we relax
+   * the rules too much it is likely to cause very confusing malfunctions.
+   *
+   * The default value is false.
+   */
+  // "allowMostlyStandardPackageNames": true,
+
+  /**
    * This feature helps you to review and approve new packages before they are introduced
    * to your monorepo.  For example, you may be concerned about licensing, code quality,
    * performance, or simply accumulating too many libraries with overlapping functionality.
@@ -152,14 +215,14 @@
   //     "tools",      // non-shipping projects that are part of the developer toolchain
   //     "prototypes"  // experiments that should mostly be ignored by the review process
   //   ],
-  //
+  // 
   //   /**
   //    * A list of NPM package scopes that will be excluded from review.
   //    * We recommend to exclude TypeScript typings (the "@types" scope), because
   //    * if the underlying package was already approved, this would imply that the typings
   //    * are also approved.
   //    */
-  //   // "ignoredNpmScopes": [ "@types" ]
+  //   // "ignoredNpmScopes": ["@types"]
   // },
 
   /**
@@ -211,12 +274,24 @@
      * determined from Git alone, since the "pull request" feature is not a Git concept.  Ideally
      * Rush would use a vendor-specific protocol to query the information from GitHub, Azure DevOps, etc.
      * But to keep things simple, "rush change" simply assumes that your PR is against the "master" branch
-     * of the Git remote indicated by the respository.url setting in rush.json.  If you are working in
+     * of the Git remote indicated by the repository.url setting in rush.json.  If you are working in
      * a GitHub "fork" of the real repo, this setting will be different from the repository URL of your
      * your PR branch, and in this situation "rush change" will also automatically invoke "git fetch"
      * to retrieve the latest activity for the remote master branch.
      */
-    "url": "https://github.com/launchtray/hatch"
+    // "url": "https://github.com/microsoft/rush-example",
+
+    /**
+     * The default branch name. This tells "rush change" which remote branch to compare against.
+     * The default value is "master"
+     */
+    // "defaultBranch": "master",
+
+    /**
+     * The default remote. This tells "rush change" which remote to compare against if the remote URL is
+     * not set or if a remote matching the provided remote URL is not found.
+     */
+    // "defaultRemote": "origin"
   },
 
   /**
@@ -269,7 +344,7 @@
     //    * The folder name for this variant.
     //    */
     //   "variantName": "old-sdk",
-    //
+    // 
     //   /**
     //    * An informative description
     //    */
@@ -308,19 +383,19 @@
     //    * The NPM package name of the project (must match package.json)
     //    */
     //   "packageName": "my-app",
-    //
+    // 
     //   /**
     //    * The path to the project folder, relative to the rush.json config file.
     //    */
     //   "projectFolder": "apps/my-app",
-    //
+    // 
     //   /**
     //    * An optional category for usage in the "browser-approved-packages.json"
     //    * and "nonbrowser-approved-packages.json" files.  The value must be one of the
     //    * strings from the "reviewCategories" defined above.
     //    */
     //   "reviewCategory": "production",
-    //
+    // 
     //   /**
     //    * A list of local projects that appear as devDependencies for this project, but cannot be
     //    * locally linked because it would create a cyclic dependency; instead, the last published
@@ -329,20 +404,20 @@
     //   "cyclicDependencyProjects": [
     //     // "my-toolchain"
     //   ],
-    //
+    // 
     //   /**
     //    * If true, then this project will be ignored by the "rush check" command.
     //    * The default value is false.
     //    */
     //   // "skipRushCheck": false,
-    //
+    // 
     //   /**
     //    * A flag indicating that changes to this project will be published to npm, which affects
     //    * the Rush change and publish workflows. The default value is false.
     //    * NOTE: "versionPolicyName" and "shouldPublish" are alternatives; you cannot specify them both.
     //    */
     //   // "shouldPublish": false,
-    //
+    // 
     //   /**
     //    * An optional version policy associated with the project.  Version policies are defined
     //    * in "version-policies.json" file.  See the "rush publish" documentation for more info.

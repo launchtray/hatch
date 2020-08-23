@@ -86,6 +86,7 @@
     "razzle": "3.1.6",
     "resolve": "^1.17.0",
     "razzle-dev-utils": "3.1.6",
+    "razzle-plugin-typescript": "3.1.6",
     "react-error-overlay": "^6",
     "rimraf": "3.0.0",
     "selenium-webdriver": "^4.0.0-alpha.5",

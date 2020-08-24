@@ -106,6 +106,11 @@ export const componentCreator = (parentDirectory: string) => {
   }
 };
 
+const toShortName = (name: string) => {
+  const components = name.split('/');
+  return components[components.length - 1];
+};
+
 export const createFromTemplate = async ({srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
@@ -113,7 +118,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
     if (rushConfigPath) {
       const rushConfigDir = path.dirname(rushConfigPath);
-      dstPath = path.resolve(rushConfigDir, projectFolder, name);
+      dstPath = path.resolve(rushConfigDir, projectFolder, toShortName(name));
     }
   }
   if (fs.existsSync(dstPath)) {
@@ -155,6 +160,19 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(rushConfigPath)) {
           await fs.remove(rushConfigPath);
         }
+        const versionPoliciesPath = path.resolve(tempFilePath, 'common', 'config', 'rush', 'version-policies.json');
+        const versionPoliciesRaw = fs.readFileSync(versionPoliciesPath).toString();
+        const versionPoliciesParsed = parse(versionPoliciesRaw);
+        versionPoliciesParsed.push({
+          definitionName: 'individualVersion',
+          policyName: 'libraries',
+        });
+        versionPoliciesParsed.push({
+          definitionName: 'individualVersion',
+          policyName: 'tools',
+        });
+        const versionPoliciesRawUpdated = stringify(versionPoliciesParsed, null, 2);
+        fs.writeFileSync(versionPoliciesPath, versionPoliciesRawUpdated);
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {
@@ -178,6 +196,10 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(dotGitIgnorePath)) {
           await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
         }
+        const dotDockerIgnorePath = path.resolve(tempFilePath, 'dot-dockerignore');
+        if (fs.existsSync(dotDockerIgnorePath)) {
+          await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
+        }
       } else if (templateType === 'project') {
         // Delete files that might be copied over if this is a local dev install
         const nodeModulesPath = path.resolve(tempFilePath, 'node_modules');
@@ -196,15 +218,20 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
           to: name,
         });
         await replace({
+          files: tempFilePath + '/**/*',
+          from: /HATCH_CLI_TEMPLATE_VAR_projectShortName/g,
+          to: toShortName(name),
+        });
+        await replace({
           files: tempFilePath + '/package.json',
           from: '@launchtray/hatch-template-' + templateName,
-          to: name
+          to: name,
         });
 
         // Rename hidden / project files
-        const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectName.iml');
+        const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.iml');
         if (fs.existsSync(imlPath)) {
-          await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${name}.iml`));
+          await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${toShortName(name)}.iml`));
         }
         const dotIdeaPath = path.resolve(tempFilePath, 'dot-idea');
         if (fs.existsSync(dotIdeaPath)) {
@@ -222,19 +249,26 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(dotDockerIgnorePath)) {
           await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
         }
-        const testPath = path.resolve(tempFilePath, 'src', '__test__', 'HATCH_CLI_TEMPLATE_VAR_projectName.test.ts');
+        const testPath = path.resolve(tempFilePath, 'src', '__test__', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.test.ts');
         if (fs.existsSync(testPath)) {
-          await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${name}.test.ts`));
+          await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${toShortName(name)}.test.ts`));
         }
         if (rushConfigPath && projectFolder) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
-          const projectRelativePath = path.join(projectFolder, name);
-          rushConfigParsed.projects.push({
+          const projectRelativePath = path.join(projectFolder, toShortName(name));
+          const project: {[key: string]: any} = {
             packageName: name,
             projectFolder: projectRelativePath,
-            shouldPublish: true,
-          });
+          };
+          if (projectFolder === 'libraries') {
+            project.versionPolicyName = 'libraries';
+          } else if (projectFolder === 'tools') {
+            project.versionPolicyName = 'tools';
+          } else {
+            project.shouldPublish = false;
+          }
+          rushConfigParsed.projects.push(project);
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
         }

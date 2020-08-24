@@ -1,0 +1,16 @@
+**/node_modules
+**/build
+**/.rush
+**/.idea
+**/.storybook
+**/README.md
+**/*.log
+**/Dockerfile
+**/package-lock.json
+**/pnpm-lock.yaml
+**/shrinkwrap.yaml
+**/npm-shrinkwrap.json
+**/yarn.lock
+**/.git
+common/temp
+common/scripts

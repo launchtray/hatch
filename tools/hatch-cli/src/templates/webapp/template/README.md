@@ -1,4 +1,4 @@
-# HATCH_CLI_TEMPLATE_VAR_projectName
+# HATCH_CLI_TEMPLATE_VAR_projectShortName
 This project is a TypeScript [single-page web application](https://en.wikipedia.org/wiki/Single-page_application) built 
 using the [hatch](https://github.com/@launchtray/hatch) tools and libraries.
 

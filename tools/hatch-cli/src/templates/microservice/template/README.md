@@ -1,4 +1,4 @@
-# HATCH_CLI_TEMPLATE_VAR_projectName
+# HATCH_CLI_TEMPLATE_VAR_projectShortName
 This project is a TypeScript microservice built 
 using the [hatch](https://github.com/@launchtray/hatch) tools and libraries.
 

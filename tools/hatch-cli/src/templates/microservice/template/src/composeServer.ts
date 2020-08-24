@@ -7,7 +7,7 @@ import {
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
 
 export default async (): Promise<ServerComposition> => {
-  ROOT_CONTAINER.register('appName', {useValue: 'HATCH_CLI_TEMPLATE_VAR_projectName-server'});
+  ROOT_CONTAINER.register('appName', {useValue: 'HATCH_CLI_TEMPLATE_VAR_projectShortName-server'});
 
   return {
     serverMiddleware: [

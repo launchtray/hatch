@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/HATCH_CLI_TEMPLATE_VAR_projectName.iml" filepath="$PROJECT_DIR$/.idea/HATCH_CLI_TEMPLATE_VAR_projectName.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/HATCH_CLI_TEMPLATE_VAR_projectShortName.iml" filepath="$PROJECT_DIR$/.idea/HATCH_CLI_TEMPLATE_VAR_projectShortName.iml" />
     </modules>
   </component>
 </project>

@@ -15,7 +15,9 @@ RUN npm install -g @microsoft/rush
 RUN rush update --purge
 COPY ./libraries ./libraries
 ARG PREBUILD_ALL_LIBRARIES=true
-RUN if [ "$PREBUILD_ALL_LIBRARIES" = "true" ] ; then rush build --to-version-policy libraries ; fi
+RUN if [ "$PREBUILD_ALL_LIBRARIES" = "true" ] && [ ! -z "$(rush list -p | grep " libraries/")" ] ; then \
+      rush build --to-version-policy libraries ; \
+    fi
 
 # Build a specific app based on the APP_NAME build arg
 FROM build-libraries as build-app

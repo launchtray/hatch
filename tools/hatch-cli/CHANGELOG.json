@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.10.4",
+      "tag": "@launchtray/hatch-cli_v0.10.4",
+      "date": "Tue, 25 Aug 2020 01:00:49 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix docker build for monorepos without libraries"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.3",
       "tag": "@launchtray/hatch-cli_v0.10.3",
       "date": "Mon, 24 Aug 2020 21:22:43 GMT",

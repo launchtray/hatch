@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Mon, 24 Aug 2020 21:22:43 GMT and should not be manually modified.
+This log was last generated on Tue, 25 Aug 2020 01:00:49 GMT and should not be manually modified.
+
+## 0.10.4
+Tue, 25 Aug 2020 01:00:49 GMT
+
+### Updates
+
+- Fix docker build for monorepos without libraries
 
 ## 0.10.3
 Mon, 24 Aug 2020 21:22:43 GMT

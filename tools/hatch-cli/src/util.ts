@@ -12,6 +12,7 @@ import {RushConfiguration} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
 import YAML from 'yaml'
 import {Pair} from 'yaml/types';
+import dotenv from 'dotenv';
 
 type TemplateType =
   | 'monorepo'
@@ -113,9 +114,21 @@ const toShortName = (name: string) => {
   return components[components.length - 1];
 };
 
+const toEnvName = (shortName: string) => {
+  return shortName.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase();
+};
+
+const toDockerServiceName = (shortName: string, isStaticServer: boolean) => {
+  return (isStaticServer ? '_static_' : '') + shortName;
+};
+
+const toPortName = (shortName: string, isStaticServer: boolean) => {
+  const envName = toEnvName(shortName);
+  return (isStaticServer ? '_STATIC_' : '') + envName + '_PORT';
+};
+
 const createDockerService = (doc: YAML.Document, shortName: string, isStaticServer: boolean) => {
-  const envName = shortName.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase();
-  const serviceName = (isStaticServer ? '_static_' : '') + shortName;
+  const serviceName = toDockerServiceName(shortName, isStaticServer);
   const service: any = {
     key: serviceName,
     value: {
@@ -124,7 +137,7 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
         target: (isStaticServer ? 'static-server' : 'production-app'),
         args: {APP_NAME: shortName},
       },
-      ports: ['${' + (isStaticServer ? '_STATIC_' : '') + envName + '_PORT}:80'],
+      ports: ['${' + toPortName(shortName, isStaticServer) + '}:80'],
     },
   };
   if (!isStaticServer) {
@@ -133,12 +146,52 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
       './docker-compose.urls.env',
     ];
     service.value.environment = {
-      STATIC_ASSETS_BASE_URL: 'http://localhost:${_STATIC_' + envName + '_PORT}',
+      STATIC_ASSETS_BASE_URL: 'http://localhost:${'+ toPortName(shortName, true) + '}',
     };
   }
   const pair = new Pair(service.key, service.value);
   pair.spaceBefore = true;
   doc.addIn(['services'], pair);
+};
+
+const MIN_PORT = 3002; // Start after default dev server ports
+const MAX_PORT = 65535;
+
+const findAvailablePorts = (dotEnv: any, portCount: number) => {
+  let dotEnvPorts = {};
+  const foundPorts = [];
+  for (const key of Object.keys(dotEnv)) {
+    if (key.endsWith('_PORT')) {
+      const port = parseInt(dotEnv[key]);
+      if (!isNaN(port) && port >= MIN_PORT && port <= MAX_PORT) {
+        dotEnvPorts[port] = true;
+      }
+    }
+  }
+  for (let port = MIN_PORT; port <= MAX_PORT; port++) {
+    if (!dotEnvPorts[port]) {
+      foundPorts.push(port);
+      if (foundPorts.length >= portCount) {
+        break;
+      }
+    }
+  }
+  return foundPorts;
+};
+
+const parseDotEnv = (dotEnvPath: string) => {
+  return dotenv.parse(fs.readFileSync(dotEnvPath));
+};
+
+const appendToFile = (path: string, lines: string[]) => {
+  const stream = fs.createWriteStream(path, {flags: 'a'});
+  try {
+    for (const line of lines) {
+      stream.write(line + '\n');
+    }
+  } finally {
+    stream.end();
+  }
 };
 
 const HATCH_SERVER_TEMPLATE_NAMES = ['webapp', 'microservice'];
@@ -156,6 +209,19 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
     createDockerService(dockerComposeDocument, shortName, false);
     createDockerService(dockerComposeDocument, shortName, true);
     fs.writeFileSync(dockerComposePath, dockerComposeDocument.toString());
+
+    const dotEnvPath = path.resolve(monorepoRootDir, '.env');
+    const dotEnv = parseDotEnv(dotEnvPath);
+    const ports = findAvailablePorts(dotEnv, 2);
+    appendToFile(dotEnvPath, [
+      `${toPortName(shortName, false)}=${ports[0]}`,
+      `${toPortName(shortName, true)}=${ports[1]}`,
+    ]);
+
+    const urlsEnvPath = path.resolve(monorepoRootDir, 'docker-compose.urls.env');
+    appendToFile(urlsEnvPath, [
+      `${toEnvName(shortName)}_BASE_URL=http://${toDockerServiceName(shortName, false)}`
+    ]);
   }
 };
 

@@ -24,6 +24,7 @@
     "@types/node": "^12",
     "@types/tmp": "^0.1",
     "ansi-escapes": "^4",
+    "dotenv": "^8.2.0",
     "chalk": "^3",
     "commander": "^4",
     "comment-json": "^3.0.3",

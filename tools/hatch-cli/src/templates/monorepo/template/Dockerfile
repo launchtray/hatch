@@ -18,11 +18,11 @@ RUN rush update --purge
 COPY ./libraries ./libraries
 ARG PREBUILD=all
 RUN if [ "$PREBUILD" = "libraries" ] && [ ! -z "$(rush list -p | grep " libraries/")" ] ; then \
-      rush build --to-version-policy libraries ; \
+      rush build -p 3 --to-version-policy libraries ; \
     fi
 COPY ./ ./
 RUN if [ "$PREBUILD" = "all" ] ; then \
-      rush build ; \
+      rush build -p 3; \
     fi
 
 # Build a specific app based on the APP_NAME build arg
@@ -30,7 +30,7 @@ FROM prebuild as build-app
 ARG APP_NAME=webapp
 COPY ./apps/$APP_NAME ./apps/$APP_NAME
 WORKDIR /workspace/apps/$APP_NAME
-RUN rush build --to .
+RUN rush build -p 3 --to .
 RUN find . -not -name "build" -mindepth 1 -maxdepth 1 -print | xargs rm -rf
 
 # Remove sourcemaps

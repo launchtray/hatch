@@ -10,6 +10,8 @@ import replace from 'replace-in-file';
 import {spawnSync} from "child_process";
 import {RushConfiguration} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
+import YAML from 'yaml'
+import {Pair} from 'yaml/types';
 
 type TemplateType =
   | 'monorepo'
@@ -111,14 +113,61 @@ const toShortName = (name: string) => {
   return components[components.length - 1];
 };
 
+const createDockerService = (doc: YAML.Document, shortName: string, isStaticServer: boolean) => {
+  const envName = shortName.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase();
+  const serviceName = (isStaticServer ? '_static_' : '') + shortName;
+  const service: any = {
+    key: serviceName,
+    value: {
+      build: {
+        context: '.',
+        target: (isStaticServer ? 'static-server' : 'production-app'),
+        args: {APP_NAME: shortName},
+      },
+      ports: ['${' + (isStaticServer ? '_STATIC_' : '') + envName + '_PORT}:80'],
+    },
+  };
+  if (!isStaticServer) {
+    service.value.env_file = [
+      './docker-compose.common.env',
+      './docker-compose.urls.env',
+    ];
+    service.value.environment = {
+      STATIC_ASSETS_BASE_URL: 'http://localhost:${_STATIC_' + envName + '_PORT}',
+    };
+  }
+  const pair = new Pair(service.key, service.value);
+  pair.spaceBefore = true;
+  doc.addIn(['services'], pair);
+};
+
+const HATCH_SERVER_TEMPLATE_NAMES = ['webapp', 'microservice'];
+const updateDockerComposition = async (templateName: string, monorepoRootDir: string, shortName: string) => {
+  if (HATCH_SERVER_TEMPLATE_NAMES.includes(templateName)) {
+    const dockerComposePath = path.resolve(monorepoRootDir, 'docker-compose.yaml');
+    let dockerComposeDocument: YAML.Document;
+    if (fs.existsSync(dockerComposePath)) {
+      const dockerComposeFile = fs.readFileSync(dockerComposePath, 'utf8');
+      dockerComposeDocument = YAML.parseDocument(dockerComposeFile);
+    } else {
+      dockerComposeDocument = new YAML.Document();
+      dockerComposeDocument.addIn([], {version: '3.8'});
+    }
+    createDockerService(dockerComposeDocument, shortName, false);
+    createDockerService(dockerComposeDocument, shortName, true);
+    fs.writeFileSync(dockerComposePath, dockerComposeDocument.toString());
+  }
+};
+
 export const createFromTemplate = async ({srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions) => {
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
+  let monorepoRootDir: string | undefined;
   if (templateType === 'project' && projectFolder) {
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
     if (rushConfigPath) {
-      const rushConfigDir = path.dirname(rushConfigPath);
-      dstPath = path.resolve(rushConfigDir, projectFolder, toShortName(name));
+      monorepoRootDir = path.dirname(rushConfigPath);
+      dstPath = path.resolve(monorepoRootDir, projectFolder, toShortName(name));
     }
   }
   if (fs.existsSync(dstPath)) {
@@ -253,7 +302,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${toShortName(name)}.test.ts`));
         }
-        if (rushConfigPath && projectFolder) {
+        if (rushConfigPath && monorepoRootDir && projectFolder) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
           const projectRelativePath = path.join(projectFolder, toShortName(name));
@@ -271,6 +320,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
           rushConfigParsed.projects.push(project);
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
+          await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
         }
       } else {
         await replace({

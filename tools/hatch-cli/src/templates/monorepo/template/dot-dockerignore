@@ -6,6 +6,7 @@
 **/README.md
 **/*.log
 **/Dockerfile
+**/docker-compose.*
 **/package-lock.json
 **/pnpm-lock.yaml
 **/shrinkwrap.yaml

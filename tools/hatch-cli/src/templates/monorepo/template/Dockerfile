@@ -1,26 +1,32 @@
 # Filter down to minimum input files for rush update so dependencies are cached
-FROM node:12 as prebuild
+FROM node:12 as cache-dependencies
 WORKDIR /workspace
 COPY ./ ./
 RUN find apps libraries tools -not -name "package.json" -mindepth 2 -maxdepth 2 -print | xargs rm -rf
 RUN find apps libraries tools -mindepth 1 -maxdepth 1 -type f -print | xargs rm -rf
 
-# Build all libraries. By default we build all libraries prior to building the target app
-# in order to ensure that the built libraries are identical across all apps. Set the
-# PREBUILD_ALL_LIBRARIES build arg to false to disable.
-FROM node:12 as build-libraries
+# By default we pre-build all modules prior to building the target app in order
+# to ensure that the built modules are identical across all apps. Set the PREBUILD
+# build arg to "false" to disable, or to "libraries" to only pre-build libraries.
+# Note that for multi-app workspaces, parallelization provided by PREBUILD=all (the
+# default) might make it the fastest option.
+FROM node:12 as prebuild
 WORKDIR /workspace
-COPY --from=prebuild /workspace .
+COPY --from=cache-dependencies /workspace .
 RUN npm install -g @microsoft/rush
 RUN rush update --purge
 COPY ./libraries ./libraries
-ARG PREBUILD_ALL_LIBRARIES=true
-RUN if [ "$PREBUILD_ALL_LIBRARIES" = "true" ] && [ ! -z "$(rush list -p | grep " libraries/")" ] ; then \
+ARG PREBUILD=all
+RUN if [ "$PREBUILD" = "libraries" ] && [ ! -z "$(rush list -p | grep " libraries/")" ] ; then \
       rush build --to-version-policy libraries ; \
+    fi
+COPY ./ ./
+RUN if [ "$PREBUILD" = "all" ] ; then \
+      rush build ; \
     fi
 
 # Build a specific app based on the APP_NAME build arg
-FROM build-libraries as build-app
+FROM prebuild as build-app
 ARG APP_NAME=webapp
 COPY ./apps/$APP_NAME ./apps/$APP_NAME
 WORKDIR /workspace/apps/$APP_NAME
@@ -54,5 +60,3 @@ COPY --from=remove-sourcemaps /workspace/apps/$APP_NAME/build/public /usr/share/
 FROM alpine as bundle-app
 ARG APP_NAME=webapp
 COPY --from=build-app /workspace/apps/$APP_NAME/build /app/build
-
-

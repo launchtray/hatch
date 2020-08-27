@@ -175,7 +175,13 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
 const MIN_PORT = 3002; // Start after default dev server ports
 const MAX_PORT = 65535;
 
-const findAvailablePorts = (dotEnv: any, portCount: number) => {
+// Finds ports which:
+// - are not already used in the .env file
+// - are back to back
+// This allows for the ports to be used for both prod and
+// dev, where (port + 1) is used for the static file server
+// and the webpack server, respectively.
+const findAvailablePortPair = (dotEnv: any) => {
   let dotEnvPorts = {};
   const foundPorts = [];
   for (const key of Object.keys(dotEnv)) {
@@ -187,11 +193,10 @@ const findAvailablePorts = (dotEnv: any, portCount: number) => {
     }
   }
   for (let port = MIN_PORT; port <= MAX_PORT; port++) {
-    if (!dotEnvPorts[port]) {
+    if (!dotEnvPorts[port] && !dotEnvPorts[port + 1]) {
+      foundPorts.push(port++);
       foundPorts.push(port);
-      if (foundPorts.length >= portCount) {
-        break;
-      }
+      break;
     }
   }
   return foundPorts;
@@ -252,7 +257,7 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
 
     const dotEnvPath = path.resolve(monorepoRootDir, '.env');
     const dotEnv = parseDotEnv(dotEnvPath);
-    const ports = findAvailablePorts(dotEnv, 2);
+    const ports = findAvailablePortPair(dotEnv);
     appendToFile(dotEnvPath, [
       `${toPortName(shortName, false)}=${ports[0]}`,
       `${toPortName(shortName, true)}=${ports[1]}`,

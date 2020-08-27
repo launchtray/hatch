@@ -66,15 +66,19 @@ export const createProject = async (parentDirectory: string, projectName: string
     throw new Error('Project name must be specified');
   }
   const projectPath = process.cwd() + '/' + projectName;
-  const finalProjectPath = await createFromTemplate({
+  const {dstPath, inMonorepo} = await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: projectPath,
     name: projectName,
     templateType: 'project',
     projectFolder: projectFolder,
   });
-  console.log(chalk.green('Created \'' + finalProjectPath + '\''));
-  console.log('Now would be a good time to cd into the project and install dependencies (e.g. via npm, yarn, or rush)');
+  console.log(chalk.green('Created \'' + dstPath + '\''));
+  if (inMonorepo) {
+    console.log('Now might be a good time run `rush update`');
+  } else {
+    console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+  }
 };
 
 export const projectCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
@@ -261,13 +265,17 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
   }
 };
 
-export const createFromTemplate = async ({srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions) => {
+export const createFromTemplate = async (
+  {srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions
+): Promise<{dstPath: string, inMonorepo: boolean}> => {
+  let inMonorepo = false;
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
   let monorepoRootDir: string | undefined;
   if (templateType === 'project' && projectFolder) {
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
     if (rushConfigPath) {
+      inMonorepo = true;
       monorepoRootDir = path.dirname(rushConfigPath);
       dstPath = path.resolve(monorepoRootDir, projectFolder, toShortName(name));
     }
@@ -436,7 +444,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
       cleanUp();
     }
   });
-  return dstPath;
+  return {dstPath, inMonorepo};
 };
 
 export const templatePath = (parentDirectory: string, templateFile: string) => {

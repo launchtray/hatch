@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+
+rush update && rush build --to-version-policy libraries
+
+appShortNames="$( \
+  rush list --json \
+  | grep "\"path\": \"apps/" \
+  | awk -F '"' '{print $4}' \
+  | awk -F '/' '{print $2}' \
+)"
+
+maxShortNameLength=0
+while IFS= read -r shortName; do
+  shortNameLength=${#shortName}
+  if [ $shortNameLength -gt $maxShortNameLength ]; then
+    maxShortNameLength=$shortNameLength
+  fi
+done <<< "$appShortNames"
+
+while IFS= read -r shortName; do
+  cd "apps/$shortName"
+  appTagPrefix="$(printf %-$(($maxShortNameLength))s "$shortName")  | "
+  if [ -f "razzle.config.js" ]; then
+    envName="$(echo "${shortName//[^[:alnum:]]/_}" | awk '{print toupper($0)}')"
+    portName="${envName}_PORT"
+    appPort=$(grep "^$portName=" ../../.env | awk -F '=' '{print $2}')
+    (PORT=$appPort rushx start | sed -e "s/^/${appTagPrefix}/") &
+  fi
+  cd ../..
+done <<< "$appShortNames"
+
+wait

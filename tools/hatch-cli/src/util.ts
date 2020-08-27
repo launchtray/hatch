@@ -194,6 +194,9 @@ const findAvailablePorts = (dotEnv: any, portCount: number) => {
 };
 
 const parseDotEnv = (dotEnvPath: string) => {
+  if (!fs.existsSync(dotEnvPath)) {
+    fs.createFileSync(dotEnvPath);
+  }
   return dotenv.parse(fs.readFileSync(dotEnvPath));
 };
 

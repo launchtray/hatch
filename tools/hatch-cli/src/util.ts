@@ -275,6 +275,46 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
   }
 };
 
+const updateVersionPolicies = (monorepoPath: string) => {
+  const versionPoliciesPath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'version-policies.json');
+  const versionPoliciesRaw = fs.readFileSync(versionPoliciesPath).toString();
+  const versionPoliciesParsed = parse(versionPoliciesRaw);
+  versionPoliciesParsed.push({
+    definitionName: 'individualVersion',
+    policyName: 'libraries',
+  });
+  versionPoliciesParsed.push({
+    definitionName: 'individualVersion',
+    policyName: 'tools',
+  });
+  const versionPoliciesRawUpdated = stringify(versionPoliciesParsed, null, 2);
+  fs.writeFileSync(versionPoliciesPath, versionPoliciesRawUpdated);
+};
+
+const updateCustomCommands = (monorepoPath: string) => {
+  const commandLinePath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'command-line.json');
+  const commandLineRaw = fs.readFileSync(commandLinePath).toString();
+  const commandLineParsed = parse(commandLineRaw);
+  commandLineParsed.commands.push({
+    commandKind: 'global',
+    name: 'dev',
+    summary: 'Runs all apps locally in dev mode',
+    description: 'This command will run all hatch servers locally in development mode',
+    safeForSimultaneousRushProcesses: true,
+    shellCommand: './dev',
+  });
+  commandLineParsed.commands.push({
+    commandKind: 'global',
+    name: 'prod',
+    summary: 'Runs all apps locally via Docker',
+    description: 'This command will run all hatch servers locally as production builds in Docker',
+    safeForSimultaneousRushProcesses: true,
+    shellCommand: './prod',
+  });
+  const commandLineRawUpdated = stringify(commandLineParsed, null, 2);
+  fs.writeFileSync(commandLinePath, commandLineRawUpdated);
+};
+
 export const createFromTemplate = async (
   {srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
@@ -329,19 +369,8 @@ export const createFromTemplate = async (
         if (fs.existsSync(rushConfigPath)) {
           await fs.remove(rushConfigPath);
         }
-        const versionPoliciesPath = path.resolve(tempFilePath, 'common', 'config', 'rush', 'version-policies.json');
-        const versionPoliciesRaw = fs.readFileSync(versionPoliciesPath).toString();
-        const versionPoliciesParsed = parse(versionPoliciesRaw);
-        versionPoliciesParsed.push({
-          definitionName: 'individualVersion',
-          policyName: 'libraries',
-        });
-        versionPoliciesParsed.push({
-          definitionName: 'individualVersion',
-          policyName: 'tools',
-        });
-        const versionPoliciesRawUpdated = stringify(versionPoliciesParsed, null, 2);
-        fs.writeFileSync(versionPoliciesPath, versionPoliciesRawUpdated);
+        updateVersionPolicies(tempFilePath);
+        updateCustomCommands(tempFilePath);
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {

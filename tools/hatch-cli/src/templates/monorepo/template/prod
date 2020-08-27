@@ -1,4 +1,7 @@
 #!/bin/bash
+scriptDir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+cd $scriptDir
+
 set -e
 if ! command -v docker-compose &> /dev/null
 then

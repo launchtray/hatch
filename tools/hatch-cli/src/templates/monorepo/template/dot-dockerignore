@@ -13,5 +13,10 @@
 **/npm-shrinkwrap.json
 **/yarn.lock
 **/.git
+common.env
 common/temp
 common/scripts
+dev
+prod
+dev.env
+prod.env

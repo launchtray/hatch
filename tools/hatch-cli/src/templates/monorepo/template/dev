@@ -19,7 +19,9 @@ appShortNames="$( \
 )"
 
 maxShortNameLength=0
+serviceCount=0
 while IFS= read -r shortName; do
+  serviceCount=$((serviceCount + 1))
   shortNameLength=${#shortName}
   if [ $shortNameLength -gt $maxShortNameLength ]; then
     maxShortNameLength=$shortNameLength
@@ -34,14 +36,28 @@ source dev.env
 set +o xtrace
 set +a
 
+# ASNI escape codes: https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+# Original ordering below matches docker compose colors as of v1.26.2 per:
+#   https://github.com/docker/compose/blob/master/compose/cli/colors.py
+declare -a colorCodes=("36" "33" "32" "35" "34" "36;1" "33;1" "32;1" "35;1" "34;1")
+colorCount=${#colorCodes[@]}
+# Start at service count to match production colors, since for the production build,
+# the static file servers will take the first $serviceCount colors
+colorIndex=$serviceCount
 while IFS= read -r shortName; do
+  colorIndex=$(($colorIndex % $colorCount))
+  colorCode=${colorCodes[$colorIndex]}
+  colorStart="\033[${colorCode}m"
+  colorEnd="\033[0m"
+  colorIndex=$(($colorIndex + 1))
+
   cd "apps/$shortName"
   appTagPrefix="$(printf %-$(($maxShortNameLength))s "$shortName")  | "
   if [ -f "razzle.config.js" ]; then
     envName="$(echo "${shortName//[^[:alnum:]]/_}" | awk '{print toupper($0)}')"
     portName="${envName}_PORT"
     appPort=$(grep "^$portName=" ../../.env | awk -F '=' '{print $2}')
-    (PORT=$appPort rushx start | sed -e "s/^/${appTagPrefix}/") &
+    (PORT=$appPort rushx start | sed -e "s/^/`printf "${colorStart}${appTagPrefix}${colorEnd}"`/") &
   fi
   cd ../..
 done <<< "$appShortNames"

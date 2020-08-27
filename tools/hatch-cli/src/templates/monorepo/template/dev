@@ -1,8 +1,15 @@
 #!/bin/bash
 set -e
+# Kills subprocesses on exit
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
-rush update && rush build --to-version-policy libraries
+rush update
+if [ ! -z "$(rush list -p | grep " libraries/")" ]; then
+  rush build ---to-version-policy libraries
+fi
+if [ ! -z "$(rush list -p | grep " tools/")" ]; then
+  rush build ---to-version-policy tools
+fi
 
 appShortNames="$( \
   rush list --json \
@@ -18,6 +25,14 @@ while IFS= read -r shortName; do
     maxShortNameLength=$shortNameLength
   fi
 done <<< "$appShortNames"
+
+set -a # automatically export all variables
+source .env
+set -o xtrace # print out variables as they are set
+source common.env
+source dev.env
+set +o xtrace
+set +a
 
 while IFS= read -r shortName; do
   cd "apps/$shortName"

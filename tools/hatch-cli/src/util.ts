@@ -146,8 +146,8 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
   };
   if (!isStaticServer) {
     service.value.env_file = [
-      './docker-compose.common.env',
-      './docker-compose.urls.env',
+      './common.env',
+      './prod.env',
     ];
     service.value.environment = {
       STATIC_ASSETS_BASE_URL: 'http://localhost:${'+ toPortName(shortName, true) + '}',
@@ -263,9 +263,14 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
       `${toPortName(shortName, true)}=${ports[1]}`,
     ]);
 
-    const urlsEnvPath = path.resolve(monorepoRootDir, 'docker-compose.urls.env');
-    appendToFile(urlsEnvPath, [
+    const prodEnvPath = path.resolve(monorepoRootDir, 'prod.env');
+    appendToFile(prodEnvPath, [
       `${toEnvName(shortName)}_BASE_URL=http://${toDockerServiceName(shortName, false)}`
+    ]);
+
+    const devEnvPath = path.resolve(monorepoRootDir, 'dev.env');
+    appendToFile(devEnvPath, [
+      `${toEnvName(shortName)}_BASE_URL=http://localhost:$${toPortName(shortName, false)}`
     ]);
   }
 };

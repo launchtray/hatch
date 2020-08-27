@@ -11,7 +11,7 @@ import {spawnSync} from "child_process";
 import {RushConfiguration} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
 import YAML from 'yaml'
-import {Pair} from 'yaml/types';
+import {Pair, YAMLMap} from 'yaml/types';
 import dotenv from 'dotenv';
 
 type TemplateType =
@@ -150,7 +150,21 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
     };
   }
   const pair = new Pair(service.key, service.value);
-  pair.spaceBefore = true;
+  if (!doc.has('services')) {
+    const services = new Pair('services', new YAMLMap());
+    services.spaceBefore = true;
+    doc.addIn([], services);
+  } else {
+    const services = doc.get('services');
+    if (
+      typeof services !== 'object'
+      || typeof (services.toJSON()) !== 'object'
+      || Array.isArray(services.toJSON())
+    ) {
+      throw new Error('Existing docker-compose.yaml file has an invalid `services` definition');
+    }
+    pair.spaceBefore = true;
+  }
   doc.addIn(['services'], pair);
 };
 
@@ -184,6 +198,9 @@ const parseDotEnv = (dotEnvPath: string) => {
 };
 
 const appendToFile = (path: string, lines: string[]) => {
+  if (!fs.existsSync(path)) {
+    fs.createFileSync(path);
+  }
   const stream = fs.createWriteStream(path, {flags: 'a'});
   try {
     for (const line of lines) {
@@ -202,10 +219,26 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
     if (fs.existsSync(dockerComposePath)) {
       const dockerComposeFile = fs.readFileSync(dockerComposePath, 'utf8');
       dockerComposeDocument = YAML.parseDocument(dockerComposeFile);
+      const asJSON = dockerComposeDocument.toJSON();
+      const asString = dockerComposeDocument.toString();
+      if (
+        asJSON == null
+        || asString == null
+        || asString.trim() === ''
+        || typeof asJSON !== 'object'
+        || Array.isArray(asJSON)
+      ) {
+        dockerComposeDocument = new YAML.Document(new YAMLMap());
+      }
     } else {
-      dockerComposeDocument = new YAML.Document();
-      dockerComposeDocument.addIn([], {version: '3.8'});
+      dockerComposeDocument = new YAML.Document(new YAMLMap());
     }
+
+    if (!dockerComposeDocument.has('version')) {
+      const version = new Pair('version', '3.8');
+      dockerComposeDocument.addIn([], version);
+    }
+
     createDockerService(dockerComposeDocument, shortName, false);
     createDockerService(dockerComposeDocument, shortName, true);
     fs.writeFileSync(dockerComposePath, dockerComposeDocument.toString());

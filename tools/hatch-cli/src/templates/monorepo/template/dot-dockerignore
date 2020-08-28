@@ -6,11 +6,17 @@
 **/README.md
 **/*.log
 **/Dockerfile
+**/docker-compose.*
 **/package-lock.json
 **/pnpm-lock.yaml
 **/shrinkwrap.yaml
 **/npm-shrinkwrap.json
 **/yarn.lock
 **/.git
+common.env
 common/temp
 common/scripts
+dev
+prod
+dev.env
+prod.env

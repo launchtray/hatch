@@ -157,6 +157,12 @@ const createServerAsync = async <T extends ServerComposition>(
 
   const appName = await rootContainer.resolve<string>('appName');
   const logger = await createServerLogger(appName);
+  const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
+  const port = (portString && parseInt(portString)) || 3000;
+  const hostname = process.env.HOSTNAME || process.env.HATCH_BUILDTIME_HOSTNAME;
+  if (process.env.NODE_ENV === 'development') {
+    logger.info('Listening at http://' + (hostname ?? 'localhost') + ':' + port);
+  }
   const errorReporter = new SentryReporter(sentryMonitor, logger, {dsn});
   rootContainer.registerInstance('ErrorReporter', errorReporter);
   logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
@@ -193,9 +199,6 @@ const createServerAsync = async <T extends ServerComposition>(
   serverExtension?.(runningServer, runningServerApp, composition, logger, errorReporter);
 
   if (newRunningServer) {
-    const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
-    const port = (portString && parseInt(portString)) || 3000;
-    const hostname = process.env.HOSTNAME || process.env.HATCH_BUILDTIME_HOSTNAME;
     runningServer
       .listen(port, hostname)
       .on('error', (err: Error) => {

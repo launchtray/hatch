@@ -24,6 +24,7 @@
     "@types/node": "^12",
     "@types/tmp": "^0.1",
     "ansi-escapes": "^4",
+    "dotenv": "^8.2.0",
     "chalk": "^3",
     "commander": "^4",
     "comment-json": "^3.0.3",
@@ -31,7 +32,8 @@
     "inquirer": "^7",
     "ora": "^4",
     "replace-in-file": "^5",
-    "tmp": "^0.1"
+    "tmp": "^0.1",
+    "yaml": "^2.0.0-0"
   },
   "devDependencies": {
     "@launchtray/hatch-template-webapp": "0.1.0",

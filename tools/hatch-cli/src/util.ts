@@ -10,6 +10,9 @@ import replace from 'replace-in-file';
 import {spawnSync} from "child_process";
 import {RushConfiguration} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
+import YAML from 'yaml'
+import {Pair, YAMLMap} from 'yaml/types';
+import dotenv from 'dotenv';
 
 type TemplateType =
   | 'monorepo'
@@ -63,15 +66,19 @@ export const createProject = async (parentDirectory: string, projectName: string
     throw new Error('Project name must be specified');
   }
   const projectPath = process.cwd() + '/' + projectName;
-  const finalProjectPath = await createFromTemplate({
+  const {dstPath, inMonorepo} = await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: projectPath,
     name: projectName,
     templateType: 'project',
     projectFolder: projectFolder,
   });
-  console.log(chalk.green('Created \'' + finalProjectPath + '\''));
-  console.log('Now would be a good time to cd into the project and install dependencies (e.g. via npm, yarn, or rush)');
+  console.log(chalk.green('Created \'' + dstPath + '\''));
+  if (inMonorepo) {
+    console.log('Now might be a good time run `rush update`');
+  } else {
+    console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+  }
 };
 
 export const projectCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
@@ -111,14 +118,216 @@ const toShortName = (name: string) => {
   return components[components.length - 1];
 };
 
-export const createFromTemplate = async ({srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions) => {
+const toEnvName = (shortName: string) => {
+  return shortName.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase();
+};
+
+const toDockerServiceName = (shortName: string, isStaticServer: boolean) => {
+  return (isStaticServer ? '_static_' : '') + shortName;
+};
+
+const toPortName = (shortName: string, isStaticServer: boolean) => {
+  const envName = toEnvName(shortName);
+  return (isStaticServer ? '_STATIC_' : '') + envName + '_PORT';
+};
+
+const createDockerService = (doc: YAML.Document, shortName: string, isStaticServer: boolean) => {
+  const serviceName = toDockerServiceName(shortName, isStaticServer);
+  const service: any = {
+    key: serviceName,
+    value: {
+      build: {
+        context: '.',
+        target: (isStaticServer ? 'static-server' : 'production-app'),
+        args: {APP_NAME: shortName},
+      },
+      ports: ['${' + toPortName(shortName, isStaticServer) + '}:80'],
+    },
+  };
+  if (!isStaticServer) {
+    service.value.env_file = [
+      './common.env',
+      './prod.env',
+    ];
+    service.value.environment = {
+      STATIC_ASSETS_BASE_URL: 'http://localhost:${'+ toPortName(shortName, true) + '}',
+    };
+  }
+  const pair = new Pair(service.key, service.value);
+  if (!doc.has('services')) {
+    const services = new Pair('services', new YAMLMap());
+    services.spaceBefore = true;
+    doc.addIn([], services);
+  } else {
+    const services = doc.get('services');
+    if (
+      typeof services !== 'object'
+      || typeof (services.toJSON()) !== 'object'
+      || Array.isArray(services.toJSON())
+    ) {
+      throw new Error('Existing docker-compose.yaml file has an invalid `services` definition');
+    }
+    pair.spaceBefore = true;
+  }
+  doc.addIn(['services'], pair);
+};
+
+const MIN_PORT = 3002; // Start after default dev server ports
+const MAX_PORT = 65535;
+
+// Finds ports which:
+// - are not already used in the .env file
+// - are back to back
+// This allows for the ports to be used for both prod and
+// dev, where (port + 1) is used for the static file server
+// and the webpack server, respectively.
+const findAvailablePortPair = (dotEnv: any) => {
+  let dotEnvPorts = {};
+  const foundPorts = [];
+  for (const key of Object.keys(dotEnv)) {
+    if (key.endsWith('_PORT')) {
+      const port = parseInt(dotEnv[key]);
+      if (!isNaN(port) && port >= MIN_PORT && port <= MAX_PORT) {
+        dotEnvPorts[port] = true;
+      }
+    }
+  }
+  for (let port = MIN_PORT; port <= MAX_PORT; port++) {
+    if (!dotEnvPorts[port] && !dotEnvPorts[port + 1]) {
+      foundPorts.push(port++);
+      foundPorts.push(port);
+      break;
+    }
+  }
+  return foundPorts;
+};
+
+const parseDotEnv = (dotEnvPath: string) => {
+  if (!fs.existsSync(dotEnvPath)) {
+    fs.createFileSync(dotEnvPath);
+  }
+  return dotenv.parse(fs.readFileSync(dotEnvPath));
+};
+
+const appendToFile = (path: string, lines: string[]) => {
+  if (!fs.existsSync(path)) {
+    fs.createFileSync(path);
+  }
+  const stream = fs.createWriteStream(path, {flags: 'a'});
+  try {
+    for (const line of lines) {
+      stream.write(line + '\n');
+    }
+  } finally {
+    stream.end();
+  }
+};
+
+const HATCH_SERVER_TEMPLATE_NAMES = ['webapp', 'microservice'];
+const updateDockerComposition = async (templateName: string, monorepoRootDir: string, shortName: string) => {
+  if (HATCH_SERVER_TEMPLATE_NAMES.includes(templateName)) {
+    const dockerComposePath = path.resolve(monorepoRootDir, 'docker-compose.yaml');
+    let dockerComposeDocument: YAML.Document;
+    if (fs.existsSync(dockerComposePath)) {
+      const dockerComposeFile = fs.readFileSync(dockerComposePath, 'utf8');
+      dockerComposeDocument = YAML.parseDocument(dockerComposeFile);
+      const asJSON = dockerComposeDocument.toJSON();
+      const asString = dockerComposeDocument.toString();
+      if (
+        asJSON == null
+        || asString == null
+        || asString.trim() === ''
+        || typeof asJSON !== 'object'
+        || Array.isArray(asJSON)
+      ) {
+        dockerComposeDocument = new YAML.Document(new YAMLMap());
+      }
+    } else {
+      dockerComposeDocument = new YAML.Document(new YAMLMap());
+    }
+
+    if (!dockerComposeDocument.has('version')) {
+      const version = new Pair('version', '3.8');
+      dockerComposeDocument.addIn([], version);
+    }
+
+    createDockerService(dockerComposeDocument, shortName, false);
+    createDockerService(dockerComposeDocument, shortName, true);
+    fs.writeFileSync(dockerComposePath, dockerComposeDocument.toString());
+
+    const dotEnvPath = path.resolve(monorepoRootDir, '.env');
+    const dotEnv = parseDotEnv(dotEnvPath);
+    const ports = findAvailablePortPair(dotEnv);
+    appendToFile(dotEnvPath, [
+      `${toPortName(shortName, false)}=${ports[0]}`,
+      `${toPortName(shortName, true)}=${ports[1]}`,
+    ]);
+
+    const prodEnvPath = path.resolve(monorepoRootDir, 'prod.env');
+    appendToFile(prodEnvPath, [
+      `${toEnvName(shortName)}_BASE_URL=http://${toDockerServiceName(shortName, false)}`
+    ]);
+
+    const devEnvPath = path.resolve(monorepoRootDir, 'dev.env');
+    appendToFile(devEnvPath, [
+      `${toEnvName(shortName)}_BASE_URL=http://localhost:$${toPortName(shortName, false)}`
+    ]);
+  }
+};
+
+const updateVersionPolicies = (monorepoPath: string) => {
+  const versionPoliciesPath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'version-policies.json');
+  const versionPoliciesRaw = fs.readFileSync(versionPoliciesPath).toString();
+  const versionPoliciesParsed = parse(versionPoliciesRaw);
+  versionPoliciesParsed.push({
+    definitionName: 'individualVersion',
+    policyName: 'libraries',
+  });
+  versionPoliciesParsed.push({
+    definitionName: 'individualVersion',
+    policyName: 'tools',
+  });
+  const versionPoliciesRawUpdated = stringify(versionPoliciesParsed, null, 2);
+  fs.writeFileSync(versionPoliciesPath, versionPoliciesRawUpdated);
+};
+
+const updateCustomCommands = (monorepoPath: string) => {
+  const commandLinePath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'command-line.json');
+  const commandLineRaw = fs.readFileSync(commandLinePath).toString();
+  const commandLineParsed = parse(commandLineRaw);
+  commandLineParsed.commands.push({
+    commandKind: 'global',
+    name: 'dev',
+    summary: 'Runs all apps locally in dev mode',
+    description: 'This command will run all hatch servers locally in development mode',
+    safeForSimultaneousRushProcesses: true,
+    shellCommand: './dev',
+  });
+  commandLineParsed.commands.push({
+    commandKind: 'global',
+    name: 'prod',
+    summary: 'Runs all apps locally via Docker',
+    description: 'This command will run all hatch servers locally as production builds in Docker',
+    safeForSimultaneousRushProcesses: true,
+    shellCommand: './prod',
+  });
+  const commandLineRawUpdated = stringify(commandLineParsed, null, 2);
+  fs.writeFileSync(commandLinePath, commandLineRawUpdated);
+};
+
+export const createFromTemplate = async (
+  {srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions
+): Promise<{dstPath: string, inMonorepo: boolean}> => {
+  let inMonorepo = false;
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
+  let monorepoRootDir: string | undefined;
   if (templateType === 'project' && projectFolder) {
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
     if (rushConfigPath) {
-      const rushConfigDir = path.dirname(rushConfigPath);
-      dstPath = path.resolve(rushConfigDir, projectFolder, toShortName(name));
+      inMonorepo = true;
+      monorepoRootDir = path.dirname(rushConfigPath);
+      dstPath = path.resolve(monorepoRootDir, projectFolder, toShortName(name));
     }
   }
   if (fs.existsSync(dstPath)) {
@@ -160,19 +369,8 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(rushConfigPath)) {
           await fs.remove(rushConfigPath);
         }
-        const versionPoliciesPath = path.resolve(tempFilePath, 'common', 'config', 'rush', 'version-policies.json');
-        const versionPoliciesRaw = fs.readFileSync(versionPoliciesPath).toString();
-        const versionPoliciesParsed = parse(versionPoliciesRaw);
-        versionPoliciesParsed.push({
-          definitionName: 'individualVersion',
-          policyName: 'libraries',
-        });
-        versionPoliciesParsed.push({
-          definitionName: 'individualVersion',
-          policyName: 'tools',
-        });
-        const versionPoliciesRawUpdated = stringify(versionPoliciesParsed, null, 2);
-        fs.writeFileSync(versionPoliciesPath, versionPoliciesRawUpdated);
+        updateVersionPolicies(tempFilePath);
+        updateCustomCommands(tempFilePath);
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {
@@ -253,7 +451,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${toShortName(name)}.test.ts`));
         }
-        if (rushConfigPath && projectFolder) {
+        if (rushConfigPath && monorepoRootDir && projectFolder) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
           const projectRelativePath = path.join(projectFolder, toShortName(name));
@@ -271,6 +469,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
           rushConfigParsed.projects.push(project);
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
+          await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
         }
       } else {
         await replace({
@@ -284,7 +483,7 @@ export const createFromTemplate = async ({srcPath, dstPath, name, templateType, 
       cleanUp();
     }
   });
-  return dstPath;
+  return {dstPath, inMonorepo};
 };
 
 export const templatePath = (parentDirectory: string, templateFile: string) => {

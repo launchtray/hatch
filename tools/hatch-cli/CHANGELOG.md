@@ -1,6 +1,14 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Tue, 25 Aug 2020 01:00:49 GMT and should not be manually modified.
+This log was last generated on Fri, 28 Aug 2020 03:52:17 GMT and should not be manually modified.
+
+## 0.10.5
+Fri, 28 Aug 2020 03:52:17 GMT
+
+### Updates
+
+- Added auto-generation of docker compose content
+- Added scripts for running all apps at once
 
 ## 0.10.4
 Tue, 25 Aug 2020 01:00:49 GMT

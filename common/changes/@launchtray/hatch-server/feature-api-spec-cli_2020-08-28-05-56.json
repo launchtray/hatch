@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server",
+      "comment": "Add ability to generate API spec via CLI",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server",
+  "email": "kiltyj@gmail.com"
+}

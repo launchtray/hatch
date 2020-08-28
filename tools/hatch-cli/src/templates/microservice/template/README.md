@@ -84,17 +84,22 @@ Utilities should live in the [utilities](src/utilities) directory (see more info
 1. To build the app for production, run the `build` script, e.g. with npm:
 
     ```
-    npm build
+    npm run build
     ```
 1. To run the production-built app, run the `start:prod` script, e.g. with npm:
 
     ```
-    npm start:prod
+    npm run start:prod
     ```
 1. To run tests, run the Jest test watcher via the `test` script, e.g. with npm:
 
     ```
     npm test
+    ```
+1. To generate an OpenAPI API spec and exit:
+
+    ```
+    npm run build && PRINT_API_SPEC_ONLY=true node build/server.js
     ```
    
 ## Environment variables

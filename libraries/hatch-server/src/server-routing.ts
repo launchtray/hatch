@@ -21,9 +21,12 @@ export interface RouteDefiner {
     app: Application,
     server: Server,
     handler: RequestHandler,
-    apiMetadataConsumer: APIMetadataConsumer,
     controller: any
   ): void;
+}
+
+export interface APIMetadataRegistrar {
+  (apiMetadataConsumer: APIMetadataConsumer): void;
 }
 
 export type Route = {method?: HTTPMethod, path: PathParams} | PathParams;
@@ -54,11 +57,12 @@ export const requestMatchesRouteList = (req: {url: string, method: string}, rout
 };
 
 const routeDefinersKey = Symbol('routeDefiners');
+const registerMetadataKey = Symbol('registerMetadata');
 const rootContainerKey = Symbol('rootContainer');
 const wsRoutesKey = Symbol('wsEnabled');
 const requestContainerKey = Symbol('requestContainer');
 
-const custom = (routeDefiner: RouteDefiner) => {
+const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrar) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
     const requestHandler = async (ctlr: any, req: Request, res: Response, next: NextFunction) => {
@@ -80,17 +84,22 @@ const custom = (routeDefiner: RouteDefiner) => {
     if (target[routeDefinersKey] == null) {
       target[routeDefinersKey] = [];
     }
+    if (target[registerMetadataKey] == null) {
+      target[registerMetadataKey] = [];
+    }
     const ctlrRouteDefiner = (
       ctlr: any,
       app: Application,
       server: Server,
-      apiMetadataConsumer: APIMetadataConsumer
     ) => {
       routeDefiner(app, server, (req: Request<any>, res: Response, next: NextFunction) => {
         requestHandler(ctlr, req, res, next).catch(next);
-      }, apiMetadataConsumer, ctlr);
+      }, ctlr);
     };
     target[routeDefinersKey].push(ctlrRouteDefiner);
+    if (registerMetadata != null) {
+      target[registerMetadataKey].push(registerMetadata);
+    }
   };
 };
 
@@ -147,9 +156,11 @@ const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
     if (target[routeDefinersKey] == null) {
       target[routeDefinersKey] = [];
     }
-    const routeDefiner = (ctlr: any, app: Application, server: Server, apiMetadataConsumer: APIMetadataConsumer) => {
+    if (target[registerMetadataKey] == null) {
+      target[registerMetadataKey] = [];
+    }
+    const routeDefiner = (ctlr: any, app: Application, server: Server) => {
       registerRouteTokens(ctlr, metadata, {path, method: 'get'});
-      consumeAPIMetadata(metadata, 'get', path, apiMetadataConsumer);
       if (!server[wsRoutesKey]) {
         server[wsRoutesKey] = [];
         server.on('upgrade', (req, socket, head) => {
@@ -188,7 +199,11 @@ const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
         wss,
       });
     };
+    const registerMetadata = (apiMetadataConsumer: APIMetadataConsumer) => {
+      consumeAPIMetadata(metadata, 'get', path, apiMetadataConsumer);
+    }
     target[routeDefinersKey].push(routeDefiner);
+    target[registerMetadataKey].push(registerMetadata);
   };
 };
 
@@ -235,6 +250,16 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
       controllerBoundRouteDefiner(this, app, server, apiMetadataConsumer);
     });
   };
+
+  const originalRegisterMetadata = target.constructor.prototype.registerAPIMetadata;
+  target.constructor.prototype.registerAPIMetadata = async function(apiMetadataConsumer: APIMetadataConsumer) {
+    if (originalRegisterMetadata != null) {
+      await originalRegisterMetadata.bind(this)(apiMetadataConsumer);
+    }
+    target.prototype[registerMetadataKey].forEach((apiMetadataRegistrar: APIMetadataRegistrar) => {
+      apiMetadataRegistrar(apiMetadataConsumer);
+    });
+  };
   return target;
 };
 
@@ -269,7 +294,7 @@ export type StandardRouteDefiners = {
 };
 
 export interface NonStandardRouteDefiners {
-  custom: (routeDefiner: RouteDefiner) => any;
+  custom: (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrar) => any;
   m_search: (path: PathParams, metadata?: APIMetadataParameters) => any;
   websocket: (path: PathParams, metadata?: APIMetadataParameters) => any;
 }
@@ -346,13 +371,15 @@ const proxy = {
       adjustedMethod = 'm-search';
     }
     return (path: PathParams, metadata: APIMetadataParameters = {}) => {
-      const routeDefiner: RouteDefiner = (app, server, handler, apiMetadataConsumer: APIMetadataConsumer, ctlr: any) => {
+      const routeDefiner: RouteDefiner = (app, server, handler, ctlr: any) => {
         const definer = app[adjustedMethod].bind(app) as (path: PathParams, handler: any) => void;
         definer(path, handler);
         registerRouteTokens(ctlr, metadata, {path, method: adjustedMethod as HTTPMethod});
-        consumeAPIMetadata(metadata, method, path, apiMetadataConsumer);
       };
-      return custom(routeDefiner);
+      const registerMetadata = (apiMetadataConsumer: APIMetadataConsumer) => {
+        consumeAPIMetadata(metadata, method, path, apiMetadataConsumer);
+      }
+      return custom(routeDefiner, registerMetadata);
     };
   },
 };

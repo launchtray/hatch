@@ -154,8 +154,20 @@ const createServerAsync = async <T extends ServerComposition>(
 
   const serverMiddlewareClasses = composition.serverMiddleware ?? [];
   const rootContainer = ROOT_CONTAINER;
-
+  const appVersion = rootContainer.isRegistered('appVersion')
+    ? await rootContainer.resolve<string>('appVersion')
+    : '0.0.0';
   const appName = await rootContainer.resolve<string>('appName');
+  const apiSpecBuilder = new OpenAPISpecBuilder(appName, appVersion);
+  const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
+
+  registerServerMiddleware(rootContainer, serverMiddlewareClasses, apiMetadataConsumer);
+  const apiSpec = apiSpecBuilder.build();
+  if (process.env.PRINT_API_SPEC_ONLY === 'true') {
+    console.log(JSON.stringify(apiSpec));
+    process.exit(0);
+  }
+
   const logger = await createServerLogger(appName);
   const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
   const port = (portString && parseInt(portString)) || 3000;
@@ -167,26 +179,14 @@ const createServerAsync = async <T extends ServerComposition>(
   rootContainer.registerInstance('ErrorReporter', errorReporter);
   logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
 
-  registerServerMiddleware(
-    rootContainer,
-    ...serverMiddlewareClasses,
-  );
-
-  const appVersion = rootContainer.isRegistered('appVersion')
-      ? await rootContainer.resolve<string>('appVersion')
-      : '0.0.0';
-
-  const apiSpecBuilder = new OpenAPISpecBuilder(appName, appVersion);
   const serverMiddlewareList = await resolveServerMiddleware(rootContainer, logger);
-  const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
   for (const serverMiddleware of serverMiddlewareList) {
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);
     }
-    await serverMiddleware.register(runningServerApp, runningServer, apiMetadataConsumer);
+    await serverMiddleware.register(runningServerApp, runningServer);
   }
 
-  const apiSpec = apiSpecBuilder.build();
   runningServerApp.get('/api.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     const options: SerializeJSOptions = {unsafe: true, isJSON: true};

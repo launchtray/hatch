@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.10.6",
+      "tag": "@launchtray/hatch-server_v0.10.6",
+      "date": "Fri, 28 Aug 2020 06:18:04 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add ability to generate API spec via CLI"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.5",
       "tag": "@launchtray/hatch-server_v0.10.5",
       "date": "Fri, 28 Aug 2020 03:52:17 GMT",

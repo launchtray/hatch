@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Fri, 28 Aug 2020 03:52:17 GMT and should not be manually modified.
+This log was last generated on Fri, 28 Aug 2020 06:18:04 GMT and should not be manually modified.
+
+## 0.10.6
+Fri, 28 Aug 2020 06:18:04 GMT
+
+### Updates
+
+- Add ability to generate API spec via CLI
 
 ## 0.10.5
 Fri, 28 Aug 2020 03:52:17 GMT

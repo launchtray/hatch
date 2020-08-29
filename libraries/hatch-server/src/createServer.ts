@@ -14,7 +14,8 @@ import {
   captureException,
   init,
   setExtra,
-  setTag} from '@sentry/node';
+  setTag,
+} from '@sentry/node';
 import {Options} from '@sentry/types';
 import express, {Application} from 'express';
 import http from 'http';
@@ -59,13 +60,14 @@ const formatObjectForLog = (obj: any) => {
   return util.inspect(obj, {breakLength: Infinity, compact: true});
 };
 
-const customLogFormat = (tag: string) => {
+const RAW_LEVEL_MAX_LENGTH = 5;
+const COLORIZED_LEVEL_MAX_LENGTH = RAW_LEVEL_MAX_LENGTH + 10; // 10 = overhead length of color escape sequence
+const customLogFormat = (colorized: boolean) => {
   return format.combine(
-    format.label({label: tag}),
     format.timestamp(),
     {
       transform(info: any) {
-        const {timestamp, level, label, message} = info;
+        const {timestamp, level, message} = info;
         const args = info[Symbol.for('splat')];
         let messageWithArgs = formatObjectForLog(message);
         if (args != null) {
@@ -73,7 +75,8 @@ const customLogFormat = (tag: string) => {
             return formatObjectForLog(obj);
           }).join(' ');
         }
-        info[Symbol.for('message')] = `[${timestamp}] [${label}] [${level}]: ${messageWithArgs}`;
+        const paddedLevel = `[${level}]`.padEnd((colorized ? COLORIZED_LEVEL_MAX_LENGTH : RAW_LEVEL_MAX_LENGTH) + 2);
+        info[Symbol.for('message')] = `[${timestamp}] ${paddedLevel}: ${messageWithArgs}`;
         return info;
       }
     },
@@ -88,7 +91,7 @@ const createServerLogger = async (appName: string) => {
     rootContainer.register('serverLogFile', {useValue: defaultServerLogFile});
   }
   const serverLogFile = await rootContainer.resolve<string>('serverLogFile');
-  const defaultLogLevel = process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development' ? 'debug' : 'info';
+  const defaultLogLevel = process.env.LOG_LEVEL ?? (process.env.NODE_ENV === 'development' ? 'debug' : 'info');
   if (!rootContainer.isRegistered('logLevel')) {
     rootContainer.register('logLevel', {useValue: defaultLogLevel});
   }
@@ -99,14 +102,14 @@ const createServerLogger = async (appName: string) => {
       level: logLevel,
       format: format.combine(
         format.colorize(),
-        customLogFormat(appName),
+        customLogFormat(true),
       ),
     }));
   } else {
     logger.add(new transports.File({
       filename: serverLogFile,
       level: logLevel,
-      format: customLogFormat(appName),
+      format: customLogFormat(false),
       maxsize: 10 ** 8,
       maxFiles: 5,
       zippedArchive: true,

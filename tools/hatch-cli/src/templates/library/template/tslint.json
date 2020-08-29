@@ -16,12 +16,6 @@
     "jsx-wrap-multiline": false,
     "label-position": true,
     "max-line-length": [true, 120],
-    "member-ordering": [
-      true,
-      "private-before-public",
-      "static-before-instance",
-      "variables-before-functions"
-    ],
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
@@ -44,7 +38,6 @@
     "object-literal-sort-keys": [
       false
     ],
-    "object-curly-spacing": [true, "never"],
     "one-line": [
       true,
       "check-catch",
@@ -87,9 +80,6 @@
       "check-typecast"
     ]
   },
-  "rulesDirectory": [
-    "./node_modules/tslint-eslint-rules/dist/rules"
-  ],
   "linterOptions": {
     "exclude": [
       "**/dist/*"

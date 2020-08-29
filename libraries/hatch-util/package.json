@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/node": "^12",
     "rimraf": "3.0.0",
-    "typescript": "^3.7.3"
+    "typescript": "^4.0.2"
   },
   "peerDependencies": {
     "@launchtray/tsyringe-async": "4.3.2",

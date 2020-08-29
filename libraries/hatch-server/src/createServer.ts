@@ -91,7 +91,7 @@ const createServerLogger = async (appName: string) => {
     rootContainer.register('serverLogFile', {useValue: defaultServerLogFile});
   }
   const serverLogFile = await rootContainer.resolve<string>('serverLogFile');
-  const defaultLogLevel = process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development' ? 'debug' : 'info';
+  const defaultLogLevel = process.env.LOG_LEVEL ?? (process.env.NODE_ENV === 'development' ? 'debug' : 'info');
   if (!rootContainer.isRegistered('logLevel')) {
     rootContainer.register('logLevel', {useValue: defaultLogLevel});
   }

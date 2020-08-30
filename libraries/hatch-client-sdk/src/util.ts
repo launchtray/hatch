@@ -39,7 +39,7 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
       const printSpecCmd = spawnSync('node', [serverExec], {encoding : 'utf8', env});
       if (printSpecCmd.error) {
         console.debug(printSpecCmd.stdout);
-        throw new Error('Error printing  API spec: ' + printSpecCmd.error.message);
+        throw new Error('Error printing API spec: ' + printSpecCmd.error.message);
       }
       const inputSpec = printSpecCmd.stdout;
       fs.writeFileSync(tempFilePath, inputSpec);

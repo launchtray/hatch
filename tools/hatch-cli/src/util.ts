@@ -460,14 +460,22 @@ export const createFromTemplate = async (
           to: name,
         });
 
-        // Rename hidden / project files
+        // Handle hidden / project files
         const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.iml');
         if (fs.existsSync(imlPath)) {
-          await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${toShortName(name)}.iml`));
+          if (inMonorepo) {
+            await fs.remove(imlPath);
+          } else {
+            await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${toShortName(name)}.iml`));
+          }
         }
         const dotIdeaPath = path.resolve(tempFilePath, 'dot-idea');
         if (fs.existsSync(dotIdeaPath)) {
-          await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+          if (inMonorepo) {
+            await fs.remove(dotIdeaPath);
+          } else {
+            await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+          }
         }
         const dotStorybookPath = path.resolve(tempFilePath, 'dot-storybook');
         if (fs.existsSync(dotStorybookPath)) {

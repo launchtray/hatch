@@ -320,6 +320,10 @@ export const convertExpressPathToOpenAPIPath = (
         name: param,
         in: 'path',
         required: true,
+        schema: {
+          type: 'string',
+          ...paramsIn[param].schema,
+        },
       });
       return `{${param}}`
     });
@@ -330,6 +334,10 @@ export const convertExpressPathToOpenAPIPath = (
       in: 'query',
       required: false,
       ...paramsIn[param],
+      schema: {
+        type: 'string',
+        ...paramsIn[param].schema,
+      },
     });
   });
   return newPath;

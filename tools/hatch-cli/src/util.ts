@@ -25,6 +25,7 @@ type ProjectFolder =
 
 interface ClientSDKOptions {
   dependency?: string;
+  ver?: string;
   input?: string;
 }
 
@@ -518,7 +519,8 @@ export const createFromTemplate = async (
           const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
           const clientSDKPackageParsed = parse(clientSDKPackage);
           if (clientSDKOptions.dependency) {
-            clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = '*';
+            const dependencyVersion = clientSDKOptions.ver ?? 'latest';
+            clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
             clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
               ' && rimraf dist && tsc';
           } else if (clientSDKOptions.input) {

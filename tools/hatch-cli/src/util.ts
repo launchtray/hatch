@@ -459,7 +459,7 @@ export const createFromTemplate = async (
           files: tempFilePath + '/**/*',
           from: /HATCH_CLI_TEMPLATE_VAR_projectShortName/g,
           to: toShortName(name),
-        }); 
+        });
         await replace({
           files: tempFilePath + '/package.json',
           from: '@launchtray/hatch-template-' + templateName,

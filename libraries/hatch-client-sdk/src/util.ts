@@ -16,9 +16,9 @@ export const createClientSDKByInputSpec = (inputSpec: string) => {
     '--skip-validate-spec',
   ];
   const generatorCmd = spawnSync(generatorExec, args, {encoding : 'utf8'});
-  if (generatorCmd.error) {
+  if (generatorCmd.stderr || generatorCmd.error) {
     console.log(generatorCmd.stdout);
-    throw new Error('Error generating client SDK: ' + generatorCmd.error.message);
+    throw new Error(generatorCmd.stderr || generatorCmd.error?.message);
   }
  };
 
@@ -37,9 +37,9 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
       const env = Object.create(process.env);
       env.PRINT_API_SPEC_ONLY = 'true';
       const printSpecCmd = spawnSync('node', [serverExec], {encoding : 'utf8', env});
-      if (printSpecCmd.error) {
+      if (printSpecCmd.stderr || printSpecCmd.error) {
         console.debug(printSpecCmd.stdout);
-        throw new Error('Error printing API spec: ' + printSpecCmd.error.message);
+        throw new Error(printSpecCmd.stderr || printSpecCmd.error?.message);
       }
       const inputSpec = printSpecCmd.stdout;
       fs.writeFileSync(tempFilePath, inputSpec);

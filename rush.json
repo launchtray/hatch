@@ -479,6 +479,11 @@
       "packageName": "@launchtray/hatch-template-library",
       "projectFolder": "tools/hatch-cli/src/templates/library/template",
       "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/hatch-template-client-sdk",
+      "projectFolder": "tools/hatch-cli/src/templates/client-sdk/template",
+      "shouldPublish": false
     }
   ]
 }

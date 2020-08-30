@@ -1,0 +1,23 @@
+{
+  "name": "@launchtray/hatch-template-client-sdk",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "scripts": {
+    "prepare": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc"
+  },
+  "dependencies": {
+    "@types/node": "^12"
+  },
+  "devDependencies": {
+    "@launchtray/hatch-client-sdk": "^0.1.0",
+    "typescript": "^3.7.3",
+    "rimraf": "3.0.0"
+  }
+}

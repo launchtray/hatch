@@ -13,6 +13,7 @@ dependencies:
   '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz'
   '@rush-temp/hatch-server-user-management': 'file:projects/hatch-server-user-management.tgz'
+  '@rush-temp/hatch-template-client-sdk': 'file:projects/hatch-template-client-sdk.tgz'
   '@rush-temp/hatch-template-library': 'file:projects/hatch-template-library.tgz'
   '@rush-temp/hatch-template-microservice': 'file:projects/hatch-template-microservice.tgz'
   '@rush-temp/hatch-template-webapp': 'file:projects/hatch-template-webapp.tgz'
@@ -15505,6 +15506,17 @@ packages:
       integrity: sha512-b19kEpysJfT7OZ6GM4Y3mc2XXjuFStBMSdX7fMMmFd2x5WVzQMx21YIoacJMX6WcGpcKBNudwbuXEOixEFnuAQ==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
+  'file:projects/hatch-template-client-sdk.tgz':
+    dependencies:
+      '@types/node': 12.12.54
+      rimraf: 3.0.0
+      typescript: 3.9.7
+    dev: false
+    name: '@rush-temp/hatch-template-client-sdk'
+    resolution:
+      integrity: sha512-j70sp+CcSj/GJ3+gOxMVpdA+0pRFBImaPfS5dR+yCTGe7jYAiKloaJMzZwG0GMJ88SnHXsE3kVfAE6vkzuvfYg==
+      tarball: 'file:projects/hatch-template-client-sdk.tgz'
+    version: 0.0.0
   'file:projects/hatch-template-library.tgz':
     dependencies:
       '@types/jest': 24.9.1
@@ -15825,6 +15837,7 @@ specifiers:
   '@rush-temp/hatch-server': 'file:./projects/hatch-server.tgz'
   '@rush-temp/hatch-server-middleware': 'file:./projects/hatch-server-middleware.tgz'
   '@rush-temp/hatch-server-user-management': 'file:./projects/hatch-server-user-management.tgz'
+  '@rush-temp/hatch-template-client-sdk': 'file:./projects/hatch-template-client-sdk.tgz'
   '@rush-temp/hatch-template-library': 'file:./projects/hatch-template-library.tgz'
   '@rush-temp/hatch-template-microservice': 'file:./projects/hatch-template-microservice.tgz'
   '@rush-temp/hatch-template-webapp': 'file:./projects/hatch-template-webapp.tgz'

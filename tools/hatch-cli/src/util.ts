@@ -23,12 +23,18 @@ type ProjectFolder =
   | 'libraries'
   | 'tools';
 
+interface ClientSDKOptions {
+  dependency?: string;
+  input?: string;
+}
+
 interface CopyDirOptions {
   srcPath: string;
   dstPath: string;
   name: string;
   templateType?: TemplateType;
   projectFolder?: ProjectFolder;
+  clientSDKOptions?: ClientSDKOptions;
 }
 
 export const withSpinner = async (message: string, task: () => Promise<void>): Promise<void> => {
@@ -40,6 +46,34 @@ export const withSpinner = async (message: string, task: () => Promise<void>): P
     process.stdout.write(eraseLine);
   }
 };
+
+export const createClientSDK = async (parentDirectory: string, clientName: string, clientSDKOptions: ClientSDKOptions,
+                                      projectFolder?: ProjectFolder) => {
+  if (!clientName) {
+    throw new Error('Client SDK name must be specified');
+  }
+  const clientPath = process.cwd() + '/' + clientName;
+  const {dstPath, inMonorepo} = await createFromTemplate({
+    srcPath: templateDir(parentDirectory),
+    dstPath: clientPath,
+    name: clientName,
+    templateType: 'project',
+    projectFolder: projectFolder,
+    clientSDKOptions: clientSDKOptions,
+  });
+  console.log(chalk.green('Created \'' + dstPath + '\''));
+  if (inMonorepo) {
+    console.log('Now might be a good time run to `rush update`');
+  } else {
+    console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+  }
+}
+
+export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
+  return (projectName: string, clientOptions: ClientSDKOptions) => {
+    return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
+  }
+}
 
 export const createMonorepo = async (parentDirectory: string, monorepoName: string) => {
   if (!monorepoName) {
@@ -75,7 +109,7 @@ export const createProject = async (parentDirectory: string, projectName: string
   });
   console.log(chalk.green('Created \'' + dstPath + '\''));
   if (inMonorepo) {
-    console.log('Now might be a good time run `rush update`');
+    console.log('Now might be a good time run to `rush update`');
   } else {
     console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
   }
@@ -316,7 +350,7 @@ const updateCustomCommands = (monorepoPath: string) => {
 };
 
 export const createFromTemplate = async (
-  {srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions
+  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
   let inMonorepo = false;
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
@@ -470,6 +504,26 @@ export const createFromTemplate = async (
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
+        }
+        if (clientSDKOptions) {
+          const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
+          const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
+          const clientSDKPackageParsed = parse(clientSDKPackage);
+          if (clientSDKOptions.dependency) {
+            clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = '*';
+            clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
+              ' && rimraf dist && tsc';
+          } else if (clientSDKOptions.input) {
+            clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --input ' + clientSDKOptions.input +
+              ' && rimraf dist && tsc';
+            await replace({
+              files: tempFilePath + '/package.json',
+              from: /HATCH_CLI_TEMPLATE_VAR_clientSDKBuildCommand/g,
+              to: 'hatch-client-sdk --input ' + clientSDKOptions.input,
+            });
+          }
+          const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
+          fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
         }
       } else {
         await replace({

@@ -103,7 +103,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const composition: WebClientComposition = await clientComposer();
 
   const appName = await container.resolve<string>('appName');
-  const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger(appName);
+  const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger();
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {dsn, integrations: consoleBreadcrumbs});
   container.registerInstance('ErrorReporter', sentry);

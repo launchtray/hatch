@@ -12,5 +12,6 @@ fi
 docker-compose up --remove-orphans --build --no-start
 echo ==============================
 cat .env | grep -v _STATIC # Prints ports for non-static servers
+cat common.env
 echo ==============================
 docker-compose up

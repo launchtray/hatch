@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.10.7",
+      "tag": "@launchtray/hatch-cli_v0.10.7",
+      "date": "Sat, 29 Aug 2020 03:52:13 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add printing of environment variables when running monorepo production apps"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.6",
       "tag": "@launchtray/hatch-cli_v0.10.6",
       "date": "Fri, 28 Aug 2020 06:18:04 GMT",

@@ -10,6 +10,7 @@ const formatObjectForLog = (obj: any) => {
   return util.inspect(obj, {breakLength: Infinity, compact: true});
 };
 
+const RAW_LEVEL_MAX_LENGTH = 5;
 export class ErrorReporterTransport extends TransportStream {
   constructor(opts: TransportStreamOptions, private readonly errorReporter: ErrorReporter) {
     super(opts);
@@ -20,7 +21,7 @@ export class ErrorReporterTransport extends TransportStream {
       this.emit('logged', info);
     });
 
-    const {level, label, message} = info;
+    const {level, message} = info;
     const args = info[Symbol.for('splat')];
     let messageWithArgs = formatObjectForLog(message);
     if (args != null) {
@@ -28,9 +29,8 @@ export class ErrorReporterTransport extends TransportStream {
         return formatObjectForLog(obj);
       }).join(' ');
     }
-    const formattedMessage = `[${label}] [${level}]: ${messageWithArgs}`;
-    this.errorReporter.captureLog(formattedMessage);
-
+    const paddedLevel = `[${level}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
+    this.errorReporter.captureLog(`${paddedLevel}: ${messageWithArgs}`);
     callback();
   }
 

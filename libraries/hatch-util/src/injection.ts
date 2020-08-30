@@ -1,13 +1,12 @@
 import 'reflect-metadata';
 import {
   container as tsyringe_container,
-  DependencyContainer as TSyringeDependencyContainer,
+  DependencyContainer,
   initializer as tsyringe_initializer,
   inject as tsyringe_inject,
   injectAll as tsyringe_injectAll,
   injectable as tsyringe_injectable,
-  InjectionToken,
-  Lifecycle as tsyringe_Lifecycle,
+  Lifecycle,
   resolveParams as tsyringe_resolveParams,
   scoped as tsyringe_scoped,
 } from '@launchtray/tsyringe-async';
@@ -60,23 +59,6 @@ const getToken = (tokenUsedByDependency: TokenKey, dependency: any, propertyKey?
   return resolvedToken ?? tokenUsedByDependency;
 };
 
-interface TokenDescriptor {
-  token: InjectionToken<any>;
-  multiple: boolean;
-}
-
-const isTokenDescriptor = (
-  descriptor: any
-): descriptor is TokenDescriptor => {
-  return (
-    typeof descriptor === 'object' &&
-    'token' in descriptor &&
-    'multiple' in descriptor
-  );
-};
-
-export interface DependencyContainer extends TSyringeDependencyContainer {}
-
 export const inject = (token: TokenKey): (target: any, propertyKey: string | symbol, paramIndex: number) => any => {
   return (target: any, propertyKey: string | symbol, paramIndex: number) => {
     return tsyringe_inject(getToken(token, target, propertyKey))(target, propertyKey, paramIndex);
@@ -102,7 +84,7 @@ export const initializeInjection = (context?: InjectionInitializationContext) =>
 export const injectable: <T>() => (target: Class<T>) => void = tsyringe_injectable;
 export const ROOT_CONTAINER: DependencyContainer = tsyringe_container;
 export const containerSingleton = <T>() => (target: Class<T>) => {
-  return tsyringe_scoped(tsyringe_Lifecycle.ContainerScoped)(target);
+  return tsyringe_scoped(Lifecycle.ContainerScoped)(target);
 };
 export const resolveParams: (
   container: DependencyContainer,

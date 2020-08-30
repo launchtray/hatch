@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-cli",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "description": "",
   "bin": {
     "hatch": "./dist/index.js"
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.10.6",
+    "@launchtray/hatch-util": "^0.10.7",
     "@launchtray/tsyringe-async": "4.3.2",
     "@microsoft/rush": "^5.29.1",
     "@microsoft/rush-lib": "^5.29.1",
@@ -38,6 +38,6 @@
   "devDependencies": {
     "@launchtray/hatch-template-webapp": "0.1.0",
     "rimraf": "3.0.0",
-    "typescript": "^3.7.3"
+    "typescript": "^4.0.2"
   }
 }

@@ -24,6 +24,7 @@ type ProjectFolder =
   | 'tools';
 
 interface ClientSDKOptions {
+  package?: string;
   dependency?: string;
   ver?: string;
   input?: string;
@@ -439,6 +440,10 @@ export const createFromTemplate = async (
         if (fs.existsSync(nodeModulesPath)) {
           await fs.remove(nodeModulesPath);
         }
+        const distPath = path.resolve(tempFilePath, 'dist');
+        if (fs.existsSync(distPath)) {
+          await fs.remove(distPath);
+        }
         const rushPath = path.resolve(tempFilePath, '.rush');
         if (fs.existsSync(rushPath)) {
           await fs.remove(rushPath);
@@ -454,11 +459,11 @@ export const createFromTemplate = async (
           files: tempFilePath + '/**/*',
           from: /HATCH_CLI_TEMPLATE_VAR_projectShortName/g,
           to: toShortName(name),
-        });
+        }); 
         await replace({
           files: tempFilePath + '/package.json',
           from: '@launchtray/hatch-template-' + templateName,
-          to: name,
+          to: (clientSDKOptions && clientSDKOptions.package) ?? name,
         });
 
         // Handle hidden / project files

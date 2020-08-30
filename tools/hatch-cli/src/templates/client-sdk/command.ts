@@ -4,6 +4,7 @@ import {clientSDKCreator, projectCreator, runCommander} from '../../util';
 commander
   .name('hatch client-sdk')
   .arguments('[name]')
+  .option('-p, --package <package>', 'The client SDK package name. Defaults to [name]')
   .option('-d, --dependency <dependency>', 'The hatch microservice or webapp dependency name to generate the OpenAPI spec')
   .option('-v, --ver <ver>', 'The hatch microservice or webapp dependency version to generate the OpenAPI spec')
   .option('-i, --input <input>', 'The location of the OpenAPI spec, as URL or file')

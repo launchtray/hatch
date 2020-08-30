@@ -105,6 +105,8 @@ own outside of a project created by `hatch`.
 * [hatch-server-user-management](libraries/hatch-server-user-management) -- a library for server-side user management 
   such as authentication, user registration, and password resetting that adheres to the interface defined in 
   [hatch-user-management-client](libraries/hatch-user-management-client)
+* [hatch-client-sdk](libraries/hatch-client-sdk) -- a library for generating a client-sdk library from an [OpenAPI 
+  Specification](https://swagger.io/resources/open-api/), hatch microservice, or hatch webapp
 
 
 ## Developer setup

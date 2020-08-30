@@ -13,14 +13,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.10.6",
+    "@launchtray/hatch-util": "^0.10.7",
     "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
     "@types/node": "^12",
     "@types/tmp": "^0.1",
     "tmp": "^0.1"
   },
   "devDependencies": {
-    "typescript": "^3.7.3",
+    "typescript": "^4.0.2",
     "rimraf": "3.0.0"
   }
 }

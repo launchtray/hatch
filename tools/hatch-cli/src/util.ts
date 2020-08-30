@@ -524,11 +524,6 @@ export const createFromTemplate = async (
           } else if (clientSDKOptions.input) {
             clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --input ' + clientSDKOptions.input +
               ' && rimraf dist && tsc';
-            await replace({
-              files: tempFilePath + '/package.json',
-              from: /HATCH_CLI_TEMPLATE_VAR_clientSDKBuildCommand/g,
-              to: 'hatch-client-sdk --input ' + clientSDKOptions.input,
-            });
           }
           const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
           fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);

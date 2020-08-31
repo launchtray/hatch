@@ -24,7 +24,7 @@ type ProjectFolder =
   | 'tools';
 
 interface ClientSDKOptions {
-  package?: string;
+  name?: string;
   dependency?: string;
   ver?: string;
   input?: string;
@@ -49,16 +49,16 @@ export const withSpinner = async (message: string, task: () => Promise<void>): P
   }
 };
 
-export const createClientSDK = async (parentDirectory: string, clientName: string, clientSDKOptions: ClientSDKOptions,
+export const createClientSDK = async (parentDirectory: string, projectName: string, clientSDKOptions: ClientSDKOptions,
                                       projectFolder?: ProjectFolder) => {
-  if (!clientName) {
+  if (!projectName) {
     throw new Error('Client SDK name must be specified');
   }
-  const clientPath = process.cwd() + '/' + clientName;
+  const clientPath = process.cwd() + '/' + projectName;
   const {dstPath, inMonorepo} = await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: clientPath,
-    name: clientName,
+    name: projectName,
     templateType: 'project',
     projectFolder: projectFolder,
     clientSDKOptions: clientSDKOptions,
@@ -72,7 +72,15 @@ export const createClientSDK = async (parentDirectory: string, clientName: strin
 }
 
 export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
-  return (projectName: string, clientOptions: ClientSDKOptions) => {
+  return (clientOptions: ClientSDKOptions) => {
+    if (!clientOptions.dependency && !clientOptions.input) {
+      throw new Error('Dependency or input spec must be specified')
+    }
+    if (clientOptions.input && !clientOptions.name) {
+      throw new Error('Name must be specified when generating a client SDK from an input spec')
+    }
+    const projectName = (clientOptions.dependency && !clientOptions.name) ?
+      toShortName(clientOptions.dependency) + '-sdk' : clientOptions.name as string;
     return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
   }
 }
@@ -463,7 +471,7 @@ export const createFromTemplate = async (
         await replace({
           files: tempFilePath + '/package.json',
           from: '@launchtray/hatch-template-' + templateName,
-          to: (clientSDKOptions && clientSDKOptions.package) ?? name,
+          to: name,
         });
 
         // Handle hidden / project files

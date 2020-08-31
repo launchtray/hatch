@@ -3,11 +3,13 @@ import {clientSDKCreator, projectCreator, runCommander} from '../../util';
 
 commander
   .name('hatch client-sdk')
-  .arguments('[name]')
-  .option('-p, --package <package>', 'The client SDK package name. Defaults to [name]')
-  .option('-d, --dependency <dependency>', 'The hatch microservice or webapp dependency name to generate the OpenAPI spec')
-  .option('-v, --ver <ver>', 'The hatch microservice or webapp dependency version to generate the OpenAPI spec')
-  .option('-i, --input <input>', 'The location of the OpenAPI spec, as URL or file')
+  .option('-n, --name <name>', 'The client SDK package name. Defaults to <dependency>-sdk if ' +
+    'generating from a dependency, else required', null)
+  .option('-d, --dependency <dependency>', 'The hatch microservice or webapp dependency name to ' +
+    'generate the OpenAPI spec', null)
+  .option('-v, --ver <ver>', 'The hatch microservice or webapp dependency version to generate the ' +
+    'OpenAPI spec. Defaults to \"latest\"', null)
+  .option('-i, --input <input>', 'The location of the OpenAPI spec, as URL or file', null)
   .description('Creates a client-sdk project from an OpenAPI Specification')
   .action(clientSDKCreator(__dirname, 'libraries'));
 

@@ -80,7 +80,7 @@ export const clientSDKCreator = (parentDirectory: string, projectFolder?: Projec
       throw new Error('Name must be specified when generating a client SDK from an input spec')
     }
     const projectName = (clientOptions.dependency && !clientOptions.name) ?
-      toShortName(clientOptions.dependency) + '-sdk' : clientOptions.name as string;
+      clientOptions.dependency + '-sdk' : clientOptions.name as string;
     return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
   }
 }

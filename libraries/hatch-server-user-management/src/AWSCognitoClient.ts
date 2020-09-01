@@ -63,11 +63,8 @@ export default class AWSCognitoClient implements UserManagementClient {
 
   @initializer()
   async initialize() {
-    const chain = new CredentialProviderChain();
-    const credentials = await chain.resolvePromise();
+    this.cognitoProvider.config.credentialProvider = new CredentialProviderChain();
     this.cognitoProvider.config.update({
-      accessKeyId: credentials.accessKeyId,
-      secretAccessKey: credentials.secretAccessKey,
       region: this.awsRegion,
     });
   }

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-user-management
 
-This log was last generated on Tue, 01 Sep 2020 05:43:06 GMT and should not be manually modified.
+This log was last generated on Tue, 01 Sep 2020 18:55:59 GMT and should not be manually modified.
+
+## 0.10.10
+Tue, 01 Sep 2020 18:55:59 GMT
+
+### Updates
+
+- Simplify initialization of Cognito client
 
 ## 0.10.9
 Tue, 01 Sep 2020 05:43:06 GMT

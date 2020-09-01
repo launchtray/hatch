@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.10.8",
+      "tag": "@launchtray/hatch-cli_v0.10.8",
+      "date": "Tue, 01 Sep 2020 01:03:47 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Upgrade to TypeScript 4"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.7",
       "tag": "@launchtray/hatch-cli_v0.10.7",
       "date": "Sat, 29 Aug 2020 03:52:13 GMT",

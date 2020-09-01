@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-injectables",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "description": "Injectable utility components for web applications",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -16,8 +16,8 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.10.7",
-    "@launchtray/hatch-web": "^0.10.7",
+    "@launchtray/hatch-util": "^0.10.8",
+    "@launchtray/hatch-web": "^0.10.8",
     "@launchtray/tsyringe-async": "4.3.2",
     "@types/react-dom": "^16",
     "@types/react-router": "^5",

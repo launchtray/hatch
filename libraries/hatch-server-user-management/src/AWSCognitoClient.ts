@@ -58,15 +58,11 @@ export default class AWSCognitoClient implements UserManagementClient {
               @inject('awsClientId') private readonly awsClientId: string)
   {
     this.iss = 'https://cognito-idp.' + awsRegion + '.amazonaws.com/' + this.awsUserPoolId;
-    logger.debug('Created AWS cognito client');
-  }
-
-  @initializer()
-  async initialize() {
-    this.cognitoProvider.config.credentialProvider = new CredentialProviderChain();
     this.cognitoProvider.config.update({
       region: this.awsRegion,
+      credentialProvider: new CredentialProviderChain(),
     });
+    logger.debug('Created AWS cognito client');
   }
   
   public async authenticate(username: string, password: string) {

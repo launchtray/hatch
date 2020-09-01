@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-user-management",
+      "comment": "Simplify initialization of Cognito client",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-user-management",
+  "email": "kiltyj@gmail.com"
+}

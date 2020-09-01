@@ -1,8 +1,8 @@
-import {CognitoIdentityServiceProvider} from 'aws-sdk';
+import {CognitoIdentityServiceProvider, CredentialProviderChain} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
-import {inject, injectable, Logger} from '@launchtray/hatch-util';
+import {initializer, inject, injectable, Logger} from '@launchtray/hatch-util';
 import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import {
   UserAttributes,
@@ -53,18 +53,23 @@ export default class AWSCognitoClient implements UserManagementClient {
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
   
   constructor(@inject('Logger') private readonly logger: Logger,
-              @inject('awsAccessKeyId') private readonly awsAccessKeyId: string,
-              @inject('awsSecretAccessKey') private readonly awsSecretAccessKey: string,
               @inject('awsRegion') private readonly awsRegion: string,
               @inject('awsUserPoolId') private readonly awsUserPoolId: string,
-              @inject('awsClientId') private readonly awsClientId: string) {
+              @inject('awsClientId') private readonly awsClientId: string)
+  {
     this.iss = 'https://cognito-idp.' + awsRegion + '.amazonaws.com/' + this.awsUserPoolId;
-    this.cognitoProvider.config.update({
-      accessKeyId: awsAccessKeyId,
-      secretAccessKey: awsSecretAccessKey,
-      region: awsRegion,
-    });
     logger.debug('Created AWS cognito client');
+  }
+
+  @initializer()
+  async initialize() {
+    const chain = new CredentialProviderChain();
+    const credentials = await chain.resolvePromise();
+    this.cognitoProvider.config.update({
+      accessKeyId: credentials.accessKeyId,
+      secretAccessKey: credentials.secretAccessKey,
+      region: this.awsRegion,
+    });
   }
   
   public async authenticate(username: string, password: string) {

@@ -7,11 +7,13 @@ import tmp from 'tmp';
 export const createClientSDKByInputSpec = (inputSpec: string) => {
   const generatorExec = path.resolve(__dirname, '../node_modules/.bin/openapi-generator');
   const outputPath = './src/autogen';
+  const templatePath = path.resolve(__dirname, '../lib/typescript-fetch');
   const args = [
     'generate',
     '--input-spec', inputSpec,
     '--output', outputPath,
     '--generator-name', 'typescript-fetch',
+    '--template-dir', templatePath,
     '--additional-properties=supportsES6=true,typescriptThreePlus=true',
     '--skip-validate-spec',
   ];

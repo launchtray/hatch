@@ -322,7 +322,7 @@ export const convertExpressPathToOpenAPIPath = (
         required: true,
         schema: {
           type: 'string',
-          ...paramsIn[param].schema,
+          ...paramsIn[param]?.schema,
         },
       });
       return `{${param}}`
@@ -336,7 +336,7 @@ export const convertExpressPathToOpenAPIPath = (
       ...paramsIn[param],
       schema: {
         type: 'string',
-        ...paramsIn[param].schema,
+        ...paramsIn[param]?.schema,
       },
     });
   });

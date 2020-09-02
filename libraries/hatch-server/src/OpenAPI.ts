@@ -2,8 +2,13 @@ import {APIMetadata} from './ServerMiddleware';
 
 // This file defines types per https://swagger.io/specification
 
+export type OpenAPIResponseBodyContent = {
+  [mediaType: string]: OpenAPIMediaTypeObject;
+};
+
 export interface OpenAPIResponse {
   description: string;
+  content?: OpenAPIResponseBodyContent;
 }
 
 export type OpenAPIResponses = {

@@ -5,6 +5,9 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/common/scripts" />
       <excludeFolder url="file://$MODULE_DIR$/common/temp" />
+      <excludePattern pattern="build" />
+      <excludePattern pattern="dist" />
+      <excludePattern pattern=".rush" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

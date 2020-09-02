@@ -25,8 +25,7 @@
   },
   "jest": {
     "transform": {
-      "\\.(ts|tsx)$": "ts-jest",
-      "^(?!.*\\.(js|jsx|json)$)": "<rootDir>/node_modules/razzle/config/jest/fileTransform.js"
+      "\\.(ts|tsx)$": "ts-jest"
     },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",

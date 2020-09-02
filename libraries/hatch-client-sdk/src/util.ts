@@ -16,35 +16,35 @@ export const createClientSDKByInputSpec = (inputSpec: string) => {
     '--skip-validate-spec',
   ];
   const generatorCmd = spawnSync(generatorExec, args, {encoding : 'utf8'});
-  if (generatorCmd.stderr || generatorCmd.error) {
+  if (generatorCmd.error) {
     console.log(generatorCmd.stdout);
-    throw new Error(generatorCmd.stderr || generatorCmd.error?.message);
+    throw new Error(generatorCmd.error.message);
   }
  };
 
 export const createClientSDKByDependency = async (dependencyName: string) => {
-    const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
-    tmp.file((err, tmpPath, fd, tmpCleanUp) => {
-      if (err) {
-        tmpCleanUp();
-        tempFileFuture.completeExceptionally(err);
-      }
-      tempFileFuture.complete([tmpPath, tmpCleanUp]);
-    });
-    const [tempFilePath, cleanUp] = await tempFileFuture.get();
-    try {
-      const serverExec = path.resolve(process.cwd(), 'node_modules', dependencyName, 'build', 'server.js');
-      const env = Object.create(process.env);
-      env.PRINT_API_SPEC_ONLY = 'true';
-      const printSpecCmd = spawnSync('node', [serverExec], {encoding : 'utf8', env});
-      if (printSpecCmd.stderr || printSpecCmd.error) {
-        console.debug(printSpecCmd.stdout);
-        throw new Error(printSpecCmd.stderr || printSpecCmd.error?.message);
-      }
-      const inputSpec = printSpecCmd.stdout;
-      fs.writeFileSync(tempFilePath, inputSpec);
-      createClientSDKByInputSpec(tempFilePath);
-    } finally {
-      cleanUp();
+  const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
+  tmp.file((err, tmpPath, fd, tmpCleanUp) => {
+    if (err) {
+      tmpCleanUp();
+      tempFileFuture.completeExceptionally(err);
     }
+    tempFileFuture.complete([tmpPath, tmpCleanUp]);
+  });
+  const [tempFilePath, cleanUp] = await tempFileFuture.get();
+  try {
+    const serverExec = path.resolve(process.cwd(), 'node_modules', dependencyName, 'build', 'server.js');
+    const env = Object.create(process.env);
+    env.PRINT_API_SPEC_ONLY = 'true';
+    const printSpecCmd = spawnSync('node', [serverExec], {encoding : 'utf8', env});
+    if (printSpecCmd.error) {
+      console.debug(printSpecCmd.stdout);
+      throw new Error(printSpecCmd.error.message);
+    }
+    const inputSpec = printSpecCmd.stdout;
+    fs.writeFileSync(tempFilePath, inputSpec);
+    createClientSDKByInputSpec(tempFilePath);
+  } finally {
+    cleanUp();
+  }
 };

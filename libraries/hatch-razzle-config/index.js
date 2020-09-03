@@ -24,6 +24,13 @@ const patchWebpackConfig = (config, isServer, webpack) => {
     maxEntrypointSize: 10000000,
   };
 
+  if (isServer) {
+    config.optimization = {
+      ...config.optimization,
+      minimize: false,
+    }
+  }
+
   if (webpack) {
     const definePluginIndex = config.plugins.findIndex(
       plugin => plugin instanceof webpack.DefinePlugin && plugin.definitions,

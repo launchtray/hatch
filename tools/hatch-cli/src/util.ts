@@ -501,7 +501,15 @@ export const createFromTemplate = async (
         }
         const dotDockerIgnorePath = path.resolve(tempFilePath, 'dot-dockerignore');
         if (fs.existsSync(dotDockerIgnorePath)) {
-          await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
+          if (inMonorepo) {
+            await fs.remove(dotDockerIgnorePath);
+          } else {
+            await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
+          }
+        }
+        const dockerfilePath = path.resolve(tempFilePath, 'Dockerfile');
+        if (fs.existsSync(dockerfilePath) && inMonorepo) {
+          await fs.remove(dockerfilePath);
         }
         const testPath = path.resolve(tempFilePath, 'src', '__test__', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.test.ts');
         if (fs.existsSync(testPath)) {

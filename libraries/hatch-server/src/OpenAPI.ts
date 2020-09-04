@@ -18,6 +18,7 @@ export type OpenAPIResponses = {
 export interface OpenAPISchemaObject {
   // TODO: Flesh this out more to improve IDE help
   // For now, see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
+  title?: string;
   [key: string]: any;
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-util",
-  "version": "0.10.10",
+  "version": "0.10.11",
   "description": "Utilities used by several other hatch modules",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-razzle-config
 
-This log was last generated on Tue, 01 Sep 2020 18:55:59 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Sep 2020 21:01:39 GMT and should not be manually modified.
+
+## 0.10.11
+Fri, 04 Sep 2020 21:01:39 GMT
+
+### Updates
+
+- Logging and developer experience improvements
 
 ## 0.10.10
 Tue, 01 Sep 2020 18:55:59 GMT

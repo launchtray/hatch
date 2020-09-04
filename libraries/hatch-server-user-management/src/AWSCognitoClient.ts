@@ -87,14 +87,16 @@ export default class AWSCognitoClient implements UserManagementClient {
   
   public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes) {
     let cognitoUserAttributes: AttributeListType = [];
-    if (userAttributes) {
-      Object.keys(userAttributes).forEach((key) => {
-          cognitoUserAttributes.push({
-            Name: key,
-            Value: userAttributes[key],
-          });
+    const userAttributesWithEmail = {
+      email: username,
+      ...userAttributes,
+    };
+    Object.keys(userAttributesWithEmail).forEach((key) => {
+      cognitoUserAttributes.push({
+        Name: key,
+        Value: userAttributesWithEmail[key],
       });
-    }
+    });
     try {
       await this.cognitoProvider.signUp({
         ClientId: this.awsClientId,

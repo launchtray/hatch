@@ -89,6 +89,7 @@ export interface OpenAPIOperation {
   requestBody?: OpenAPIRequestBody;
   description?: string;
   operationId?: string;
+  tags?: [string];
 }
 
 export type OpenAPIOperations = {
@@ -133,6 +134,7 @@ export class OpenAPISpecBuilder {
         parameters: apiMetadata.parameters,
         requestBody: apiMetadata.requestBody,
         operationId: apiMetadata.operationId,
+        tags: apiMetadata.tags,
       }
     }
   }

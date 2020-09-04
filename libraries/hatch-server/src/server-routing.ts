@@ -134,6 +134,7 @@ const consumeAPIMetadata = (
         },
       },
       operationId: metadata.operationId,
+      tags: metadata.tags,
     };
     apiMetadataConsumer(apiMetadata);
   }

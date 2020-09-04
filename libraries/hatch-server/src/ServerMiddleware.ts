@@ -14,6 +14,7 @@ export interface APIMetadataParameters {
   requestBody?: OpenAPIRequestBody;
   tokens?: Array<string | symbol>;
   operationId?: string;
+  tags?: string[],
 }
 
 export interface APIMetadata {
@@ -24,6 +25,7 @@ export interface APIMetadata {
   responses: OpenAPIResponses;
   requestBody?: OpenAPIRequestBody;
   operationId?: string,
+  tags?: string[],
 }
 
 export type APIMetadataConsumer = (metadata: APIMetadata) => void;

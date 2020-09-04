@@ -133,6 +133,7 @@ const consumeAPIMetadata = (
           description: '',
         },
       },
+      operationId: metadata.operationId,
     };
     apiMetadataConsumer(apiMetadata);
   }

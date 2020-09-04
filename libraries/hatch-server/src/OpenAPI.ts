@@ -88,6 +88,7 @@ export interface OpenAPIOperation {
   parameters: OpenAPIParameter[];
   requestBody?: OpenAPIRequestBody;
   description?: string;
+  operationId?: string;
 }
 
 export type OpenAPIOperations = {
@@ -110,7 +111,7 @@ export interface OpenAPISpec {
 }
 
 export class OpenAPISpecBuilder {
-  private spec: OpenAPISpec;
+  private readonly spec: OpenAPISpec;
 
   constructor(appName: string, appVersion: string) {
     this.spec = {
@@ -131,6 +132,7 @@ export class OpenAPISpecBuilder {
         responses: apiMetadata.responses,
         parameters: apiMetadata.parameters,
         requestBody: apiMetadata.requestBody,
+        operationId: apiMetadata.operationId,
       }
     }
   }

@@ -1,13 +1,16 @@
 import {CompletableFuture} from '@launchtray/hatch-util';
 import {spawnSync} from 'child_process';
-import fs from 'fs';
 import path from 'path';
 import tmp from 'tmp';
+import fs from 'fs-extra';
 
-export const createClientSDKByInputSpec = (inputSpec: string) => {
+export const createClientSDKByInputSpec = async (inputSpec: string) => {
   const generatorExec = path.resolve(__dirname, '../node_modules/.bin/openapi-generator');
-  const outputPath = './src/autogen';
   const templatePath = path.resolve(__dirname, '../lib/typescript-fetch');
+  const outputPath = './src/autogen';
+  if (fs.existsSync(outputPath)) {
+    await fs.remove(outputPath);
+  }
   const args = [
     'generate',
     '--input-spec', inputSpec,
@@ -17,12 +20,12 @@ export const createClientSDKByInputSpec = (inputSpec: string) => {
     '--additional-properties=supportsES6=true,typescriptThreePlus=true',
     '--skip-validate-spec',
   ];
-  const generatorCmd = spawnSync(generatorExec, args, {encoding : 'utf8'});
+  const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
   if (generatorCmd.error) {
     console.log(generatorCmd.stdout);
     throw new Error(generatorCmd.error.message);
   }
- };
+};
 
 export const createClientSDKByDependency = async (dependencyName: string) => {
   const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
@@ -45,7 +48,7 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
     }
     const inputSpec = printSpecCmd.stdout;
     fs.writeFileSync(tempFilePath, inputSpec);
-    createClientSDKByInputSpec(tempFilePath);
+    await createClientSDKByInputSpec(tempFilePath);
   } finally {
     cleanUp();
   }

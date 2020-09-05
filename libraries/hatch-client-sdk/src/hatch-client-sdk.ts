@@ -9,7 +9,9 @@ if (argv.length < 2) {
 } else if (typeArg === '--input') {
   // location of the OpenAPI spec, as URL or file
   const inputSpec = argv[1];
-  createClientSDKByInputSpec(inputSpec);
+  createClientSDKByInputSpec(inputSpec).catch((err) => {
+    throw new Error(err);
+  });
 } else if (typeArg === '--dependency') {
   const dependencyName = argv[1];
   createClientSDKByDependency(dependencyName).catch((err) => {

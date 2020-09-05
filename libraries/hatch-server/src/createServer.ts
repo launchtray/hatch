@@ -96,14 +96,15 @@ const createServerLogger = async (appName: string) => {
     rootContainer.register('logLevel', {useValue: defaultLogLevel});
   }
   const logLevel = await rootContainer.resolve<string>('logLevel');
+  const colorizeLog = process.env.COLORIZE_LOG === 'true';
 
   if (process.env.NODE_ENV === 'development' || process.env.LOG_TO_CONSOLE === 'true') {
     logger.add(new transports.Console({
       level: logLevel,
-      format: format.combine(
+      format: colorizeLog ? format.combine(
         format.colorize(),
         customLogFormat(true),
-      ),
+      ) : customLogFormat(false),
     }));
   } else {
     logger.add(new transports.File({

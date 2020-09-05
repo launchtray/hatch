@@ -15,8 +15,8 @@ class Home extends React.Component<PropTypes> {
           style={{height: 100, width: 68, alignSelf: 'center'}}
           source={require('../assets/hatch_eyes.png')}
         />
-        <Button testID={'helloButton'} onPressRoute={'/hello?a=1#b'} title={'Hello!'}/>
-        <Button testID={'helloButton2'} onPress={this.props.onButtonPress} title={'Hello2!'}/>
+        <Button testID={'helloButton'} onPressRoute={'/hello?a=1#b'} title={'Nav via link'}/>
+        <Button testID={'helloButton2'} onPress={this.props.onButtonPress} title={'Nav via action'}/>
       </View>
     );
   }

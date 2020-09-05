@@ -36,6 +36,10 @@ export const addCsrfCheckApiMetadata = (metadataParams: APIMetadataParameters) =
 export class AuthenticateRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Authenticates a user and retrieves valid access and refresh tokens',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'authenticate',
     requestBody: {
       content: {
         'application/json': {
@@ -56,6 +60,26 @@ export class AuthenticateRequest {
           }
         }
       }
+    },
+    responses: {
+      '200': {
+        description: 'The authenticated user\'s auth tokens',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                accessToken: {
+                  type: 'string'
+                },
+                refreshToken: {
+                  type: 'string'
+                },
+              }
+            }
+          }
+        }
+      }
     }
   };
 }
@@ -65,6 +89,10 @@ addCsrfCheckApiMetadata(AuthenticateRequest.apiMetadata);
 export class StartUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Sign\'s up a user account',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'startUserRegistration',
     requestBody: {
       content: {
         'application/json': {
@@ -94,7 +122,11 @@ export class StartUserRegistrationRequest {
 
 export class ResendUserRegistrationCodeRequest {
   public static apiMetadata: APIMetadataParameters = {
-    description: 'Creates a user account',
+    description: 'Resend user registration code',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'resendUserRegistrationCode',
     requestBody: {
       content: {
         'application/json': {
@@ -117,7 +149,11 @@ export class ResendUserRegistrationCodeRequest {
 
 export class ConfirmUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
-    description: 'Confirms a user account',
+    description: 'Confirms a user registration',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'confirmUserRegistration',
     requestBody: {
       content: {
         'application/json': {
@@ -145,6 +181,10 @@ export class ConfirmUserRegistrationRequest {
 export class StartPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Resets a user account password',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'startPasswordReset',
     requestBody: {
       content: {
         'application/json': {
@@ -167,7 +207,11 @@ export class StartPasswordResetRequest {
 
 export class ConfirmPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
-    description: 'Resets a user account password',
+    description: 'Confirms a users password reset',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'confirmPasswordReset',
     requestBody: {
       content: {
         'application/json': {
@@ -199,6 +243,10 @@ export class ConfirmPasswordResetRequest {
 export class RefreshAuthenticationRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Refreshes a user\'s access token',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'refreshAuthentication',
     requestBody: {
       content: {
         'application/json': {
@@ -215,6 +263,26 @@ export class RefreshAuthenticationRequest {
           }
         }
       }
+    },
+    responses: {
+      '200': {
+        description: 'The authenticated user\'s auth tokens',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                accessToken: {
+                  type: 'string'
+                },
+                refreshToken: {
+                  type: 'string'
+                },
+              }
+            }
+          }
+        }
+      }
     }
   };
 }
@@ -224,6 +292,10 @@ addCsrfCheckApiMetadata(RefreshAuthenticationRequest.apiMetadata);
 export class SignOutUserRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Signs out a user',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'signOutUser',
     requestBody: {
       content: {
         'application/json': {
@@ -241,15 +313,15 @@ addCsrfCheckApiMetadata(SignOutUserRequest.apiMetadata);
 export class SetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Sets a user\'s attributes',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'setUserAttributes',
     requestBody: {
       content: {
         'application/json': {
           schema: {
             type: 'object',
-            userAttributes: [
-              'username',
-              'password',
-            ],
             properties: {
               userAttributes: {
                 type: 'object'
@@ -267,6 +339,10 @@ addCsrfCheckApiMetadata(SetUserAttributesRequest.apiMetadata);
 export class GetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Gets a user\'s attributes',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'getUserAttributes',
     parameters: {
       userId: {
         in: 'query',
@@ -279,12 +355,29 @@ export class GetUserAttributesRequest {
         description: 'The username of the user whose attributes should be returned',
       },
     },
+    responses: {
+      '200': {
+        description: 'User Attributes object',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              additionalProperties: true,
+            }
+          }
+        }
+      }
+    }
   };
 }
 
 export class GetUserIdRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Gets a user\'s ID',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'getUserId',
     parameters: {
       username: {
         in: 'query',
@@ -292,5 +385,86 @@ export class GetUserIdRequest {
         description: 'The username of the user whose ID should be returned',
       },
     },
+    responses: {
+      '200': {
+        description: 'The user ID',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              required: [
+                'userId',
+              ],
+              properties: {
+                userId: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
+export class GetUserInfoRequest {
+  public static apiMetadata: APIMetadataParameters = {
+    description: 'Gets a user\'s info',
+    tags: [
+      'User Management Service'
+    ],
+    operationId: 'getUserInfo',
+    responses: {
+      '200': {
+        description: 'The user info',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              required: [
+                'userId',
+                'username',
+                'accessToken'
+              ],
+              properties: {
+                userId: {
+                  type: 'string'
+                },
+                username: {
+                  type: 'string'
+                },
+                accessToken: {
+                  type: 'string'
+                },
+              }
+            }
+          }
+        }
+      },
+      '201': {
+        description: 'The user info',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              required: [
+                'userId',
+                'username',
+                'accessToken'
+              ],
+              properties: {
+                userId: {
+                  type: 'string'
+                },
+                accessToken: {
+                  type: 'string'
+                },
+              }
+            }
+          }
+        }
+      }
+    }
   };
 }

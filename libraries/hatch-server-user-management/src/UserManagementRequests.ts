@@ -441,29 +441,6 @@ export class GetUserInfoRequest {
             }
           }
         }
-      },
-      '201': {
-        description: 'The user info',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              required: [
-                'userId',
-                'username',
-                'accessToken'
-              ],
-              properties: {
-                userId: {
-                  type: 'string'
-                },
-                accessToken: {
-                  type: 'string'
-                },
-              }
-            }
-          }
-        }
       }
     }
   };

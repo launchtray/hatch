@@ -475,6 +475,10 @@ export const createFromTemplate = async (
         });
 
         // Handle hidden / project files
+        const tslintPath = path.resolve(tempFilePath, 'tslint.json');
+        if (inMonorepo && fs.existsSync(tslintPath)) {
+          await fs.remove(tslintPath);
+        }
         const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.iml');
         if (fs.existsSync(imlPath)) {
           if (inMonorepo) {

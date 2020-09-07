@@ -1,6 +1,30 @@
 # Change Log - @launchtray/hatch-razzle-config
 
-This log was last generated on Sat, 29 Aug 2020 03:52:13 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Sep 2020 21:01:39 GMT and should not be manually modified.
+
+## 0.10.11
+Fri, 04 Sep 2020 21:01:39 GMT
+
+### Updates
+
+- Logging and developer experience improvements
+
+## 0.10.10
+Tue, 01 Sep 2020 18:55:59 GMT
+
+*Version update only*
+
+## 0.10.9
+Tue, 01 Sep 2020 05:43:06 GMT
+
+*Version update only*
+
+## 0.10.8
+Tue, 01 Sep 2020 01:03:47 GMT
+
+### Updates
+
+- Upgrade to TypeScript 4
 
 ## 0.10.7
 Sat, 29 Aug 2020 03:52:13 GMT

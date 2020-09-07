@@ -475,6 +475,14 @@ export const createFromTemplate = async (
         });
 
         // Handle hidden / project files
+        const tsconfigExtendsPath = path.resolve(tempFilePath, 'tsconfig-extends');
+        if (fs.existsSync(tsconfigExtendsPath)) {
+          if (inMonorepo) {
+            await fs.move(tsconfigExtendsPath, path.resolve(tempFilePath, 'tsconfig.json'), {overwrite: true});
+          } else {
+            await fs.remove(tsconfigExtendsPath);
+          }
+        }
         const tslintPath = path.resolve(tempFilePath, 'tslint.json');
         if (inMonorepo && fs.existsSync(tslintPath)) {
           await fs.remove(tslintPath);

@@ -22,8 +22,9 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
   ];
   const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
   if (generatorCmd.error) {
+  if (generatorCmd.error || generatorCmd.stderr) {
     console.log(generatorCmd.stdout);
-    throw new Error(generatorCmd.error.message);
+    throw new Error(generatorCmd.error?.message ?? generatorCmd.stderr);
   }
 };
 

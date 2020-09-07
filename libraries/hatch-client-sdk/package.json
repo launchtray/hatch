@@ -13,7 +13,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.10.7",
+    "@launchtray/hatch-util": "^0.10.11",
     "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
     "@types/fs-extra": "^8",
     "@types/node": "^12",

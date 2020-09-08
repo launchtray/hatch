@@ -90,7 +90,7 @@ export interface OpenAPIOperation {
   requestBody?: OpenAPIRequestBody;
   description?: string;
   operationId?: string;
-  tags?: [string];
+  tags?: string[];
 }
 
 export type OpenAPIOperations = {

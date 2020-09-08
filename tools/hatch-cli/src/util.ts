@@ -359,6 +359,23 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
+function generateClientSDK(tempFilePath: string, clientSDKOptions: ClientSDKOptions) {
+  const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
+  const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
+  const clientSDKPackageParsed = parse(clientSDKPackage);
+  if (clientSDKOptions.dependency != null) {
+    const dependencyVersion = clientSDKOptions.ver ?? 'latest';
+    clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
+      ' && rimraf dist && tsc';
+  } else if (clientSDKOptions.spec != null) {
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec +
+      ' && rimraf dist && tsc';
+  }
+  const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
+  fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
+}
+
 export const createFromTemplate = async (
   {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
@@ -544,20 +561,7 @@ export const createFromTemplate = async (
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
         }
         if (clientSDKOptions != null) {
-          const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
-          const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
-          const clientSDKPackageParsed = parse(clientSDKPackage);
-          if (clientSDKOptions.dependency != null) {
-            const dependencyVersion = clientSDKOptions.ver ?? 'latest';
-            clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
-            clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
-              ' && rimraf dist && tsc';
-          } else if (clientSDKOptions.spec != null) {
-            clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec +
-              ' && rimraf dist && tsc';
-          }
-          const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
-          fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
+          generateClientSDK(tempFilePath, clientSDKOptions);
         }
       } else {
         await replace({

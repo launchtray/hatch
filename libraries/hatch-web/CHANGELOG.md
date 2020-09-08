@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Fri, 04 Sep 2020 21:01:39 GMT and should not be manually modified.
+This log was last generated on Tue, 08 Sep 2020 23:18:47 GMT and should not be manually modified.
+
+## 0.10.12
+Tue, 08 Sep 2020 23:18:47 GMT
+
+*Version update only*
 
 ## 0.10.11
 Fri, 04 Sep 2020 21:01:39 GMT

@@ -1,0 +1,17 @@
+{
+  "name": "@launchtray/hatch-client-sdk",
+  "entries": [
+    {
+      "version": "0.10.12",
+      "tag": "@launchtray/hatch-client-sdk_v0.10.12",
+      "date": "Tue, 08 Sep 2020 23:18:47 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add hatch client-sdk library"
+          }
+        ]
+      }
+    }
+  ]
+}

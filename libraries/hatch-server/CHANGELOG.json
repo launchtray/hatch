@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.10.12",
+      "tag": "@launchtray/hatch-server_v0.10.12",
+      "date": "Tue, 08 Sep 2020 23:18:47 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "OpenAPI interface and builder improvements"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.11",
       "tag": "@launchtray/hatch-server_v0.10.11",
       "date": "Fri, 04 Sep 2020 21:01:39 GMT",

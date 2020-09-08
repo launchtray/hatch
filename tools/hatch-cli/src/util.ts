@@ -359,7 +359,7 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
-function generateClientSDK(tempFilePath: string, clientSDKOptions: ClientSDKOptions) {
+const generateClientSDK = (tempFilePath: string, clientSDKOptions: ClientSDKOptions) => {
   const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
   const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
   const clientSDKPackageParsed = parse(clientSDKPackage);

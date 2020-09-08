@@ -374,7 +374,7 @@ const generateClientSDK = (tempFilePath: string, clientSDKOptions: ClientSDKOpti
   }
   const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
   fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
-}
+};
 
 export const createFromTemplate = async (
   {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions

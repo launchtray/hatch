@@ -29,6 +29,7 @@
     "@types/ws": "^7",
     "bufferutil": "^4",
     "express": "^4",
+    "http-status-codes": "^1.4.0",
     "utf-8-validate": "^5",
     "winston": "^3",
     "winston-transport": "^4",

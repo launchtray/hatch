@@ -25,6 +25,7 @@ commander
   .command(...commandForTemplate('story', 'storybook story'))
   .command(...commandForTemplate('library', 'library project'))
   .command(...commandForTemplate('monorepo', 'monorepo project'))
+  .command(...commandForTemplate('client-sdk', 'client-sdk project'))
 ;
 
 runCommander();

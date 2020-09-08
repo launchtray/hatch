@@ -23,6 +23,7 @@ import {
   SetUserAttributesRequest,
   GetUserAttributesRequest,
   GetUserIdRequest,
+  GetUserInfoRequest,
 } from './UserManagementRequests';
 import UserContext from './UserContext';
 import * as HttpStatus from 'http-status-codes';
@@ -125,7 +126,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   @route.post(UserManagementEndpoints.START_USER_REGISTRATION, StartUserRegistrationRequest.apiMetadata)
   public async startUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Starting user registration...');
@@ -156,7 +157,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   @route.post(UserManagementEndpoints.RESEND_USER_REGISTRATION, ResendUserRegistrationCodeRequest.apiMetadata)
   public async resendUserRegistrationCode(params: BasicRouteParams) {
     this.logger.debug('Resending user registration code...');
@@ -187,7 +188,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   @route.post(UserManagementEndpoints.CONFIRM_USER_REGISTRATION, ConfirmUserRegistrationRequest.apiMetadata)
   public async confirmUserRegistration(params: BasicRouteParams) {
     this.logger.debug('Confirming user registration...');
@@ -222,7 +223,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   @route.post(UserManagementEndpoints.START_PASSWORD_RESET, StartPasswordResetRequest.apiMetadata)
   public async startPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Starting user password reset...');
@@ -253,7 +254,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   @route.post(UserManagementEndpoints.CONFIRM_PASSWORD_RESET, ConfirmPasswordResetRequest.apiMetadata)
   public async confirmPasswordReset(params: BasicRouteParams) {
     this.logger.debug('Confirming user password reset...');
@@ -291,7 +292,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   @route.post(UserManagementEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
@@ -356,7 +357,7 @@ export default class UserManagementController {
       }
     }
   }
-  
+
   // all methods defined after this method are authenticated as defined below
   @route.all('*')
   public async verifyUser(userInfoRequest: UserInfoRequest) {
@@ -416,7 +417,7 @@ export default class UserManagementController {
     }
     return {clientUserId, queriedUserId};
   }
-  
+
   @route.post(UserManagementEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
   public async signOutUser(userContext: UserContext) {
     const params = userContext.params;
@@ -433,7 +434,7 @@ export default class UserManagementController {
       });
     }
   }
-  
+
   @route.get(UserManagementEndpoints.GET_USER_ATTRIBUTES, GetUserAttributesRequest.apiMetadata)
   public async getUserAttributes(userContext: UserContext) {
     const params = userContext.params;
@@ -453,7 +454,7 @@ export default class UserManagementController {
       });
     }
   }
-  
+
   @route.post(UserManagementEndpoints.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
   public async setUserAttributes(userContext: UserContext) {
     const params = userContext.params;
@@ -482,7 +483,7 @@ export default class UserManagementController {
     }
   }
 
-  @route.get(UserManagementEndpoints.GET_USER_INFO)
+  @route.get(UserManagementEndpoints.GET_USER_INFO, GetUserInfoRequest.apiMetadata)
   public async getUserInfo(userContext: UserContext) {
     this.logger.debug('Getting user info...');
     userContext.params.res.status(HttpStatus.OK).send({

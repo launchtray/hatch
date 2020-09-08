@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:latest"],
+  "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "align": [true, "parameters", "arguments", "statements"],
     "ban": false,

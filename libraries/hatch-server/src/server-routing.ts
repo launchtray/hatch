@@ -13,6 +13,7 @@ import {
 } from './ServerMiddleware';
 import WebSocket from 'ws';
 import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody} from './OpenAPI';
+import * as HttpStatus from 'http-status-codes';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
 
@@ -133,7 +134,32 @@ const consumeAPIMetadata = (
           description: '',
         },
       },
+      operationId: metadata.operationId,
+      tags: metadata.tags,
     };
+    if (apiMetadata.operationId != null) {
+      const mediaType = 'application/json';
+      // add title to request body schema based on operation id if it exists and title does not
+      if (apiMetadata.requestBody != null) {
+        const operationId = apiMetadata.operationId;
+        const schema = apiMetadata.requestBody?.content?.[mediaType]?.schema;
+        if (operationId != null && schema != null && schema.title == null) {
+          apiMetadata.requestBody.content[mediaType].schema.title = operationId + 'Payload';
+        }
+      }
+      // add title(s) to responses schema based on operation id if it exists and title does not
+      if (apiMetadata.responses != null) {
+        const operationId = apiMetadata.operationId;
+        const responses = Object.keys(apiMetadata.responses);
+        responses.forEach((response) => {
+          const schema = response != null && apiMetadata.responses?.[response]?.content?.[mediaType]?.schema;
+          if (operationId != null && schema != null && schema.title == null) {
+            const id = responses.length === 1 ? '' : Number.isNaN(Number(response)) ? response : HttpStatus.getStatusText(Number(response));
+            apiMetadata.responses[response].content[mediaType].schema.title = operationId + id + 'Response'
+          }
+        });
+      }
+    }
     apiMetadataConsumer(apiMetadata);
   }
 };
@@ -320,6 +346,10 @@ export const convertExpressPathToOpenAPIPath = (
         name: param,
         in: 'path',
         required: true,
+        schema: {
+          type: 'string',
+          ...paramsIn[param]?.schema,
+        },
       });
       return `{${param}}`
     });
@@ -330,6 +360,10 @@ export const convertExpressPathToOpenAPIPath = (
       in: 'query',
       required: false,
       ...paramsIn[param],
+      schema: {
+        type: 'string',
+        ...paramsIn[param]?.schema,
+      },
     });
   });
   return newPath;

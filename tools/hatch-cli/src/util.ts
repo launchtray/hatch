@@ -23,12 +23,20 @@ type ProjectFolder =
   | 'libraries'
   | 'tools';
 
+interface ClientSDKOptions {
+  name?: string;
+  dependency?: string;
+  ver?: string;
+  spec?: string;
+}
+
 interface CopyDirOptions {
   srcPath: string;
   dstPath: string;
   name: string;
   templateType?: TemplateType;
   projectFolder?: ProjectFolder;
+  clientSDKOptions?: ClientSDKOptions;
 }
 
 export const withSpinner = async (message: string, task: () => Promise<void>): Promise<void> => {
@@ -40,6 +48,42 @@ export const withSpinner = async (message: string, task: () => Promise<void>): P
     process.stdout.write(eraseLine);
   }
 };
+
+export const createClientSDK = async (parentDirectory: string, projectName: string, clientSDKOptions: ClientSDKOptions,
+                                      projectFolder?: ProjectFolder) => {
+  if (!projectName) {
+    throw new Error('Client SDK name must be specified');
+  }
+  const clientPath = process.cwd() + '/' + projectName;
+  const {dstPath, inMonorepo} = await createFromTemplate({
+    srcPath: templateDir(parentDirectory),
+    dstPath: clientPath,
+    name: projectName,
+    templateType: 'project',
+    projectFolder: projectFolder,
+    clientSDKOptions: clientSDKOptions,
+  });
+  console.log(chalk.green('Created \'' + dstPath + '\''));
+  if (inMonorepo) {
+    console.log('Now might be a good time run to `rush update`');
+  } else {
+    console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+  }
+}
+
+export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
+  return (clientOptions: ClientSDKOptions) => {
+    if (!clientOptions.dependency && !clientOptions.spec) {
+      throw new Error('Dependency or input spec must be specified')
+    }
+    if (clientOptions.spec && !clientOptions.name) {
+      throw new Error('Name must be specified when generating a client SDK from an input spec')
+    }
+    const projectName = (clientOptions.dependency && !clientOptions.name) ?
+      clientOptions.dependency + '-sdk' : clientOptions.name as string;
+    return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
+  }
+}
 
 export const createMonorepo = async (parentDirectory: string, monorepoName: string) => {
   if (!monorepoName) {
@@ -75,7 +119,7 @@ export const createProject = async (parentDirectory: string, projectName: string
   });
   console.log(chalk.green('Created \'' + dstPath + '\''));
   if (inMonorepo) {
-    console.log('Now might be a good time run `rush update`');
+    console.log('Now might be a good time run to `rush update`');
   } else {
     console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
   }
@@ -315,8 +359,25 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
+const generateClientSDK = (tempFilePath: string, clientSDKOptions: ClientSDKOptions) => {
+  const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
+  const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
+  const clientSDKPackageParsed = parse(clientSDKPackage);
+  if (clientSDKOptions.dependency != null) {
+    const dependencyVersion = clientSDKOptions.ver ?? 'latest';
+    clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
+      ' && rimraf dist && tsc';
+  } else if (clientSDKOptions.spec != null) {
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec +
+      ' && rimraf dist && tsc';
+  }
+  const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
+  fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
+};
+
 export const createFromTemplate = async (
-  {srcPath, dstPath, name, templateType, projectFolder}: CopyDirOptions
+  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
   let inMonorepo = false;
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
@@ -404,6 +465,10 @@ export const createFromTemplate = async (
         if (fs.existsSync(nodeModulesPath)) {
           await fs.remove(nodeModulesPath);
         }
+        const distPath = path.resolve(tempFilePath, 'dist');
+        if (fs.existsSync(distPath)) {
+          await fs.remove(distPath);
+        }
         const rushPath = path.resolve(tempFilePath, '.rush');
         if (fs.existsSync(rushPath)) {
           await fs.remove(rushPath);
@@ -426,14 +491,30 @@ export const createFromTemplate = async (
           to: name,
         });
 
-        // Rename hidden / project files
+        // Handle hidden / project files
+        const tsconfigExtendsPath = path.resolve(tempFilePath, 'tsconfig-extends');
+        if (fs.existsSync(tsconfigExtendsPath)) {
+          if (inMonorepo) {
+            await fs.move(tsconfigExtendsPath, path.resolve(tempFilePath, 'tsconfig.json'), {overwrite: true});
+          } else {
+            await fs.remove(tsconfigExtendsPath);
+          }
+        }
         const imlPath = path.resolve(tempFilePath, 'dot-idea', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.iml');
         if (fs.existsSync(imlPath)) {
-          await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${toShortName(name)}.iml`));
+          if (inMonorepo) {
+            await fs.remove(imlPath);
+          } else {
+            await fs.move(imlPath, path.resolve(tempFilePath, 'dot-idea', `${toShortName(name)}.iml`));
+          }
         }
         const dotIdeaPath = path.resolve(tempFilePath, 'dot-idea');
         if (fs.existsSync(dotIdeaPath)) {
-          await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+          if (inMonorepo) {
+            await fs.remove(dotIdeaPath);
+          } else {
+            await fs.move(dotIdeaPath, path.resolve(tempFilePath, '.idea'));
+          }
         }
         const dotStorybookPath = path.resolve(tempFilePath, 'dot-storybook');
         if (fs.existsSync(dotStorybookPath)) {
@@ -445,7 +526,15 @@ export const createFromTemplate = async (
         }
         const dotDockerIgnorePath = path.resolve(tempFilePath, 'dot-dockerignore');
         if (fs.existsSync(dotDockerIgnorePath)) {
-          await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
+          if (inMonorepo) {
+            await fs.remove(dotDockerIgnorePath);
+          } else {
+            await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
+          }
+        }
+        const dockerfilePath = path.resolve(tempFilePath, 'Dockerfile');
+        if (fs.existsSync(dockerfilePath) && inMonorepo) {
+          await fs.remove(dockerfilePath);
         }
         const testPath = path.resolve(tempFilePath, 'src', '__test__', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.test.ts');
         if (fs.existsSync(testPath)) {
@@ -470,6 +559,9 @@ export const createFromTemplate = async (
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
+        }
+        if (clientSDKOptions != null) {
+          generateClientSDK(tempFilePath, clientSDKOptions);
         }
       } else {
         await replace({

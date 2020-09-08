@@ -2,8 +2,13 @@ import {APIMetadata} from './ServerMiddleware';
 
 // This file defines types per https://swagger.io/specification
 
+export type OpenAPIResponseBodyContent = {
+  [mediaType: string]: OpenAPIMediaTypeObject;
+};
+
 export interface OpenAPIResponse {
   description: string;
+  content?: OpenAPIResponseBodyContent;
 }
 
 export type OpenAPIResponses = {
@@ -13,6 +18,7 @@ export type OpenAPIResponses = {
 export interface OpenAPISchemaObject {
   // TODO: Flesh this out more to improve IDE help
   // For now, see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
+  title?: string;
   [key: string]: any;
 }
 
@@ -83,6 +89,8 @@ export interface OpenAPIOperation {
   parameters: OpenAPIParameter[];
   requestBody?: OpenAPIRequestBody;
   description?: string;
+  operationId?: string;
+  tags?: string[];
 }
 
 export type OpenAPIOperations = {
@@ -105,7 +113,7 @@ export interface OpenAPISpec {
 }
 
 export class OpenAPISpecBuilder {
-  private spec: OpenAPISpec;
+  private readonly spec: OpenAPISpec;
 
   constructor(appName: string, appVersion: string) {
     this.spec = {
@@ -126,6 +134,8 @@ export class OpenAPISpecBuilder {
         responses: apiMetadata.responses,
         parameters: apiMetadata.parameters,
         requestBody: apiMetadata.requestBody,
+        operationId: apiMetadata.operationId,
+        tags: apiMetadata.tags,
       }
     }
   }

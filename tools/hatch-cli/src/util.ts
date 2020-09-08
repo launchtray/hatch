@@ -27,7 +27,7 @@ interface ClientSDKOptions {
   name?: string;
   dependency?: string;
   ver?: string;
-  input?: string;
+  spec?: string;
 }
 
 interface CopyDirOptions {
@@ -73,10 +73,10 @@ export const createClientSDK = async (parentDirectory: string, projectName: stri
 
 export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
   return (clientOptions: ClientSDKOptions) => {
-    if (!clientOptions.dependency && !clientOptions.input) {
+    if (!clientOptions.dependency && !clientOptions.spec) {
       throw new Error('Dependency or input spec must be specified')
     }
-    if (clientOptions.input && !clientOptions.name) {
+    if (clientOptions.spec && !clientOptions.name) {
       throw new Error('Name must be specified when generating a client SDK from an input spec')
     }
     const projectName = (clientOptions.dependency && !clientOptions.name) ?
@@ -552,8 +552,8 @@ export const createFromTemplate = async (
             clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
             clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
               ' && rimraf dist && tsc';
-          } else if (clientSDKOptions.input != null) {
-            clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --input ' + clientSDKOptions.input +
+          } else if (clientSDKOptions.spec != null) {
+            clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec +
               ' && rimraf dist && tsc';
           }
           const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);

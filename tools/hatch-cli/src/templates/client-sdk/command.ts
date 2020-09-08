@@ -9,7 +9,7 @@ commander
     'generate the OpenAPI spec', null)
   .option('-v, --ver <ver>', 'The hatch microservice or webapp dependency version to generate the ' +
     'OpenAPI spec. Defaults to \"latest\"', null)
-  .option('-i, --input <input>', 'The location of the OpenAPI spec, as URL or file', null)
+  .option('-s, --spec <spec>', 'The location of the OpenAPI spec, as URL or file', null)
   .description('Creates a client-sdk project from an OpenAPI Specification')
   .action(clientSDKCreator(__dirname, 'libraries'));
 

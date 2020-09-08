@@ -16644,7 +16644,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-3mPZwgBGuSRrXrcCiXgF+VrLwewsYdzUtA+eYcE8YVrtN4yvGLsISvnP1Hde4SBhXozajFhEzYNMs10H7yO0kg==
+      integrity: sha512-PR+cTtYUaxTYYKgVayglOJD2qzzq2dI2xBiJso/BGlwRlBhXxcjbgNJoZwxFLIgrNw4QwxiFW8FuGQPJjrSQmA==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -16672,21 +16672,23 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-oMpAql+9Y7pAZBoArbSsyRGM/FgMBmSSR7smC1wGGxzTk4MGbLDCfGY3ZNCVnE4oocvYKtvadL8E6xpeZiLl7Q==
+      integrity: sha512-k0ynhqcHMcSIyVIe82D1rU+CMsMYBLj46V6AgzdUiVVQr8Gv3jIu0h+gN2rujgRJS83Iukd8Jo/iyTEhkamHSA==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-client-sdk.tgz':
     dependencies:
       '@openapitools/openapi-generator-cli': 1.0.15-4.3.1
+      '@types/fs-extra': 8.1.1
       '@types/node': 12.12.54
       '@types/tmp': 0.1.0
+      fs-extra: 8.1.0
       rimraf: 3.0.0
       tmp: 0.1.0
       typescript: 4.0.2
     dev: false
     name: '@rush-temp/hatch-client-sdk'
     resolution:
-      integrity: sha512-cqek6M4DT6Vrn9Uy6XAGVnVgci24sUQ6RJJJ4DPliW019ztEyotGny7JZSqcJwUnP5FRiPUAVnYx/xfLVtbEPw==
+      integrity: sha512-Rabhzq2WsPcF7tmd1rTO7nmuRFsPE+enk9mb9/0Zlp1Z3ZRJdY405RX65w2XYKgZAx5EYGhHVHVB3pkxAMJ4Ow==
       tarball: 'file:projects/hatch-client-sdk.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz_typescript@4.0.2':
@@ -16721,7 +16723,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-lqydh7pKWT84JPbyhnIDn44nMbedS6nZkGHEdfB3968Hrau3r1RiELkC1AMRjKBQG4rXI2JontOXti6EEjTwtg==
+      integrity: sha512-rZXLSOzR+HMFCnRL6iXbH62TmRQUrdYP8yRwSrnnrpvbV78/bVpZPpyo6H0gNMkoLrIowbRMCyzH4UpSB/LiEQ==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server-user-management.tgz':
@@ -16740,7 +16742,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-user-management'
     resolution:
-      integrity: sha512-AAzKHEk1CeWPbabk7ehUHY47x84nuiv83fUXlEj5WC9oDivEgikwdzcbzJEIUXW8Ec2BiVJMxB6HFcXF6QWRXg==
+      integrity: sha512-0MEir8r4u1ZyIfAw7WhNDEkeeXwymM7rr055JZlx7psMrwdJ748Z7KOg0jeysjD3Sb49l423y3ltEUNPx2wU1w==
       tarball: 'file:projects/hatch-server-user-management.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -16756,6 +16758,7 @@ packages:
       '@types/ws': 7.2.6
       bufferutil: 4.0.1
       express: 4.17.1
+      http-status-codes: 1.4.0
       serialize-javascript: 2.1.2
       utf-8-validate: 5.0.2
       winston: 3.3.3
@@ -16764,18 +16767,19 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-qBrWv49Jk7pPzGB8Lpp+4JYtuHEJ1xgb4mHBxxWybFxoE7GpriQLjvuR/HnnQ0m6FRm2ky2G0ULtrT4V8x3YDQ==
+      integrity: sha512-pqzgNjOezbGDCNF6JEjARgQh9XyMe3pMzf/Y6Hn4FSWhyuoXy01Ilyj1OvX6046KN6cuTsfaHrHPkSNOCCwBEA==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-template-client-sdk.tgz':
     dependencies:
       '@types/node': 12.12.54
+      cross-fetch: 3.0.5
       rimraf: 3.0.0
       typescript: 4.0.2
     dev: false
     name: '@rush-temp/hatch-template-client-sdk'
     resolution:
-      integrity: sha512-FwcbS/DIasTJo9Ds7vEWLDaZ1FflJZ/3DDQXBh9jq75MH2wyCCdKgdrcmbIPqATzmQWB9KvBsxH+QGoEnH+rNA==
+      integrity: sha512-+IdO7e+3jF+iApf4xc35KbwA3zNykX62uAh4RNCeWUWaaeouZM/A60jHwcqkZOIPQw6jD3/TdBaPWkAiHg24HA==
       tarball: 'file:projects/hatch-template-client-sdk.tgz'
     version: 0.0.0
   'file:projects/hatch-template-library.tgz_5290a7aab7631971258e1bd11475725e':
@@ -16842,7 +16846,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-microservice'
     resolution:
-      integrity: sha512-LzAddmxvXv8qSnQ8bzoiHKjZZrcU4Nbaml1esxhYR9LR3WPeORzT+UdJjIdG8UtIBrslmvozFeN1mumqWokU/w==
+      integrity: sha512-J3cgUhr+V2QFTCkb7n+ZOeH5xpKoayfsBNWIDx0IHWzOtEl6JxZgWvTKVgCGgcq7Xk8+sM5mzyTh8o0XYrQF7w==
       tarball: 'file:projects/hatch-template-microservice.tgz'
     version: 0.0.0
   'file:projects/hatch-template-webapp.tgz':
@@ -16925,7 +16929,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-webapp'
     resolution:
-      integrity: sha512-xIBmiKo2xkd4paV7C+1ENCBRTN+Cge7letT80TEf+9nAu0FyBiwEdw4xzTWDMGX3GlpDIrrA8FOUsxNy5DoGsw==
+      integrity: sha512-Kp5G2+cm0WYmQBL46LWvdYjgEgioVIvKNF0u+RC/PjLo3OZPwsLNZF+b2+a8FIVjWb7E/hnyMb3g4g3/fbDdzw==
       tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -16948,7 +16952,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-user-management-client'
     resolution:
-      integrity: sha512-Ei9a/wwQZa4PZ8yH17ri7SqOu4lzGN+VVjUUAYxj+rAY1yE3VdkApWBU2IqH7y4hZ06+PkgNJsCBItdFVoIEPQ==
+      integrity: sha512-/OnBzSxKYk/AZN0Uo7ctvqhPrZ7Spb038I/Q2q5ZY4SwnK4cBU2mgqnZzsT2wP84T9XmFlbTGHgBxRndhExYnA==
       tarball: 'file:projects/hatch-user-management-client.tgz'
     version: 0.0.0
   'file:projects/hatch-util.tgz':
@@ -16996,7 +17000,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-iXj3q5fRTRxkcFfhddU1AWeGA7v69jfjq5PtMcI9/lrYKbEv0XmNdb6xWvFEz7f81qk7M1QgpMkS15YG3lO2JQ==
+      integrity: sha512-Sl0TXhMUThzjv3mSoMfSeD3bU71lH8KHYXJPDxjQ5w1+qnTsjLE2X/2tfpdABCmFfRX4p7ujkKk8OS2M6ZR+ug==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-injectables.tgz_react@16.13.1':
@@ -17015,7 +17019,7 @@ packages:
     peerDependencies:
       react: '*'
     resolution:
-      integrity: sha512-B4TAzu1LS3wCJD8Vr/x219dTNtZO0aM4JNrUqMTkdarRzduJHSsj4UzcBn4KzWS7tueS7AmmYyAPfqyJkiytlA==
+      integrity: sha512-S7SjBu9xS4SboQvtIixGfYtlpfFWvvx01umfSrI8OQwlDxxmZ8mcC3Xrdta4JGNzxECrgNp6QzUARRpb+kBdVg==
       tarball: 'file:projects/hatch-web-injectables.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -17049,7 +17053,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-ntytzIEwO3d0Q+cvmTuk6bAifWINavfAHIXREtfzrBRw5Jg22V6yqZ9g2AFF4UZQaiO7SOuSDecYW6v//OuFNg==
+      integrity: sha512-wVK81Czwjn5mC/R1HzCmc17M9AbeZJbZ5ry1zHG5mvUtGhyDeWL5NsSQcwf72nsIUddZG/8oSivtaBGg8b+CkQ==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
@@ -17080,9 +17084,10 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-c3os7w6QPEVCqr7ugPaNR3X6kxaYujzQAqzARUP9QlupLbpNkN+rVslp9aV8r17JZZDjNIQmITvdClLz0gCx/g==
+      integrity: sha512-7NNkX1PrDELwMBDAkV7C9JiItD9q6Ps9DgVtltLbd/uS2PJnwO9ZhKC8wi03WZvNyDRgJbPCpiwJcTx5rm8uxQ==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
+registry: ''
 specifiers:
   '@babel/core': ^7
   '@babel/runtime': ^7

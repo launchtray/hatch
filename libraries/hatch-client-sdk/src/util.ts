@@ -52,7 +52,7 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
       console.log(printSpecCmd.stdout);
       throw new Error(printSpecCmd.error.message);
     }
-    const inputSpec = '';
+    const inputSpec = printSpecCmd.stdout;
     fs.writeFileSync(tempFilePath, inputSpec);
     await createClientSDKByInputSpec(tempFilePath);
   } finally {

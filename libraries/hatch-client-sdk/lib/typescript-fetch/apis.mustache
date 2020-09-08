@@ -149,9 +149,19 @@ export class {{classname}} extends runtime.BaseAPI {
 
         {{/isListContainer}}
         {{^isListContainer}}
+        {{^required}}
+        const {{paramName}}DefaultValue = {{{defaultValue}}};
+        if (requestParameters.{{paramName}} !== undefined && requestParameters.{{paramName}} !== null) {
+            headerParameters['{{baseName}}'] = String(requestParameters.{{paramName}});
+        } else if ({{paramName}}DefaultValue !== undefined && {{paramName}}DefaultValue !== null) {
+            headerParameters['{{baseName}}'] = String({{{defaultValue}}});
+        }
+        {{/required}}
+        {{#required}}
         if (requestParameters.{{paramName}} !== undefined && requestParameters.{{paramName}} !== null) {
             headerParameters['{{baseName}}'] = String(requestParameters.{{paramName}});
         }
+        {{/required}}
 
         {{/isListContainer}}
         {{/headerParams}}

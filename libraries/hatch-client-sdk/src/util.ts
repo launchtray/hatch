@@ -5,8 +5,8 @@ import tmp from 'tmp';
 import fs from 'fs-extra';
 
 export const createClientSDKByInputSpec = async (inputSpec: string) => {
-  const generatorExec = path.resolve(__dirname, '../node_modules/.bin/openapi-generator');
-  const templatePath = path.resolve(__dirname, '../lib/typescript-fetch');
+  const generatorExec = path.resolve(__dirname, '..', 'node_modules', '.bin', 'openapi-generator');
+  const templatePath = path.resolve(__dirname, '..', 'lib', 'typescript-fetch');
   const outputPath = './src/autogen';
   if (fs.existsSync(outputPath)) {
     await fs.remove(outputPath);
@@ -21,10 +21,15 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
     '--skip-validate-spec',
   ];
   const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
-  if (generatorCmd.error) {
-  if (generatorCmd.error || generatorCmd.stderr) {
+  if (generatorCmd.error != null) {
     console.log(generatorCmd.stdout);
-    throw new Error(generatorCmd.error?.message ?? generatorCmd.stderr);
+    throw new Error(generatorCmd.error.message);
+  }
+  // if successful, the last file generated is the openapi-generation/VERSION file
+  const openApiVersionFile = path.resolve(outputPath, '.openapi-generator', 'VERSION');
+  if (!fs.existsSync(openApiVersionFile)) {
+    console.log(generatorCmd.stdout);
+    throw new Error('Error generating client sdk: ' + generatorCmd.stderr);
   }
 };
 
@@ -44,10 +49,10 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
     env.PRINT_API_SPEC_ONLY = 'true';
     const printSpecCmd = spawnSync('node', [serverExec], {encoding : 'utf8', env});
     if (printSpecCmd.error) {
-      console.debug(printSpecCmd.stdout);
+      console.log(printSpecCmd.stdout);
       throw new Error(printSpecCmd.error.message);
     }
-    const inputSpec = printSpecCmd.stdout;
+    const inputSpec = '';
     fs.writeFileSync(tempFilePath, inputSpec);
     await createClientSDKByInputSpec(tempFilePath);
   } finally {

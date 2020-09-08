@@ -543,16 +543,16 @@ export const createFromTemplate = async (
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
         }
-        if (clientSDKOptions) {
+        if (clientSDKOptions != null) {
           const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
           const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
           const clientSDKPackageParsed = parse(clientSDKPackage);
-          if (clientSDKOptions.dependency) {
+          if (clientSDKOptions.dependency != null) {
             const dependencyVersion = clientSDKOptions.ver ?? 'latest';
             clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
             clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
               ' && rimraf dist && tsc';
-          } else if (clientSDKOptions.input) {
+          } else if (clientSDKOptions.input != null) {
             clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --input ' + clientSDKOptions.input +
               ' && rimraf dist && tsc';
           }

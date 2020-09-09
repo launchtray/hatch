@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.10.13",
+      "tag": "@launchtray/hatch-cli_v0.10.13",
+      "date": "Wed, 09 Sep 2020 01:10:18 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix dependency type, IDE cleanup"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.12",
       "tag": "@launchtray/hatch-cli_v0.10.12",
       "date": "Tue, 08 Sep 2020 23:18:47 GMT",

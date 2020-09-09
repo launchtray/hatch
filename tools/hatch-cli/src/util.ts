@@ -8,7 +8,7 @@ import tmp from 'tmp';
 import {CompletableFuture} from '@launchtray/hatch-util';
 import replace from 'replace-in-file';
 import {spawnSync} from "child_process";
-import {RushConfiguration} from '@microsoft/rush-lib';
+import {RushConfiguration, RushConfigurationProject} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
 import YAML from 'yaml'
 import {Pair, YAMLMap} from 'yaml/types';
@@ -359,18 +359,31 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
-const generateClientSDK = (tempFilePath: string, clientSDKOptions: ClientSDKOptions) => {
+const generateClientSDK = (clientSDKOptions: ClientSDKOptions, rushConfigParsed: any, monorepoRootDir: string, tempFilePath: string) => {
+  if (clientSDKOptions.dependency != null && clientSDKOptions.ver == null) {
+    const dependencyProject = rushConfigParsed.projects?.find((project: RushConfigurationProject) => {
+      if (project.packageName === clientSDKOptions.dependency) {
+        return project;
+      }
+      return null;
+    });
+    const dependencyProjectFolder = dependencyProject?.projectFolder;
+    if (dependencyProject?.projectFolder != null) {
+      const dependencyPackagePath = path.resolve(monorepoRootDir, dependencyProjectFolder, 'package.json');
+      const dependencyPackage = fs.readFileSync(dependencyPackagePath).toString();
+      const dependencyPackageParsed = parse(dependencyPackage);
+      clientSDKOptions.ver = dependencyPackageParsed?.version;
+    }
+  }
   const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
   const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
   const clientSDKPackageParsed = parse(clientSDKPackage);
   if (clientSDKOptions.dependency != null) {
     const dependencyVersion = clientSDKOptions.ver ?? 'latest';
     clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
-    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency +
-      ' && rimraf dist && tsc';
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency + ' && rimraf dist && tsc';
   } else if (clientSDKOptions.spec != null) {
-    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec +
-      ' && rimraf dist && tsc';
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec + ' && rimraf dist && tsc';
   }
   const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
   fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
@@ -543,6 +556,9 @@ export const createFromTemplate = async (
         if (rushConfigPath && monorepoRootDir && projectFolder) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
+          if (clientSDKOptions != null) {
+            generateClientSDK(clientSDKOptions, rushConfigParsed, monorepoRootDir, tempFilePath);
+          }
           const projectRelativePath = path.join(projectFolder, toShortName(name));
           const project: {[key: string]: any} = {
             packageName: name,
@@ -559,9 +575,6 @@ export const createFromTemplate = async (
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
-        }
-        if (clientSDKOptions != null) {
-          generateClientSDK(tempFilePath, clientSDKOptions);
         }
       } else {
         await replace({

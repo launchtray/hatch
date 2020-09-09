@@ -365,7 +365,7 @@ const generateClientSDK = (clientSDKOptions: ClientSDKOptions, tempFilePath: str
       return project.packageName === clientSDKOptions.dependency;
     });
     const dependencyProjectFolder = dependencyProject?.projectFolder;
-    if (dependencyProjectFolder && monorepoRootDir) {
+    if (dependencyProjectFolder != null && monorepoRootDir != null) {
       const dependencyPackagePath = path.resolve(monorepoRootDir, dependencyProjectFolder, 'package.json');
       const dependencyPackage = fs.readFileSync(dependencyPackagePath).toString();
       const dependencyPackageParsed = parse(dependencyPackage);

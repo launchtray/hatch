@@ -12,7 +12,8 @@
     "access": "public"
   },
   "dependencies": {
-    "serialize-javascript": "^2.1.0"
+    "serialize-javascript": "^2.1.0",
+    "http-status-codes": "^1.4.0"
   },
   "devDependencies": {
     "@types/serialize-javascript": "^1.5.0"
@@ -29,7 +30,6 @@
     "@types/ws": "^7",
     "bufferutil": "^4",
     "express": "^4",
-    "http-status-codes": "^1.4.0",
     "utf-8-validate": "^5",
     "winston": "^3",
     "winston-transport": "^4",

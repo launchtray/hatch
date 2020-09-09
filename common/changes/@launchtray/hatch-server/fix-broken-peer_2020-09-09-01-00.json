@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server",
+      "comment": "Fix dependency type, IDE cleanup",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server",
+  "email": "kiltyj@gmail.com"
+}

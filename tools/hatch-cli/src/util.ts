@@ -362,10 +362,7 @@ const updateCustomCommands = (monorepoPath: string) => {
 const generateClientSDK = (clientSDKOptions: ClientSDKOptions, rushConfigParsed: any, monorepoRootDir: string, tempFilePath: string) => {
   if (clientSDKOptions.dependency != null && clientSDKOptions.ver == null) {
     const dependencyProject = rushConfigParsed.projects?.find((project: RushConfigurationProject) => {
-      if (project.packageName === clientSDKOptions.dependency) {
-        return project;
-      }
-      return null;
+      return project.packageName === clientSDKOptions.dependency;
     });
     const dependencyProjectFolder = dependencyProject?.projectFolder;
     if (dependencyProject?.projectFolder != null) {

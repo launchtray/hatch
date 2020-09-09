@@ -2,7 +2,7 @@
 /* eslint-disable */
 {{>licenseInfo}}
 
-import 'cross-fetch/polyfill';
+import fetch from 'cross-fetch';
 
 export const BASE_PATH = "{{{basePath}}}".replace(/\/+$/, "");
 
@@ -139,7 +139,7 @@ export class Configuration {
     }
 
     get fetchApi(): FetchAPI {
-        return this.configuration.fetchApi || window.fetch.bind(window);
+        return this.configuration.fetchApi || fetch;
     }
 
     get middleware(): Middleware[] {

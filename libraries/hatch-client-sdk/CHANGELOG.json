@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-client-sdk",
   "entries": [
     {
+      "version": "0.10.14",
+      "tag": "@launchtray/hatch-client-sdk_v0.10.14",
+      "date": "Wed, 09 Sep 2020 21:45:17 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Updated mustache runtime template to explicitly import fetch from cross-fetch"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.13",
       "tag": "@launchtray/hatch-client-sdk_v0.10.13",
       "date": "Wed, 09 Sep 2020 01:10:18 GMT",

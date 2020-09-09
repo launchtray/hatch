@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server
 
-This log was last generated on Wed, 09 Sep 2020 01:10:18 GMT and should not be manually modified.
+This log was last generated on Wed, 09 Sep 2020 21:45:17 GMT and should not be manually modified.
+
+## 0.10.14
+Wed, 09 Sep 2020 21:45:17 GMT
+
+### Updates
+
+- Fix typo
 
 ## 0.10.13
 Wed, 09 Sep 2020 01:10:18 GMT

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.10.14",
+      "tag": "@launchtray/hatch-cli_v0.10.14",
+      "date": "Wed, 09 Sep 2020 21:45:17 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Automatically add version when creating client-sdk when a dependency exists in a monorepo and the version is not specified"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.13",
       "tag": "@launchtray/hatch-cli_v0.10.13",
       "date": "Wed, 09 Sep 2020 01:10:18 GMT",

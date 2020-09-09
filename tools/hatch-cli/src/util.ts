@@ -359,13 +359,13 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
-const generateClientSDK = (clientSDKOptions: ClientSDKOptions, rushConfigParsed: any, monorepoRootDir: string, tempFilePath: string) => {
+const generateClientSDK = (clientSDKOptions: ClientSDKOptions, tempFilePath: string, rushConfigParsed?: any, monorepoRootDir?: string) => {
   if (clientSDKOptions.dependency != null && clientSDKOptions.ver == null) {
     const dependencyProject = rushConfigParsed.projects?.find((project: RushConfigurationProject) => {
       return project.packageName === clientSDKOptions.dependency;
     });
     const dependencyProjectFolder = dependencyProject?.projectFolder;
-    if (dependencyProject?.projectFolder != null) {
+    if (dependencyProject?.projectFolder != null && monorepoRootDir != null) {
       const dependencyPackagePath = path.resolve(monorepoRootDir, dependencyProjectFolder, 'package.json');
       const dependencyPackage = fs.readFileSync(dependencyPackagePath).toString();
       const dependencyPackageParsed = parse(dependencyPackage);
@@ -554,7 +554,7 @@ export const createFromTemplate = async (
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
           if (clientSDKOptions != null) {
-            generateClientSDK(clientSDKOptions, rushConfigParsed, monorepoRootDir, tempFilePath);
+            generateClientSDK(clientSDKOptions, tempFilePath, rushConfigParsed, monorepoRootDir);
           }
           const projectRelativePath = path.join(projectFolder, toShortName(name));
           const project: {[key: string]: any} = {
@@ -572,6 +572,8 @@ export const createFromTemplate = async (
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
+        } else if (projectFolder != null && clientSDKOptions != null) {
+          generateClientSDK(clientSDKOptions, tempFilePath);
         }
       } else {
         await replace({

@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-client-sdk",
+      "comment": "Updated mustache runtime template to explicitly import fetch from cross-fetch",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-client-sdk",
+  "email": "rosshnaylor@gmail.com"
+}

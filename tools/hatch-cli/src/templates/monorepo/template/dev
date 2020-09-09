@@ -8,10 +8,10 @@ trap "trap - SIGTERM && kill -- -$$ 2>/dev/null" SIGINT SIGTERM EXIT
 
 rush update
 if [ ! -z "$(rush list -p | grep " libraries/")" ]; then
-  rush build ---to-version-policy libraries
+  rush build --to-version-policy libraries
 fi
 if [ ! -z "$(rush list -p | grep " tools/")" ]; then
-  rush build ---to-version-policy tools
+  rush build --to-version-policy tools
 fi
 
 appShortNames="$( \

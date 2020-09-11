@@ -145,6 +145,27 @@
     //    */
     //   // "autoinstallerName": "my-task"
     // }
+
+     {
+       /**
+        * (Required) Determines the type of custom command.
+        * Rush's "global" commands are invoked once for the entire repo.
+        */
+       "commandKind": "global",
+
+       "name": "install-cli",
+       "summary": "Installs the hatch CLI from tools/hatch-cli",
+       "description": "This installs the local hatch CLI globally",
+
+       "safeForSimultaneousRushProcesses": false,
+
+       /**
+        * (Required) A script that will be invoked using the OS shell. The working directory will be
+        * the folder that contains rush.json.  If custom parameters are associated with this command, their
+        * values will be appended to the end of this string.
+        */
+       "shellCommand": "npm install -g ./tools/hatch-cli"
+     }
   ],
 
   /**

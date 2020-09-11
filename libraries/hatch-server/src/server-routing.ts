@@ -30,6 +30,15 @@ export interface APIMetadataRegistrar {
   (apiMetadataConsumer: APIMetadataConsumer): void;
 }
 
+export interface APIMetadataRegistrarWithAnnotationData {
+  (
+    apiMetadataConsumer: APIMetadataConsumer,
+    target: any,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor,
+  ): void;
+}
+
 export type Route = {method?: HTTPMethod, path: PathParams} | PathParams;
 
 const isRouteObject = (route: Route): route is {method?: HTTPMethod, path: PathParams} => {
@@ -63,7 +72,7 @@ const rootContainerKey = Symbol('rootContainer');
 const wsRoutesKey = Symbol('wsEnabled');
 const requestContainerKey = Symbol('requestContainer');
 
-const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrar) => {
+const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
     const requestHandler = async (ctlr: any, req: Request, res: Response, next: NextFunction) => {
@@ -99,7 +108,10 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
     };
     target[routeDefinersKey].push(ctlrRouteDefiner);
     if (registerMetadata != null) {
-      target[registerMetadataKey].push(registerMetadata);
+      const metadataRegistrar: APIMetadataRegistrar = (apiMetadataConsumer) => {
+        registerMetadata(apiMetadataConsumer, target, propertyKey, descriptor);
+      };
+      target[registerMetadataKey].push(metadataRegistrar);
     }
   };
 };
@@ -114,6 +126,9 @@ const registerRouteTokens = (ctlr: any, metadata: APIMetadataParameters, route: 
 };
 
 const consumeAPIMetadata = (
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor,
   metadata: APIMetadataParameters,
   method: keyof RouteDefiners,
   path: PathParams,
@@ -123,6 +138,9 @@ const consumeAPIMetadata = (
   const parameters: OpenAPIParameter[] = [];
   const apiPath = convertExpressPathToOpenAPIPath(path, metadata.parameters ?? {}, parameters);
   if (apiMethod && apiPath) {
+    const controllerName = target.constructor.name.replace(/Controller$/, '');
+    const defaultTags = [controllerName];
+    const defaultOperationId = String(propertyKey);
     const apiMetadata = {
       description: metadata.description ?? '',
       method: apiMethod,
@@ -134,8 +152,8 @@ const consumeAPIMetadata = (
           description: '',
         },
       },
-      operationId: metadata.operationId,
-      tags: metadata.tags,
+      operationId: metadata.operationId ?? defaultOperationId,
+      tags: (metadata.tags != null && metadata.tags.length > 0) ? metadata.tags : defaultTags,
     };
     if (apiMetadata.operationId != null) {
       const mediaType = 'application/json';
@@ -226,7 +244,7 @@ const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
       });
     };
     const registerMetadata = (apiMetadataConsumer: APIMetadataConsumer) => {
-      consumeAPIMetadata(metadata, 'get', path, apiMetadataConsumer);
+      consumeAPIMetadata(target, propertyKey, descriptor, metadata, 'get', path, apiMetadataConsumer);
     }
     target[routeDefinersKey].push(routeDefiner);
     target[registerMetadataKey].push(registerMetadata);
@@ -410,8 +428,13 @@ const proxy = {
         definer(path, handler);
         registerRouteTokens(ctlr, metadata, {path, method: adjustedMethod as HTTPMethod});
       };
-      const registerMetadata = (apiMetadataConsumer: APIMetadataConsumer) => {
-        consumeAPIMetadata(metadata, method, path, apiMetadataConsumer);
+      const registerMetadata: APIMetadataRegistrarWithAnnotationData = (
+        apiMetadataConsumer,
+        target,
+        propertyKey,
+        descriptor
+      ) => {
+        consumeAPIMetadata(target, propertyKey, descriptor, metadata, method, path, apiMetadataConsumer);
       }
       return custom(routeDefiner, registerMetadata);
     };

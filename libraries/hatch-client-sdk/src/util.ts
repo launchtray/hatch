@@ -47,7 +47,11 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
     const serverExec = path.resolve(process.cwd(), 'node_modules', dependencyName, 'build', 'server.js');
     const env = Object.create(process.env);
     env.PRINT_API_SPEC_ONLY = 'true';
-    const printSpecCmd = spawnSync('node', [serverExec], {encoding : 'utf8', env});
+    const printSpecCmd = spawnSync('node', [serverExec], {
+      encoding : 'utf8',
+      env,
+      maxBuffer: 10 * 1024 * 1024
+    });
     if (printSpecCmd.error) {
       console.log(printSpecCmd.stdout);
       throw new Error(printSpecCmd.error.message);

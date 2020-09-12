@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-client-sdk
 
-This log was last generated on Wed, 09 Sep 2020 21:45:17 GMT and should not be manually modified.
+This log was last generated on Sat, 12 Sep 2020 03:25:34 GMT and should not be manually modified.
+
+## 0.10.15
+Sat, 12 Sep 2020 03:25:34 GMT
+
+### Updates
+
+- Added default tag and operation IDs based on class and method names
 
 ## 0.10.14
 Wed, 09 Sep 2020 21:45:17 GMT

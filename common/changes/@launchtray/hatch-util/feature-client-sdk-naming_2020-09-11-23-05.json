@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-util",
+      "comment": "Make CompletableFuture.complete argument optional",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-util",
+  "email": "kiltyj@gmail.com"
+}

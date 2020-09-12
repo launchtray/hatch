@@ -35,19 +35,19 @@ export interface ServerMiddleware {
 }
 
 export interface ServerMiddlewareClass extends Class<ServerMiddleware> {
-  registerAPIMetadata?(apiMetadataConsumer: APIMetadataConsumer): void;
+  registerAPIMetadata?(apiMetadataConsumer: APIMetadataConsumer): Promise<void>;
 }
 
 const serverMiddlewareKey = Symbol('serverMiddleware');
 
-export const registerServerMiddleware = (
+export const registerServerMiddleware = async (
   container: DependencyContainer,
   middlewareList: ServerMiddlewareClass[],
   apiMetadataConsumer: APIMetadataConsumer
 ) => {
   for (const middleware of middlewareList) {
     container.registerSingleton(serverMiddlewareKey, middleware);
-    middleware.registerAPIMetadata?.(apiMetadataConsumer);
+    await middleware.registerAPIMetadata?.(apiMetadataConsumer);
   }
 };
 

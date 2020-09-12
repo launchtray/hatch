@@ -1,4 +1,5 @@
 import {
+  CompletableFuture,
   DependencyContainer,
   ErrorReporter,
   initializeInjection,
@@ -165,10 +166,14 @@ const createServerAsync = async <T extends ServerComposition>(
   const apiSpecBuilder = new OpenAPISpecBuilder(appName, appVersion);
   const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
 
-  registerServerMiddleware(rootContainer, serverMiddlewareClasses, apiMetadataConsumer);
+  await registerServerMiddleware(rootContainer, serverMiddlewareClasses, apiMetadataConsumer);
   const apiSpec = apiSpecBuilder.build();
   if (process.env.PRINT_API_SPEC_ONLY === 'true') {
-    console.log(JSON.stringify(apiSpec));
+    const flushed = new CompletableFuture('stdout flushed');
+    process.stdout.write(JSON.stringify(apiSpec), 'utf8', () => {
+      flushed.complete();
+    });
+    await flushed.get();
     process.exit(0);
   }
 

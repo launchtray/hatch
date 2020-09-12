@@ -8,6 +8,8 @@ export const BASE_PATH = "{{{basePath}}}".replace(/\/+$/, "");
 
 const isBlob = (value: any) => typeof Blob !== 'undefined' && value instanceof Blob;
 
+export type AnyType = any;
+
 /**
  * This is the base class for all generated API classes.
  */

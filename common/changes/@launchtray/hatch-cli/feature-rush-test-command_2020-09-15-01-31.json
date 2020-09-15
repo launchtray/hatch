@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "Update project template test script hooks",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "rosshnaylor@gmail.com"
+}

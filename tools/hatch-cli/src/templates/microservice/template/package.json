@@ -9,7 +9,7 @@
   "scripts": {
     "start": "razzle start",
     "build": "rimraf build && razzle build",
-    "test": "razzle test --env=jsdom",
+    "test": "razzle test --env=jsdom --watchAll=false --passWithNoTests",
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {

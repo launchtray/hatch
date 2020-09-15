@@ -355,6 +355,14 @@ const updateCustomCommands = (monorepoPath: string) => {
     safeForSimultaneousRushProcesses: true,
     shellCommand: './prod',
   });
+  commandLineParsed.commands.push({
+    commandKind: 'bulk',
+    name: 'test',
+    summary: 'Runs all project\'s package.json test script hook commands if defined',
+    description: 'This command will run all project\'s package.json test script hook commands if defined',
+    enableParallelism: true,
+    ignoreMissingScript: true,
+  });
   const commandLineRawUpdated = stringify(commandLineParsed, null, 2);
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };

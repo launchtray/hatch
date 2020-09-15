@@ -150,6 +150,13 @@ const consumeAPIMetadata = (
       responses: metadata.responses ?? {
         default: {
           description: '',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object'
+              },
+            },
+          },
         },
       },
       operationId: metadata.operationId ?? defaultOperationId,

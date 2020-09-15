@@ -358,8 +358,8 @@ const updateCustomCommands = (monorepoPath: string) => {
   commandLineParsed.commands.push({
     commandKind: 'bulk',
     name: 'test',
-    summary: 'Runs all projects package.json test script hook command',
-    description: 'This command will run all projects package.json test script hook command that have the test script defined',
+    summary: 'Runs all project\'s package.json test script hook command if defined',
+    description: 'This command will run all project\'s package.json test script hook command if defined',
     enableParallelism: true,
     ignoreMissingScript: true,
   });

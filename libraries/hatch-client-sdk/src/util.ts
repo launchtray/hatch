@@ -1,4 +1,3 @@
-import {CompletableFuture} from '@launchtray/hatch-util';
 import {spawnSync} from 'child_process';
 import path from 'path';
 import tmp from 'tmp';
@@ -34,15 +33,10 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
 };
 
 export const createClientSDKByDependency = async (dependencyName: string) => {
-  const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
-  tmp.file((err, tmpPath, fd, tmpCleanUp) => {
-    if (err) {
-      tmpCleanUp();
-      tempFileFuture.completeExceptionally(err);
-    }
-    tempFileFuture.complete([tmpPath, tmpCleanUp]);
-  });
-  const [tempFilePath, cleanUp] = await tempFileFuture.get();
+  const fileResult = tmp.fileSync();
+  const tempFilePath = fileResult.name;
+  const cleanUp = fileResult.removeCallback;
+
   try {
     const serverExec = path.resolve(process.cwd(), 'node_modules', dependencyName, 'build', 'server.js');
     const env = Object.create(process.env);

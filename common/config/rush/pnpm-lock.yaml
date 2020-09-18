@@ -4,7 +4,7 @@ dependencies:
   '@launchtray/tsyringe-async': 4.3.2
   '@microsoft/rush': 5.33.2
   '@microsoft/rush-lib': 5.33.2
-  '@openapitools/openapi-generator-cli': 1.0.15-4.3.1
+  '@openapitools/openapi-generator-cli': 1.0.18-4.3.1
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-web': 'file:projects/example-web.tgz'
   '@rush-temp/hatch-cli': 'file:projects/hatch-cli.tgz'
@@ -1864,11 +1864,11 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
-  /@openapitools/openapi-generator-cli/1.0.15-4.3.1:
+  /@openapitools/openapi-generator-cli/1.0.18-4.3.1:
     dev: false
     hasBin: true
     resolution:
-      integrity: sha512-U+sanspDmeBElVNjYHQ4U7BbSEJUQzjNKmiTzXpcEw/r93sgxmzS2Sew5t+Zj6kyN1YTvjhRjJikNcW9/bmTKA==
+      integrity: sha512-t5OFeIfbD5bUQH3/5xoCHr96ay9nIKPgtlkN9YrX7Ce4q8NdSUU/bl83MJjzU8qcdDiwZtuUgqTM2Y4FLOi9CA==
   /@pnpm/error/1.3.0:
     dev: false
     engines:
@@ -16644,7 +16644,7 @@ packages:
     dev: false
     name: '@rush-temp/example-web'
     resolution:
-      integrity: sha512-PR+cTtYUaxTYYKgVayglOJD2qzzq2dI2xBiJso/BGlwRlBhXxcjbgNJoZwxFLIgrNw4QwxiFW8FuGQPJjrSQmA==
+      integrity: sha512-FZa+gEz+HzqkgrefImjfG6siY5QHYOZ8c+ShPBLJHlW0uh5EVWs92uTteQdLdP1UGJFtwi9PZnbTb/cyrkx2lg==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz':
@@ -16672,12 +16672,12 @@ packages:
     dev: false
     name: '@rush-temp/hatch-cli'
     resolution:
-      integrity: sha512-k0ynhqcHMcSIyVIe82D1rU+CMsMYBLj46V6AgzdUiVVQr8Gv3jIu0h+gN2rujgRJS83Iukd8Jo/iyTEhkamHSA==
+      integrity: sha512-eFxao7PjEPOHhzkucgFdbpS0EuwjexQ/GKaokMdG+nkHorUtlayWbzTg71GgNFsJsQ3IbFxsgdyO462cToWFiQ==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-client-sdk.tgz':
     dependencies:
-      '@openapitools/openapi-generator-cli': 1.0.15-4.3.1
+      '@openapitools/openapi-generator-cli': 1.0.18-4.3.1
       '@types/fs-extra': 8.1.1
       '@types/node': 12.12.54
       '@types/tmp': 0.1.0
@@ -16688,7 +16688,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-client-sdk'
     resolution:
-      integrity: sha512-Rabhzq2WsPcF7tmd1rTO7nmuRFsPE+enk9mb9/0Zlp1Z3ZRJdY405RX65w2XYKgZAx5EYGhHVHVB3pkxAMJ4Ow==
+      integrity: sha512-ykr3UpqwlsBYQP5oXuwPKuO8NgVBp71lElJcTlf+bSMwIFZrRWS4FdIAqqKBAqlIfI5L2NLhTqw18aaxugB3NQ==
       tarball: 'file:projects/hatch-client-sdk.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz_typescript@4.0.2':
@@ -16723,7 +16723,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-middleware'
     resolution:
-      integrity: sha512-rZXLSOzR+HMFCnRL6iXbH62TmRQUrdYP8yRwSrnnrpvbV78/bVpZPpyo6H0gNMkoLrIowbRMCyzH4UpSB/LiEQ==
+      integrity: sha512-w9DtPU6qf8Q+89PtrqbylOC8kfz6juoAtRewGrM+OAs3Q0rgblN7qfe+9KvwlPaSjha3+xFW02LAFjk15XjZug==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server-user-management.tgz':
@@ -16742,7 +16742,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server-user-management'
     resolution:
-      integrity: sha512-0MEir8r4u1ZyIfAw7WhNDEkeeXwymM7rr055JZlx7psMrwdJ748Z7KOg0jeysjD3Sb49l423y3ltEUNPx2wU1w==
+      integrity: sha512-byEbyz715nx1LEEmoO8/Xr1tcVlW22I6D8SO3+PwpWz+LFPW2dkzvD7p8VawCTeiT4Jvxh3K+Vsxpy9+DYBb3A==
       tarball: 'file:projects/hatch-server-user-management.tgz'
     version: 0.0.0
   'file:projects/hatch-server.tgz':
@@ -16767,7 +16767,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-server'
     resolution:
-      integrity: sha512-pqzgNjOezbGDCNF6JEjARgQh9XyMe3pMzf/Y6Hn4FSWhyuoXy01Ilyj1OvX6046KN6cuTsfaHrHPkSNOCCwBEA==
+      integrity: sha512-SETjuC5hwY4PCyrs9iBW5MEtTrT2zpp0eSjh0xqBNbjxEgG6UP72r2wwVgt4oRAo9Fz/VFzXhRvrHLMn/LVjIA==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-template-client-sdk.tgz':
@@ -16779,7 +16779,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-client-sdk'
     resolution:
-      integrity: sha512-+IdO7e+3jF+iApf4xc35KbwA3zNykX62uAh4RNCeWUWaaeouZM/A60jHwcqkZOIPQw6jD3/TdBaPWkAiHg24HA==
+      integrity: sha512-qNi1JqWaGS2Onm2tLY6x8qeWNkY6AyxWoesQFyCxaE9gvKm/O9NRw7Ga6j7TT4H7MYT/PRHEtNMsN5gFtzmndg==
       tarball: 'file:projects/hatch-template-client-sdk.tgz'
     version: 0.0.0
   'file:projects/hatch-template-library.tgz_5290a7aab7631971258e1bd11475725e':
@@ -16846,7 +16846,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-microservice'
     resolution:
-      integrity: sha512-J3cgUhr+V2QFTCkb7n+ZOeH5xpKoayfsBNWIDx0IHWzOtEl6JxZgWvTKVgCGgcq7Xk8+sM5mzyTh8o0XYrQF7w==
+      integrity: sha512-kUyZUbFGWndYwZxmds9qTUcYTmjt48xPKeV/dRYJwMwv/KDJHO2KReoqC5ICMj5YZarXe3JEglHDFV2FYAymmA==
       tarball: 'file:projects/hatch-template-microservice.tgz'
     version: 0.0.0
   'file:projects/hatch-template-webapp.tgz':
@@ -16929,7 +16929,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-template-webapp'
     resolution:
-      integrity: sha512-Kp5G2+cm0WYmQBL46LWvdYjgEgioVIvKNF0u+RC/PjLo3OZPwsLNZF+b2+a8FIVjWb7E/hnyMb3g4g3/fbDdzw==
+      integrity: sha512-p9OpXRIPjYwFCQ7Xm4FmQogXM00b/xd3LG0KhU92yBP4pHFlzsMMFoZQfXO/EGAvMEO14U0HMfQ2hgwRAP6yUA==
       tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz':
@@ -16952,7 +16952,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-user-management-client'
     resolution:
-      integrity: sha512-/OnBzSxKYk/AZN0Uo7ctvqhPrZ7Spb038I/Q2q5ZY4SwnK4cBU2mgqnZzsT2wP84T9XmFlbTGHgBxRndhExYnA==
+      integrity: sha512-UklH1LLK+APe/NslIgWS0MYpNHMHoQXbYHve8jhw6TrGlj2Rwa3GRt0323tcOV8wB3vu4sIaP0YBcG3sJymJXA==
       tarball: 'file:projects/hatch-user-management-client.tgz'
     version: 0.0.0
   'file:projects/hatch-util.tgz':
@@ -17000,7 +17000,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-client'
     resolution:
-      integrity: sha512-Sl0TXhMUThzjv3mSoMfSeD3bU71lH8KHYXJPDxjQ5w1+qnTsjLE2X/2tfpdABCmFfRX4p7ujkKk8OS2M6ZR+ug==
+      integrity: sha512-z68Iu+M6lx0UNW37TVJvlErGT/u9A6/VD2kH9GbF67F4pP+BmTs33Acs8M2sduS0AO/BFcZ1+cZNlA1Ae+2UQw==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
   'file:projects/hatch-web-injectables.tgz_react@16.13.1':
@@ -17019,7 +17019,7 @@ packages:
     peerDependencies:
       react: '*'
     resolution:
-      integrity: sha512-S7SjBu9xS4SboQvtIixGfYtlpfFWvvx01umfSrI8OQwlDxxmZ8mcC3Xrdta4JGNzxECrgNp6QzUARRpb+kBdVg==
+      integrity: sha512-RbwCQ7t+6h3tJiprnZBlyM4jp6h9MK5sC7LKAQGr4oBU45IcV7HrEYnXheGRVQUBSgu+fFyY8TdVOz0UtIMjgQ==
       tarball: 'file:projects/hatch-web-injectables.tgz'
     version: 0.0.0
   'file:projects/hatch-web-server.tgz':
@@ -17053,7 +17053,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web-server'
     resolution:
-      integrity: sha512-wVK81Czwjn5mC/R1HzCmc17M9AbeZJbZ5ry1zHG5mvUtGhyDeWL5NsSQcwf72nsIUddZG/8oSivtaBGg8b+CkQ==
+      integrity: sha512-u7+0BVJRPfSh4z+h3BJOdEbcWY9jI8j+eu7+zoTpytHqYdZ0IGBGzLMRDGB9+qyYpEezDre/WBWY7fIOiGBxjA==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
   'file:projects/hatch-web.tgz':
@@ -17084,7 +17084,7 @@ packages:
     dev: false
     name: '@rush-temp/hatch-web'
     resolution:
-      integrity: sha512-7NNkX1PrDELwMBDAkV7C9JiItD9q6Ps9DgVtltLbd/uS2PJnwO9ZhKC8wi03WZvNyDRgJbPCpiwJcTx5rm8uxQ==
+      integrity: sha512-obY2zB0ZxcFKUQT2TZbjdjE6l+I8KLRfmCIAwgQC8EABGfeIqFx8jWvpzxStDIhVtnE4G+BfH11Noh1H8Ghxkw==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 registry: ''
@@ -17094,7 +17094,7 @@ specifiers:
   '@launchtray/tsyringe-async': 4.3.2
   '@microsoft/rush': ^5.29.1
   '@microsoft/rush-lib': ^5.29.1
-  '@openapitools/openapi-generator-cli': ^1.0.15-4.3.1
+  '@openapitools/openapi-generator-cli': ^1.0.18-4.3.1
   '@redux-saga/core': ^1
   '@rush-temp/example-web': 'file:./projects/example-web.tgz'
   '@rush-temp/hatch-cli': 'file:./projects/hatch-cli.tgz'

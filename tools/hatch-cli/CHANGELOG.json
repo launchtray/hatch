@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.10.17",
+      "tag": "@launchtray/hatch-cli_v0.10.17",
+      "date": "Fri, 18 Sep 2020 23:46:41 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix Dockerfile for client SDK builds"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.16",
       "tag": "@launchtray/hatch-cli_v0.10.16",
       "date": "Tue, 15 Sep 2020 03:33:32 GMT",

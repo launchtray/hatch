@@ -91,6 +91,7 @@ export interface OpenAPIOperation {
   description?: string;
   operationId?: string;
   tags?: string[];
+  security?: OpenAPIOperationSecurity[];
 }
 
 export type OpenAPIOperations = {
@@ -101,6 +102,12 @@ export interface OpenAPIPath extends OpenAPIOperations {
   description?: string;
 }
 
+const bearerAuth = 'bearerAuth';
+export type OpenAPIOperationSecurity = {
+  [bearerAuth]?: string[];
+  // Add more security schemes as needed
+}
+
 export interface OpenAPISpec {
   openapi: '3.0.2';
   info: {
@@ -109,6 +116,14 @@ export interface OpenAPISpec {
   },
   paths: {
     [key: string]: OpenAPIPath;
+  };
+  components: {
+    securitySchemes: {
+      [bearerAuth]: {
+        type: 'http',
+        scheme: 'bearer'
+      };
+    }
   };
 }
 
@@ -122,7 +137,15 @@ export class OpenAPISpecBuilder {
         title: appName,
         version: appVersion,
       },
-      paths: {}
+      paths: {},
+      components: {
+        securitySchemes: {
+          [bearerAuth]: {
+            type: 'http',
+            scheme: 'bearer'
+          },
+        }
+      },
     };
   }
 
@@ -136,6 +159,7 @@ export class OpenAPISpecBuilder {
         requestBody: apiMetadata.requestBody,
         operationId: apiMetadata.operationId,
         tags: apiMetadata.tags,
+        security: apiMetadata.security,
       }
     }
   }

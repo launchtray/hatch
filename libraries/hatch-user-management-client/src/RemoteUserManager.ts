@@ -7,24 +7,25 @@ import {UserManagementClientSdk} from './UserManagementClientSdk';
 export default class RemoteUserManager implements UserManager {
   constructor(private readonly userManagementClient: UserManagementClientSdk) {}
 
-  async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string): Promise<UserAttributes> {
-    return await this.userManagementClient.getUserAttributes(queriedUserId, accessToken);
+  async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string, tenantId?: string): Promise<UserAttributes> {
+    return await this.userManagementClient.getUserAttributes(queriedUserId,accessToken, {tenantId});
   }
 
-  async getUserId(clientUserId: string, queriedUsername: string, accessToken: string): Promise<string> {
-    return await this.userManagementClient.getUserId(queriedUsername, accessToken);
+  async getUserId(clientUserId: string, queriedUsername: string, accessToken: string, tenantId?: string): Promise<string> {
+    return await this.userManagementClient.getUserId(queriedUsername, accessToken, {tenantId});
   }
 
   async setUserAttributes(
     clientUserId: string,
     queriedUserId: string,
     attributes: UserAttributes,
-    accessToken: string
+    accessToken: string,
+    tenantId?: string
   ): Promise<UserAttributes> {
-    return await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken);
+    return await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken,{tenantId});
   }
 
-  async signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string) {
-    return await this.userManagementClient.signOutUser(userIdToSignOut, accessToken);
+  async signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string, tenantId?: string) {
+    return await this.userManagementClient.signOutUser(userIdToSignOut, accessToken, {tenantId});
   }
 }

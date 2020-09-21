@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-user-management-client",
+      "comment": "Add optional tenant id parameter",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-user-management-client",
+  "email": "rosshnaylor@gmail.com"
+}

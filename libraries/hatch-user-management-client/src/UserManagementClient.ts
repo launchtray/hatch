@@ -28,17 +28,23 @@ export enum UserManagementEndpoints {
   GET_USER_ID = '/api/userId',
 }
 
+export const TENANT_ID_HEADER = 'x-tenant-id';
+
+export type UserManagementClientOptions = {
+  tenantId?: string
+}
+
 export interface UserManagementClient {
-  authenticate(username: string, password: string): Promise<AuthTokens>;
-  startUserRegistration(username: string, password: string, userAttributes: UserAttributes): Promise<void>;
-  resendUserRegistrationCode(username: string): Promise<void>;
-  confirmUserRegistration(username: string, confirmationCode: string): Promise<void>;
-  startPasswordReset(username: string): Promise<void>;
-  confirmPasswordReset(username: string, confirmationCode: string, password: string): Promise<void>;
-  refreshAuthentication(refreshToken: string, accessToken: string): Promise<AuthTokens>;
-  signOutUser(userId: string, accessToken: string): Promise<void>;
-  getUserAttributes(userId: string, accessToken: string): Promise<UserAttributes>;
-  setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string): Promise<void>;
-  getUserInfo(accessToken: string): Promise<UserInfo>;
-  getUserId?(username: string, accessToken: string): Promise<string>;
+  authenticate(username: string, password: string, options?: UserManagementClientOptions): Promise<AuthTokens>;
+  startUserRegistration(username: string, password: string, userAttributes: UserAttributes, options?: UserManagementClientOptions): Promise<void>;
+  resendUserRegistrationCode(username: string, options?: UserManagementClientOptions): Promise<void>;
+  confirmUserRegistration(username: string, confirmationCode: string, options?: UserManagementClientOptions): Promise<void>;
+  startPasswordReset(username: string, options?: UserManagementClientOptions): Promise<void>;
+  confirmPasswordReset(username: string, confirmationCode: string, password: string, options?: UserManagementClientOptions): Promise<void>;
+  refreshAuthentication(refreshToken: string, accessToken: string, options?: UserManagementClientOptions): Promise<AuthTokens>;
+  signOutUser(userId: string, accessToken: string, options?: UserManagementClientOptions): Promise<void>;
+  getUserAttributes(userId: string, accessToken: string, options?: UserManagementClientOptions): Promise<UserAttributes>;
+  setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions): Promise<void>;
+  getUserInfo(accessToken: string, options?: UserManagementClientOptions): Promise<UserInfo>;
+  getUserId?(username: string, accessToken: string, options?: UserManagementClientOptions): Promise<string>;
 }

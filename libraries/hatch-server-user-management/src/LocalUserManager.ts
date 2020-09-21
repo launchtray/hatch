@@ -22,8 +22,8 @@ export default class LocalUserManager implements UserManager {
     }
   }
 
-  async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string): Promise<UserAttributes> {
-    const allAttributes = await this.userManagementClient.getUserAttributes(queriedUserId, accessToken);
+  async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string, tenantId?: string): Promise<UserAttributes> {
+    const allAttributes = await this.userManagementClient.getUserAttributes(queriedUserId, accessToken, {tenantId});
     const attributes = await this.permissionsManager.getReadableAttributes(clientUserId, queriedUserId, allAttributes);
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to read any permissions for queried user');
@@ -35,22 +35,23 @@ export default class LocalUserManager implements UserManager {
     clientUserId: string,
     queriedUserId: string,
     attributes: UserAttributes,
-    accessToken: string
+    accessToken: string,
+    tenantId?: string
   ): Promise<UserAttributes> {
     const writableAttributes = await this.permissionsManager.getWriteableAttributes(
       clientUserId, queriedUserId, attributes);
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to set any permissions for queried user');
     } else {
-      await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken);
+      await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken, {tenantId});
     }
     return writableAttributes;
   }
 
-  async getUserId(clientUserId: string, queriedUsername: string, accessToken: string) {
+  async getUserId(clientUserId: string, queriedUsername: string, accessToken: string, tenantId?: string) {
     let userId;
     if (this.userManagementClient.getUserId != null) {
-      userId = await this.userManagementClient.getUserId(queriedUsername, accessToken);
+      userId = await this.userManagementClient.getUserId(queriedUsername, accessToken, {tenantId});
     } else {
       throw new Error('User ID lookup is not supported');
     }
@@ -62,11 +63,11 @@ export default class LocalUserManager implements UserManager {
     return userId;
   }
 
-  async signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string) {
+  async signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string, tenantId?: string) {
     const allowed = await this.permissionsManager.isUserAllowedToSignOutUser(clientUserId, userIdToSignOut);
     if (!allowed) {
       throw new Error('User is not allowed to read user ID for queried user');
     }
-    await this.userManagementClient.signOutUser(userIdToSignOut, accessToken);
+    await this.userManagementClient.signOutUser(userIdToSignOut, accessToken, {tenantId});
   }
 }

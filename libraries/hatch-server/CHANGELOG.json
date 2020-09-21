@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.10.18",
+      "tag": "@launchtray/hatch-server_v0.10.18",
+      "date": "Mon, 21 Sep 2020 19:43:10 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update OpenAPI interfaces to allow for bearer authentication schema"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.17",
       "tag": "@launchtray/hatch-server_v0.10.17",
       "date": "Fri, 18 Sep 2020 23:46:41 GMT",

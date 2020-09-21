@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-web-client
 
-This log was last generated on Fri, 18 Sep 2020 23:46:41 GMT and should not be manually modified.
+This log was last generated on Mon, 21 Sep 2020 19:43:10 GMT and should not be manually modified.
+
+## 0.10.18
+Mon, 21 Sep 2020 19:43:10 GMT
+
+*Version update only*
 
 ## 0.10.17
 Fri, 18 Sep 2020 23:46:41 GMT

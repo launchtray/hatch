@@ -414,9 +414,8 @@ export default class UserManagementController {
     if (queriedUserId == null) {
       if (queriedUsername != null) {
         if (this.userManagementClient.getUserId != null) {
-          const tenantId = userContext.tenantId;
           queriedUserId = await this.userManagementClient.getUserId(queriedUsername,
-            {accessToken: userContext.accessToken, tenantId});
+            {accessToken: userContext.accessToken, tenantId: userContext.tenantId});
         } else {
           throw new Error('User ID lookup is not supported');
         }

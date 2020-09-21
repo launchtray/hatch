@@ -20,7 +20,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.AUTHENTICATE, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -40,7 +40,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_USER_REGISTRATION, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -58,7 +58,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.RESEND_USER_REGISTRATION, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -77,7 +77,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_USER_REGISTRATION, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -95,7 +95,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_PASSWORD_RESET, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -115,7 +115,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_PASSWORD_RESET, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -133,7 +133,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.REFRESH_AUTHENTICATION, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -151,7 +151,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SIGN_OUT_USER, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -167,7 +167,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const params = '?userId=' + encodeURIComponent(userId);
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES + params, {
       method: 'GET',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user attributes response body: ' + JSON.stringify(responseBody));
@@ -185,7 +185,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SET_USER_ATTRIBUTES, {
       method: 'POST',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -200,7 +200,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     this.logger.debug('Requesting to get user info...');
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_INFO, {
       method: 'GET',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user info response body: ' + JSON.stringify(responseBody));
@@ -215,7 +215,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const params = '?username=' + encodeURIComponent(username);
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID + params, {
       method: 'GET',
-      headers: this.buildHeader(options),
+      headers: this.buildHeaders(options),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user ID response body: ' + JSON.stringify(responseBody));
@@ -225,7 +225,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  private buildHeader(options?: UserManagementClientOptions) {
+  private buildHeaders(options?: UserManagementClientOptions) {
     const headers = new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json'

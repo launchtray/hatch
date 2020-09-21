@@ -161,6 +161,7 @@ const consumeAPIMetadata = (
       },
       operationId: metadata.operationId ?? defaultOperationId,
       tags: (metadata.tags != null && metadata.tags.length > 0) ? metadata.tags : defaultTags,
+      security: metadata.security,
     };
     if (apiMetadata.operationId != null) {
       const mediaType = 'application/json';

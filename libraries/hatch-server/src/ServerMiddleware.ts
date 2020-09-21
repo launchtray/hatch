@@ -1,7 +1,7 @@
 import {Class, DependencyContainer, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import http from 'http';
-import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses} from './OpenAPI';
+import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses, OpenAPIOperationSecurity} from './OpenAPI';
 
 export type Server = http.Server;
 
@@ -15,6 +15,7 @@ export interface APIMetadataParameters {
   tokens?: Array<string | symbol>;
   operationId?: string;
   tags?: string[],
+  security?: OpenAPIOperationSecurity[],
 }
 
 export interface APIMetadata {
@@ -26,6 +27,7 @@ export interface APIMetadata {
   requestBody?: OpenAPIRequestBody;
   operationId?: string,
   tags?: string[],
+  security?: OpenAPIOperationSecurity[],
 }
 
 export type APIMetadataConsumer = (metadata: APIMetadata) => void;

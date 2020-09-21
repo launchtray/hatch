@@ -47,6 +47,15 @@ const addTenantIDHeader = (metadataParams: APIMetadataParameters) => {
   };
 };
 
+const addBearerAuthHeader = (metadataParams: APIMetadataParameters) => {
+  if (metadataParams.security == null) {
+    metadataParams.security = [];
+  }
+  metadataParams.security.push({
+    bearerAuth: [],
+  });
+}
+
 export class AuthenticateRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Authenticates a user and retrieves valid access and refresh tokens',
@@ -98,9 +107,9 @@ export class AuthenticateRequest {
   };
 }
 
-addCsrfCheckApiMetadata(AuthenticateRequest.apiMetadata);
-
 addTenantIDHeader(AuthenticateRequest.apiMetadata);
+
+addCsrfCheckApiMetadata(AuthenticateRequest.apiMetadata);
 
 export class StartUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -313,6 +322,8 @@ export class RefreshAuthenticationRequest {
   };
 }
 
+addBearerAuthHeader(RefreshAuthenticationRequest.apiMetadata)
+
 addTenantIDHeader(RefreshAuthenticationRequest.apiMetadata);
 
 addCsrfCheckApiMetadata(RefreshAuthenticationRequest.apiMetadata);
@@ -336,9 +347,11 @@ export class SignOutUserRequest {
   };
 }
 
-addCsrfCheckApiMetadata(SignOutUserRequest.apiMetadata);
+addBearerAuthHeader(SignOutUserRequest.apiMetadata);
 
 addTenantIDHeader(SignOutUserRequest.apiMetadata);
+
+addCsrfCheckApiMetadata(SignOutUserRequest.apiMetadata);
 
 export class SetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -364,9 +377,11 @@ export class SetUserAttributesRequest {
   };
 }
 
-addCsrfCheckApiMetadata(SetUserAttributesRequest.apiMetadata);
+addBearerAuthHeader(SetUserAttributesRequest.apiMetadata);
 
 addTenantIDHeader(SetUserAttributesRequest.apiMetadata);
+
+addCsrfCheckApiMetadata(SetUserAttributesRequest.apiMetadata);
 
 export class GetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -402,6 +417,8 @@ export class GetUserAttributesRequest {
     }
   };
 }
+
+addBearerAuthHeader(GetUserAttributesRequest.apiMetadata);
 
 addTenantIDHeader(GetUserAttributesRequest.apiMetadata);
 
@@ -442,6 +459,8 @@ export class GetUserIdRequest {
   };
 }
 
+addBearerAuthHeader(GetUserIdRequest.apiMetadata)
+
 addTenantIDHeader(GetUserIdRequest.apiMetadata);
 
 export class GetUserInfoRequest {
@@ -481,5 +500,7 @@ export class GetUserInfoRequest {
     }
   };
 }
+
+addBearerAuthHeader(GetUserInfoRequest.apiMetadata);
 
 addTenantIDHeader(GetUserInfoRequest.apiMetadata);

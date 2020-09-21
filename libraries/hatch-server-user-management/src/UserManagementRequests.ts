@@ -33,6 +33,20 @@ export const addCsrfCheckApiMetadata = (metadataParams: APIMetadataParameters) =
   };
 };
 
+const addTenantIDHeader = (metadataParams: APIMetadataParameters) => {
+  if (metadataParams.parameters == null) {
+    metadataParams.parameters = {};
+  }
+  metadataParams.parameters['x-tenant-id'] = {
+    in: 'header',
+    required: false,
+    description: 'Header specifying tenant ID',
+    schema: {
+      type: 'string',
+    },
+  };
+};
+
 export class AuthenticateRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Authenticates a user and retrieves valid access and refresh tokens',
@@ -86,6 +100,8 @@ export class AuthenticateRequest {
 
 addCsrfCheckApiMetadata(AuthenticateRequest.apiMetadata);
 
+addTenantIDHeader(AuthenticateRequest.apiMetadata);
+
 export class StartUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Sign\'s up a user account',
@@ -120,6 +136,8 @@ export class StartUserRegistrationRequest {
   };
 }
 
+addTenantIDHeader(StartUserRegistrationRequest.apiMetadata);
+
 export class ResendUserRegistrationCodeRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Resend user registration code',
@@ -146,6 +164,8 @@ export class ResendUserRegistrationCodeRequest {
     }
   };
 }
+
+addTenantIDHeader(ResendUserRegistrationCodeRequest.apiMetadata);
 
 export class ConfirmUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -178,6 +198,8 @@ export class ConfirmUserRegistrationRequest {
   };
 }
 
+addTenantIDHeader(ResendUserRegistrationCodeRequest.apiMetadata);
+
 export class StartPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Resets a user account password',
@@ -204,6 +226,8 @@ export class StartPasswordResetRequest {
     }
   };
 }
+
+addTenantIDHeader(StartPasswordResetRequest.apiMetadata);
 
 export class ConfirmPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -239,6 +263,8 @@ export class ConfirmPasswordResetRequest {
     }
   };
 }
+
+addTenantIDHeader(ConfirmPasswordResetRequest.apiMetadata);
 
 export class RefreshAuthenticationRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -287,6 +313,8 @@ export class RefreshAuthenticationRequest {
   };
 }
 
+addTenantIDHeader(RefreshAuthenticationRequest.apiMetadata);
+
 addCsrfCheckApiMetadata(RefreshAuthenticationRequest.apiMetadata);
 
 export class SignOutUserRequest {
@@ -309,6 +337,8 @@ export class SignOutUserRequest {
 }
 
 addCsrfCheckApiMetadata(SignOutUserRequest.apiMetadata);
+
+addTenantIDHeader(SignOutUserRequest.apiMetadata);
 
 export class SetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -335,6 +365,8 @@ export class SetUserAttributesRequest {
 }
 
 addCsrfCheckApiMetadata(SetUserAttributesRequest.apiMetadata);
+
+addTenantIDHeader(SetUserAttributesRequest.apiMetadata);
 
 export class GetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -370,6 +402,8 @@ export class GetUserAttributesRequest {
     }
   };
 }
+
+addTenantIDHeader(GetUserAttributesRequest.apiMetadata);
 
 export class GetUserIdRequest {
   public static apiMetadata: APIMetadataParameters = {
@@ -408,6 +442,8 @@ export class GetUserIdRequest {
   };
 }
 
+addTenantIDHeader(GetUserIdRequest.apiMetadata);
+
 export class GetUserInfoRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Gets a user\'s info',
@@ -445,3 +481,5 @@ export class GetUserInfoRequest {
     }
   };
 }
+
+addTenantIDHeader(GetUserInfoRequest.apiMetadata);

@@ -1,6 +1,11 @@
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {containerSingleton, initializer, Logger} from '@launchtray/hatch-util';
 import UserInfoRequest from './UserInfoRequest';
+import {TENANT_ID_HEADER} from '@launchtray/hatch-user-management-client';
+
+export const extractTenantID = (params: BasicRouteParams) => {
+  return params.req.header(TENANT_ID_HEADER);
+}
 
 @containerSingleton()
 export default class UserContext {
@@ -8,10 +13,12 @@ export default class UserContext {
   public userId: string = '';
   public username: string = '';
   public accessToken: string = '';
+  public tenantId?: string;
   public error?: Error;
 
   constructor(public readonly params: BasicRouteParams, private readonly request: UserInfoRequest) {
     this.logger = params.logger;
+    this.tenantId = extractTenantID(params);
   }
 
   @initializer()

@@ -41,7 +41,7 @@ export default class UserInfoRequest {
     }
     this.logger.debug('Auth blacklist:', this.authBlacklist);
   }
-  
+
   public async getUserInfo() {
     if (this.userInfo == null) {
       await this.authenticateUser();
@@ -52,16 +52,16 @@ export default class UserInfoRequest {
   public getUnverifiedAccessToken() {
     return this.extractAuthenticationCookie() ?? this.extractAuthenticationHeader();
   }
-  
+
   private async authenticateUser() {
-    const token = this.getUnverifiedAccessToken();
-    if (token) {
-      this.userInfo = await this.userService.getUserInfo(token);
+    const accessToken = this.getUnverifiedAccessToken();
+    if (accessToken != null) {
+      this.userInfo = await this.userService.getUserInfo({accessToken});
     } else {
       throw new Error('Authorization token is missing from cookie and bearer header');
     }
   }
-  
+
   private extractAuthenticationCookie() {
     this.logger.debug('Checking for authorization cookie...');
     let cookies = null;
@@ -77,7 +77,7 @@ export default class UserInfoRequest {
       return;
     }
   }
-  
+
   private extractAuthenticationHeader() {
     this.logger.debug('Checking for authorization header...');
     if (this.params.req && this.params.req.headers && this.params.req.headers.authorization) {
@@ -92,5 +92,5 @@ export default class UserInfoRequest {
     }
     return;
   }
-  
+
 }

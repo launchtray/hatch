@@ -25,7 +25,7 @@ import {
   GetUserIdRequest,
   GetUserInfoRequest,
 } from './UserManagementRequests';
-import UserContext from './UserContext';
+import UserContext, {extractTenantID} from './UserContext';
 import * as HttpStatus from 'http-status-codes';
 import cookie from 'cookie';
 
@@ -91,7 +91,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        const authTokens = await this.userManagementClient.authenticate(username, password);
+        const tenantId = extractTenantID(params);
+        const authTokens = await this.userManagementClient.authenticate(username, password, {tenantId});
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
           sameSite: 'lax',
           secure: process.env.NODE_ENV !== 'development',
@@ -139,7 +140,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userManagementClient.startUserRegistration(username, password, userAttributes);
+        const tenantId = extractTenantID(params);
+        await this.userManagementClient.startUserRegistration(username, password, userAttributes, {tenantId});
         this.logger.debug('User registration started');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -170,7 +172,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userManagementClient.resendUserRegistrationCode(username);
+        const tenantId = extractTenantID(params);
+        await this.userManagementClient.resendUserRegistrationCode(username, {tenantId});
         this.logger.debug('User registration code resent');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -201,7 +204,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userManagementClient.confirmUserRegistration(username,confirmationCode);
+        const tenantId = extractTenantID(params);
+        await this.userManagementClient.confirmUserRegistration(username, confirmationCode, {tenantId});
         this.logger.debug('User registration confirmed');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -236,7 +240,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userManagementClient.startPasswordReset(username);
+        const tenantId = extractTenantID(params);
+        await this.userManagementClient.startPasswordReset(username, {tenantId});
         this.logger.debug('User password reset started');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -267,7 +272,8 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        await this.userManagementClient.confirmPasswordReset(username, confirmationCode, password);
+        const tenantId = extractTenantID(params);
+        await this.userManagementClient.confirmPasswordReset(username, confirmationCode, password, {tenantId});
         this.logger.debug('User password reset confirmed');
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -327,7 +333,8 @@ export default class UserManagementController {
         });
       } else {
         const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
-        const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken);
+        const tenantId = extractTenantID(params);
+        const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, {accessToken, tenantId});
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
           sameSite: 'lax',
           secure: process.env.NODE_ENV !== 'development',
@@ -407,7 +414,9 @@ export default class UserManagementController {
     if (queriedUserId == null) {
       if (queriedUsername != null) {
         if (this.userManagementClient.getUserId != null) {
-          queriedUserId = await this.userManagementClient.getUserId(queriedUsername, userContext.accessToken);
+          const tenantId = userContext.tenantId;
+          queriedUserId = await this.userManagementClient.getUserId(queriedUsername,
+            {accessToken: userContext.accessToken, tenantId});
         } else {
           throw new Error('User ID lookup is not supported');
         }
@@ -423,7 +432,7 @@ export default class UserManagementController {
     const params = userContext.params;
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
-      await this.userManager.signOutUser(clientUserId, queriedUserId, userContext.accessToken);
+      await this.userManager.signOutUser(clientUserId, queriedUserId, userContext.accessToken, userContext.tenantId);
       this.logger.debug('User signed out');
       params.res.sendStatus(HttpStatus.OK);
     } catch (err) {
@@ -441,7 +450,7 @@ export default class UserManagementController {
     this.logger.debug('Getting user attributes...');
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
-      const attributes = await this.userManager.getUserAttributes(clientUserId, queriedUserId, userContext.accessToken);
+      const attributes = await this.userManager.getUserAttributes(clientUserId, queriedUserId, userContext.accessToken, userContext.tenantId);
       this.logger.debug('User attributes fetched:', attributes);
       params.res.status(HttpStatus.OK).send({
         userAttributes: attributes,
@@ -470,7 +479,7 @@ export default class UserManagementController {
         });
       } else {
         const attributes = await this.userManager.setUserAttributes(clientUserId, queriedUserId,
-          userAttributes, userContext.accessToken);
+          userAttributes, userContext.accessToken, userContext.tenantId);
         this.logger.debug('User attributes set:', attributes);
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -503,7 +512,7 @@ export default class UserManagementController {
       const clientUserId = userContext.userId;
       const queriedUsername = params.req.query.username;
       if (queriedUsername != null) {
-        const userId = await this.userManager.getUserId(clientUserId, queriedUsername, userContext.accessToken);
+        const userId = await this.userManager.getUserId(clientUserId, queriedUsername, userContext.accessToken, userContext.tenantId);
         this.logger.debug('User ID fetched:', userId);
         params.res.status(HttpStatus.OK).send({
           userId,

@@ -2,12 +2,13 @@ import {CognitoIdentityServiceProvider, CredentialProviderChain} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
-import {initializer, inject, injectable, Logger} from '@launchtray/hatch-util';
-import {AttributeListType} from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import {inject, injectable, Logger} from '@launchtray/hatch-util';
+import {AttributeListType, ListUserPoolClientsRequest} from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import {
   UserAttributes,
   UserManagementClient,
   UserInfo,
+  UserManagementClientOptions,
   UserManagementError,
   UserManagementErrorCodes
 } from '@launchtray/hatch-user-management-client';
@@ -48,28 +49,27 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
 
 @injectable()
 export default class AWSCognitoClient implements UserManagementClient {
-  private readonly iss: string;
-  private pemCerts: {} | undefined;
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
-  
+
   constructor(@inject('Logger') private readonly logger: Logger,
               @inject('awsRegion') private readonly awsRegion: string,
               @inject('awsUserPoolId') private readonly awsUserPoolId: string,
               @inject('awsClientId') private readonly awsClientId: string)
   {
-    this.iss = 'https://cognito-idp.' + awsRegion + '.amazonaws.com/' + this.awsUserPoolId;
     this.cognitoProvider.config.update({
       region: this.awsRegion,
       credentialProvider: new CredentialProviderChain(),
     });
     logger.debug('Created AWS cognito client');
   }
-  
-  public async authenticate(username: string, password: string) {
+
+  public async authenticate(username: string, password: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+      const clientId = await this.getClientId(userPoolId);
       const response = await this.cognitoProvider.adminInitiateAuth({
-        UserPoolId: this.awsUserPoolId,
-        ClientId: this.awsClientId,
+        UserPoolId: userPoolId,
+        ClientId: clientId,
         AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
         AuthParameters: {
           USERNAME: username,
@@ -84,8 +84,8 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes) {
+
+  public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
     let cognitoUserAttributes: AttributeListType = [];
     const userAttributesWithEmail = {
       email: username,
@@ -98,8 +98,10 @@ export default class AWSCognitoClient implements UserManagementClient {
       });
     });
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+      const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.signUp({
-        ClientId: this.awsClientId,
+        ClientId: clientId,
         Username: username,
         Password: password,
         UserAttributes: cognitoUserAttributes,
@@ -108,22 +110,26 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async resendUserRegistrationCode(username: string) {
+
+  public async resendUserRegistrationCode(username: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+      const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.resendConfirmationCode({
-        ClientId: this.awsClientId,
+        ClientId: clientId,
         Username: username,
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async confirmUserRegistration(username: string, confirmationCode: string) {
+
+  public async confirmUserRegistration(username: string, confirmationCode: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+      const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.confirmSignUp({
-        ClientId: this.awsClientId,
+        ClientId: clientId,
         Username: username,
         ConfirmationCode: confirmationCode,
       }).promise();
@@ -131,22 +137,25 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async startPasswordReset(username: string) {
+
+  public async startPasswordReset(username: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       await this.cognitoProvider.adminResetUserPassword({
-        UserPoolId: this.awsUserPoolId,
+        UserPoolId: userPoolId,
         Username: username,
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async confirmPasswordReset(username: string, confirmationCode: string, password: string) {
+
+  public async confirmPasswordReset(username: string, confirmationCode: string, password: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+      const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.confirmForgotPassword({
-        ClientId: this.awsClientId,
+        ClientId: clientId,
         Username: username,
         ConfirmationCode: confirmationCode,
         Password: password,
@@ -155,12 +164,14 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async refreshAuthentication(refreshToken: string) {
+
+  public async refreshAuthentication(refreshToken: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+      const clientId = await this.getClientId(userPoolId);
       const response = await this.cognitoProvider.adminInitiateAuth({
-        UserPoolId: this.awsUserPoolId,
-        ClientId: this.awsClientId,
+        UserPoolId: userPoolId,
+        ClientId: clientId,
         AuthFlow: 'REFRESH_TOKEN',
         AuthParameters: {
           REFRESH_TOKEN: refreshToken,
@@ -174,22 +185,24 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async signOutUser(username: string) {
+
+  public async signOutUser(username: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       await this.cognitoProvider.adminUserGlobalSignOut({
-        UserPoolId: this.awsUserPoolId,
+        UserPoolId: userPoolId,
         Username: username,
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async getUserAttributes(userId: string) {
+
+  public async getUserAttributes(userId: string, options?: UserManagementClientOptions) {
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const response = await this.cognitoProvider.listUsers({
-        UserPoolId: this.awsUserPoolId,
+        UserPoolId: userPoolId,
         Limit: 1,
         Filter: 'sub = "' + userId + '"',
       }).promise();
@@ -206,10 +219,10 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
 
-  private async getUserAttributesByUsername(username: string): Promise<UserAttributes> {
+  private async getUserAttributesByUsername(username: string, userPoolId: string): Promise<UserAttributes> {
     this.logger.debug('Getting user by username:', username);
     const response = await this.cognitoProvider.adminGetUser({
-      UserPoolId: this.awsUserPoolId,
+      UserPoolId: userPoolId,
       Username: username,
     }).promise();
     this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
@@ -222,11 +235,12 @@ export default class AWSCognitoClient implements UserManagementClient {
     return userAttrsResp;
   }
 
-  public async getUserId(username: string) {
-    return (await this.getUserAttributesByUsername(username))!.sub;
+  public async getUserId(username: string, options?: UserManagementClientOptions) {
+    const userPoolId = options?.tenantId ?? this.awsUserPoolId;
+    return (await this.getUserAttributesByUsername(username, userPoolId))!.sub;
   }
-  
-  public async setUserAttributes(userId: string, userAttributes: UserAttributes) {
+
+  public async setUserAttributes(userId: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
     const userAttributesList: AttributeListType = [];
     const attributes = userAttributes || {};
     Object.keys(attributes).map((key) => {
@@ -237,9 +251,10 @@ export default class AWSCognitoClient implements UserManagementClient {
       return userAttributesList;
     });
     try {
+      const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const username = (await this.getUserAttributes(userId)).email;
       await this.cognitoProvider.adminUpdateUserAttributes({
-        UserPoolId: this.awsUserPoolId,
+        UserPoolId: userPoolId,
         Username: username,
         UserAttributes: userAttributesList,
       }).promise();
@@ -247,28 +262,32 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
-  
-  public async getUserInfo(accessToken: string) {
-    await this.requirePublicKeys();
-    if (!this.pemCerts) {
+
+  public async getUserInfo(options: UserManagementClientOptions) {
+    if (options.accessToken == null) {
+      throw new Error('Missing access token');
+    }
+    const pemCerts = await this.getPemCerts(options.tenantId);
+    if (pemCerts == null) {
       throw new Error('Missing public keys from AWS Cognito to verify token');
     }
+    const accessToken = options.accessToken;
     const decodedJwt: any = jwt.decode(accessToken, {complete: true});
-    if (!decodedJwt) {
+    if (decodedJwt == null) {
       throw new Error('Error decoding token');
     }
     this.logger.debug('Decoded JWT Token: ', decodedJwt);
-  
+
     if (decodedJwt.payload && decodedJwt.payload.token_use !== 'access') {
       throw new Error('Expected access token but received ' + decodedJwt.payload.token_use + ' token');
     }
-    
+
     const kid = decodedJwt.header && decodedJwt.header.kid;
-    if (!kid) {
+    if (kid == null) {
       throw new Error('Missing kid field from token supplied');
     }
-    
-    const pem = this.pemCerts[kid];
+
+    const pem = pemCerts[kid];
     try {
       jwt.verify(accessToken, pem);
     } catch (err) {
@@ -280,16 +299,12 @@ export default class AWSCognitoClient implements UserManagementClient {
     const userId = decodedJwt.payload && decodedJwt.payload.sub;
     return new UserInfo(userId, username, accessToken);
   }
-  
-  private async requirePublicKeys() {
-    if (!this.pemCerts) {
-      this.pemCerts = await this.getPublicKeys();
-    }
-  }
-  
-  private async getPublicKeys() {
+
+  private async getPemCerts(provideUserPoolId?: string) {
+    const userPoolId = provideUserPoolId ?? this.awsUserPoolId;
     const postFix = '/.well-known/jwks.json';
-    const request = this.iss + postFix;
+    const iss = 'https://cognito-idp.' + this.awsRegion + '.amazonaws.com/' + userPoolId;
+    const request = iss + postFix;
     const response = await fetch(request, {
       method: 'GET',
       headers: {
@@ -312,5 +327,25 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
     return pemCerts;
   }
-  
+
+  private async getClientId(userPoolId: string): Promise<string> {
+    if (userPoolId === this.awsUserPoolId) {
+      return this.awsClientId;
+    }
+    const request: ListUserPoolClientsRequest = {
+      UserPoolId: userPoolId,
+    }
+    const response = await this.cognitoProvider.listUserPoolClients(request).promise();
+    const userPoolClients = response.UserPoolClients;
+    if (userPoolClients?.length !== 1) {
+      throw new Error('Expected number of clients is 1 but found: ' + userPoolClients?.length)
+    }
+    const userPoolClient = userPoolClients[0];
+    this.logger.debug('Found user client: {name=' + userPoolClient.ClientName + ',id=' + userPoolClient.ClientId + '}');
+    if (userPoolClient.ClientId == null) {
+      throw new Error('Unable to find client id for user pool id: ' + userPoolClient.UserPoolId);
+    }
+    return userPoolClient.ClientId;
+  }
+
 }

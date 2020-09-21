@@ -1,13 +1,14 @@
 import UserAttributes from './UserAttributes';
 
 export interface UserManager {
-  getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string): Promise<UserAttributes>;
+  getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string, tenantId?: string): Promise<UserAttributes>;
   setUserAttributes(
     clientUserId: string,
     queriedUserId: string,
     attributes: UserAttributes,
-    accessToken: string
+    accessToken: string,
+    tenantId?: string
   ): Promise<UserAttributes>;
-  getUserId(clientUserId: string, queriedUsername: string, accessToken: string): Promise<string>;
-  signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string): Promise<void>;
+  getUserId(clientUserId: string, queriedUsername: string, accessToken: string, tenantId?: string): Promise<string>;
+  signOutUser(clientUserId: string, userIdToSignOut: string, accessToken: string, tenantId?: string): Promise<void>;
 }

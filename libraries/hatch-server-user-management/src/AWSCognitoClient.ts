@@ -165,7 +165,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
 
-  public async refreshAuthentication(refreshToken: string, options?: UserManagementClientOptions) {
+  public async refreshAuthentication(refreshToken: string, accessToken: string, options?: UserManagementClientOptions) {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
@@ -186,7 +186,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
 
-  public async signOutUser(username: string, options?: UserManagementClientOptions) {
+  public async signOutUser(username: string, accessToken: string, options?: UserManagementClientOptions) {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       await this.cognitoProvider.adminUserGlobalSignOut({
@@ -198,7 +198,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
 
-  public async getUserAttributes(userId: string, options?: UserManagementClientOptions) {
+  public async getUserAttributes(userId: string, accessToken?: string, options?: UserManagementClientOptions) {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const response = await this.cognitoProvider.listUsers({
@@ -235,12 +235,12 @@ export default class AWSCognitoClient implements UserManagementClient {
     return userAttrsResp;
   }
 
-  public async getUserId(username: string, options?: UserManagementClientOptions) {
+  public async getUserId(username: string, accessToken: string, options?: UserManagementClientOptions) {
     const userPoolId = options?.tenantId ?? this.awsUserPoolId;
     return (await this.getUserAttributesByUsername(username, userPoolId))!.sub;
   }
 
-  public async setUserAttributes(userId: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
+  public async setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions) {
     const userAttributesList: AttributeListType = [];
     const attributes = userAttributes || {};
     Object.keys(attributes).map((key) => {
@@ -263,15 +263,14 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
   }
 
-  public async getUserInfo(options: UserManagementClientOptions) {
-    if (options.accessToken == null) {
+  public async getUserInfo(accessToken: string, options: UserManagementClientOptions) {
+    if (accessToken == null) {
       throw new Error('Missing access token');
     }
     const pemCerts = await this.getPemCerts(options.tenantId);
     if (pemCerts == null) {
       throw new Error('Missing public keys from AWS Cognito to verify token');
     }
-    const accessToken = options.accessToken;
     const decodedJwt: any = jwt.decode(accessToken, {complete: true});
     if (decodedJwt == null) {
       throw new Error('Error decoding token');

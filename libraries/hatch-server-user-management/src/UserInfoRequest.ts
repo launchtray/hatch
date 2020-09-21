@@ -56,7 +56,7 @@ export default class UserInfoRequest {
   private async authenticateUser() {
     const accessToken = this.getUnverifiedAccessToken();
     if (accessToken != null) {
-      this.userInfo = await this.userService.getUserInfo({accessToken});
+      this.userInfo = await this.userService.getUserInfo(accessToken);
     } else {
       throw new Error('Authorization token is missing from cookie and bearer header');
     }

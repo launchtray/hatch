@@ -31,7 +31,6 @@ export enum UserManagementEndpoints {
 export const TENANT_ID_HEADER = 'x-tenant-id';
 
 export type UserManagementClientOptions = {
-  accessToken?: string,
   tenantId?: string
 }
 
@@ -42,10 +41,10 @@ export interface UserManagementClient {
   confirmUserRegistration(username: string, confirmationCode: string, options?: UserManagementClientOptions): Promise<void>;
   startPasswordReset(username: string, options?: UserManagementClientOptions): Promise<void>;
   confirmPasswordReset(username: string, confirmationCode: string, password: string, options?: UserManagementClientOptions): Promise<void>;
-  refreshAuthentication(refreshToken: string, options?: UserManagementClientOptions): Promise<AuthTokens>;
-  signOutUser(userId: string, options?: UserManagementClientOptions): Promise<void>;
-  getUserAttributes(userId: string, options?: UserManagementClientOptions): Promise<UserAttributes>;
-  setUserAttributes(userId: string, userAttributes: UserAttributes, options?: UserManagementClientOptions): Promise<void>;
-  getUserInfo(options?: UserManagementClientOptions): Promise<UserInfo>;
-  getUserId?(username: string, options?: UserManagementClientOptions): Promise<string>;
+  refreshAuthentication(refreshToken: string, accessToken: string, options?: UserManagementClientOptions): Promise<AuthTokens>;
+  signOutUser(userId: string, accessToken: string, options?: UserManagementClientOptions): Promise<void>;
+  getUserAttributes(userId: string, accessToken: string, options?: UserManagementClientOptions): Promise<UserAttributes>;
+  setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions): Promise<void>;
+  getUserInfo(accessToken: string, options?: UserManagementClientOptions): Promise<UserInfo>;
+  getUserId?(username: string, accessToken: string, options?: UserManagementClientOptions): Promise<string>;
 }

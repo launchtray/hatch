@@ -20,7 +20,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.AUTHENTICATE, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -40,7 +40,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_USER_REGISTRATION, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -58,7 +58,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.RESEND_USER_REGISTRATION, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -77,7 +77,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_USER_REGISTRATION, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -95,7 +95,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_PASSWORD_RESET, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -115,7 +115,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_PASSWORD_RESET, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -126,14 +126,14 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async refreshAuthentication(refreshToken: string, options?: UserManagementClientOptions) {
+  public async refreshAuthentication(refreshToken: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to refresh user authentication...');
     const post = {
       refreshToken,
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.REFRESH_AUTHENTICATION, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId, accessToken),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -144,14 +144,14 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async signOutUser(userId: string, options?: UserManagementClientOptions) {
+  public async signOutUser(userId: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to sign out user...');
     const post = {
       userId,
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SIGN_OUT_USER, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId, accessToken),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -162,12 +162,12 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async getUserAttributes(userId: string, options?: UserManagementClientOptions) {
+  public async getUserAttributes(userId: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user attributes...');
     const params = '?userId=' + encodeURIComponent(userId);
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES + params, {
       method: 'GET',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId, accessToken),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user attributes response body: ' + JSON.stringify(responseBody));
@@ -177,7 +177,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async setUserAttributes(userId: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
+  public async setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to set user attributes...');
     const post = {
       userId,
@@ -185,7 +185,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     };
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SET_USER_ATTRIBUTES, {
       method: 'POST',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId, accessToken),
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
@@ -196,11 +196,11 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async getUserInfo(options?: UserManagementClientOptions) {
+  public async getUserInfo(accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user info...');
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_INFO, {
       method: 'GET',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId, accessToken),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user info response body: ' + JSON.stringify(responseBody));
@@ -210,12 +210,12 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async getUserId(username: string, options?: UserManagementClientOptions) {
+  public async getUserId(username: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user ID...');
     const params = '?username=' + encodeURIComponent(username);
     let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID + params, {
       method: 'GET',
-      headers: this.buildHeaders(options),
+      headers: this.buildHeaders(options?.tenantId, accessToken),
     });
     const responseBody = await response.json();
     this.logger.debug('Request to get user ID response body: ' + JSON.stringify(responseBody));
@@ -225,16 +225,16 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  private buildHeaders(options?: UserManagementClientOptions) {
+  private buildHeaders(tenantId?: string, accessToken?: string) {
     const headers = new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     });
-    if (options?.tenantId != null) {
-      headers.set(TENANT_ID_HEADER, options.tenantId)
+    if (tenantId != null) {
+      headers.set(TENANT_ID_HEADER, tenantId);
     }
-    if (options?.accessToken != null) {
-      headers.set('Authorization', 'Bearer ' + options.accessToken,)
+    if (accessToken != null) {
+      headers.set('Authorization', 'Bearer ' + accessToken)
     }
     return headers
   }

@@ -23,7 +23,7 @@ export default class LocalUserManager implements UserManager {
   }
 
   async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string, tenantId?: string): Promise<UserAttributes> {
-    const allAttributes = await this.userManagementClient.getUserAttributes(queriedUserId, {accessToken, tenantId});
+    const allAttributes = await this.userManagementClient.getUserAttributes(queriedUserId, accessToken, {tenantId});
     const attributes = await this.permissionsManager.getReadableAttributes(clientUserId, queriedUserId, allAttributes);
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to read any permissions for queried user');
@@ -43,7 +43,7 @@ export default class LocalUserManager implements UserManager {
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to set any permissions for queried user');
     } else {
-      await this.userManagementClient.setUserAttributes(queriedUserId, attributes, {accessToken, tenantId});
+      await this.userManagementClient.setUserAttributes(queriedUserId, attributes, accessToken, {tenantId});
     }
     return writableAttributes;
   }
@@ -51,7 +51,7 @@ export default class LocalUserManager implements UserManager {
   async getUserId(clientUserId: string, queriedUsername: string, accessToken: string, tenantId?: string) {
     let userId;
     if (this.userManagementClient.getUserId != null) {
-      userId = await this.userManagementClient.getUserId(queriedUsername, {accessToken, tenantId});
+      userId = await this.userManagementClient.getUserId(queriedUsername, accessToken, {tenantId});
     } else {
       throw new Error('User ID lookup is not supported');
     }
@@ -68,6 +68,6 @@ export default class LocalUserManager implements UserManager {
     if (!allowed) {
       throw new Error('User is not allowed to read user ID for queried user');
     }
-    await this.userManagementClient.signOutUser(userIdToSignOut, {accessToken, tenantId});
+    await this.userManagementClient.signOutUser(userIdToSignOut, accessToken, {tenantId});
   }
 }

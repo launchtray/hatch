@@ -334,7 +334,7 @@ export default class UserManagementController {
       } else {
         const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
         const tenantId = extractTenantID(params);
-        const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, {accessToken, tenantId});
+        const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken, {tenantId});
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
           sameSite: 'lax',
           secure: process.env.NODE_ENV !== 'development',
@@ -415,7 +415,7 @@ export default class UserManagementController {
       if (queriedUsername != null) {
         if (this.userManagementClient.getUserId != null) {
           queriedUserId = await this.userManagementClient.getUserId(queriedUsername,
-            {accessToken: userContext.accessToken, tenantId: userContext.tenantId});
+            userContext.accessToken, {tenantId: userContext.tenantId});
         } else {
           throw new Error('User ID lookup is not supported');
         }

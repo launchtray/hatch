@@ -302,6 +302,7 @@ export default class UserManagementController {
   @route.post(UserManagementEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
     const params = userInfoRequest.params;
+    const tenantId = extractTenantID(params);
     this.logger.debug('Refreshing user authentication tokens...');
     if (!isCsrfSafe(params)) {
       this.logger.error('Rejecting request due to CSRF check');
@@ -311,7 +312,7 @@ export default class UserManagementController {
       return;
     }
     try {
-      await userInfoRequest.getUserInfo();
+      await userInfoRequest.getUserInfo(tenantId);
     } catch (err) {
       if (err instanceof TokenExpiredError) {
         this.logger.debug('Token signature verified but expired at', err.expiredAt)
@@ -333,7 +334,6 @@ export default class UserManagementController {
         });
       } else {
         const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
-        const tenantId = extractTenantID(params);
         const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken, {tenantId});
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
           sameSite: 'lax',

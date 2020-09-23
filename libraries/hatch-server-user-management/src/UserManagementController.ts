@@ -383,7 +383,8 @@ export default class UserManagementController {
       });
     } else {
       try {
-        const userInfo = await userInfoRequest.getUserInfo();
+        const tenantId = extractTenantID(params);
+        const userInfo = await userInfoRequest.getUserInfo(tenantId);
         if (userInfo) {
           this.logger.debug('User authenticated {username:' + userInfo.username + '}');
           params.next();

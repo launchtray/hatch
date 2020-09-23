@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-client-sdk",
   "entries": [
     {
+      "version": "0.10.20",
+      "tag": "@launchtray/hatch-client-sdk_v0.10.20",
+      "date": "Wed, 23 Sep 2020 18:26:58 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "update runtime.mustache to not stringify a body with type string"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.19",
       "tag": "@launchtray/hatch-client-sdk_v0.10.19",
       "date": "Wed, 23 Sep 2020 05:55:15 GMT",

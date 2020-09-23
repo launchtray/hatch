@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-user-management",
   "entries": [
     {
+      "version": "0.10.19",
+      "tag": "@launchtray/hatch-server-user-management_v0.10.19",
+      "date": "Wed, 23 Sep 2020 05:55:15 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add tenant ID to get user info method"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.18",
       "tag": "@launchtray/hatch-server-user-management_v0.10.18",
       "date": "Mon, 21 Sep 2020 19:43:10 GMT",

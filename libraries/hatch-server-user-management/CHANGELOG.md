@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-user-management
 
-This log was last generated on Mon, 21 Sep 2020 19:43:10 GMT and should not be manually modified.
+This log was last generated on Wed, 23 Sep 2020 05:55:15 GMT and should not be manually modified.
+
+## 0.10.19
+Wed, 23 Sep 2020 05:55:15 GMT
+
+### Updates
+
+- Add tenant ID to get user info method
 
 ## 0.10.18
 Mon, 21 Sep 2020 19:43:10 GMT

@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-client-sdk",
   "entries": [
     {
+      "version": "0.10.19",
+      "tag": "@launchtray/hatch-client-sdk_v0.10.19",
+      "date": "Wed, 23 Sep 2020 05:55:15 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.10.18",
       "tag": "@launchtray/hatch-client-sdk_v0.10.18",
       "date": "Mon, 21 Sep 2020 19:43:10 GMT",

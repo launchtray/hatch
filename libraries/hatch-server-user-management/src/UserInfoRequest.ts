@@ -42,9 +42,9 @@ export default class UserInfoRequest {
     this.logger.debug('Auth blacklist:', this.authBlacklist);
   }
 
-  public async getUserInfo() {
+  public async getUserInfo(tenantId?: string) {
     if (this.userInfo == null) {
-      await this.authenticateUser();
+      await this.authenticateUser(tenantId);
     }
     return this.userInfo;
   }
@@ -53,10 +53,10 @@ export default class UserInfoRequest {
     return this.extractAuthenticationCookie() ?? this.extractAuthenticationHeader();
   }
 
-  private async authenticateUser() {
+  private async authenticateUser(tenantId?: string) {
     const accessToken = this.getUnverifiedAccessToken();
     if (accessToken != null) {
-      this.userInfo = await this.userService.getUserInfo(accessToken);
+      this.userInfo = await this.userService.getUserInfo(accessToken, {tenantId});
     } else {
       throw new Error('Authorization token is missing from cookie and bearer header');
     }

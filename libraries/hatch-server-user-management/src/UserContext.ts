@@ -24,7 +24,7 @@ export default class UserContext {
   @initializer()
   private async init() {
     try {
-      const userInfo = await this.request.getUserInfo();
+      const userInfo = await this.request.getUserInfo(this.tenantId);
       this.userId = userInfo?.userId ?? '';
       this.username = userInfo?.username ?? '';
       this.accessToken = userInfo?.accessToken ?? '';

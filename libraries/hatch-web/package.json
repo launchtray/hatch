@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web",
-  "version": "0.10.20",
+  "version": "0.10.21",
   "description": "Utilities for composing apps using dependency injection",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.10.20",
+    "@launchtray/hatch-util": "^0.10.21",
     "@launchtray/tsyringe-async": "4.3.2",
     "@redux-saga/core": "^1",
     "@types/react": "^16",

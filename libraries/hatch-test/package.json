@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-test",
-  "version": "0.10.20",
+  "version": "0.10.21",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

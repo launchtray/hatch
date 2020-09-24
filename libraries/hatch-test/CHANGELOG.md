@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-test
 
-This log was last generated on Wed, 23 Sep 2020 18:26:58 GMT and should not be manually modified.
+This log was last generated on Thu, 24 Sep 2020 03:59:15 GMT and should not be manually modified.
+
+## 0.10.21
+Thu, 24 Sep 2020 03:59:15 GMT
+
+### Updates
+
+- Add ability to get info about the currently running spec
 
 ## 0.10.20
 Wed, 23 Sep 2020 18:26:58 GMT

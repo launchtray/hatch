@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-test",
   "entries": [
     {
+      "version": "0.10.21",
+      "tag": "@launchtray/hatch-test_v0.10.21",
+      "date": "Thu, 24 Sep 2020 03:59:15 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add ability to get info about the currently running spec"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.20",
       "tag": "@launchtray/hatch-test_v0.10.20",
       "date": "Wed, 23 Sep 2020 18:26:58 GMT",

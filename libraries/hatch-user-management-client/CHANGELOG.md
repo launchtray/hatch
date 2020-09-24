@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-user-management-client
 
-This log was last generated on Wed, 23 Sep 2020 18:26:58 GMT and should not be manually modified.
+This log was last generated on Thu, 24 Sep 2020 03:59:15 GMT and should not be manually modified.
+
+## 0.10.21
+Thu, 24 Sep 2020 03:59:15 GMT
+
+*Version update only*
 
 ## 0.10.20
 Wed, 23 Sep 2020 18:26:58 GMT

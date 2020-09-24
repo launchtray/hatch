@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-util",
   "entries": [
     {
+      "version": "0.10.21",
+      "tag": "@launchtray/hatch-util_v0.10.21",
+      "date": "Thu, 24 Sep 2020 03:59:15 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.10.20",
       "tag": "@launchtray/hatch-util_v0.10.20",
       "date": "Wed, 23 Sep 2020 18:26:58 GMT",

@@ -1,4 +1,4 @@
-import {WebAppDriver} from '@launchtray/hatch-test';
+import {WebAppDriver} from '@launchtray/hatch-test-web';
 
 describe('webdriver', () => {
   let driver: WebAppDriver;

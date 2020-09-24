@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.10.21",
+    "@launchtray/hatch-test-web": "^0.10.21",
     "@launchtray/hatch-razzle-config": "^0.10.21",
     "@types/chromedriver": "^2.38.0",
     "@types/selenium-webdriver": "^4.0.5",

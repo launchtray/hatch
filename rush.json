@@ -431,6 +431,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-test-web",
+      "projectFolder": "libraries/hatch-test-web",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-web",
       "projectFolder": "libraries/hatch-web",
       "versionPolicyName": "hatchVersionPolicy"

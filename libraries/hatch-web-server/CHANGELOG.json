@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-web-server",
   "entries": [
     {
+      "version": "0.11.0",
+      "tag": "@launchtray/hatch-web-server_v0.11.0",
+      "date": "Thu, 24 Sep 2020 21:00:00 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.10.21",
       "tag": "@launchtray/hatch-web-server_v0.10.21",
       "date": "Thu, 24 Sep 2020 03:59:15 GMT",

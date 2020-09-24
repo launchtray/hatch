@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-test",
   "entries": [
     {
+      "version": "0.11.0",
+      "tag": "@launchtray/hatch-test_v0.11.0",
+      "date": "Thu, 24 Sep 2020 21:00:00 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Separate hatch-test from hatch-test-web"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.10.21",
       "tag": "@launchtray/hatch-test_v0.10.21",
       "date": "Thu, 24 Sep 2020 03:59:15 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-client-sdk
 
-This log was last generated on Thu, 24 Sep 2020 21:00:00 GMT and should not be manually modified.
+This log was last generated on Thu, 08 Oct 2020 05:55:22 GMT and should not be manually modified.
+
+## 0.11.1
+Thu, 08 Oct 2020 05:55:22 GMT
+
+### Updates
+
+- Map object type to any type for client sdk generation
 
 ## 0.11.0
 Thu, 24 Sep 2020 21:00:00 GMT

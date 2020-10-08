@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-client-sdk",
   "entries": [
     {
+      "version": "0.11.1",
+      "tag": "@launchtray/hatch-client-sdk_v0.11.1",
+      "date": "Thu, 08 Oct 2020 05:55:22 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Map object type to any type for client sdk generation"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.11.0",
       "tag": "@launchtray/hatch-client-sdk_v0.11.0",
       "date": "Thu, 24 Sep 2020 21:00:00 GMT",

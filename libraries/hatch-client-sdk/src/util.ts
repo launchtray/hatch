@@ -18,6 +18,7 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
     '--template-dir', templatePath,
     '--additional-properties=supportsES6=true,typescriptThreePlus=true',
     '--skip-validate-spec',
+    '--type-mappings object=any',
   ];
   const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
   if (generatorCmd.error != null) {

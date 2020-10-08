@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-client-sdk",
+      "comment": "Map object type to any type for client sdk generation",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-client-sdk",
+  "email": "rosshnaylor@gmail.com"
+}

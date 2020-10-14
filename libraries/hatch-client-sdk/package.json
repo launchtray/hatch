@@ -16,9 +16,9 @@
     "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1",
     "@types/fs-extra": "^8",
     "@types/node": "^12",
-    "@types/tmp": "^0.1",
+    "@types/tmp": "^0.2.0",
     "fs-extra": "^8",
-    "tmp": "^0.1"
+    "tmp": "^0.2.1"
   },
   "devDependencies": {
     "rimraf": "3.0.0",

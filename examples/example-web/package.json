@@ -47,6 +47,7 @@
     "redux": "^4",
     "redux-devtools-extension": "^2",
     "redux-saga": "^1",
+    "supports-color": "^7.2.0",
     "winston": "^3",
     "winston-transport": "^4",
     "@sentry/types": "^5",

@@ -60,6 +60,7 @@
     "redux-devtools-extension": "^2",
     "redux-saga": "^1",
     "regenerator-runtime": "^0.13.3",
+    "supports-color": "^7.2.0",
     "swagger-ui-react": "3.25.0",
     "utf-8-validate": "^5",
     "winston": "^3",

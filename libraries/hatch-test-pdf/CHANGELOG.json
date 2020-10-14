@@ -1,0 +1,17 @@
+{
+  "name": "@launchtray/hatch-test-pdf",
+  "entries": [
+    {
+      "version": "0.11.2",
+      "tag": "@launchtray/hatch-test-pdf_v0.11.2",
+      "date": "Wed, 14 Oct 2020 18:53:03 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Initial commit"
+          }
+        ]
+      }
+    }
+  ]
+}

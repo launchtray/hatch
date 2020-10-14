@@ -1,0 +1,17 @@
+{
+  "name": "@launchtray/hatch-server-pdf",
+  "entries": [
+    {
+      "version": "0.11.2",
+      "tag": "@launchtray/hatch-server-pdf_v0.11.2",
+      "date": "Wed, 14 Oct 2020 18:53:03 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Initial commit"
+          }
+        ]
+      }
+    }
+  ]
+}

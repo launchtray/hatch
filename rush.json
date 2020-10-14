@@ -466,6 +466,21 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-server-pdf",
+      "projectFolder": "libraries/hatch-server-pdf",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
+      "packageName": "@launchtray/hatch-test-pdf",
+      "projectFolder": "libraries/hatch-test-pdf",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
+      "packageName": "@launchtray/hatch-i18n",
+      "projectFolder": "libraries/hatch-i18n",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-cli",
       "projectFolder": "tools/hatch-cli",
       "versionPolicyName": "hatchVersionPolicy"

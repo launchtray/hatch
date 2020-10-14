@@ -33,7 +33,8 @@
     "utf-8-validate": "^5",
     "swagger-ui": "3.25.0",
     "isarray": "^2.0.5",
-    "regenerator-runtime": "^0.13.3"
+    "regenerator-runtime": "^0.13.3",
+    "supports-color": "^7.2.0"
   },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.11.1",

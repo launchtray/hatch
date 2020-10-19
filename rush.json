@@ -481,6 +481,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-mock-server",
+      "projectFolder": "libraries/hatch-mock-server",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-cli",
       "projectFolder": "tools/hatch-cli",
       "versionPolicyName": "hatchVersionPolicy"

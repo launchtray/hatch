@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "@types/serialize-javascript": "^1.5.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.11.3",
+    "@launchtray/hatch-util": "^0.11.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/node": "^5",
     "@sentry/types": "^5",

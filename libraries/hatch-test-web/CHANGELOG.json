@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-test-web",
   "entries": [
     {
+      "version": "0.11.4",
+      "tag": "@launchtray/hatch-test-web_v0.11.4",
+      "date": "Mon, 19 Oct 2020 21:19:50 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.11.3",
       "tag": "@launchtray/hatch-test-web_v0.11.3",
       "date": "Wed, 14 Oct 2020 20:16:22 GMT",

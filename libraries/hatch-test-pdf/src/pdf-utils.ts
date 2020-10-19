@@ -75,7 +75,12 @@ export class PDF {
   };
 
   constructor(
-    private pdfUrl: string
+    private pdfUrl: string,
+    private fetchOptions: {
+      headers?: {[key: string]: string},
+      method?: string,
+      body?: any,
+    }
   ) {
     const versionInfo = execSync('convert --version', {encoding: 'utf8'});
     if (!versionInfo.includes(`Version: ImageMagick ${requiredImageMagickVersion}`)) {
@@ -93,7 +98,9 @@ export class PDF {
   private async requirePDF(url: string) {
     if (this.pdfImage == null) {
       const response = await fetch(url, {
+        ...this.fetchOptions,
         headers: {
+          ...this.fetchOptions.headers,
           'x-pdf-test-metadata': 'true',
         },
       });

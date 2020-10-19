@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-mock-server",
+      "comment": "Added mock server library",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-mock-server",
+  "email": "kiltyj@gmail.com"
+}

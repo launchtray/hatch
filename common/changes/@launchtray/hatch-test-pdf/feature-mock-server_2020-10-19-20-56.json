@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-test-pdf",
+      "comment": "Added parameter for customizing PDF fetch params",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-test-pdf",
+  "email": "kiltyj@gmail.com"
+}

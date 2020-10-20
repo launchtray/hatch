@@ -192,15 +192,17 @@ export class PDF {
     }
 
     const actualImagePath = await writeImageToTempFile(actualImage, 'actual');
+    const actualImagePng = PNG.sync.read(fs.readFileSync(actualImagePath));
     const expectedImagePng = PNG.sync.read(fs.readFileSync(options.expectedAssetPath));
 
-    if (expectedImagePng.width !== actualWidth || expectedImagePng.height !== actualHeight) {
-      console.log('Size mismatch. Actual path: ' + actualImagePath);
+    if (expectedImagePng.width !== actualImagePng.width || expectedImagePng.height !== actualImagePng.height) {
+      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}` +
+        `Actual: ${actualImagePng.width}x${actualImagePng.height})`);
+      console.log('               Actual path: ' + actualImagePath);
       console.log('               Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
       return false;
     }
 
-    const actualImagePng = PNG.sync.read(fs.readFileSync(actualImagePath));
     const maxDataLength = actualWidth * actualHeight * 4;
     const diffBuffer = Buffer.allocUnsafe(maxDataLength);
 

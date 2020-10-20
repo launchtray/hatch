@@ -196,8 +196,8 @@ export class PDF {
     const expectedImagePng = PNG.sync.read(fs.readFileSync(options.expectedAssetPath));
 
     if (expectedImagePng.width !== actualImagePng.width || expectedImagePng.height !== actualImagePng.height) {
-      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}` +
-        `Actual: ${actualImagePng.width}x${actualImagePng.height})`);
+      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, ` +
+        `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
       console.log('               Actual path: ' + actualImagePath);
       console.log('               Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
       return false;

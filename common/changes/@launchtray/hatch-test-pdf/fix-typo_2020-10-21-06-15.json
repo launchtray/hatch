@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-test-pdf",
+      "comment": "Copy actual file to directory of exptected image on failure",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-test-pdf",
+  "email": "kiltyj@gmail.com"
+}

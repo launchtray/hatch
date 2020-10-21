@@ -7,7 +7,7 @@ import util from 'util';
 import sharp, {Sharp} from 'sharp';
 import pixelmatch from 'pixelmatch';
 import {execSync} from 'child_process';
-import {PNG} from 'pngjs';
+import {PNG, PNGWithMetadata} from 'pngjs';
 
 const pipeline = util.promisify(stream.pipeline);
 
@@ -193,9 +193,27 @@ export class PDF {
 
     const actualImagePath = await writeImageToTempFile(actualImage, 'actual');
     const actualImagePng = PNG.sync.read(fs.readFileSync(actualImagePath));
-    const expectedImagePng = PNG.sync.read(fs.readFileSync(options.expectedAssetPath));
+    const actualImagePathOnFailure = options.expectedAssetPath.replace(/\.png$/, '.actual.png');
+
+    let expectedImagePng: PNGWithMetadata;
+    try {
+      expectedImagePng = PNG.sync.read(fs.readFileSync(options.expectedAssetPath));
+    } catch (err) {
+      console.log('Error reading expected file:', err);
+      if (process.env.OVERWRITE_EXPECTED_IMAGES === 'true') {
+        fs.copyFileSync(actualImagePath, options.expectedAssetPath);
+      } else {
+        fs.copyFileSync(actualImagePath, actualImagePathOnFailure);
+      }
+      return false;
+    }
 
     if (expectedImagePng.width !== actualImagePng.width || expectedImagePng.height !== actualImagePng.height) {
+      if (process.env.OVERWRITE_EXPECTED_IMAGES === 'true') {
+        fs.copyFileSync(actualImagePath, options.expectedAssetPath);
+      } else {
+        fs.copyFileSync(actualImagePath, actualImagePathOnFailure);
+      }
       console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, ` +
         `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
       console.log('               Actual path: ' + actualImagePath);
@@ -216,6 +234,11 @@ export class PDF {
     );
     const matches = (pixelDiffCount === 0);
     if (!matches) {
+      if (process.env.OVERWRITE_EXPECTED_IMAGES === 'true') {
+        fs.copyFileSync(actualImagePath, options.expectedAssetPath);
+      } else {
+        fs.copyFileSync(actualImagePath, actualImagePathOnFailure);
+      }
       const diffImage = sharp(diffBuffer, {raw: {width: actualWidth, height: actualHeight, channels: 4}}).png();
       const diffImagePath = await writeImageToTempFile(diffImage, 'diff');
       const pdfPath = this.tmpPdfFile.name;

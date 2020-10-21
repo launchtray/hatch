@@ -2,6 +2,21 @@
   "name": "@launchtray/hatch-test-pdf",
   "entries": [
     {
+      "version": "0.11.6",
+      "tag": "@launchtray/hatch-test-pdf_v0.11.6",
+      "date": "Wed, 21 Oct 2020 07:12:55 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix log statement typo"
+          },
+          {
+            "comment": "Copy actual file to directory of exptected image on failure"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.11.5",
       "tag": "@launchtray/hatch-test-pdf_v0.11.5",
       "date": "Tue, 20 Oct 2020 04:58:02 GMT",

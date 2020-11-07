@@ -59,7 +59,7 @@ const writeImageToTempFile = async (image: Sharp, description: string = ''): Pro
   return writeBufferToTempFile(await image.toBuffer(), description);
 };
 
-const defaultRequiredImageMagickVersion = '7.0.10-31';
+const defaultRequiredImageMagickVersion = '7.0.10-35';
 
 export class PDF {
   private pageImages: {[key: number]: Promise<string>} = {};

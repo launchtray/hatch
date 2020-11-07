@@ -59,7 +59,7 @@ const writeImageToTempFile = async (image: Sharp, description: string = ''): Pro
   return writeBufferToTempFile(await image.toBuffer(), description);
 };
 
-const requiredImageMagickVersion = '7.0.10-31';
+const defaultRequiredImageMagickVersion = '7.0.10-35';
 
 export class PDF {
   private pageImages: {[key: number]: Promise<string>} = {};
@@ -80,11 +80,12 @@ export class PDF {
       headers?: {[key: string]: string},
       method?: string,
       body?: any,
-    }
+    },
+    private imageMagickVersion: string = defaultRequiredImageMagickVersion,
   ) {
     const versionInfo = execSync('convert --version', {encoding: 'utf8'});
-    if (!versionInfo.includes(`Version: ImageMagick ${requiredImageMagickVersion}`)) {
-      throw new Error(`ImageMagick version ${requiredImageMagickVersion} must be installed to run these tests. ` +
+    if (!versionInfo.includes(`Version: ImageMagick ${imageMagickVersion}`)) {
+      throw new Error(`ImageMagick version ${imageMagickVersion} must be installed to run these tests. ` +
         'If this version is no longer available, the CI machine may need to be upgraded along with any screenshots ' +
         'that are checked into this repository.',
       );

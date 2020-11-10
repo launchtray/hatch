@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-mock-server",
+      "comment": "Add workaround for mock-server hang",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-mock-server",
+  "email": "kiltyj@gmail.com"
+}

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-mock-server",
   "entries": [
     {
+      "version": "0.11.8",
+      "tag": "@launchtray/hatch-mock-server_v0.11.8",
+      "date": "Tue, 10 Nov 2020 04:57:04 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add workaround for mock-server hang"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.11.7",
       "tag": "@launchtray/hatch-mock-server_v0.11.7",
       "date": "Sun, 08 Nov 2020 09:34:05 GMT",

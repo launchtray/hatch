@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-server-user-management",
   "entries": [
     {
+      "version": "0.11.8",
+      "tag": "@launchtray/hatch-server-user-management_v0.11.8",
+      "date": "Tue, 10 Nov 2020 04:57:04 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.11.7",
       "tag": "@launchtray/hatch-server-user-management_v0.11.7",
       "date": "Sun, 08 Nov 2020 09:34:05 GMT",

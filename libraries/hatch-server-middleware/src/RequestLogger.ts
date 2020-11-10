@@ -26,7 +26,8 @@ const requestLogger = (serverLogFile: string) => {
         transform(info: any) {
           const {timestamp, message, meta} = info;
           const metaMessage = meta ? ' ' + formatObjectForLog(meta) : '';
-          const paddedLevel = useConsole
+          const useColor = useConsole && process.env.COLORIZE_LOG === 'true';
+          const paddedLevel = useColor
             ? `[\x1b[${REQUEST_LEVEL_COLOR_CODE}m${REQUEST_LEVEL_TAG}\x1b[39m]`.padEnd(COLORIZED_LEVEL_MAX_LENGTH + 2)
             : `[${REQUEST_LEVEL_TAG}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
           info[Symbol.for('message')] = `[${timestamp}] ${paddedLevel}: ${message}${metaMessage}`;

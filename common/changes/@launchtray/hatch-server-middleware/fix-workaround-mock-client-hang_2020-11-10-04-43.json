@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "comment": "Fix colorization of http tag",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-middleware",
+  "email": "kiltyj@gmail.com"
+}

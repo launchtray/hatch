@@ -1,6 +1,7 @@
 import {mockServerClient} from 'mockserver-client';
 import {DEFAULT_PORT} from './index';
 import tmp from 'tmp';
+import {retry, withTimeout} from './util';
 
 export interface SimpleMockResponseOptions {
   path: string;
@@ -38,7 +39,8 @@ export default class MockServerClient {
     const cwd = process.cwd();
     try {
       process.chdir(this.tmpDir.name);
-      await this.client.mockAnyResponse({
+      // Workaround: the mock server client library will hang forever if the (unused) pem fails to be retrieved
+      await retry(3, () => withTimeout(5000, this.client.mockAnyResponse({
         httpRequest: {
           path,
           method: method ?? 'GET',
@@ -52,7 +54,7 @@ export default class MockServerClient {
           cookies: responseCookies,
           headers: responseHeaders,
         },
-      });
+      })));
     } finally {
       process.chdir(cwd);
     }

@@ -41,6 +41,30 @@ export interface APIMetadataRegistrarWithAnnotationData {
 
 export type Route = {method?: HTTPMethod, path: PathParams} | PathParams;
 
+export enum LivenessState {
+  CORRECT = 'CORRECT',
+  BROKEN = 'BROKEN',
+}
+
+export enum ReadinessState {
+  ACCEPTING_TRAFFIC = 'ACCEPTING_TRAFFIC',
+  REFUSING_TRAFFIC = 'REFUSING_TRAFFIC',
+}
+
+export enum HealthStatus {
+  UP = 'UP',
+  DOWN = 'DOWN',
+  OUT_OF_SERVICE = 'OUT_OF_SERVICE',
+  UNKNOWN = 'UNKNOWN',
+}
+
+// Use this to customize the route used for liveness checks. Explicitly set to null to disable route.
+export const CUSTOM_LIVENESS_ROUTE = Symbol('CUSTOM_LIVENESS_ROUTE');
+// Use this to customize the route used for readiness checks. Explicitly set to null to disable route.
+export const CUSTOM_READINESS_ROUTE = Symbol('CUSTOM_READINESS_ROUTE');
+// Use this to customize the route used for overall health check. Explicitly set to null to disable route.
+export const CUSTOM_OVERALL_HEALTH_ROUTE = Symbol('CUSTOM_OVERALL_HEALTH_ROUTE');
+
 const isRouteObject = (route: Route): route is {method?: HTTPMethod, path: PathParams} => {
   return route != null && route['path'] != null;
 };
@@ -71,6 +95,8 @@ const registerMetadataKey = Symbol('registerMetadata');
 const rootContainerKey = Symbol('rootContainer');
 const wsRoutesKey = Symbol('wsEnabled');
 const requestContainerKey = Symbol('requestContainer');
+const livenessChecksKey = Symbol('livenessChecksKey');
+const readinessChecksKey = Symbol('readinessChecksKey');
 
 const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
@@ -303,6 +329,46 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
     });
   };
 
+  if (target.prototype[livenessChecksKey] != null && target.prototype[livenessChecksKey].length > 0) {
+    const originalGetLivenessState = target.prototype.getLivenessState;
+    target.prototype.getLivenessState = async function () {
+      let overallState: LivenessState | undefined;
+      if (originalGetLivenessState != null) {
+        const state = await originalGetLivenessState.bind(this)();
+        if (state != null && state !== true && state !== LivenessState.CORRECT) {
+          overallState = state;
+        }
+      }
+      for (const livenessCheck of target.prototype[livenessChecksKey]) {
+        const state = await livenessCheck(this);
+        if (state != null && state !== true && state !== LivenessState.CORRECT) {
+          overallState = state;
+        }
+      }
+      return overallState ?? LivenessState.CORRECT;
+    };
+  }
+
+  if (target.prototype[readinessChecksKey] != null && target.prototype[readinessChecksKey].length > 0) {
+    const originalGetReadinessState = target.prototype.getReadinessState;
+    target.prototype.getReadinessState = async function () {
+      let overallState: ReadinessState | undefined;
+      if (originalGetReadinessState != null) {
+        const state = await originalGetReadinessState.bind(this)();
+        if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
+          overallState = state;
+        }
+      }
+      for (const readinessCheck of target.prototype[readinessChecksKey]) {
+        const state = await readinessCheck(this);
+        if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
+          overallState = state;
+        }
+      }
+      return overallState ?? ReadinessState.ACCEPTING_TRAFFIC;
+    };
+  }
+
   const originalRegisterMetadata = target.constructor.prototype.registerAPIMetadata;
   target.constructor.prototype.registerAPIMetadata = async function(apiMetadataConsumer: APIMetadataConsumer) {
     if (originalRegisterMetadata != null) {
@@ -450,3 +516,27 @@ const proxy = {
 };
 
 export default new Proxy({custom} as any, proxy) as RouteDefiners;
+
+const addHealthCheck = (checkKey: symbol, target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  const originalMethod = descriptor.value;
+  if (target[checkKey] == null) {
+    target[checkKey] = [];
+  }
+  target[checkKey].push(async (ctlr: any) => {
+    const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
+    const args = await resolveParams(rootContainer, target, propertyKey);
+    return await originalMethod.apply(ctlr, args);
+  });
+};
+
+export const livenessCheck = () => {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    addHealthCheck(livenessChecksKey, target, propertyKey, descriptor);
+  };
+};
+
+export const readinessCheck = () => {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    addHealthCheck(readinessChecksKey, target, propertyKey, descriptor);
+  };
+};

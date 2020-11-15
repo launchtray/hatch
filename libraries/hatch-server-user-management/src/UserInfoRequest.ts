@@ -17,6 +17,8 @@ export default class UserInfoRequest {
     // default whitelist for swagger and static assets
     '/api',
     '/api.json',
+    '/api/health',
+    '/api/health/*',
     '/static/*',
     '/favicon.ico',
     '/robots.txt',

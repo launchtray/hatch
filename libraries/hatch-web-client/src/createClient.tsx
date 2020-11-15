@@ -67,6 +67,22 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
   );
 };
 
+const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
+  return (
+    <StoreProvider store={reduxStore}>
+      <NavProvider>
+        <HelmetProvider>
+          <Switch>
+            <Route>
+              <RootApp/>
+            </Route>
+          </Switch>
+        </HelmetProvider>
+      </NavProvider>
+    </StoreProvider>
+  );
+};
+
 let sagaMiddleware: Middleware & {run: (rootSaga: Saga) => Task};
 let store: Store;
 let runningRootSagaTask: Task;
@@ -82,8 +98,6 @@ if (module.hot) {
     sagaMiddleware = module.hot.data.sagaMiddleware;
   }
 }
-
-const dsn: string | undefined = runtimeConfig.SENTRY_DSN;
 
 const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },
@@ -102,10 +116,12 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const appName = await container.resolve<string>('appName');
   const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger();
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
-  const sentry = new SentryReporter(sentryMonitor, logger, {dsn, integrations: consoleBreadcrumbs});
+  const sentry = new SentryReporter(sentryMonitor, logger, {
+    dsn: runtimeConfig.SENTRY_DSN,
+    integrations: consoleBreadcrumbs
+  });
   container.registerInstance('ErrorReporter', sentry);
 
   container.registerInstance('Logger', logger);
@@ -150,7 +166,11 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
 
   const App = composition.App;
 
-  AppRegistry.registerComponent('RNApp', () => RNApp);
+  if (runtimeConfig.ENABLE_API_SPEC === 'true') {
+    AppRegistry.registerComponent('RNApp', () => RNApp);
+  } else {
+    AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);
+  }
   AppRegistry.runApplication('RNApp', {
     initialProps: {reduxStore: store, RootApp: App},
     rootTag: document.getElementById('root'),

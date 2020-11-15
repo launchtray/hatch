@@ -109,6 +109,8 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
     <head>
       <script>
         window.__STATIC_ASSETS_BASE_URL__ = '${assetsPrefix}/';
+        window.__PRELOADED_STATE__ = ${serialize(store.getState())}
+        window.__RUNTIME_CONFIG__ = ${serialize(runtimeConfig)}
       </script>
       ${helmet.title.toString()}
       ${helmet.meta.toString()}
@@ -126,10 +128,6 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="root">${html}</div>
-      <script>
-        window.__PRELOADED_STATE__ = ${serialize(store.getState())}
-        window.__ENV__ = ${serialize(runtimeConfig)}
-      </script>
     </body>
     </html>`
   );
@@ -137,6 +135,8 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
+  runtimeConfig.SENTRY_DSN = process.env.SENTRY_DSN;
+  runtimeConfig.ENABLE_API_SPEC = process.env.ENABLE_API_SPEC;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     addStaticRoutes(app, assetsPrefix);
     app.get('/*', (req, res, next) => {

@@ -130,8 +130,6 @@ const sentryMonitor: SentryMonitor = {
   setTag: (key: string, value: string) => { setTag(key, value); },
 };
 
-const dsn: string | undefined = process.env.SENTRY_DSN;
-
 const getLivenessStatus = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<HealthStatus> => {
   let overallStatus: HealthStatus | undefined;
   for (const serverMiddleware of serverMiddlewareList) {
@@ -284,7 +282,7 @@ const createServerAsync = async <T extends ServerComposition>(
   if (process.env.NODE_ENV === 'development') {
     logger.info('Listening at http://' + (hostname ?? 'localhost') + ':' + port);
   }
-  const errorReporter = new SentryReporter(sentryMonitor, logger, {dsn});
+  const errorReporter = new SentryReporter(sentryMonitor, logger, {dsn: process.env.SENTRY_DSN});
   rootContainer.registerInstance('ErrorReporter', errorReporter);
   logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
 
@@ -298,14 +296,16 @@ const createServerAsync = async <T extends ServerComposition>(
     await serverMiddleware.register(runningServerApp, runningServer);
   }
 
-  runningServerApp.get('/api.json', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    const options: SerializeJSOptions = {unsafe: true, isJSON: true};
-    if (req.query.pretty) {
-      options.space = 2;
-    }
-    res.status(200).send(serialize(apiSpec, options));
-  });
+  if (process.env.ENABLE_API_SPEC === 'true') {
+    runningServerApp.get('/api.json', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      const options: SerializeJSOptions = {unsafe: true, isJSON: true};
+      if (req.query.pretty) {
+        options.space = 2;
+      }
+      res.status(200).send(serialize(apiSpec, options));
+    });
+  }
 
   serverExtension?.(runningServer, runningServerApp, composition, logger, errorReporter);
 

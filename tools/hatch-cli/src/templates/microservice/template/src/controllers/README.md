@@ -92,3 +92,22 @@ public async handleWebsocket(params: WebSocketRouteParams) {
   });
 }
 ```
+
+## Health checks
+Each controller can define health checks that contribute to the overall health result returned by `/api/health`,
+`/api/health/liveness` and `/api/health/readiness`. This can be done via `@livenessCheck()` and `@readinessCheck()`
+decorators. Each controller can have multiple checks of each type.
+
+### Liveness checks
+Liveness checks can be used for signaling that the service is alive or if it needs to be restarted.
+
+To signal that functionality is healthy, methods decorated with `@livenessCheck()` can return `true` or 
+`LivenessState.CORRECT`. Liveness checks that throw an error, return `false` or return `LivenessState.BROKEN` will cause 
+the overall health check to indicate that the service is down.
+
+### Readiness checks
+Readiness checks can be used for signaling that the service is not only alive, but is ready to receive traffic.
+
+To signal that functionality is ready, methods decorated with `@readinessCheck()` can return `true` or 
+`ReadinessCheck.ACCEPTING_TRAFFIC`. Readiness checks that throw an error, return `false` or return 
+`ReadinessCheck.REFUSING_TRAFFIC` will cause the overall health check to indicate that the service is out of service.

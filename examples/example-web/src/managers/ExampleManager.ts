@@ -7,10 +7,11 @@ import {
 import {
   effects,
   onClientLoad,
-  onLocationChange,
+  onLocationChange, 
+  runtimeConfig,
   webAppManager,
 } from '@launchtray/hatch-web';
-import {ClientLoadContext, LocationChangeContext} from '@launchtray/hatch-web-injectables';
+import {LocationChangeContext} from '@launchtray/hatch-web-injectables';
 
 @injectable()
 export class ExampleDependencyForManager {
@@ -61,6 +62,7 @@ export default class ExampleManager {
 
   @onClientLoad()
   public *handleClientLoad() {
+    console.log('Runtime config:', runtimeConfig);
     while (true) {
       yield effects.delay(5000);
       yield effects.put({type: 'ExampleManager3Action', payload: {result: this.dependency.getResult()}});

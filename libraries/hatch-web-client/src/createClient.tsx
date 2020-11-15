@@ -83,8 +83,6 @@ if (module.hot) {
   }
 }
 
-const dsn: string | undefined = runtimeConfig.SENTRY_DSN;
-
 const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },
   captureException: (error: any) => { captureException(error); },
@@ -102,10 +100,12 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const appName = await container.resolve<string>('appName');
   const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger();
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
-  const sentry = new SentryReporter(sentryMonitor, logger, {dsn, integrations: consoleBreadcrumbs});
+  const sentry = new SentryReporter(sentryMonitor, logger, {
+    dsn: runtimeConfig.SENTRY_DSN,
+    integrations: consoleBreadcrumbs
+  });
   container.registerInstance('ErrorReporter', sentry);
 
   container.registerInstance('Logger', logger);

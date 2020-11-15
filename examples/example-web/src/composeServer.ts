@@ -12,11 +12,14 @@ import {
   UserManagementController
 } from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
+import {runtimeConfig} from '@launchtray/hatch-web';
 import {WebServerComposition} from '@launchtray/hatch-web-server';
 import composeCommon from './composeCommon';
 import ExampleController from './controllers/ExampleController';
 
 export default async (): Promise<WebServerComposition> => {
+
+  runtimeConfig.TEST_VAR = 'Hello!';
 
   ROOT_CONTAINER.register('appName', {useValue: 'example-web'});
   ROOT_CONTAINER.registerSingleton('UserManagementClient', AWSCognitoClient);

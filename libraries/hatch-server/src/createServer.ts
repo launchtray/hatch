@@ -9,14 +9,7 @@ import {
   SentryMonitor,
   SentryReporter,
 } from '@launchtray/hatch-util';
-import {
-  addBreadcrumb,
-  Breadcrumb,
-  captureException,
-  init,
-  setExtra,
-  setTag,
-} from '@sentry/node';
+import {addBreadcrumb, Breadcrumb, captureException, init, setExtra, setTag} from '@sentry/node';
 import {Options} from '@sentry/types';
 import express, {Application} from 'express';
 import http from 'http';
@@ -24,13 +17,20 @@ import serialize, {SerializeJSOptions} from 'serialize-javascript';
 import util from 'util';
 import {createLogger, format, transports} from 'winston';
 import {ErrorReporterTransport} from './ErrorReporterTransport';
-import {assignRootContainerToController, cleanUpRouting, hasControllerRoutes} from './server-routing';
-import {
-  ServerComposer,
-  ServerComposition,
-} from './ServerComposer';
-import {registerServerMiddleware, resolveServerMiddleware, Server} from './ServerMiddleware';
 import {OpenAPISpecBuilder} from './OpenAPI';
+import {
+  assignRootContainerToController,
+  cleanUpRouting,
+  CUSTOM_LIVENESS_ROUTE,
+  CUSTOM_OVERALL_HEALTH_ROUTE,
+  CUSTOM_READINESS_ROUTE,
+  hasControllerRoutes,
+  HealthStatus,
+  LivenessState,
+  ReadinessState,
+} from './server-routing';
+import {ServerComposer, ServerComposition} from './ServerComposer';
+import {registerServerMiddleware, resolveServerMiddleware, Server, ServerMiddleware} from './ServerMiddleware';
 
 export type ServerExtension<T extends ServerComposition> =
   (server: Server, app: Application, composition: T, logger: Logger, errorReporter: ErrorReporter) => void;
@@ -132,6 +132,106 @@ const sentryMonitor: SentryMonitor = {
 
 const dsn: string | undefined = process.env.SENTRY_DSN;
 
+const getLivenessStatus = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<HealthStatus> => {
+  let overallStatus: HealthStatus | undefined;
+  for (const serverMiddleware of serverMiddlewareList) {
+    try {
+      const state = await serverMiddleware.getLivenessState?.();
+      if (state != null && state !== true && state !== LivenessState.CORRECT) {
+        overallStatus = HealthStatus.DOWN;
+      }
+    } catch (err) {
+      logger.error('Error during liveness check:', err);
+      return HealthStatus.DOWN;
+    }
+  }
+  return overallStatus ?? HealthStatus.UP;
+};
+
+const getReadinessStatus = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<HealthStatus> => {
+  let overallStatus: HealthStatus | undefined;
+  for (const serverMiddleware of serverMiddlewareList) {
+    try {
+      const state = await serverMiddleware.getReadinessState?.();
+      if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
+        overallStatus = HealthStatus.OUT_OF_SERVICE;
+      }
+    } catch (err) {
+      logger.error('Error during readiness check:', err);
+      return HealthStatus.DOWN;
+    }
+  }
+  return overallStatus ?? HealthStatus.UP;
+};
+
+const codeForHealthStatus = (healthStatus: HealthStatus) => {
+  switch (healthStatus) {
+    case HealthStatus.UP:
+      return 200;
+    case HealthStatus.OUT_OF_SERVICE:
+      return 503;
+    default:
+      return 500;
+  }
+};
+
+const addHealthChecks = async (
+  logger: Logger,
+  app: Application,
+  container: DependencyContainer,
+  serverMiddlewareList: ServerMiddleware[]
+) => {
+  let livenessRoute = '/api/health/liveness';
+  if (container.isRegistered(CUSTOM_LIVENESS_ROUTE)) {
+    livenessRoute = await container.resolve(CUSTOM_LIVENESS_ROUTE);
+  }
+
+  if (livenessRoute != null) {
+    app.get(livenessRoute, async (req, res) => {
+      const status = await getLivenessStatus(logger, serverMiddlewareList);
+      const components = {livenessProbe: {status}};
+      res.setHeader('Content-Type', 'application/json');
+      res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
+    });
+  }
+
+  let readinessRoute = '/api/health/readiness';
+  if (container.isRegistered(CUSTOM_READINESS_ROUTE)) {
+    readinessRoute = await container.resolve(CUSTOM_READINESS_ROUTE);
+  }
+  if (readinessRoute != null) {
+    app.get(readinessRoute, async (req, res) => {
+      const status = await getReadinessStatus(logger, serverMiddlewareList);
+      const components = {readinessProbe: {status}};
+      res.setHeader('Content-Type', 'application/json');
+      res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
+    });
+  }
+
+  let healthRoute = '/api/health';
+  if (container.isRegistered(CUSTOM_OVERALL_HEALTH_ROUTE)) {
+    healthRoute = await container.resolve(CUSTOM_OVERALL_HEALTH_ROUTE);
+  }
+  if (healthRoute != null) {
+    app.get(healthRoute, async (req, res) => {
+      const livenessStatus = await getLivenessStatus(logger, serverMiddlewareList);
+      const readinessStatus = await getReadinessStatus(logger, serverMiddlewareList);
+      const components = {livenessProbe: {status: livenessStatus}, readinessProbe: {status: readinessStatus}};
+      const groups = ['liveness', 'readiness'];
+      res.setHeader('Content-Type', 'application/json');
+      if (livenessStatus !== HealthStatus.UP) {
+        res.status(500).send(JSON.stringify({status: 'DOWN', components, groups}));
+        return;
+      }
+      res.status(codeForHealthStatus(readinessStatus)).send(JSON.stringify({
+        status: readinessStatus,
+        components,
+        groups,
+      }));
+    });
+  }
+};
+
 const createServerAsync = async <T extends ServerComposition>(
   serverComposer: ServerComposer<T>,
   serverExtension?: ServerExtension<T>,
@@ -189,6 +289,8 @@ const createServerAsync = async <T extends ServerComposition>(
   logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
 
   const serverMiddlewareList = await resolveServerMiddleware(rootContainer, logger);
+  await addHealthChecks(logger, runningServerApp, rootContainer, serverMiddlewareList);
+
   for (const serverMiddleware of serverMiddlewareList) {
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);

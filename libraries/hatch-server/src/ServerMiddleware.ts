@@ -2,6 +2,7 @@ import {Class, DependencyContainer, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import http from 'http';
 import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses, OpenAPIOperationSecurity} from './OpenAPI';
+import {LivenessState, ReadinessState} from './server-routing';
 
 export type Server = http.Server;
 
@@ -34,6 +35,8 @@ export type APIMetadataConsumer = (metadata: APIMetadata) => void;
 
 export interface ServerMiddleware {
   register(app: Application, server: Server): Promise<void>;
+  getLivenessState?(): Promise<LivenessState | boolean | undefined>;
+  getReadinessState?(): Promise<ReadinessState | boolean | undefined>;
 }
 
 export interface ServerMiddlewareClass extends Class<ServerMiddleware> {

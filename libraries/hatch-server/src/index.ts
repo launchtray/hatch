@@ -3,9 +3,15 @@ import createServer, {CreateServerOptions} from './createServer';
 import route, {
   assignRootContainerToController,
   controller,
+  CUSTOM_LIVENESS_ROUTE,
+  CUSTOM_READINESS_ROUTE,
   hasControllerRoutes,
   HTTPMethod,
+  livenessCheck,
+  LivenessState,
   middlewareFor,
+  readinessCheck,
+  ReadinessState,
   requestMatchesRouteList,
   Route,
 } from './server-routing';
@@ -48,4 +54,10 @@ export {
   Server,
   createMicroservice,
   loadStaticAssetsMetadata,
+  CUSTOM_LIVENESS_ROUTE,
+  CUSTOM_READINESS_ROUTE,
+  livenessCheck,
+  LivenessState,
+  readinessCheck,
+  ReadinessState,
 };

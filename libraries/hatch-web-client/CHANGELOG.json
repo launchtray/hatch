@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web-client",
   "entries": [
     {
+      "version": "0.11.9",
+      "tag": "@launchtray/hatch-web-client_v0.11.9",
+      "date": "Sun, 15 Nov 2020 06:24:41 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Disable swagger by default, clean up runtime config"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.11.8",
       "tag": "@launchtray/hatch-web-client_v0.11.8",
       "date": "Tue, 10 Nov 2020 04:57:04 GMT",

@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-server",
-  "version": "0.11.8",
+  "version": "0.11.9",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -21,9 +21,9 @@
     "rimraf": "3.0.0"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server": "^0.11.8",
-    "@launchtray/hatch-util": "^0.11.8",
-    "@launchtray/hatch-web": "^0.11.8",
+    "@launchtray/hatch-server": "^0.11.9",
+    "@launchtray/hatch-util": "^0.11.9",
+    "@launchtray/hatch-web": "^0.11.9",
     "@launchtray/tsyringe-async": "4.3.2",
     "@redux-saga/core": "^1",
     "@types/express": "^4",

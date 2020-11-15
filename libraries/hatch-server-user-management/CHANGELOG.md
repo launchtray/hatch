@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-user-management
 
-This log was last generated on Tue, 10 Nov 2020 04:57:04 GMT and should not be manually modified.
+This log was last generated on Sun, 15 Nov 2020 06:24:40 GMT and should not be manually modified.
+
+## 0.11.9
+Sun, 15 Nov 2020 06:24:40 GMT
+
+### Updates
+
+- Added health check endpoints to default auth whitelist
 
 ## 0.11.8
 Tue, 10 Nov 2020 04:57:04 GMT

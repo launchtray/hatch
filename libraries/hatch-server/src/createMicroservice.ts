@@ -36,20 +36,22 @@ const renderClient = async (): Promise<string> => {
 
 export default (options: CreateServerOptions<ServerComposition>) => {
   createServer(options, (server, app) => {
-    addStaticRoutes(app, assetsPrefix);
-    app.get('/api', (req, res, next) => {
-      crypto.randomBytes(32, (err, buf) => {
-        if (err) {
-          next(err);
-          return;
-        }
-        renderClient().then((body) => {
-          res.cookie('double_submit', buf.toString('hex'));
-          res.status(200).send(body);
-        }).catch((err: Error) => {
-          next?.(err);
+    if (process.env.ENABLE_API_SPEC === 'true') {
+      addStaticRoutes(app, assetsPrefix);
+      app.get('/api', (req, res, next) => {
+        crypto.randomBytes(32, (err, buf) => {
+          if (err) {
+            next(err);
+            return;
+          }
+          renderClient().then((body) => {
+            res.cookie('double_submit', buf.toString('hex'));
+            res.status(200).send(body);
+          }).catch((err: Error) => {
+            next?.(err);
+          });
         });
       });
-    });
+    }
   });
 };

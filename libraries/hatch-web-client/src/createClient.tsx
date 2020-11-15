@@ -67,6 +67,22 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
   );
 };
 
+const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
+  return (
+    <StoreProvider store={reduxStore}>
+      <NavProvider>
+        <HelmetProvider>
+          <Switch>
+            <Route>
+              <RootApp/>
+            </Route>
+          </Switch>
+        </HelmetProvider>
+      </NavProvider>
+    </StoreProvider>
+  );
+};
+
 let sagaMiddleware: Middleware & {run: (rootSaga: Saga) => Task};
 let store: Store;
 let runningRootSagaTask: Task;
@@ -150,7 +166,11 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
 
   const App = composition.App;
 
-  AppRegistry.registerComponent('RNApp', () => RNApp);
+  if (runtimeConfig.ENABLE_API_SPEC === 'true') {
+    AppRegistry.registerComponent('RNApp', () => RNApp);
+  } else {
+    AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);
+  }
   AppRegistry.runApplication('RNApp', {
     initialProps: {reduxStore: store, RootApp: App},
     rootTag: document.getElementById('root'),

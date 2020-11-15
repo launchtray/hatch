@@ -136,6 +136,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
   runtimeConfig.SENTRY_DSN = process.env.SENTRY_DSN;
+  runtimeConfig.ENABLE_API_SPEC = process.env.ENABLE_API_SPEC;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     addStaticRoutes(app, assetsPrefix);
     app.get('/*', (req, res, next) => {

@@ -7,7 +7,7 @@ import {
 import {
   effects,
   onClientLoad,
-  onLocationChange, 
+  onLocationChange,
   runtimeConfig,
   webAppManager,
 } from '@launchtray/hatch-web';

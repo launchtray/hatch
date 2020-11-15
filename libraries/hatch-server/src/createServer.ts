@@ -296,14 +296,16 @@ const createServerAsync = async <T extends ServerComposition>(
     await serverMiddleware.register(runningServerApp, runningServer);
   }
 
-  runningServerApp.get('/api.json', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    const options: SerializeJSOptions = {unsafe: true, isJSON: true};
-    if (req.query.pretty) {
-      options.space = 2;
-    }
-    res.status(200).send(serialize(apiSpec, options));
-  });
+  if (process.env.ENABLE_API_SPEC === 'true') {
+    runningServerApp.get('/api.json', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      const options: SerializeJSOptions = {unsafe: true, isJSON: true};
+      if (req.query.pretty) {
+        options.space = 2;
+      }
+      res.status(200).send(serialize(apiSpec, options));
+    });
+  }
 
   serverExtension?.(runningServer, runningServerApp, composition, logger, errorReporter);
 

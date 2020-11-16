@@ -27,12 +27,27 @@ module.exports = {
  * The return value is the updated object.
  */
 function readPackage(packageJson, context) {
-
-  // // The karma types have a missing dependency on typings from the log4js package.
-  // if (packageJson.name === '@types/karma') {
-  //  context.log('Fixed up dependencies for @types/karma');
-  //  packageJson.dependencies['log4js'] = '0.6.38';
-  // }
+  // dreamopt 0.6.0 has a corrupted tarball that causes PNPM to fail during installation.
+  // dreamopt 0.8.0 has a fixed tarball, and according to semver (and observation) is
+  // backwards compatible with 0.6.0.
+  // From: https://github.com/andreyvit/dreamopt.js/issues/4
+  updateDependencies(context, packageJson.dependencies)
+  updateDependencies(context, packageJson.devDependencies)
+  updateDependencies(context, packageJson.peerDependencies)
 
   return packageJson;
+}
+
+function updateDependencies(context, dependencies) {
+  if (!dependencies) {
+    return
+  }
+
+  const oldVersion = dependencies['dreamopt']
+  if (!oldVersion) {
+    return
+  }
+
+  // This isn't strictly correct if the package version is `0.6.0` or `~0.6.0` instead of `^0.6.0`, use with care.
+  dependencies['dreamopt'] = oldVersion.replace('0.6.0', '0.8.0')
 }

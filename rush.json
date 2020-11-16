@@ -476,6 +476,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-cdk",
+      "projectFolder": "libraries/hatch-cdk",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-i18n",
       "projectFolder": "libraries/hatch-i18n",
       "versionPolicyName": "hatchVersionPolicy"

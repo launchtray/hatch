@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-i18n
 
-This log was last generated on Sun, 15 Nov 2020 06:24:40 GMT and should not be manually modified.
+This log was last generated on Mon, 16 Nov 2020 22:53:54 GMT and should not be manually modified.
+
+## 0.11.10
+Mon, 16 Nov 2020 22:53:54 GMT
+
+*Version update only*
 
 ## 0.11.9
 Sun, 15 Nov 2020 06:24:40 GMT

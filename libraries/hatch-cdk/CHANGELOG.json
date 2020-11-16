@@ -1,0 +1,17 @@
+{
+  "name": "@launchtray/hatch-cdk",
+  "entries": [
+    {
+      "version": "0.11.10",
+      "tag": "@launchtray/hatch-cdk_v0.11.10",
+      "date": "Mon, 16 Nov 2020 22:53:54 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Initial CDK library"
+          }
+        ]
+      }
+    }
+  ]
+}

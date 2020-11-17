@@ -13,26 +13,26 @@
     "cdk": "cdk"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "^1.73.0",
-    "@aws-cdk/aws-certificatemanager":"^1.73.0",
+    "@aws-cdk/aws-certificatemanager": "^1.73.0",
     "@aws-cdk/aws-cloudfront": "^1.73.0",
-    "@aws-cdk/aws-cloudfront-origins":"^1.73.0",
-    "@aws-cdk/aws-logs": "^1.73.0",
-    "@aws-cdk/aws-ecs":"^1.73.0",
+    "@aws-cdk/aws-cloudfront-origins": "^1.73.0",
+    "@aws-cdk/aws-ecs": "^1.73.0",
     "@aws-cdk/aws-ecs-patterns": "^1.73.0",
-    "@aws-cdk/aws-elasticloadbalancingv2":"^1.73.0"
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.73.0",
+    "@aws-cdk/aws-logs": "^1.73.0",
+    "@aws-cdk/core": "^1.73.0"
   },
   "dependencies": {
+    "@aws-cdk/assets": "1.73.0",
     "@aws-cdk/aws-cognito": "1.73.0",
     "@aws-cdk/aws-ec2": "1.73.0",
     "@aws-cdk/aws-ecr-assets": "1.73.0",
-    "@aws-cdk/aws-route53": "1.73.0",
-    "@aws-cdk/aws-s3-deployment": "1.73.0",
     "@aws-cdk/aws-iam": "1.73.0",
+    "@aws-cdk/aws-route53": "1.73.0",
     "@aws-cdk/aws-route53-targets": "1.73.0",
     "@aws-cdk/aws-s3": "1.73.0",
     "@aws-cdk/aws-s3-assets": "1.73.0",
-    "@aws-cdk/assets": "1.73.0",
+    "@aws-cdk/aws-s3-deployment": "1.73.0",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {

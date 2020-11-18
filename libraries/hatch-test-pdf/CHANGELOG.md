@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-test-pdf
 
-This log was last generated on Mon, 16 Nov 2020 22:53:54 GMT and should not be manually modified.
+This log was last generated on Wed, 18 Nov 2020 00:15:13 GMT and should not be manually modified.
+
+## 0.11.11
+Wed, 18 Nov 2020 00:15:13 GMT
+
+### Updates
+
+- Add printing of test temp PDF path
 
 ## 0.11.10
 Mon, 16 Nov 2020 22:53:54 GMT

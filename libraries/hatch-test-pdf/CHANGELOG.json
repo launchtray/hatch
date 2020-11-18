@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-test-pdf",
   "entries": [
     {
+      "version": "0.11.11",
+      "tag": "@launchtray/hatch-test-pdf_v0.11.11",
+      "date": "Wed, 18 Nov 2020 00:15:13 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add printing of test temp PDF path"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.11.10",
       "tag": "@launchtray/hatch-test-pdf_v0.11.10",
       "date": "Mon, 16 Nov 2020 22:53:54 GMT",

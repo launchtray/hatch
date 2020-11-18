@@ -96,6 +96,10 @@ export class PDF {
     }
   }
 
+  public getTempPDFPath() {
+    return this.tmpPdfFile.name;
+  }
+
   private async requirePDF(url: string) {
     if (this.pdfImage == null) {
       const response = await fetch(url, {
@@ -247,6 +251,9 @@ export class PDF {
       console.log('                Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
       console.log('                Diff image   : ' + fs.readFileSync(diffImagePath).toString('base64'));
       console.log('                Actual PDF   : ' + fs.readFileSync(pdfPath).toString('base64'));
+    }
+    if (process.env.PRINT_TEMP_PDF_PATH) {
+      console.log('PDF Path: ' + this.getTempPDFPath());
     }
     return matches;
   }

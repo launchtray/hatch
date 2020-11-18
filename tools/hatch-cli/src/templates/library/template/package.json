@@ -13,10 +13,8 @@
     "build": "rimraf dist && tsc",
     "test": "jest --passWithNoTests"
   },
-  "dependencies": {
-    "@types/node": "^12"
-  },
   "devDependencies": {
+    "@types/node": "^12",
     "@types/jest": "^26.0.10",
     "jest": "^26.4.2",
     "ts-jest": "^26.3.0",

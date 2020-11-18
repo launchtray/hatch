@@ -21,6 +21,9 @@
     "@types/node": "^12",
     "rimraf": "3.0.0",
     "tslint": "^6.1.3",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "i18next": "^19.8.0",
+    "i18next-react-postprocessor": "^3.0.4",
+    "luxon": "^1.25.0"
   }
 }

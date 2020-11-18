@@ -19,10 +19,6 @@
     "@launchtray/tsyringe-async": "4.3.2",
     "@microsoft/rush": "^5.29.1",
     "@microsoft/rush-lib": "^5.29.1",
-    "@sentry/types": "^5",
-    "@types/fs-extra": "^8",
-    "@types/node": "^12",
-    "@types/tmp": "^0.2.0",
     "ansi-escapes": "^4",
     "chalk": "^3",
     "commander": "^4",
@@ -36,6 +32,10 @@
     "yaml": "^2.0.0-0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8",
+    "@types/node": "^12",
+    "@types/tmp": "^0.2.0",
+    "@sentry/types": "^5",
     "@launchtray/hatch-template-webapp": "0.1.0",
     "rimraf": "3.0.0",
     "typescript": "^4.0.2"

@@ -13,7 +13,6 @@
     "access": "public"
   },
   "devDependencies": {
-    "rimraf": "3.0.0",
     "@launchtray/hatch-util": "^0.11.12",
     "@launchtray/hatch-web": "^0.11.12",
     "@launchtray/tsyringe-async": "4.3.2",
@@ -22,7 +21,8 @@
     "@types/react-router-dom": "^5",
     "react-router": "^5",
     "react-router-dom": "^5",
-    "redux": "^4"
+    "redux": "^4",
+    "rimraf": "3.0.0"
   },
   "peerDependencies": {
     "@launchtray/hatch-util": "^0.11.12",

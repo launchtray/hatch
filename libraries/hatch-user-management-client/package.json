@@ -19,8 +19,8 @@
     "@launchtray/tsyringe-async": "4.3.2"
   },
   "devDependencies": {
-    "@types/node": "^12",
     "@launchtray/hatch-util": "^0.11.12",
-    "@launchtray/tsyringe-async": "4.3.2"
+    "@launchtray/tsyringe-async": "4.3.2",
+    "@types/node": "^12"
   }
 }

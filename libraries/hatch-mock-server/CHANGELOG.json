@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-mock-server",
   "entries": [
     {
+      "version": "0.11.12",
+      "tag": "@launchtray/hatch-mock-server_v0.11.12",
+      "date": "Thu, 19 Nov 2020 04:44:31 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix dependencies for Rush upgrade"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.11.11",
       "tag": "@launchtray/hatch-mock-server_v0.11.11",
       "date": "Wed, 18 Nov 2020 00:15:13 GMT",

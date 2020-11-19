@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-test
 
-This log was last generated on Thu, 19 Nov 2020 04:44:31 GMT and should not be manually modified.
+This log was last generated on Thu, 19 Nov 2020 04:59:17 GMT and should not be manually modified.
+
+## 0.12.0
+Thu, 19 Nov 2020 04:59:17 GMT
+
+_Version update only_
 
 ## 0.11.12
 Thu, 19 Nov 2020 04:44:31 GMT

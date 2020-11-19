@@ -20,9 +20,7 @@
     "@types/history": "^4.7.3",
     "@types/node": "^12",
     "@types/webpack-env": "^1",
-    "rimraf": "3.0.0"
-  },
-  "peerDependencies": {
+    "rimraf": "3.0.0",
     "@launchtray/hatch-util": "^0.11.11",
     "@launchtray/tsyringe-async": "4.3.2",
     "@redux-saga/core": "^1",
@@ -32,6 +30,20 @@
     "@types/react-redux": "^7",
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",
+    "prop-types": "^15",
+    "react": "^16",
+    "react-dom": "^16",
+    "react-native-web": "0.12.3",
+    "react-redux": "^7",
+    "react-router": "^5",
+    "react-router-dom": "^5",
+    "redux": "^4",
+    "redux-saga": "^1"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "^0.11.11",
+    "@launchtray/tsyringe-async": "4.3.2",
+    "@redux-saga/core": "^1",
     "prop-types": "^15",
     "react": "^16",
     "react-dom": "^16",

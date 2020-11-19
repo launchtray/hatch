@@ -16,9 +16,7 @@
     "serialize-javascript": "^2.1.0"
   },
   "devDependencies": {
-    "@types/serialize-javascript": "^1.5.0"
-  },
-  "peerDependencies": {
+    "@types/serialize-javascript": "^1.5.0",
     "@launchtray/hatch-util": "^0.11.11",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/node": "^5",
@@ -28,6 +26,18 @@
     "@types/node": "^12",
     "@types/webpack-env": "^1",
     "@types/ws": "^7",
+    "bufferutil": "^4",
+    "express": "^4",
+    "utf-8-validate": "^5",
+    "winston": "^3",
+    "winston-transport": "^4",
+    "ws": "^7"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "^0.11.11",
+    "@launchtray/tsyringe-async": "4.3.2",
+    "@sentry/node": "^5",
+    "@sentry/types": "^5",
     "bufferutil": "^4",
     "express": "^4",
     "utf-8-validate": "^5",

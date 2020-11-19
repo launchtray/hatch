@@ -17,8 +17,10 @@
   },
   "devDependencies": {
     "@types/node": "^12",
+    "@sentry/types": "^5",
     "rimraf": "3.0.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "@launchtray/tsyringe-async": "4.3.2"
   },
   "peerDependencies": {
     "@launchtray/tsyringe-async": "4.3.2",

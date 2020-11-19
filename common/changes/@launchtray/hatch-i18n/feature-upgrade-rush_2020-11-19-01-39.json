@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-i18n",
+      "comment": "Fix dependencies for Rush upgrade",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-i18n",
+  "email": "kiltyj@gmail.com"
+}

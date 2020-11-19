@@ -14,9 +14,7 @@
   "devDependencies": {
     "@types/node": "^12",
     "@types/webpack-env": "^1",
-    "rimraf": "3.0.0"
-  },
-  "peerDependencies": {
+    "rimraf": "3.0.0",
     "@launchtray/hatch-util": "^0.11.11",
     "@launchtray/hatch-web": "^0.11.11",
     "@launchtray/tsyringe-async": "4.3.2",
@@ -30,6 +28,26 @@
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",
     "@types/swagger-ui-react": "3.23.0",
+    "prop-types": "^15",
+    "react": "^16",
+    "react-dom": "^16",
+    "react-helmet-async": "^1",
+    "react-native-web": "0.12.3",
+    "react-redux": "^7",
+    "react-router": "^5",
+    "react-router-dom": "^5",
+    "redux": "^4",
+    "redux-devtools-extension": "^2",
+    "redux-saga": "^1",
+    "swagger-ui-react": "3.25.0"
+  },
+  "peerDependencies": {
+    "@sentry/types": "^5",
+    "@launchtray/hatch-util": "^0.11.11",
+    "@launchtray/hatch-web": "^0.11.11",
+    "@launchtray/tsyringe-async": "4.3.2",
+    "@redux-saga/core": "^1",
+    "@sentry/browser": "^5",
     "prop-types": "^15",
     "react": "^16",
     "react-dom": "^16",

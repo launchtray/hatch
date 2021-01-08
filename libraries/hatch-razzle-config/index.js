@@ -78,6 +78,10 @@ const patchWebpackConfig = (config, isServer, webpack) => {
         } else {
           commitDate = childProcess.execSync('git show -s --format=%aI HEAD 2>/dev/null').toString().trim();
         }
+        // Older versions of git don't support strict ISO strings and return %aI literally
+        if (commitDate === '%aI') {
+          commitDate = childProcess.execSync('git show -s --format=%ai HEAD 2>/dev/null').toString().trim();
+        }
         hatchDefinitions['process.env.HATCH_BUILDTIME_COMMIT_DATE'] = JSON.stringify(commitDate);
       } catch (err) {
         console.log('Warning: could not embed build-time commit date: ' + err.message);

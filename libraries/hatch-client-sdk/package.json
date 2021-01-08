@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-client-sdk",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",

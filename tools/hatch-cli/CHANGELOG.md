@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Fri, 08 Jan 2021 21:28:18 GMT and should not be manually modified.
+This log was last generated on Fri, 08 Jan 2021 23:49:56 GMT and should not be manually modified.
+
+## 0.12.3
+Fri, 08 Jan 2021 23:49:56 GMT
+
+### Updates
+
+- Fixed sentry/types dependency type
 
 ## 0.12.2
 Fri, 08 Jan 2021 21:28:18 GMT

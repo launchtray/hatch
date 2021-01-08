@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.12.3",
+      "tag": "@launchtray/hatch-cli_v0.12.3",
+      "date": "Fri, 08 Jan 2021 23:49:56 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fixed sentry/types dependency type"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.12.2",
       "tag": "@launchtray/hatch-cli_v0.12.2",
       "date": "Fri, 08 Jan 2021 21:28:18 GMT",

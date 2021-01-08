@@ -37,6 +37,7 @@ export interface ServerMiddleware {
   register(app: Application, server: Server): Promise<void>;
   getLivenessState?(): Promise<LivenessState | boolean | undefined>;
   getReadinessState?(): Promise<ReadinessState | boolean | undefined>;
+  getAppInfo?(): Promise<{[key: string]: any}>
 }
 
 export interface ServerMiddlewareClass extends Class<ServerMiddleware> {

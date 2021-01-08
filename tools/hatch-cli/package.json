@@ -29,11 +29,11 @@
     "ora": "^4",
     "replace-in-file": "^5",
     "tmp": "^0.2.1",
-    "yaml": "^2.0.0-0"
+    "yaml": "^2.0.0-0",
+    "@sentry/types": "^5"
   },
   "devDependencies": {
     "@launchtray/hatch-template-webapp": "0.1.0",
-    "@sentry/types": "^5",
     "@types/fs-extra": "^8",
     "@types/node": "^12",
     "@types/tmp": "^0.2.0",

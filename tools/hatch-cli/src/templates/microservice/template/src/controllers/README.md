@@ -111,3 +111,9 @@ Readiness checks can be used for signaling that the service is not only alive, b
 To signal that functionality is ready, methods decorated with `@readinessCheck()` can return `true` or 
 `ReadinessCheck.ACCEPTING_TRAFFIC`. Readiness checks that throw an error, return `false` or return 
 `ReadinessCheck.REFUSING_TRAFFIC` will cause the overall health check to indicate that the service is out of service.
+
+### Application info
+By default, `/api/health/info` will respond with basic information about the build, like commit ID, package name and
+version, build time, etc. Custom data can be returned by this endpoint by adding controller methods decorated with
+`@appInfoProvider()`. These methods can be asynchronous and should return an object representing key-value pairs to be
+included in the response for `/api/health/info`.

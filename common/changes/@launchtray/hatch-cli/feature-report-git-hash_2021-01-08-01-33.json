@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "Updated readmes for template projects",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "kiltyj@gmail.com"
+}

@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-razzle-config
 
-This log was last generated on Fri, 08 Jan 2021 02:02:21 GMT and should not be manually modified.
+This log was last generated on Fri, 08 Jan 2021 21:28:18 GMT and should not be manually modified.
+
+## 0.12.2
+Fri, 08 Jan 2021 21:28:18 GMT
+
+### Updates
+
+- Fix generated commit date for environments using old git versions
 
 ## 0.12.1
 Fri, 08 Jan 2021 02:02:21 GMT

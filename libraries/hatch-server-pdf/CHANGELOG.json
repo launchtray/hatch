@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-server-pdf",
   "entries": [
     {
+      "version": "0.12.2",
+      "tag": "@launchtray/hatch-server-pdf_v0.12.2",
+      "date": "Fri, 08 Jan 2021 21:28:18 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.12.1",
       "tag": "@launchtray/hatch-server-pdf_v0.12.1",
       "date": "Fri, 08 Jan 2021 02:02:21 GMT",

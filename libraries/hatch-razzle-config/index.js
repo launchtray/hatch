@@ -1,5 +1,5 @@
 'use strict';
-
+const childProcess = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const appDirectory = fs.realpathSync(process.cwd());
@@ -50,6 +50,45 @@ const patchWebpackConfig = (config, isServer, webpack) => {
           hatchDefinitions[key] = razzleDefinitions[key];
         }
       });
+
+      hatchDefinitions['process.env.HATCH_BUILDTIME_BUILD_DATE'] = JSON.stringify(new Date().toISOString());
+      try {
+        let commitId;
+        if (process.env.COMMIT_ID != null) {
+          commitId = process.env.COMMIT_ID;
+        } else {
+          commitId = childProcess.execSync('git rev-parse HEAD 2>/dev/null').toString().trim();
+          let isDirty;
+          try {
+            childProcess.execSync('git diff --quiet 2>/dev/null');
+            isDirty = false;
+          } catch (err) {
+            isDirty = true;
+          }
+          commitId = commitId + (isDirty ? '-dirty' : '');
+        }
+        hatchDefinitions['process.env.HATCH_BUILDTIME_COMMIT_ID'] = JSON.stringify(commitId);
+      } catch (err) {
+        console.log('Warning: could not embed build-time commit ID: ' + err.message);
+      }
+      try {
+        let commitDate;
+        if (process.env.COMMIT_DATE != null) {
+          commitDate = process.env.COMMIT_DATE;
+        } else {
+          commitDate = childProcess.execSync('git show -s --format=%aI HEAD 2>/dev/null').toString().trim();
+        }
+        hatchDefinitions['process.env.HATCH_BUILDTIME_COMMIT_DATE'] = JSON.stringify(commitDate);
+      } catch (err) {
+        console.log('Warning: could not embed build-time commit date: ' + err.message);
+      }
+      try {
+        const packageJson = JSON.parse(fs.readFileSync(resolveApp('package.json')));
+        hatchDefinitions['process.env.HATCH_BUILDTIME_PACKAGE_NAME'] = JSON.stringify(packageJson.name);
+        hatchDefinitions['process.env.HATCH_BUILDTIME_PACKAGE_VERSION'] = JSON.stringify(packageJson.version);
+      } catch (err) {
+        console.log('Warning: could not embed build-time package.json info: ' + err.message);
+      }
       config.plugins[definePluginIndex] = new webpack.DefinePlugin(hatchDefinitions);
     }
   }

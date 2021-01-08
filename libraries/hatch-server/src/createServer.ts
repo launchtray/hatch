@@ -21,6 +21,7 @@ import {OpenAPISpecBuilder} from './OpenAPI';
 import {
   assignRootContainerToController,
   cleanUpRouting,
+  CUSTOM_INFO_ROUTE,
   CUSTOM_LIVENESS_ROUTE,
   CUSTOM_OVERALL_HEALTH_ROUTE,
   CUSTOM_READINESS_ROUTE,
@@ -162,6 +163,26 @@ const getReadinessStatus = async (logger: Logger, serverMiddlewareList: ServerMi
   return overallStatus ?? HealthStatus.UP;
 };
 
+const getAppInfo = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<{[key: string]: any}> => {
+  let overallInfo: {[key: string]: any} = {};
+  for (const serverMiddleware of serverMiddlewareList) {
+    try {
+      overallInfo = {
+        ...overallInfo,
+        ...(await serverMiddleware.getAppInfo?.())
+      };
+    } catch (err) {
+      logger.error('Error gathering app info:', err);
+    }
+  }
+  overallInfo.commitId = process.env.HATCH_BUILDTIME_COMMIT_ID;
+  overallInfo.commitDate = process.env.HATCH_BUILDTIME_COMMIT_DATE;
+  overallInfo.buildDate = process.env.HATCH_BUILDTIME_BUILD_DATE;
+  overallInfo.packageVersion = process.env.HATCH_BUILDTIME_PACKAGE_VERSION;
+  overallInfo.packageName = process.env.HATCH_BUILDTIME_PACKAGE_NAME;
+  return overallInfo;
+};
+
 const codeForHealthStatus = (healthStatus: HealthStatus) => {
   switch (healthStatus) {
     case HealthStatus.UP:
@@ -179,49 +200,64 @@ const addHealthChecks = async (
   container: DependencyContainer,
   serverMiddlewareList: ServerMiddleware[]
 ) => {
-  let livenessRoute = '/api/health/liveness';
-  if (container.isRegistered(CUSTOM_LIVENESS_ROUTE)) {
-    livenessRoute = await container.resolve(CUSTOM_LIVENESS_ROUTE);
-  }
-
-  if (livenessRoute != null) {
-    app.get(livenessRoute, async (req, res) => {
-      const status = await getLivenessStatus(logger, serverMiddlewareList);
-      const components = {livenessProbe: {status}};
-      res.setHeader('Content-Type', 'application/json');
-      res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
-    });
-  }
-
-  let readinessRoute = '/api/health/readiness';
-  if (container.isRegistered(CUSTOM_READINESS_ROUTE)) {
-    readinessRoute = await container.resolve(CUSTOM_READINESS_ROUTE);
-  }
-  if (readinessRoute != null) {
-    app.get(readinessRoute, async (req, res) => {
-      const status = await getReadinessStatus(logger, serverMiddlewareList);
-      const components = {readinessProbe: {status}};
-      res.setHeader('Content-Type', 'application/json');
-      res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
-    });
-  }
-
   let healthRoute = '/api/health';
   if (container.isRegistered(CUSTOM_OVERALL_HEALTH_ROUTE)) {
     healthRoute = await container.resolve(CUSTOM_OVERALL_HEALTH_ROUTE);
   }
+
   if (healthRoute != null) {
+    let livenessRoute = healthRoute + '/liveness';
+    if (container.isRegistered(CUSTOM_LIVENESS_ROUTE)) {
+      livenessRoute = await container.resolve(CUSTOM_LIVENESS_ROUTE);
+    }
+
+    if (livenessRoute != null) {
+      app.get(livenessRoute, async (req, res) => {
+        const status = await getLivenessStatus(logger, serverMiddlewareList);
+        const components = {livenessProbe: {status}};
+        res.setHeader('Content-Type', 'application/json');
+        res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
+      });
+    }
+
+    let readinessRoute = healthRoute + '/readiness';
+    if (container.isRegistered(CUSTOM_READINESS_ROUTE)) {
+      readinessRoute = await container.resolve(CUSTOM_READINESS_ROUTE);
+    }
+    if (readinessRoute != null) {
+      app.get(readinessRoute, async (req, res) => {
+        const status = await getReadinessStatus(logger, serverMiddlewareList);
+        const components = {readinessProbe: {status}};
+        res.setHeader('Content-Type', 'application/json');
+        res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
+      });
+    }
+
+    let infoRoute = healthRoute + '/info';
+    if (container.isRegistered(CUSTOM_INFO_ROUTE)) {
+      infoRoute = await container.resolve(CUSTOM_INFO_ROUTE);
+    }
+    if (infoRoute != null) {
+      app.get(infoRoute, async (req, res) => {
+        const info = await getAppInfo(logger, serverMiddlewareList);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(JSON.stringify(info));
+      });
+    }
+
     app.get(healthRoute, async (req, res) => {
       const livenessStatus = await getLivenessStatus(logger, serverMiddlewareList);
       const readinessStatus = await getReadinessStatus(logger, serverMiddlewareList);
+      const info = await getAppInfo(logger, serverMiddlewareList);
       const components = {livenessProbe: {status: livenessStatus}, readinessProbe: {status: readinessStatus}};
       const groups = ['liveness', 'readiness'];
       res.setHeader('Content-Type', 'application/json');
       if (livenessStatus !== HealthStatus.UP) {
-        res.status(500).send(JSON.stringify({status: 'DOWN', components, groups}));
+        res.status(500).send(JSON.stringify({info, status: 'DOWN', components, groups}));
         return;
       }
       res.status(codeForHealthStatus(readinessStatus)).send(JSON.stringify({
+        info,
         status: readinessStatus,
         components,
         groups,

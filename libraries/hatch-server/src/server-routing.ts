@@ -58,6 +58,8 @@ export enum HealthStatus {
   UNKNOWN = 'UNKNOWN',
 }
 
+// Use this to customize the route used for app info. Explicitly set to null to disable route.
+export const CUSTOM_INFO_ROUTE = Symbol('CUSTOM_INFO_ROUTE');
 // Use this to customize the route used for liveness checks. Explicitly set to null to disable route.
 export const CUSTOM_LIVENESS_ROUTE = Symbol('CUSTOM_LIVENESS_ROUTE');
 // Use this to customize the route used for readiness checks. Explicitly set to null to disable route.
@@ -97,6 +99,7 @@ const wsRoutesKey = Symbol('wsEnabled');
 const requestContainerKey = Symbol('requestContainer');
 const livenessChecksKey = Symbol('livenessChecksKey');
 const readinessChecksKey = Symbol('readinessChecksKey');
+const appInfoKey = Symbol('appInfoKey');
 
 const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
@@ -369,6 +372,28 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
     };
   }
 
+  if (target.prototype[appInfoKey] != null && target.prototype[appInfoKey].length > 0) {
+    const originalGetAppInfo = target.prototype.getAppInfo;
+    target.prototype.getAppInfo = async function () {
+      let overalInfo: {[key: string]: any} = {};
+      if (originalGetAppInfo != null) {
+        const info = await originalGetAppInfo.bind(this)();
+        overalInfo = {
+          ...overalInfo,
+          ...info
+        };
+      }
+      for (const readinessCheck of target.prototype[appInfoKey]) {
+        const info = await readinessCheck(this);
+        overalInfo = {
+          ...overalInfo,
+          ...info
+        };
+      }
+      return overalInfo;
+    };
+  }
+
   const originalRegisterMetadata = target.constructor.prototype.registerAPIMetadata;
   target.constructor.prototype.registerAPIMetadata = async function(apiMetadataConsumer: APIMetadataConsumer) {
     if (originalRegisterMetadata != null) {
@@ -538,5 +563,11 @@ export const livenessCheck = () => {
 export const readinessCheck = () => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     addHealthCheck(readinessChecksKey, target, propertyKey, descriptor);
+  };
+};
+
+export const appInfoProvider = () => {
+  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    addHealthCheck(appInfoKey, target, propertyKey, descriptor);
   };
 };

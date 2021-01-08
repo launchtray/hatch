@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server",
+      "comment": "Exposed app info via new health endpoint",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server",
+  "email": "kiltyj@gmail.com"
+}

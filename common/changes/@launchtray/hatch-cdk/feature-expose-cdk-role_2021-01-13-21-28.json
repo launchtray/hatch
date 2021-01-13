@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cdk",
+      "comment": "Expose IAM role for HatchService task",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cdk",
+  "email": "kiltyj@gmail.com"
+}

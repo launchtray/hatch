@@ -405,6 +405,7 @@ type TaskRoleModifier = (taskRole: iam.IRole) => void;
 export class HatchService extends cdk.Stack {
   public readonly publicUrl?: string;
   public readonly privateUrl?: string;
+  public readonly taskRole: iam.IRole;
 
   private readonly loadBalancerListener: ApplicationListener;
   private readonly privateLoadBalancerListener?: ApplicationListener;
@@ -530,6 +531,7 @@ export class HatchService extends cdk.Stack {
       assignPublicIp: publicLoadBalancer,
     });
     this.loadBalancerListener = fargateService.listener;
+    this.taskRole = fargateService.taskDefinition.taskRole;
 
     if (
       domainInfo?.domainName != null

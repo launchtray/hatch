@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.12.5",
+      "tag": "@launchtray/hatch-server-middleware_v0.12.5",
+      "date": "Wed, 13 Jan 2021 22:30:04 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.12.4",
       "tag": "@launchtray/hatch-server-middleware_v0.12.4",
       "date": "Wed, 13 Jan 2021 21:36:25 GMT",

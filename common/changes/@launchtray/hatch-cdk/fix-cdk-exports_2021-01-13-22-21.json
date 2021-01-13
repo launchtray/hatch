@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cdk",
+      "comment": "Fix CDK exports",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cdk",
+  "email": "kiltyj@gmail.com"
+}

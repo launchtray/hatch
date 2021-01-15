@@ -17,7 +17,7 @@ export class FutureTimeoutError<T> extends Error {
 }
 
 export default class CompletableFuture<T> {
-  private resolve?: (value?: T) => void;
+  private resolve?: (value: T | PromiseLike<T>) => void;
   private reject?: (reason: Error) => void;
   private promise: Promise<T>;
 
@@ -38,7 +38,7 @@ export default class CompletableFuture<T> {
 
   // Call to complete future, so that .get() call returns a value
   complete(value?: T) {
-    this.resolve?.(value);
+    this.resolve?.(value!);
   }
 
   // Call to complete future exceptionally, so that .get() call throws an exception

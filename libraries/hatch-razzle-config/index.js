@@ -101,8 +101,8 @@ const patchWebpackConfig = (config, isServer, webpack) => {
 
 module.exports = {
   plugins: ['typescript'],
-  patchWebpackConfig,
-  modify(config, {target, dev}, webpack) {
-    return patchWebpackConfig(config, target !== 'web', webpack);
+  patchWebpackConfig, // Used by storybook convention used by hatch, not used by Razzle
+  modifyWebpackConfig({webpackConfig, env: {target}, webpackObject}) {
+    return patchWebpackConfig(webpackConfig, target !== 'web', webpackObject);
   },
 };

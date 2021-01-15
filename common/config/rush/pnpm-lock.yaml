@@ -33,10 +33,10 @@ dependencies:
   '@rush-temp/hatch-i18n': 'file:projects/hatch-i18n.tgz_4911166e8765a9454f60307e53215304'
   '@rush-temp/hatch-mock-server': 'file:projects/hatch-mock-server.tgz_debug@4.3.1+supports-color@7.2.0'
   '@rush-temp/hatch-razzle-config': 'file:projects/hatch-razzle-config.tgz_66733b2025c4827e09304920f621c569'
-  '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz_supports-color@7.2.0'
-  '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz_supports-color@7.2.0'
+  '@rush-temp/hatch-server': 'file:projects/hatch-server.tgz_66733b2025c4827e09304920f621c569'
+  '@rush-temp/hatch-server-middleware': 'file:projects/hatch-server-middleware.tgz_66733b2025c4827e09304920f621c569'
   '@rush-temp/hatch-server-pdf': 'file:projects/hatch-server-pdf.tgz_supports-color@7.2.0'
-  '@rush-temp/hatch-server-user-management': 'file:projects/hatch-server-user-management.tgz_supports-color@7.2.0'
+  '@rush-temp/hatch-server-user-management': 'file:projects/hatch-server-user-management.tgz_66733b2025c4827e09304920f621c569'
   '@rush-temp/hatch-template-client-sdk': 'file:projects/hatch-template-client-sdk.tgz_supports-color@7.2.0'
   '@rush-temp/hatch-template-library': 'file:projects/hatch-template-library.tgz_7b87ac1d22088aef17e04726f56343d4'
   '@rush-temp/hatch-template-microservice': 'file:projects/hatch-template-microservice.tgz_ts-node@9.1.1'
@@ -44,13 +44,13 @@ dependencies:
   '@rush-temp/hatch-test': 'file:projects/hatch-test.tgz_supports-color@7.2.0'
   '@rush-temp/hatch-test-pdf': 'file:projects/hatch-test-pdf.tgz_7b87ac1d22088aef17e04726f56343d4'
   '@rush-temp/hatch-test-web': 'file:projects/hatch-test-web.tgz_77a3105ce42ec682e0c2d94436552522'
-  '@rush-temp/hatch-user-management-client': 'file:projects/hatch-user-management-client.tgz_supports-color@7.2.0'
+  '@rush-temp/hatch-user-management-client': 'file:projects/hatch-user-management-client.tgz_66733b2025c4827e09304920f621c569'
   '@rush-temp/hatch-util': 'file:projects/hatch-util.tgz_supports-color@7.2.0'
-  '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz_supports-color@7.2.0'
-  '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz_supports-color@7.2.0'
-  '@rush-temp/hatch-web-eslint-config': 'file:projects/hatch-web-eslint-config.tgz_aae12c4fd07015d16e8a53ba962ea9fd'
-  '@rush-temp/hatch-web-injectables': 'file:projects/hatch-web-injectables.tgz_4911166e8765a9454f60307e53215304'
-  '@rush-temp/hatch-web-server': 'file:projects/hatch-web-server.tgz_supports-color@7.2.0'
+  '@rush-temp/hatch-web': 'file:projects/hatch-web.tgz_66733b2025c4827e09304920f621c569'
+  '@rush-temp/hatch-web-client': 'file:projects/hatch-web-client.tgz_66733b2025c4827e09304920f621c569'
+  '@rush-temp/hatch-web-eslint-config': 'file:projects/hatch-web-eslint-config.tgz_66733b2025c4827e09304920f621c569'
+  '@rush-temp/hatch-web-injectables': 'file:projects/hatch-web-injectables.tgz_851346e16f0c5ccbf3584f3eb55ca3b9'
+  '@rush-temp/hatch-web-server': 'file:projects/hatch-web-server.tgz_66733b2025c4827e09304920f621c569'
   '@sentry/browser': 5.30.0
   '@sentry/node': 5.30.0_supports-color@7.2.0
   '@sentry/types': 5.30.0
@@ -21070,11 +21070,21 @@ packages:
       '@types/swagger-ui-react': 3.23.0
       '@types/webpack-env': 1.16.0
       '@types/ws': 7.4.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       ajv: 6.12.6
       bufferutil: 4.0.3
       chromedriver: 78.0.1_supports-color@7.2.0
       debug: 4.3.1_supports-color@7.2.0
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
+      eslint-plugin-react: 7.22.0_eslint@7.17.0
+      eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
+      eslint-plugin-react-native: 3.10.0_6ce1b4dad2e78daaa8a661e5f69541c9
       express: 4.17.1
       geckodriver: 1.21.1_supports-color@7.2.0
       gud: 1.0.0
@@ -21120,7 +21130,7 @@ packages:
     peerDependencies:
       ts-node: '*'
     resolution:
-      integrity: sha512-VmAXJxp+IsXMKfOVvET5WfmaHVDWXmDFAD1Ify9wX3vBjI5XoN9ZGvhbQ/xxbh0INx/fT7hN2yjM6O0qf4X+6w==
+      integrity: sha512-CtYiLXNXnvQ+p5t701DwKHQxsCPQ9rfFZWBgQ9OexX5TL4iwxfZ6KqvkXopqvf0HMWZHswxkM/WySBUrnDPNKA==
       tarball: 'file:projects/example-web.tgz'
     version: 0.0.0
   'file:projects/hatch-cdk.tgz_supports-color@7.2.0':
@@ -21144,8 +21154,13 @@ packages:
       '@aws-cdk/aws-s3-deployment': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/core': 1.73.0
       '@types/node': 12.19.14
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       aws-cdk: 1.73.0_supports-color@7.2.0
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       source-map-support: 0.5.19
       ts-node: 9.1.1_typescript@4.1.3
       typescript: 4.1.3
@@ -21155,7 +21170,7 @@ packages:
     peerDependencies:
       supports-color: '*'
     resolution:
-      integrity: sha512-3NuHZ4palnI6ZephM6fja61uyfjDUnxZYsPQZyDOUu3Q+DabVoR5AN/Z/hH1bQf/JTxH2N9ZRUP0lbUAwNvjxg==
+      integrity: sha512-CkM+ecWEhDs0y7kF7Umwj+taOjgUZk7WukFVB7nlKWkmosej1m6XIgDiopweI8DMa20ZSLNsy7VkFqp05IybfQ==
       tarball: 'file:projects/hatch-cdk.tgz'
     version: 0.0.0
   'file:projects/hatch-cli.tgz_debug@4.3.1+supports-color@7.2.0':
@@ -21167,12 +21182,17 @@ packages:
       '@types/fs-extra': 8.1.1
       '@types/node': 12.19.14
       '@types/tmp': 0.2.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       ansi-escapes: 4.3.1
       chalk: 3.0.0
       commander: 4.1.1
       comment-json: 3.0.3
       dotenv: 8.2.0
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       fs-extra: 8.1.0
       inquirer: 7.3.3
       ora: 4.1.1
@@ -21188,7 +21208,7 @@ packages:
       debug: '*'
       supports-color: '*'
     resolution:
-      integrity: sha512-nCfFUl+YbusKthYIVKgbRi/kaoK2LV17hBlSRyf74aa1KkFcUv5UzszfdbZEI+J5I/ECyYkiOXnZZHgf6j+KWA==
+      integrity: sha512-1SZa3dYbBwZ+GCnUz9JY0vS/RcU2H/ssvpvlClBoUUT2Y/GxbW1ctl2KVBxQMrphXacq7iZ1jVQrzQkjwoS1CQ==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-client-sdk.tgz_supports-color@7.2.0':
@@ -21197,7 +21217,12 @@ packages:
       '@types/fs-extra': 8.1.1
       '@types/node': 12.19.14
       '@types/tmp': 0.2.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       fs-extra: 8.1.0
       rimraf: 3.0.0
       tmp: 0.2.1
@@ -21208,7 +21233,7 @@ packages:
     peerDependencies:
       supports-color: '*'
     resolution:
-      integrity: sha512-XiiyEvNVL+Dc/y+2TNocnN7iN57XTNm6axRI8JaEjUs8WHwzWQdFTlsKbmsFS4eLaaE9UEPpiStB8HOY95DaBA==
+      integrity: sha512-FTVnj4X+MUJ0Lz2ao8EIycQLpZPoYu+hkGrIqVsd1L7qvRh5fu2g0BeLmHg6CnTrz2gD4KPt5G1lfi4hFYMF4g==
       tarball: 'file:projects/hatch-client-sdk.tgz'
     version: 0.0.0
   'file:projects/hatch-eslint-config.tgz_66733b2025c4827e09304920f621c569':
@@ -21233,7 +21258,12 @@ packages:
     dependencies:
       '@types/luxon': 1.25.0
       '@types/node': 12.19.14
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       i18next: 19.8.4
       i18next-react-postprocessor: 3.0.5_i18next@19.8.4+react@16.14.0
       luxon: 1.25.0
@@ -21246,7 +21276,7 @@ packages:
       react: '*'
       supports-color: '*'
     resolution:
-      integrity: sha512-sCXdNqqgAEYxAiiKEt3E4mQpD+GG7xE1G2Z4NglK7+Pb4X3n5lfZ8ZuHAavnhcYUYCfadpGn1KEB8nd2hKr7qQ==
+      integrity: sha512-5ZtdGq7SoC7HzjiFDFYUU7EVji85NpjG54Z408KtDcSPVGBNMu684uTwNNpzH5ZH02A/8tf19/OEGErIKQf/JQ==
       tarball: 'file:projects/hatch-i18n.tgz'
     version: 0.0.0
   'file:projects/hatch-mock-server.tgz_debug@4.3.1+supports-color@7.2.0':
@@ -21256,6 +21286,9 @@ packages:
       '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
       '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       grunt: 1.3.0
       mockserver-client: 5.11.2_grunt@1.3.0+typescript@4.1.3
       mockserver-node: 5.11.2_debug@4.3.1
@@ -21269,7 +21302,7 @@ packages:
       debug: '*'
       supports-color: '*'
     resolution:
-      integrity: sha512-bdnI8I+/hcUBSxG+WZZpLeFGwg6eG4rWQvNEXvHT917nHFNYvEH0aK0al3gIOZ4Uj86CZsCSlsLsbVoNpEF0NA==
+      integrity: sha512-9q7oKPwIFG+vCAjUIgk1nksudr0XtFUJn0InueRrYoFGSMNH4oXyugKiGwpgNGwE/D+gGmO539FhLfE7wj+7Vw==
       tarball: 'file:projects/hatch-mock-server.tgz'
     version: 0.0.0
   'file:projects/hatch-razzle-config.tgz_66733b2025c4827e09304920f621c569':
@@ -21292,14 +21325,19 @@ packages:
       integrity: sha512-1QYUKwnflQTELb9CBOhMEmQmrKBgYIJVkj0XSzte42epdEmRFg2HQ1U14WvCMAuk/FMtbSlUMmETIp4tV9Sifw==
       tarball: 'file:projects/hatch-razzle-config.tgz'
     version: 0.0.0
-  'file:projects/hatch-server-middleware.tgz_supports-color@7.2.0':
+  'file:projects/hatch-server-middleware.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@types/express': 4.17.11
       '@types/express-serve-static-core': 4.17.18
       '@types/ws': 7.4.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       bufferutil: 4.0.3
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       express: 4.17.1
       express-winston: 4.0.5_winston@3.3.3
       utf-8-validate: 5.0.4
@@ -21310,8 +21348,9 @@ packages:
     name: '@rush-temp/hatch-server-middleware'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-6C5g6lti03Hqv6dZkEq0owHV1e/FlhCMwbs3TZXBpRY5eKCZtoUDzxnlxbgcVsXzzh0B/thVaYBPVUqSNF65gQ==
+      integrity: sha512-Jgo1SG8pIllGJgdasw+tNwO9tPbGJj5XJCTuVt9n8ET5r3dSkwoZOZLj6lAKFo6Wd9SfeI5VA+27RL70wnPQXw==
       tarball: 'file:projects/hatch-server-middleware.tgz'
     version: 0.0.0
   'file:projects/hatch-server-pdf.tgz_supports-color@7.2.0':
@@ -21322,6 +21361,14 @@ packages:
       '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
       '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
+      eslint-plugin-react: 7.22.0_eslint@7.17.0
+      eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
+      eslint-plugin-react-native: 3.10.0_6ce1b4dad2e78daaa8a661e5f69541c9
       react: 16.14.0
       rimraf: 3.0.0
       typescript: 4.1.3
@@ -21331,20 +21378,25 @@ packages:
     peerDependencies:
       supports-color: '*'
     resolution:
-      integrity: sha512-NeB2mxnKjS1koUKI6bsCw1h27jacd8hibgGfpP8I5K7v+wNHPpry7jDAuPWbAnNYome6EjjDSkiCMU7uZQKfpg==
+      integrity: sha512-/JKYkzpPjwSF6316zIDreSMYnTITK9JE36FKva78hdbidja3gwMU6b+bYDTI5Ys7B9BExVUggRXniZ/3Ortrmg==
       tarball: 'file:projects/hatch-server-pdf.tgz'
     version: 0.0.0
-  'file:projects/hatch-server-user-management.tgz_supports-color@7.2.0':
+  'file:projects/hatch-server-user-management.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@types/cookie': 0.4.0
       '@types/jsonwebtoken': 8.5.0
       '@types/jwk-to-pem': 2.0.0
       '@types/node': 12.19.14
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       aws-sdk: 2.828.0
       cookie: 0.4.1
       cross-fetch: 3.0.6
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       http-status-codes: 1.4.0
       jsonwebtoken: 8.5.1
       jwk-to-pem: 2.0.4
@@ -21353,11 +21405,12 @@ packages:
     name: '@rush-temp/hatch-server-user-management'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-oujh4KjjCCcbIoO8Gdj7/sJByNJeVj2/Q+QW2s6a/+5ZH8eJkhPFbFn4/umrxcQI3qQYM5T/WQduSPdGkJd/ng==
+      integrity: sha512-TG33aJSQdULQUV4hU4dGTTquBOkqGbow2+SZ19qNeKjBfBaN6MkW0cfr6RyqofBrO+tDoMBfYQU5ICnK55aOUQ==
       tarball: 'file:projects/hatch-server-user-management.tgz'
     version: 0.0.0
-  'file:projects/hatch-server.tgz_supports-color@7.2.0':
+  'file:projects/hatch-server.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@sentry/node': 5.30.0_supports-color@7.2.0
@@ -21368,8 +21421,13 @@ packages:
       '@types/serialize-javascript': 1.5.0
       '@types/webpack-env': 1.16.0
       '@types/ws': 7.4.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       bufferutil: 4.0.3
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       express: 4.17.1
       http-status-codes: 1.4.0
       serialize-javascript: 2.1.2
@@ -21382,15 +21440,21 @@ packages:
     name: '@rush-temp/hatch-server'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-0zlpuegJBlv+VyQqO6+zwD3aEx2qVmg7tEuYe1GNdMD5BRLxBlAHjfE8Mcb8LIq+ZrT6ltEIbXKxhbeG0rMvLA==
+      integrity: sha512-X114WdOxMosUncyzyI9ij2dm9AMFWn/z2IcANRDPdWCOCNci/cWNa6i+uH3MYPTmF8EFL713DCbinb7mDKgkWw==
       tarball: 'file:projects/hatch-server.tgz'
     version: 0.0.0
   'file:projects/hatch-template-client-sdk.tgz_supports-color@7.2.0':
     dependencies:
       '@types/node': 12.19.14
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       cross-fetch: 3.0.6
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       rimraf: 3.0.0
       typescript: 4.1.3
     dev: false
@@ -21399,7 +21463,7 @@ packages:
     peerDependencies:
       supports-color: '*'
     resolution:
-      integrity: sha512-9H1Thc+B8CMw03bP7udRiqrPCQA/VIbVAWJO1xT/nliCQ1PvOFE9rQA10jBwP6zmudk+r89vHVSs9lS/KGeyJg==
+      integrity: sha512-bQijYhGTnXZRLM/3lvTGpmJB3r+23IBH0uq/cuk+kSwAPsmmgjeUUnSozvqukHQVkicTJ4kO7mPdls34RHbecg==
       tarball: 'file:projects/hatch-template-client-sdk.tgz'
     version: 0.0.0
   'file:projects/hatch-template-library.tgz_7b87ac1d22088aef17e04726f56343d4':
@@ -21409,6 +21473,9 @@ packages:
       '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
       '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       jest: 26.6.3_7b87ac1d22088aef17e04726f56343d4
       rimraf: 3.0.0
       ts-jest: 26.4.4_jest@26.6.3+typescript@4.1.3
@@ -21422,7 +21489,7 @@ packages:
       ts-node: '*'
       utf-8-validate: '*'
     resolution:
-      integrity: sha512-aadABLRYvUFzpH7F4bBRyaSI+dRpqedCPFLDaDI6dD4Xh3ooIyuiRIk5k9Ap1E2SJ17UYkhzdj/igbHP8cAkrw==
+      integrity: sha512-s1iZSuudXhSES/NXUqMT8TViWAr7OlrItqSoUn81SjYiJx4sjRAZYBmV27gqzC72DjkpLiJjSMjmsqVpRATCEA==
       tarball: 'file:projects/hatch-template-library.tgz'
     version: 0.0.0
   'file:projects/hatch-template-microservice.tgz_ts-node@9.1.1':
@@ -21441,10 +21508,15 @@ packages:
       '@types/supertest': 2.0.10
       '@types/webpack-env': 1.16.0
       '@types/ws': 7.4.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       ajv: 6.12.6
       bufferutil: 4.0.3
       debug: 4.3.1_supports-color@7.2.0
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       express: 4.17.1
       invariant: 2.2.4
       isarray: 2.0.5
@@ -21474,7 +21546,7 @@ packages:
     peerDependencies:
       ts-node: '*'
     resolution:
-      integrity: sha512-wIENbHHslZWlvr/IK8ZJ0pHFGHPNi/HzsuM40Kw+1q3OSK5+45pvk3xJ4HD8x8GM/ilE4ND4f2BLoHtgoOjPdA==
+      integrity: sha512-GCc1KcETIWdN2Uoz9PFvIEHIKz2dzphzQkFJeDuOqZ3O45b0HcSyswOQmJ5HRO/plj2rkrYJ9er12dcG99NVrQ==
       tarball: 'file:projects/hatch-template-microservice.tgz'
     version: 0.0.0
   'file:projects/hatch-template-webapp.tgz_ts-node@9.1.1':
@@ -21509,12 +21581,22 @@ packages:
       '@types/swagger-ui-react': 3.23.0
       '@types/webpack-env': 1.16.0
       '@types/ws': 7.4.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       ajv: 6.12.6
       babel-loader: 8.2.2_80cd7b8149d93293e480a9a7c4e34482
       bufferutil: 4.0.3
       chromedriver: 78.0.1_supports-color@7.2.0
       debug: 4.3.1_supports-color@7.2.0
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
+      eslint-plugin-react: 7.22.0_eslint@7.17.0
+      eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
+      eslint-plugin-react-native: 3.10.0_6ce1b4dad2e78daaa8a661e5f69541c9
       express: 4.17.1
       geckodriver: 1.21.1_supports-color@7.2.0
       gud: 1.0.0
@@ -21561,7 +21643,7 @@ packages:
     peerDependencies:
       ts-node: '*'
     resolution:
-      integrity: sha512-le1rtTSm9VNdja41mjYmwLX/bj5jgfGluNfqgO8GZRJv74fCmkS8CvLHxGFE75HZOdeR3YTGFrtDOI8t4tV9Lg==
+      integrity: sha512-4z+bwF6ZNdrSESY0jEvrJ7PEy3ag9dWRfNx8dGxRcCQbgjS2kpB0cx0yPPVS3suSHtrxA1/7NIhPK37Qx7CvoQ==
       tarball: 'file:projects/hatch-template-webapp.tgz'
     version: 0.0.0
   'file:projects/hatch-test-pdf.tgz_7b87ac1d22088aef17e04726f56343d4':
@@ -21577,6 +21659,9 @@ packages:
       '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
       '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       jest: 26.6.3_7b87ac1d22088aef17e04726f56343d4
       node-fetch: 2.6.1
       pdf-image: 2.0.0
@@ -21596,13 +21681,18 @@ packages:
       ts-node: '*'
       utf-8-validate: '*'
     resolution:
-      integrity: sha512-8KC5lIMOWIKzc3I44l+jZeRUNk0DONGRFKjm2GRaz6t+WcBSYnHEI1B2jigFlF8mYSjQRpEtV/nR4oERVpB4sA==
+      integrity: sha512-eFaJz/u34zPzcdHD0KkgZnyse5pekM7lpIVNWFjMkyiMucrcip/nj0JDQqZ0I/lW93KJxi4dzehxE0bFHAjXAA==
       tarball: 'file:projects/hatch-test-pdf.tgz'
     version: 0.0.0
   'file:projects/hatch-test-web.tgz_77a3105ce42ec682e0c2d94436552522':
     dependencies:
       '@types/selenium-webdriver': 4.0.11
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       rimraf: 3.0.0
       selenium-webdriver: 4.0.0-alpha.8_c70f8fc5586dd378b8c866035dbe710b
       typescript: 4.1.3
@@ -21614,12 +21704,17 @@ packages:
       supports-color: '*'
       utf-8-validate: '*'
     resolution:
-      integrity: sha512-KZCvSsFvHUbS8T4ehW4RN6w9sVJ4LyWkHo5mNt9dz3ON+HtKJfmdz9ml9hohHc0oXnimiMM6NRRaj0flEtwtlA==
+      integrity: sha512-++9SlE/1yy1gilFx9IxwCKNhiE4C2ERRRw13WPAb6WxVemiWgdLmqJIX9QPK5+SJtqQKtw3AOq35gp1fbp1Ymw==
       tarball: 'file:projects/hatch-test-web.tgz'
     version: 0.0.0
   'file:projects/hatch-test.tgz_supports-color@7.2.0':
     dependencies:
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       rimraf: 3.0.0
       typescript: 4.1.3
     dev: false
@@ -21628,22 +21723,28 @@ packages:
     peerDependencies:
       supports-color: '*'
     resolution:
-      integrity: sha512-k04ItWdgpic2CHKf/NXxnePb8e+rMJCY6+TwTPj7dWPD+Ur0TudO+2XBWla47/t5zy178jlRpjbhNyD9c9L5QA==
+      integrity: sha512-XWxqSCYvphEMqClhaB0Ll14XKe8L6G+jOeBzUcSw8nATUrc7BoCexCM6EVwYEN6sZR5ru2HpFfswaZnUIXN+yw==
       tarball: 'file:projects/hatch-test.tgz'
     version: 0.0.0
-  'file:projects/hatch-user-management-client.tgz_supports-color@7.2.0':
+  'file:projects/hatch-user-management-client.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@types/node': 12.19.14
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       cross-fetch: 3.0.6
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
     dev: false
     id: 'file:projects/hatch-user-management-client.tgz'
     name: '@rush-temp/hatch-user-management-client'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-YWTjg9sPB0k9Qai3da2gB3JlNcCHKVnQYUfk2Cu2SHy+uh0TtRoMNF64nS+1UYX6PBxYBmhGweh38KqyZ8R0JQ==
+      integrity: sha512-V8bYi8e+HmR0mqMEurDRt50e1dE3gZ92ho7s7rcnDEyF/dhWUPtGT5pSqbFdJvVtst3dI/R4ad9p8Atq4AoMzw==
       tarball: 'file:projects/hatch-user-management-client.tgz'
     version: 0.0.0
   'file:projects/hatch-util.tgz_supports-color@7.2.0':
@@ -21651,7 +21752,12 @@ packages:
       '@launchtray/tsyringe-async': 4.3.2
       '@sentry/types': 5.30.0
       '@types/node': 12.19.14
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       reflect-metadata: 0.1.13
       rimraf: 3.0.0
       typescript: 4.1.3
@@ -21661,10 +21767,10 @@ packages:
     peerDependencies:
       supports-color: '*'
     resolution:
-      integrity: sha512-aFZ1aCk5pPq8c6R58pYQ2Kz6d6rR9FH6J40ARFZdvkb/NQmUQiYuCMw0erXH25pLOy50RIbJLizc0PFCM8d5QA==
+      integrity: sha512-jSrWk9YeKocSCobdGfgueIUcuVSrn4m4C/su2M2niVdmc2bBX2OUDYh7LDqc3QLerZ5qeyKzfGyzT12QqkPFVA==
       tarball: 'file:projects/hatch-util.tgz'
     version: 0.0.0
-  'file:projects/hatch-web-client.tgz_supports-color@7.2.0':
+  'file:projects/hatch-web-client.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@redux-saga/core': 1.1.3
@@ -21679,7 +21785,17 @@ packages:
       '@types/react-router-dom': 5.1.7
       '@types/swagger-ui-react': 3.23.0
       '@types/webpack-env': 1.16.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
+      eslint-plugin-react: 7.22.0_eslint@7.17.0
+      eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
+      eslint-plugin-react-native: 3.10.0_6ce1b4dad2e78daaa8a661e5f69541c9
       prop-types: 15.7.2
       react: 16.14.0
       react-dom: 16.14.0_react@16.14.0
@@ -21698,14 +21814,20 @@ packages:
     name: '@rush-temp/hatch-web-client'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-zY6Aqze0Ue/lX3vHX3sV/sgulP3Soc7piy1kf+nDY4XiLaXy+aM03pVKuq8aYmzKSmmJDP4xUYEyh9nP3pH6Xg==
+      integrity: sha512-HV0pVoAfoyE1KH14UtWSjnh3NN+udEdUaqi/dgnTA7hHxw5wzNpX74XEIl0yVgi9+XRMGy5y4AkjQrGvkeKNxQ==
       tarball: 'file:projects/hatch-web-client.tgz'
     version: 0.0.0
-  'file:projects/hatch-web-eslint-config.tgz_aae12c4fd07015d16e8a53ba962ea9fd':
+  'file:projects/hatch-web-eslint-config.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
       eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
       eslint-plugin-react: 7.22.0_eslint@7.17.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
@@ -21714,19 +21836,24 @@ packages:
     id: 'file:projects/hatch-web-eslint-config.tgz'
     name: '@rush-temp/hatch-web-eslint-config'
     peerDependencies:
-      eslint-plugin-import: '*'
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-fxUunmBhSh0T2KyEHsTLYDDWRw4hhTyB8AH+UNsFQktot1OzfkKQPNhv1Pa/CKKjDXz2FTGar9MFH4uvbdYCSQ==
+      integrity: sha512-GziGwFZK7hUJLv5zkjHBEOyMxj5z7G5YDSx+HmQm3ELfTvX5eiC0lTMwsm15OFGYe/245mg/0YRXM62jXMjyPg==
       tarball: 'file:projects/hatch-web-eslint-config.tgz'
     version: 0.0.0
-  'file:projects/hatch-web-injectables.tgz_4911166e8765a9454f60307e53215304':
+  'file:projects/hatch-web-injectables.tgz_851346e16f0c5ccbf3584f3eb55ca3b9':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@types/react-dom': 16.9.10
       '@types/react-router': 5.1.11
       '@types/react-router-dom': 5.1.7
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
       react-router: 5.2.0_react@16.14.0
       react-router-dom: 5.2.0_react@16.14.0
       redux: 4.0.5
@@ -21737,11 +21864,12 @@ packages:
     peerDependencies:
       react: '*'
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-86BcCvgIHjowAx6rr4c1LybBzIBWKtvkzbhBNHPafE9OlDtm++Uf1b0Sp7tM3oETsQVRIsq4Zxj3rGazYbzXQA==
+      integrity: sha512-NydI5n3HZM4PPy1tonhaSmaOCO01SWWajjOdu/C5h9mpimCum4NyDyZou/3c9PpA6XlheNly4i+JInWBZ0lR5w==
       tarball: 'file:projects/hatch-web-injectables.tgz'
     version: 0.0.0
-  'file:projects/hatch-web-server.tgz_supports-color@7.2.0':
+  'file:projects/hatch-web-server.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@redux-saga/core': 1.1.3
@@ -21756,7 +21884,17 @@ packages:
       '@types/react-router-dom': 5.1.7
       '@types/serialize-javascript': 1.5.0
       '@types/webpack-env': 1.16.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
+      eslint-plugin-react: 7.22.0_eslint@7.17.0
+      eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
+      eslint-plugin-react-native: 3.10.0_6ce1b4dad2e78daaa8a661e5f69541c9
       express: 4.17.1
       prop-types: 15.7.2
       react: 16.14.0
@@ -21775,11 +21913,12 @@ packages:
     name: '@rush-temp/hatch-web-server'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-rqZFYPzUgP3E/vTTZ3ijeXfn3SJIZvZhEEArl5Tp1WGC9yu7lT/3lhQmNpHtoTJRNo53IksSP/rl3G7YCoW1nA==
+      integrity: sha512-12FU/zBaCXbcdl1GsEJNkT7gi4rEzeqeoGxxNOxg/nKfyiiR86scFCPVV7oVXzXcDnw9F9Jhz3tNlg98UWCd0g==
       tarball: 'file:projects/hatch-web-server.tgz'
     version: 0.0.0
-  'file:projects/hatch-web.tgz_supports-color@7.2.0':
+  'file:projects/hatch-web.tgz_66733b2025c4827e09304920f621c569':
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@redux-saga/core': 1.1.3
@@ -21792,8 +21931,18 @@ packages:
       '@types/react-router': 5.1.11
       '@types/react-router-dom': 5.1.7
       '@types/webpack-env': 1.16.0
+      '@typescript-eslint/eslint-plugin': 4.13.0_d11893db42f9cb5d8e2377075d8f6dbf
+      '@typescript-eslint/parser': 4.13.0_6863f4554d586d15011852b83e5d5307
       connected-react-router: 6.5.2_59046e1667760b922f9c725bb9e89a05
       eslint: 7.17.0_supports-color@7.2.0
+      eslint-config-airbnb: 18.2.1_23e8124c5713df1fe93e7c6a7e9fc690
+      eslint-config-airbnb-base: 14.2.1_860e0a3f1402db18f3476b9d86a8ac51
+      eslint-plugin-import: 2.22.1_eslint@7.17.0
+      eslint-plugin-jest: 24.1.3_6863f4554d586d15011852b83e5d5307
+      eslint-plugin-jsx-a11y: 6.4.1_eslint@7.17.0
+      eslint-plugin-react: 7.22.0_eslint@7.17.0
+      eslint-plugin-react-hooks: 4.2.0_eslint@7.17.0
+      eslint-plugin-react-native: 3.10.0_6ce1b4dad2e78daaa8a661e5f69541c9
       history: 4.10.1
       prop-types: 15.7.2
       react: 16.14.0
@@ -21810,8 +21959,9 @@ packages:
     name: '@rush-temp/hatch-web'
     peerDependencies:
       supports-color: '*'
+      typescript: '*'
     resolution:
-      integrity: sha512-kxlyJl9+b2s/Go79WB5y7ScrP1WxHXjat86Jg8vykNiFOsmKeVbNQAzad9C6weINOi+yYaE23Ino7fpt7S5cCA==
+      integrity: sha512-PeW9GbgOKiNGL4b58OSOSfbhVNIvBq/8w1fBWwutgCsOEK5c5uA5H8yjLGEqs2B5ofLnzCegov8f1G5dHUwQPw==
       tarball: 'file:projects/hatch-web.tgz'
     version: 0.0.0
 specifiers:

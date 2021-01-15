@@ -363,6 +363,29 @@ const updateCustomCommands = (monorepoPath: string) => {
     enableParallelism: true,
     ignoreMissingScript: true,
   });
+  commandLineParsed.commands.push({
+    commandKind: 'bulk',
+    name: 'lint:fix',
+    summary: 'Fixes all lint issues',
+    description: 'Fixes lint issues for all projects via lint:fix npm script',
+    enableParallelism: true,
+    safeForSimultaneousRushProcesses: false,
+    ignoreDependencyOrder: true,
+    ignoreMissingScript: true,
+    allowWarningsInSuccessfulBuild: true
+  });
+  commandLineParsed.commands.push({
+    commandKind: 'bulk',
+    name: 'lint',
+    summary: 'Lints all projects',
+    description: 'Finds lint issues for all projects via lint npm script',
+    enableParallelism: true,
+    safeForSimultaneousRushProcesses: false,
+    ignoreDependencyOrder: true,
+    ignoreMissingScript: true,
+    allowWarningsInSuccessfulBuild: true
+  });
+
   const commandLineRawUpdated = stringify(commandLineParsed, null, 2);
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };

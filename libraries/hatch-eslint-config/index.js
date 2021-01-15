@@ -42,6 +42,10 @@ module.exports = {
     '.eslintrc.js',
     'razzle.config.js',
     'build',
+    'dist',
+    'dot-eslintrc.js',
+    'dot-storybook',
+    '.storybook',
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -58,7 +62,7 @@ module.exports = {
     'import/no-cycle': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
-    'indent': 'off',
+    'indent': ['error', 2],
     'keyword-spacing': 'off',
     'max-classes-per-file': 'off',
     'max-len': 'off',

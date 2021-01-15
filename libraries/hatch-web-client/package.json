@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",
-    "build": "rimraf dist && tsc"
+    "lint": "eslint --max-warnings=0 .",
+    "build": "rimraf dist && npm run lint && tsc"
   },
   "publishConfig": {
     "access": "public"
@@ -39,7 +40,9 @@
     "redux-devtools-extension": "^2",
     "redux-saga": "^1",
     "rimraf": "3.0.0",
-    "swagger-ui-react": "3.25.0"
+    "swagger-ui-react": "3.25.0",
+    "eslint": "^7.17.0",
+    "@launchtray/hatch-web-eslint-config": "^0.12.5"
   },
   "peerDependencies": {
     "@launchtray/hatch-util": "^0.12.5",

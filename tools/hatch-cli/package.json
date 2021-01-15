@@ -8,7 +8,8 @@
   "typings": "./dist/index.d.ts",
   "scripts": {
     "prepare": "rimraf dist && tsc",
-    "build": "rimraf dist && tsc"
+    "lint": "eslint --max-warnings=0 .",
+    "build": "rimraf dist && npm run lint && tsc"
   },
   "license": "MIT",
   "publishConfig": {
@@ -38,6 +39,8 @@
     "@types/node": "^12",
     "@types/tmp": "^0.2.0",
     "rimraf": "3.0.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "eslint": "^7.17.0",
+    "@launchtray/hatch-eslint-config": "^0.12.5"
   }
 }

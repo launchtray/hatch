@@ -100,9 +100,23 @@ const patchWebpackConfig = (config, isServer, webpack) => {
 };
 
 module.exports = {
-  plugins: ['typescript'],
-  patchWebpackConfig, // Used by storybook convention used by hatch, not used by Razzle
-  modifyWebpackConfig({webpackConfig, env: {target}, webpackObject}) {
-    return patchWebpackConfig(webpackConfig, target !== 'web', webpackObject);
+  plugins: [
+    {
+      name: 'typescript',
+      options: {
+        useEslint: true,
+        forkTsChecker: {
+          tsconfig: resolveApp('tsconfig.json'),
+          tslint: undefined,
+          eslint: true,
+          watch: resolveApp('src'),
+          typeCheck: true,
+        },
+      },
+    },
+  ],
+  patchWebpackConfig,
+  modify(config, {target, dev}, webpack) {
+    return patchWebpackConfig(config, target !== 'web', webpack);
   },
 };

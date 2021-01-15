@@ -1,0 +1,22 @@
+{
+  "name": "@launchtray/hatch-eslint-config",
+  "version": "0.12.5",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": ""
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "eslint": "^7.17.0"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^4.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3"
+  }
+}

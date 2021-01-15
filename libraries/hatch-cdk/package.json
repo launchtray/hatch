@@ -9,19 +9,20 @@
   },
   "scripts": {
     "prepare": "rimraf dist && tsc",
-    "build": "rimraf dist && tsc",
+    "lint": "eslint --max-warnings=0 .",
+    "build": "rimraf dist && npm run lint && tsc",
     "cdk": "cdk"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-certificatemanager": "^1.73.0",
-    "@aws-cdk/aws-cloudfront": "^1.73.0",
-    "@aws-cdk/aws-cloudfront-origins": "^1.73.0",
-    "@aws-cdk/aws-ecs": "^1.73.0",
-    "@aws-cdk/aws-ecs-patterns": "^1.73.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.73.0",
+    "@aws-cdk/aws-certificatemanager": "1.73.0",
+    "@aws-cdk/aws-cloudfront": "1.73.0",
+    "@aws-cdk/aws-cloudfront-origins": "1.73.0",
+    "@aws-cdk/aws-ecs": "1.73.0",
+    "@aws-cdk/aws-ecs-patterns": "1.73.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "1.73.0",
     "@aws-cdk/aws-iam": "1.73.0",
-    "@aws-cdk/aws-logs": "^1.73.0",
-    "@aws-cdk/core": "^1.73.0"
+    "@aws-cdk/aws-logs": "1.73.0",
+    "@aws-cdk/core": "1.73.0"
   },
   "dependencies": {
     "@aws-cdk/assets": "1.73.0",
@@ -36,17 +37,19 @@
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
-    "@aws-cdk/aws-certificatemanager": "^1.73.0",
-    "@aws-cdk/aws-cloudfront": "^1.73.0",
-    "@aws-cdk/aws-cloudfront-origins": "^1.73.0",
-    "@aws-cdk/aws-ecs": "^1.73.0",
-    "@aws-cdk/aws-ecs-patterns": "^1.73.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.73.0",
-    "@aws-cdk/aws-logs": "^1.73.0",
-    "@aws-cdk/core": "^1.73.0",
+    "@aws-cdk/aws-certificatemanager": "1.73.0",
+    "@aws-cdk/aws-cloudfront": "1.73.0",
+    "@aws-cdk/aws-cloudfront-origins": "1.73.0",
+    "@aws-cdk/aws-ecs": "1.73.0",
+    "@aws-cdk/aws-ecs-patterns": "1.73.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "1.73.0",
+    "@aws-cdk/aws-logs": "1.73.0",
+    "@aws-cdk/core": "1.73.0",
     "@types/node": "^12",
     "aws-cdk": "1.73.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^4.1.3"
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3",
+    "eslint": "^7.17.0",
+    "@launchtray/hatch-eslint-config": "^0.12.5"
   }
 }

@@ -477,6 +477,10 @@ export const createFromTemplate = async (
         if (fs.existsSync(dotDockerIgnorePath)) {
           await fs.move(dotDockerIgnorePath, path.resolve(tempFilePath, '.dockerignore'));
         }
+        const dotEslintRcPath = path.resolve(tempFilePath, 'dot-eslintrc.js');
+        if (fs.existsSync(dotEslintRcPath)) {
+          await fs.move(dotEslintRcPath, path.resolve(tempFilePath, '.eslintrc.js'));
+        }
       } else if (templateType === 'project') {
         // Delete files that might be copied over if this is a local dev install
         const nodeModulesPath = path.resolve(tempFilePath, 'node_modules');
@@ -541,6 +545,10 @@ export const createFromTemplate = async (
         const dotGitIgnorePath = path.resolve(tempFilePath, 'dot-gitignore');
         if (fs.existsSync(dotGitIgnorePath)) {
           await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
+        }
+        const dotEslintRcPath = path.resolve(tempFilePath, 'dot-eslintrc.js');
+        if (fs.existsSync(dotEslintRcPath)) {
+          await fs.move(dotEslintRcPath, path.resolve(tempFilePath, '.eslintrc.js'));
         }
         const dotDockerIgnorePath = path.resolve(tempFilePath, 'dot-dockerignore');
         if (fs.existsSync(dotDockerIgnorePath)) {

@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",
-    "build": "rimraf dist && tsc"
+    "lint": "eslint --max-warnings=0 .",
+    "build": "rimraf dist && npm run lint && tsc"
   },
   "publishConfig": {
     "access": "public"
@@ -31,7 +32,9 @@
     "utf-8-validate": "^5",
     "winston": "^3",
     "winston-transport": "^4",
-    "ws": "^7"
+    "ws": "^7",
+    "eslint": "^7.17.0",
+    "@launchtray/hatch-eslint-config": "^0.12.5"
   },
   "peerDependencies": {
     "@launchtray/hatch-util": "^0.12.5",

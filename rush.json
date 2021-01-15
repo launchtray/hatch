@@ -440,6 +440,16 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-eslint-config",
+      "projectFolder": "libraries/hatch-eslint-config",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
+      "packageName": "@launchtray/hatch-web-eslint-config",
+      "projectFolder": "libraries/hatch-web-eslint-config",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-razzle-config",
       "projectFolder": "libraries/hatch-razzle-config",
       "versionPolicyName": "hatchVersionPolicy"

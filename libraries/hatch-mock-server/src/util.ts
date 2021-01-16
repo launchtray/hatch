@@ -3,7 +3,7 @@ export const withTimeout = async <T> (durationMs: number, promise: Promise<T>): 
   const timeout = new Promise<T>((resolve, reject) => {
     const rejectCallback = () => {
       timer = null;
-      reject('Task timed out');
+      reject(new Error('Task timed out'));
     };
     timer = setTimeout(rejectCallback, durationMs);
   });

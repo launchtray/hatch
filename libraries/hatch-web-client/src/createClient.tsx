@@ -51,11 +51,13 @@ import {WebClientComposer, WebClientComposition} from './WebClientComposer';
 /* eslint-enable import/first */
 
 export interface CreateClientOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reloadComposeModule: () => any;
   injectionOptions?: InjectionInitializationContext;
 }
 
-const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
+const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
   return (
     <StoreProvider store={reduxStore}>
       <NavProvider>
@@ -74,7 +76,8 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
   );
 };
 
-const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
+const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
   return (
     <StoreProvider store={reduxStore}>
       <NavProvider>
@@ -95,9 +98,11 @@ let store: Store;
 let runningRootSagaTask: Task;
 if (module.hot) {
   module.hot.dispose((data) => {
+    /* eslint-disable no-param-reassign -- intentional mutation */
     data.runningRootSagaTask = runningRootSagaTask;
     data.store = store;
     data.sagaMiddleware = sagaMiddleware;
+    /* eslint-enable no-param-reassign  */
   });
   if (module.hot.data) {
     runningRootSagaTask = module.hot.data.runningRootSagaTask;
@@ -110,13 +115,13 @@ const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => {
     addBreadcrumb(breadcrumb);
   },
-  captureException: (error: any) => {
+  captureException: (error: unknown) => {
     captureException(error);
   },
   init: (options: Options) => {
     init(options);
   },
-  setExtra: (key: string, extra: any) => {
+  setExtra: (key: string, extra: unknown) => {
     setExtra(key, extra);
   },
   setTag: (key: string, value: string) => {
@@ -157,6 +162,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions});
       middleware = composeEnhancers(middleware);
     }
+    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any -- global window object
     store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);
   } else {
     store.replaceReducer(composition.createRootReducer());
@@ -169,6 +175,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   );
 
   const webAppManagerInstances = await resolveWebAppManagers(container);
+  // eslint-disable-next-line no-undef -- global document object
   const rootSaga = await createSagaForWebAppManagers(logger, webAppManagerInstances, store, container, document.cookie);
 
   if (rootSaga != null) {
@@ -185,7 +192,9 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);
   }
   AppRegistry.runApplication('RNApp', {
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- React Component should be PascalCase
     initialProps: {reduxStore: store, RootApp: composition.appComponent},
+    // eslint-disable-next-line no-undef -- global document object
     rootTag: document.getElementById('root'),
   });
 };
@@ -195,6 +204,7 @@ export default (options: CreateClientOptions) => {
   initializeInjection(options.injectionOptions);
   const clientComposer = options.reloadComposeModule().default;
   createClientAsync(clientComposer).catch((err) => {
+    // eslint-disable-next-line no-console -- intentional error logging
     console.error(err);
   });
 };

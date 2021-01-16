@@ -42,6 +42,7 @@ export abstract class WebAppDriver extends WebDriver {
 }
 
 const extendWebDriver = (driver: WebAppDriver): WebAppDriver => {
+  // eslint-disable-next-line no-param-reassign -- intentional mutation
   driver.waitForElement = async (locator: ElementLocator): Promise<WebElement> => {
     const {testID} = locator as ElementLocatorByTestID;
     const timeout = locator.timeoutInMS ?? 2000;

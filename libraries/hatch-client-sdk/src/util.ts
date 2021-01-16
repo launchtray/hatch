@@ -26,12 +26,14 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
   ];
   const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
   if (generatorCmd.error != null) {
+    // eslint-disable-next-line no-console -- intentional stdout
     console.log(generatorCmd.stdout);
     throw new Error(generatorCmd.error.message);
   }
   // if successful, the last file generated is the openapi-generation/VERSION file
   const openApiVersionFile = path.resolve(outputPath, '.openapi-generator', 'VERSION');
   if (!fs.existsSync(openApiVersionFile)) {
+    // eslint-disable-next-line no-console -- intentional stdout
     console.log(generatorCmd.stdout);
     throw new Error('Error generating client sdk: ' + generatorCmd.stderr);
   }
@@ -52,6 +54,7 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
       maxBuffer: 10 * 1024 * 1024,
     });
     if (printSpecCmd.error) {
+      // eslint-disable-next-line no-console -- intentional stdout
       console.log(printSpecCmd.stdout);
       throw new Error(printSpecCmd.error.message);
     }

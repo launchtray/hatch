@@ -1,3 +1,4 @@
+/* eslint-disable -- lots of global object manipulation without much benefit to linting */
 export interface SpecInfo {
   suiteName?: string;
   specName?: string;

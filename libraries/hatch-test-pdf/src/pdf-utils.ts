@@ -79,7 +79,7 @@ export class PDF {
     private fetchOptions: {
       headers?: {[key: string]: string},
       method?: string,
-      body?: any,
+      body?: unknown,
     },
     private imageMagickVersion: string = defaultRequiredImageMagickVersion,
   ) {
@@ -130,7 +130,10 @@ export class PDF {
     page: number,
   ) {
     await this.requirePDF(url);
-    return this.pdfImage!.convertPage(page);
+    if (this.pdfImage == null) {
+      throw new Error('Unexpected null PDF image');
+    }
+    return this.pdfImage.convertPage(page);
   }
 
   private async getPageImagePath(page: number): Promise<string> {
@@ -166,8 +169,8 @@ export class PDF {
     const pageImage = sharp(pageImagePath);
 
     let actualImage: Sharp;
-    let actualWidth: number;
-    let actualHeight: number;
+    let actualWidth: number | undefined;
+    let actualHeight: number | undefined;
     if (options.frame != null) {
       const {left, top, width, height} = options.frame;
       const widthInPixels = toPixel(width);
@@ -191,8 +194,8 @@ export class PDF {
     } else {
       actualImage = pageImage;
       const actualMetadata = await actualImage.metadata();
-      actualWidth = actualMetadata.width!;
-      actualHeight = actualMetadata.height!;
+      actualWidth = actualMetadata.width;
+      actualHeight = actualMetadata.height;
     }
 
     const actualImagePath = await writeImageToTempFile(actualImage, 'actual');
@@ -203,6 +206,7 @@ export class PDF {
     try {
       expectedImagePng = PNG.sync.read(fs.readFileSync(options.expectedAssetPath));
     } catch (err) {
+      // eslint-disable-next-line no-console -- intentional log statement
       console.log('Error reading expected file:', err);
       if (process.env.OVERWRITE_EXPECTED_IMAGES === 'true') {
         fs.copyFileSync(actualImagePath, options.expectedAssetPath);
@@ -218,13 +222,40 @@ export class PDF {
       } else {
         fs.copyFileSync(actualImagePath, actualImagePathOnFailure);
       }
+      /* eslint-disable no-console -- intentional log statements */
       console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, `
         + `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
       console.log('               Actual path: ' + actualImagePath);
       console.log('               Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
+      /* eslint-enable no-console  */
       return false;
     }
 
+    return await this.compareImages(
+      actualWidth,
+      actualHeight,
+      expectedImagePng,
+      actualImagePng,
+      actualImagePath,
+      options,
+      actualImagePathOnFailure,
+    );
+  }
+
+  private async compareImages(
+    actualWidth: number | undefined,
+    actualHeight: number | undefined,
+    expectedImagePng: PNGWithMetadata,
+    actualImagePng: PNGWithMetadata,
+    actualImagePath: string,
+    options: FrameComparisonOptions,
+    actualImagePathOnFailure: string,
+  ) {
+    if (actualWidth == null || actualHeight == null) {
+      // eslint-disable-next-line no-console -- intentional log statements
+      console.log('Unable to determine dimensions of actual image');
+      return false;
+    }
     const maxDataLength = actualWidth * actualHeight * 4;
     const diffBuffer = Buffer.allocUnsafe(maxDataLength);
 
@@ -246,12 +277,15 @@ export class PDF {
       const diffImage = sharp(diffBuffer, {raw: {width: actualWidth, height: actualHeight, channels: 4}}).png();
       const diffImagePath = await writeImageToTempFile(diffImage, 'diff');
       const pdfPath = this.tmpPdfFile.name;
+      /* eslint-disable no-console -- intentional log statements */
       console.log('Image mismatch. Pixel Δ count: ' + pixelDiffCount);
       console.log('                Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
       console.log('                Diff image   : ' + fs.readFileSync(diffImagePath).toString('base64'));
       console.log('                Actual PDF   : ' + fs.readFileSync(pdfPath).toString('base64'));
+      /* eslint-enable no-console  */
     }
     if (process.env.PRINT_TEMP_PDF_PATH) {
+      // eslint-disable-next-line no-console -- intentional log statements
       console.log('PDF Path: ' + this.getTempPDFPath());
     }
     return matches;

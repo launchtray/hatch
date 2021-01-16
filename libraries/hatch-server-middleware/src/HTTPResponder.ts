@@ -6,7 +6,7 @@ import BasicRouteParams from './BasicRouteParams';
 export default class HTTPResponder {
   constructor(public readonly params: BasicRouteParams) {}
 
-  public ok(body?: any) {
+  public ok(body?: unknown) {
     this.params.res.status(200).send(body);
   }
 }

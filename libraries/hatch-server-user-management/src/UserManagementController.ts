@@ -57,7 +57,7 @@ const isCsrfSafe = (params: BasicRouteParams): boolean => {
   const doubleSubmitParam = params.req.body.doubleSubmitCookie;
   return (
     doubleSubmitCookie != null
-    && doubleSubmitCookie != ''
+    && doubleSubmitCookie !== ''
     && doubleSubmitCookie === doubleSubmitParam
   );
 };
@@ -333,7 +333,7 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        const accessToken = userInfoRequest.getUnverifiedAccessToken()!;
+        const accessToken = userInfoRequest.getUnverifiedAccessToken();
         const authTokens = await this.userManagementClient.refreshAuthentication(refreshToken, accessToken, {tenantId});
         params.res.cookie(AUTH_ACCESS_TOKEN_COOKIE_NAME, authTokens.accessToken, {
           sameSite: 'lax',
@@ -374,7 +374,8 @@ export default class UserManagementController {
 
     this.logger.debug('Validating token', {url: params.req.url, whitelisted, blacklisted});
     if (whitelisted && !blacklisted) {
-      return params.next();
+      params.next();
+      return;
     }
     if (!isCsrfSafe(params)) {
       this.logger.error('Rejecting request due to CSRF check');
@@ -453,7 +454,12 @@ export default class UserManagementController {
     this.logger.debug('Getting user attributes...');
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
-      const attributes = await this.userManager.getUserAttributes(clientUserId, queriedUserId, userContext.accessToken, userContext.tenantId);
+      const attributes = await this.userManager.getUserAttributes(
+        clientUserId,
+        queriedUserId,
+        userContext.accessToken,
+        userContext.tenantId,
+      );
       this.logger.debug('User attributes fetched:', attributes);
       params.res.status(HttpStatus.OK).send({
         userAttributes: attributes,
@@ -520,7 +526,12 @@ export default class UserManagementController {
       const clientUserId = userContext.userId;
       const queriedUsername = params.req.query.username;
       if (queriedUsername != null) {
-        const userId = await this.userManager.getUserId(clientUserId, queriedUsername, userContext.accessToken, userContext.tenantId);
+        const userId = await this.userManager.getUserId(
+          clientUserId,
+          queriedUsername,
+          userContext.accessToken,
+          userContext.tenantId,
+        );
         this.logger.debug('User ID fetched:', userId);
         params.res.status(HttpStatus.OK).send({
           userId,

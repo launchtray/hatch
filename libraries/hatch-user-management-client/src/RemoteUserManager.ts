@@ -7,11 +7,21 @@ import {UserManagementClientSdk} from './UserManagementClientSdk';
 export default class RemoteUserManager implements UserManager {
   constructor(private readonly userManagementClient: UserManagementClientSdk) {}
 
-  async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string, tenantId?: string): Promise<UserAttributes> {
+  async getUserAttributes(
+    clientUserId: string,
+    queriedUserId: string,
+    accessToken: string,
+    tenantId?: string,
+  ): Promise<UserAttributes> {
     return await this.userManagementClient.getUserAttributes(queriedUserId, accessToken, {tenantId});
   }
 
-  async getUserId(clientUserId: string, queriedUsername: string, accessToken: string, tenantId?: string): Promise<string> {
+  async getUserId(
+    clientUserId: string,
+    queriedUsername: string,
+    accessToken: string,
+    tenantId?: string,
+  ): Promise<string> {
     return await this.userManagementClient.getUserId(queriedUsername, accessToken, {tenantId});
   }
 

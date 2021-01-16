@@ -1,6 +1,7 @@
 import {APIMetadataParameters} from '@launchtray/hatch-server';
 
 export const addCsrfCheckApiMetadata = (metadataParams: APIMetadataParameters) => {
+  /* eslint-disable no-param-reassign -- intentionally modifying reference  */
   if (metadataParams.parameters == null) {
     metadataParams.parameters = {};
   }
@@ -31,9 +32,11 @@ export const addCsrfCheckApiMetadata = (metadataParams: APIMetadataParameters) =
   metadataParams.requestBody.content['application/json'].schema.properties.doubleSubmitCookie = {
     type: 'string',
   };
+  /* eslint-enable no-param-reassign */
 };
 
 const addTenantIDHeader = (metadataParams: APIMetadataParameters) => {
+  /* eslint-disable no-param-reassign -- intentionally modifying reference  */
   if (metadataParams.parameters == null) {
     metadataParams.parameters = {};
   }
@@ -45,15 +48,18 @@ const addTenantIDHeader = (metadataParams: APIMetadataParameters) => {
       type: 'string',
     },
   };
+  /* eslint-enable no-param-reassign */
 };
 
 const addBearerAuthHeader = (metadataParams: APIMetadataParameters) => {
+  /* eslint-disable no-param-reassign -- intentionally modifying reference  */
   if (metadataParams.security == null) {
     metadataParams.security = [];
   }
   metadataParams.security.push({
     bearerAuth: [],
   });
+  /* eslint-enable no-param-reassign */
 };
 
 export class AuthenticateRequest {

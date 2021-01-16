@@ -1,6 +1,11 @@
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import fetch from 'cross-fetch';
-import {TENANT_ID_HEADER, UserManagementClient, UserManagementClientOptions, UserManagementEndpoints} from './UserManagementClient';
+import {
+  TENANT_ID_HEADER,
+  UserManagementClient,
+  UserManagementClientOptions,
+  UserManagementEndpoints,
+} from './UserManagementClient';
 import {UserManagementError} from './UserManagementError';
 import UserAttributes from './UserAttributes';
 
@@ -31,7 +36,12 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
+  public async startUserRegistration(
+    username: string,
+    password: string,
+    userAttributes: UserAttributes,
+    options?: UserManagementClientOptions,
+  ) {
     this.logger.debug('Requesting to start user registration...');
     const post = {
       username,
@@ -69,7 +79,11 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async confirmUserRegistration(username: string, confirmationCode: string, options?: UserManagementClientOptions) {
+  public async confirmUserRegistration(
+    username: string,
+    confirmationCode: string,
+    options?: UserManagementClientOptions,
+  ) {
     this.logger.debug('Requesting confirmation of user registration...');
     const post = {
       username,
@@ -106,7 +120,12 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async confirmPasswordReset(username: string, confirmationCode: string, password: string, options?: UserManagementClientOptions) {
+  public async confirmPasswordReset(
+    username: string,
+    confirmationCode: string,
+    password: string,
+    options?: UserManagementClientOptions,
+  ) {
     this.logger.debug('Requesting to confirm user password reset...');
     const post = {
       username,
@@ -177,7 +196,12 @@ export class UserManagementClientSdk implements UserManagementClient {
     return responseBody;
   }
 
-  public async setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions) {
+  public async setUserAttributes(
+    userId: string,
+    userAttributes: UserAttributes,
+    accessToken: string,
+    options?: UserManagementClientOptions,
+  ) {
     this.logger.debug('Requesting to set user attributes...');
     const post = {
       userId,
@@ -227,8 +251,10 @@ export class UserManagementClientSdk implements UserManagementClient {
 
   private buildHeaders(tenantId?: string, accessToken?: string) {
     const headers = new Headers({
+      /* eslint-disable @typescript-eslint/naming-convention */
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      /* eslint-enable @typescript-eslint/naming-convention */
     });
     if (tenantId != null) {
       headers.set(TENANT_ID_HEADER, tenantId);

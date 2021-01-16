@@ -91,6 +91,8 @@ module.exports = {
       before: true,
       after: true,
     }],
+    '@typescript-eslint/no-shadow': ['error'],
+    'no-shadow': 'off',
 
     'arrow-body-style': 'off',
     'class-methods-use-this': 'off',
@@ -136,6 +138,10 @@ module.exports = {
         selector: 'variable',
         modifiers: ['global'],
         format: ['camelCase', 'UPPER_CASE', 'snake_case', 'PascalCase'],
+      },
+      {
+        selector: 'enumMember',
+        format: ['UPPER_CASE', 'PascalCase'],
       },
       {
         selector: 'parameter',

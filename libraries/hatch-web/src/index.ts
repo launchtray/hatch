@@ -12,7 +12,7 @@ import {
   onLocationChange,
   registerWebAppManagers,
   resolveWebAppManagers,
-  webAppManager
+  webAppManager,
 } from './WebAppManager';
 import {WebCommonComposition} from './WebCommonComposer';
 import {runtimeConfig} from './config';

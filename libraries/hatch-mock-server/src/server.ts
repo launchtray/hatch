@@ -11,7 +11,7 @@ export default class MockServer {
 
   constructor(
     port: number,
-    private options?: {[key: string]: any}
+    private options?: {[key: string]: any},
   ) {
     this.port = port ?? this.options?.serverPort ?? DEFAULT_PORT;
   }

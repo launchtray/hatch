@@ -9,7 +9,7 @@ export class UserManagementClientSdk implements UserManagementClient {
 
   constructor(
     @inject('Logger') private readonly logger: Logger,
-    @inject('userManagementBaseAPIURL') private readonly userManagementBaseAPIURL: string
+    @inject('userManagementBaseAPIURL') private readonly userManagementBaseAPIURL: string,
   ) {}
 
   public async authenticate(username: string, password: string, options?: UserManagementClientOptions) {
@@ -18,7 +18,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       username,
       password,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.AUTHENTICATE, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.AUTHENTICATE, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
@@ -38,7 +38,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       password,
       userAttributes,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_USER_REGISTRATION, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_USER_REGISTRATION, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
@@ -56,7 +56,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       username,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.RESEND_USER_REGISTRATION, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.RESEND_USER_REGISTRATION, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
@@ -75,7 +75,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       username,
       confirmationCode,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_USER_REGISTRATION, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_USER_REGISTRATION, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
@@ -93,7 +93,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       username,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_PASSWORD_RESET, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.START_PASSWORD_RESET, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
@@ -113,7 +113,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       confirmationCode,
       password,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_PASSWORD_RESET, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.CONFIRM_PASSWORD_RESET, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId),
       body: JSON.stringify(post),
@@ -131,7 +131,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       refreshToken,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.REFRESH_AUTHENTICATION, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.REFRESH_AUTHENTICATION, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId, accessToken),
       body: JSON.stringify(post),
@@ -149,7 +149,7 @@ export class UserManagementClientSdk implements UserManagementClient {
     const post = {
       userId,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SIGN_OUT_USER, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SIGN_OUT_USER, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId, accessToken),
       body: JSON.stringify(post),
@@ -165,7 +165,7 @@ export class UserManagementClientSdk implements UserManagementClient {
   public async getUserAttributes(userId: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user attributes...');
     const params = '?userId=' + encodeURIComponent(userId);
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES + params, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES + params, {
       method: 'GET',
       headers: this.buildHeaders(options?.tenantId, accessToken),
     });
@@ -183,7 +183,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       userId,
       userAttributes,
     };
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SET_USER_ATTRIBUTES, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.SET_USER_ATTRIBUTES, {
       method: 'POST',
       headers: this.buildHeaders(options?.tenantId, accessToken),
       body: JSON.stringify(post),
@@ -198,7 +198,7 @@ export class UserManagementClientSdk implements UserManagementClient {
 
   public async getUserInfo(accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user info...');
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_INFO, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_INFO, {
       method: 'GET',
       headers: this.buildHeaders(options?.tenantId, accessToken),
     });
@@ -213,7 +213,7 @@ export class UserManagementClientSdk implements UserManagementClient {
   public async getUserId(username: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user ID...');
     const params = '?username=' + encodeURIComponent(username);
-    let response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID + params, {
+    const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID + params, {
       method: 'GET',
       headers: this.buildHeaders(options?.tenantId, accessToken),
     });
@@ -227,15 +227,15 @@ export class UserManagementClientSdk implements UserManagementClient {
 
   private buildHeaders(tenantId?: string, accessToken?: string) {
     const headers = new Headers({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     });
     if (tenantId != null) {
       headers.set(TENANT_ID_HEADER, tenantId);
     }
     if (accessToken != null) {
-      headers.set('Authorization', 'Bearer ' + accessToken)
+      headers.set('Authorization', 'Bearer ' + accessToken);
     }
-    return headers
+    return headers;
   }
 }

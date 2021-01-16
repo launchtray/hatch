@@ -128,7 +128,7 @@ const domainForPrefix = (prefix: string | undefined, parentDomain?: string) => {
     return undefined;
   }
   return `${prefix.replace(/\.+$/, '')}.${parentDomain}`;
-}
+};
 
 interface DomainInfo {
   domainName: string;
@@ -141,11 +141,11 @@ interface DomainInfo {
 
 const getDomainInfo = (
   stack: cdk.Stack,
-  props: {domain?: HatchServiceDomainProps, useCloudFront?: boolean}
+  props: {domain?: HatchServiceDomainProps, useCloudFront?: boolean},
 ): DomainInfo | undefined => {
   if (props.domain != null) {
     const {publicHostedZoneId, privateHostedZoneId} = props.domain;
-    const domainName = props.domain.domainName;
+    const {domainName} = props.domain;
     const subjectAlternativeNames = [`*.${domainName}`];
 
     const publicHostedZone = publicHostedZoneId != null
@@ -161,8 +161,11 @@ const getDomainInfo = (
       }) : undefined;
 
     const regionCertificate = props.domain.regionCertificateArn != null
-      ? certificatemanager.Certificate.fromCertificateArn(stack, 'regionCertificate',
-        props.domain.regionCertificateArn)
+      ? certificatemanager.Certificate.fromCertificateArn(
+        stack,
+        'regionCertificate',
+        props.domain.regionCertificateArn,
+      )
       : props.domain.createCertificates
         ? new certificatemanager.Certificate(stack, 'regionCertificate', {
           domainName,
@@ -172,8 +175,11 @@ const getDomainInfo = (
         : undefined;
 
     const distroCertificate = props.domain.cloudFrontDistributionCertificateArn != null
-      ? certificatemanager.Certificate.fromCertificateArn(stack, 'distributionCertificate',
-        props.domain.cloudFrontDistributionCertificateArn)
+      ? certificatemanager.Certificate.fromCertificateArn(
+        stack,
+        'distributionCertificate',
+        props.domain.cloudFrontDistributionCertificateArn,
+      )
       : (props.domain.createCertificates && props.useCloudFront && (publicHostedZone ?? privateHostedZone))
         ? new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
           domainName,
@@ -254,7 +260,7 @@ const configureCloudFront = (
     additionalCloudfrontBehaviors?: Record<string, cloudfront.BehaviorOptions>,
     apiCachePolicy?: cloudfront.ICachePolicy,
     webAclId?: string,
-  }
+  },
 ): string | undefined => {
   let cloudFrontHost: string | undefined;
   if (props.useCloudFront) {
@@ -268,7 +274,7 @@ const configureCloudFront = (
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       };
 
-      staticDeploymentOptions.paths.forEach(path => {
+      staticDeploymentOptions.paths.forEach((path) => {
         staticContentBehaviors[path] = staticContentBehavior;
       });
       additionalBehaviors = {
@@ -349,7 +355,7 @@ const configureCloudFront = (
     }
   }
   return cloudFrontHost;
-}
+};
 
 type StaticDeploymentOptions = {paths: string[], bucket: s3.IBucket};
 
@@ -373,7 +379,8 @@ const configureStaticDeployment = (
           buildArgs,
         }),
         command: [
-          'cp', '-R',
+          'cp',
+          '-R',
           '/app/build/public/static',
           '/app/build/public/favicon.ico',
           '/app/build/public/robots.txt',
@@ -398,7 +405,7 @@ const configureStaticDeployment = (
     staticDeploymentOptions = {paths: staticContentPaths, bucket: staticContentBucket};
   }
   return staticDeploymentOptions;
-}
+};
 
 type TaskRoleModifier = (taskRole: iam.IRole) => void;
 
@@ -442,13 +449,13 @@ export class HatchService extends cdk.Stack {
       ...props.clusterProps,
     });
 
-    let buildArgs = props.containerOptions.buildArgs;
+    const {buildArgs} = props.containerOptions;
     const container = new ecr_assets.DockerImageAsset(this, 'container', {
       directory: props.containerOptions.directory,
       target: props.containerOptions.appTarget ?? 'production-app-no-static',
       buildArgs,
     });
-    let staticDeploymentOptions = configureStaticDeployment(this, props, buildArgs);
+    const staticDeploymentOptions = configureStaticDeployment(this, props, buildArgs);
 
     const externalSecurityGroupIds = props.externalSecurityGroupIds ?? [];
     const internalSecurityGroupIds = props.internalSecurityGroupIds ?? [];
@@ -641,7 +648,7 @@ export class HatchService extends cdk.Stack {
   }
 
   public modifyLoadBalancerListeners(
-    modifier: (listener: ApplicationListener, idPrefix: string, basePriority: number) => void
+    modifier: (listener: ApplicationListener, idPrefix: string, basePriority: number) => void,
   ) {
     modifier(this.loadBalancerListener, 'mainLB-', 2);
     if (this.privateLoadBalancerListener) {

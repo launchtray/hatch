@@ -1,7 +1,11 @@
+/* eslint-disable import/first -- __webpack_public_path__ needs to be set before imports */
+/* eslint-disable no-undef, @typescript-eslint/no-explicit-any */
 const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
 if (staticAssetsBaseURL !== '/') {
   __webpack_public_path__ = staticAssetsBaseURL;
 }
+/* eslint-enable no-undef, @typescript-eslint/no-explicit-any */
+
 import {
   ConsoleLogger,
   initializeInjection,
@@ -28,7 +32,8 @@ import {
   init,
   Integrations,
   setExtra,
-  setTag} from '@sentry/browser';
+  setTag,
+} from '@sentry/browser';
 import {Options} from '@sentry/types';
 import React from 'react';
 import {HelmetProvider} from 'react-helmet-async';
@@ -42,6 +47,8 @@ import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
 import {WebClientComposer, WebClientComposition} from './WebClientComposer';
+
+/* eslint-enable import/first */
 
 export interface CreateClientOptions {
   reloadComposeModule: () => any;
@@ -100,11 +107,21 @@ if (module.hot) {
 }
 
 const sentryMonitor: SentryMonitor = {
-  addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },
-  captureException: (error: any) => { captureException(error); },
-  init: (options: Options) => { init(options); },
-  setExtra: (key: string, extra: any) => { setExtra(key, extra); },
-  setTag: (key: string, value: string) => { setTag(key, value); },
+  addBreadcrumb: (breadcrumb: Breadcrumb) => {
+    addBreadcrumb(breadcrumb);
+  },
+  captureException: (error: any) => {
+    captureException(error);
+  },
+  init: (options: Options) => {
+    init(options);
+  },
+  setExtra: (key: string, extra: any) => {
+    setExtra(key, extra);
+  },
+  setTag: (key: string, value: string) => {
+    setTag(key, value);
+  },
 };
 
 const createClientAsync = async (clientComposer: WebClientComposer) => {
@@ -120,7 +137,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {
     dsn: runtimeConfig.SENTRY_DSN,
-    integrations: consoleBreadcrumbs
+    integrations: consoleBreadcrumbs,
   });
   container.registerInstance('ErrorReporter', sentry);
 
@@ -152,9 +169,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   );
 
   const webAppManagerInstances = await resolveWebAppManagers(container);
-  const rootSaga = await createSagaForWebAppManagers(
-    logger, webAppManagerInstances, store, container, document.cookie
-  );
+  const rootSaga = await createSagaForWebAppManagers(logger, webAppManagerInstances, store, container, document.cookie);
 
   if (rootSaga != null) {
     onSagaError = (error) => {
@@ -164,15 +179,13 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   }
   runningRootSagaTask = sagaMiddleware.run(rootSaga);
 
-  const App = composition.App;
-
   if (runtimeConfig.ENABLE_API_SPEC === 'true') {
     AppRegistry.registerComponent('RNApp', () => RNApp);
   } else {
     AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);
   }
   AppRegistry.runApplication('RNApp', {
-    initialProps: {reduxStore: store, RootApp: App},
+    initialProps: {reduxStore: store, RootApp: composition.appComponent},
     rootTag: document.getElementById('root'),
   });
 };

@@ -6,7 +6,6 @@ import {
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
 import {AUTH_BLACKLIST_KEY, AUTH_WHITELIST_KEY, UserContext} from '@launchtray/hatch-server-user-management';
 import {containerSingleton, delay, initializer, inject, Logger} from '@launchtray/hatch-util';
-import {Application} from 'express';
 import WebSocket from 'ws';
 
 @containerSingleton()
@@ -25,7 +24,7 @@ class CustomResponder {
     this.testField = 'CustomResponder';
   }
 
-  public ok(body?: any) {
+  public ok(body?: string) {
     this.responder.ok(body);
   }
 
@@ -105,7 +104,7 @@ export default class ExampleController implements ServerMiddleware {
     },
   })
   public parseQueryParam(responder: CustomResponder) {
-    const name = responder.params.req.query.name;
+    const {name} = responder.params.req.query;
     if (name) {
       responder.ok(responder.testField + `: Hello, ${responder.params.req.query.name}!`);
     } else {
@@ -121,26 +120,25 @@ export default class ExampleController implements ServerMiddleware {
           schema: {
             type: 'object',
             required: [
-              'name'
+              'name',
             ],
             properties: {
               name: {
-                type: 'string'
+                type: 'string',
               },
               age: {
                 type: 'integer',
                 format: 'int32',
-                minimum: 0
-              }
-            }
-          }
-        }
-      }
-    }
+                minimum: 0,
+              },
+            },
+          },
+        },
+      },
+    },
   })
   public processBody(responder: CustomResponder) {
-    const name = responder.params.req.body.name;
-    const age = responder.params.req.body.age;
+    const {age, name} = responder.params.req.body;
     if (age != null) {
       responder.ok(`Processed age of ${name}: ${age}`);
     } else {
@@ -165,7 +163,7 @@ export default class ExampleController implements ServerMiddleware {
   }
 
   @route.get('/api/example/error')
-  public async errorEndpoint(params: BasicRouteParams) {
+  public async errorEndpoint() {
     await delay(1000);
     throw new Error('Test error');
   }
@@ -183,7 +181,7 @@ export default class ExampleController implements ServerMiddleware {
     });
   }
 
-  public async register(app: Application): Promise<void> {
+  public async register(): Promise<void> {
     this.logger.info('Calling original register:', this.testVar);
   }
 }

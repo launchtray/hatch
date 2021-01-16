@@ -10,7 +10,7 @@
     "start": "razzle start",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --fix .",
-    "build": "rimraf build && npm run lint && razzle build",
+    "build": "rimraf build && razzle build",
     "test": "razzle test --env=jsdom --watchAll=false --passWithNoTests",
     "start:prod": "NODE_ENV=production node build/server.js"
   },

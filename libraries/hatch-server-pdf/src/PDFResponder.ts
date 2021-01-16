@@ -6,7 +6,7 @@ import React from 'react';
 @containerSingleton()
 export default class PDFResponder {
   constructor(
-    public readonly params: BasicRouteParams
+    public readonly params: BasicRouteParams,
   ) {}
 
   async sendDocument(document: React.ReactElement<ReactPDF.DocumentProps>) {

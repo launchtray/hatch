@@ -52,7 +52,7 @@ class ReducerDefinitionImpl<S> implements ReducerDefinition<S> {
 }
 
 export function defineReducer<S>(initialState: S): CallableReducerDefinition<S> {
- return new ReducerDefinitionImpl<S>(initialState).createReducer();
+  return new ReducerDefinitionImpl<S>(initialState).createReducer();
 }
 
 export default defineReducer;

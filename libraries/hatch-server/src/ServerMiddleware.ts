@@ -49,7 +49,7 @@ const serverMiddlewareKey = Symbol('serverMiddleware');
 export const registerServerMiddleware = async (
   container: DependencyContainer,
   middlewareList: ServerMiddlewareClass[],
-  apiMetadataConsumer: APIMetadataConsumer
+  apiMetadataConsumer: APIMetadataConsumer,
 ) => {
   for (const middleware of middlewareList) {
     container.registerSingleton(serverMiddlewareKey, middleware);
@@ -59,7 +59,7 @@ export const registerServerMiddleware = async (
 
 export const resolveServerMiddleware = async (
   container: DependencyContainer,
-  logger?: Logger
+  logger?: Logger,
 ): Promise<ServerMiddleware[]> => {
   const middlewareList = await container.resolveAll<ServerMiddleware>(serverMiddlewareKey);
   logger?.debug('Total server middleware count: ' + middlewareList.length);

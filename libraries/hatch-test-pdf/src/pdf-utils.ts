@@ -49,13 +49,13 @@ export const toPixel = (point: number) => {
   return (point * PNG_PIXELS_PER_INCH) / PDF_POINTS_PER_INCH;
 };
 
-const writeBufferToTempFile = async (buffer: Buffer, description: string = ''): Promise<string> => {
+const writeBufferToTempFile = async (buffer: Buffer, description = ''): Promise<string> => {
   const path = tmp.fileSync({postfix: description + '.png'}).name;
   fs.writeFileSync(path, buffer);
   return path;
 };
 
-const writeImageToTempFile = async (image: Sharp, description: string = ''): Promise<string> => {
+const writeImageToTempFile = async (image: Sharp, description = ''): Promise<string> => {
   return writeBufferToTempFile(await image.toBuffer(), description);
 };
 
@@ -85,10 +85,9 @@ export class PDF {
   ) {
     const versionInfo = execSync('convert --version', {encoding: 'utf8'});
     if (!versionInfo.includes(`Version: ImageMagick ${imageMagickVersion}`)) {
-      throw new Error(`ImageMagick version ${imageMagickVersion} must be installed to run these tests. ` +
-        'If this version is no longer available, the CI machine may need to be upgraded along with any screenshots ' +
-        'that are checked into this repository.',
-      );
+      throw new Error(`ImageMagick version ${imageMagickVersion} must be installed to run these tests. `
+        + 'If this version is no longer available, the CI machine may need to be upgraded along with any screenshots '
+        + 'that are checked into this repository.');
     }
     if (jest != null) {
       // Set default test timeout to be larger, since PDF manipulation and comparison can take tens of seconds
@@ -219,8 +218,8 @@ export class PDF {
       } else {
         fs.copyFileSync(actualImagePath, actualImagePathOnFailure);
       }
-      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, ` +
-        `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
+      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, `
+        + `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
       console.log('               Actual path: ' + actualImagePath);
       console.log('               Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
       return false;

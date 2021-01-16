@@ -9,7 +9,7 @@ import {
   AUTH_WHITELIST_KEY,
   AWSCognitoClient,
   LocalUserManager,
-  UserManagementController
+  UserManagementController,
 } from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {runtimeConfig} from '@launchtray/hatch-web';

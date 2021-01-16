@@ -1,7 +1,7 @@
+import {DependencyContainer} from '@launchtray/tsyringe-async';
 import {ConsoleLogger} from './ConsoleLogger';
 import delay from './delay';
 import {ErrorReporter} from './ErrorReporter';
-import {DependencyContainer} from '@launchtray/tsyringe-async';
 import {
   Class,
   containerSingleton,

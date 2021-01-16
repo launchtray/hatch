@@ -59,7 +59,13 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   );
   const webAppManagerInstances = await resolveWebAppManagers(clientContainer);
   const rootSaga = await createSagaForWebAppManagers(
-    logger, webAppManagerInstances, store, clientContainer, cookie, authHeader, true
+    logger,
+    webAppManagerInstances,
+    store,
+    clientContainer,
+    cookie,
+    authHeader,
+    true,
   );
 
   const rootSagaTask = sagaMiddleware.run(rootSaga);
@@ -71,7 +77,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   });
   await rootTaskWithTimeout;
 
-  const App = composition.App;
+  const App = composition.appComponent;
   const helmetContext: any = {};
 
   if (requestContext.stateOnly) {
@@ -103,6 +109,9 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   const {helmet} = helmetContext;
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = assetsPrefix + '/favicon.ico';
+  const assetsScript = crossOrigin
+    ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
+    : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
 
   return (`<!doctype html>
     <html lang="" ${helmet.htmlAttributes.toString()}>
@@ -121,10 +130,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
       ${assets.client.css ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
-      ${crossOrigin
-        ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-        : `<script src="${assetsPrefix + assets.client.js}" defer></script>`
-      }
+      ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="root">${html}</div>

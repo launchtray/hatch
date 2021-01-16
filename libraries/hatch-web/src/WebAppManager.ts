@@ -8,7 +8,7 @@ import {
   Location,
   navActions,
   selectLocationFromLocationChangeAction,
-  selectFirstRenderingFromLocationChangeAction
+  selectFirstRenderingFromLocationChangeAction,
 } from './NavProvider';
 import {isActionType} from './defineAction';
 
@@ -53,7 +53,7 @@ export const onClientLoad = () => {
 
 const forEachPathMatcher = async (
   target: any,
-  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => Promise<void>
+  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => Promise<void>,
 ) => {
   const pathMatchers: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher}> = target?.[pathMatchersKey] ?? [];
   for (const {propertyKey, pathMatcher} of pathMatchers) {
@@ -63,7 +63,7 @@ const forEachPathMatcher = async (
 
 const forEachClientLoader = async (
   target: any,
-  iterator: (propertyKey: string | symbol) => Promise<void>
+  iterator: (propertyKey: string | symbol) => Promise<void>,
 ) => {
   const clientLoaders: Array<{propertyKey: string | symbol}> = target?.[clientLoadersKey] ?? [];
   for (const {propertyKey} of clientLoaders) {
@@ -111,7 +111,7 @@ export const createSagaForWebAppManagers = async (
   }
   const navigateActions = [
     navActions.locationChange,
-    navActions.serverLocationLoaded
+    navActions.serverLocationLoaded,
   ];
   const navWorker = function *(action: AnyAction) {
     let location: Location;
@@ -141,8 +141,7 @@ export const createSagaForWebAppManagers = async (
             container.registerInstance('authHeader', authHeader ?? '');
 
             const args = await resolveParams(container, target, propertyKey);
-            handleLocationChangeSagas.push(call(
-              [manager, manager[propertyKey]], ...args));
+            handleLocationChangeSagas.push(call([manager, manager[propertyKey]], ...args));
           }
         });
       }
@@ -153,12 +152,12 @@ export const createSagaForWebAppManagers = async (
   };
   if (isServer) {
     sagas.push(effects.fork(function *() {
-      const navAction = yield *effects.take(navigateActions);
+      const navAction = yield* effects.take(navigateActions);
       yield effects.fork(navWorker, navAction);
     }));
   } else {
     sagas.push(effects.fork(function *() {
-      yield *effects.takeLatest(navigateActions, navWorker);
+      yield* effects.takeLatest(navigateActions, navWorker);
     }));
   }
   return function*() {

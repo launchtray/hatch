@@ -34,15 +34,13 @@ export const addStaticRoutes = (app: Application, assetsPrefix: string) => {
     const publicPath = process.env.NODE_ENV === 'development' ? '../public' : './public';
     const publicDir = path.resolve(__dirname, publicPath);
     app.use(express.static(publicDir));
+  } else if (assetsPrefix.length === 0) {
+    // There is no URL prefix for static content, so it must be served at `/` otherwise, e.g. via a load balancer.
+    addNotFound(app, '/favicon.ico');
+    addNotFound(app, '/robots.txt');
   } else {
-    if (assetsPrefix.length === 0) {
-      // There is no URL prefix for static content, so it must be served at `/` otherwise, e.g. via a load balancer.
-      addNotFound(app, '/favicon.ico');
-      addNotFound(app, '/robots.txt');
-    } else {
-      addRedirect(app, '/favicon.ico', assetsPrefix);
-      addRedirect(app, '/robots.txt', assetsPrefix);
-    }
+    addRedirect(app, '/favicon.ico', assetsPrefix);
+    addRedirect(app, '/robots.txt', assetsPrefix);
   }
   addNotFound(app, '/static/*');
 };

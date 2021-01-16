@@ -9,7 +9,7 @@ export interface WebCommonComposition {
   translations?: TranslationsDictionary;
   createRootReducer: () => Reducer;
   actions: any;
-  App: any;
+  appComponent: any;
   webAppManagers?: Array<Class<any>>;
 }
 

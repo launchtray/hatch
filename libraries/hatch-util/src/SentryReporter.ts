@@ -5,7 +5,7 @@ import {Logger} from './Logger';
 
 export default class SentryReporter implements ErrorReporter {
   private readonly initialized?: boolean;
-  private initializedWarningShown: boolean = false;
+  private initializedWarningShown = false;
 
   constructor(private readonly sentry: SentryMonitor, private readonly logger: Logger, options: Options) {
     if (options && options.dsn) {

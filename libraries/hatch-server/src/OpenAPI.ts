@@ -142,9 +142,9 @@ export class OpenAPISpecBuilder {
         securitySchemes: {
           [bearerAuth]: {
             type: 'http',
-            scheme: 'bearer'
+            scheme: 'bearer',
           },
-        }
+        },
       },
     };
   }
@@ -160,8 +160,8 @@ export class OpenAPISpecBuilder {
         operationId: apiMetadata.operationId,
         tags: apiMetadata.tags,
         security: apiMetadata.security,
-      }
-    }
+      },
+    };
   }
 
   build(): OpenAPISpec {

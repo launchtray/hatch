@@ -35,7 +35,7 @@
     "**/webpack",
     "**/jest",
     "**/razzle.config.js",
-    "**/.eslintrc.js"
+    "**/*eslintrc*.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

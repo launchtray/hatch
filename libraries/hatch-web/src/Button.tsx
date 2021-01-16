@@ -14,7 +14,7 @@ const isPropTypesWithRoute = (props: PropTypes): props is PropTypesWithRoute => 
 
 export default class extends React.Component<PropTypes> {
   public render() {
-    const props = this.props;
+    const {props} = this;
     if (isPropTypesWithRoute(props)) {
 
       const {testID, onPressRoute, ...otherProps} = props;

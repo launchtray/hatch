@@ -50,14 +50,13 @@ export default class CompletableFuture<T> {
   async get(timeoutMilliseconds?: number): Promise<T> {
     if (timeoutMilliseconds == null) {
       return this.promise;
-    } else {
-      const callerStack = (new Error()).stack;
-      const timer = setTimeout((self: CompletableFuture<T>) => {
-        self.reject?.(new FutureTimeoutError(self, callerStack));
-      }, timeoutMilliseconds, this);
-      const result = await this.promise;
-      clearTimeout(timer);
-      return result;
     }
+    const callerStack = (new Error()).stack;
+    const timer = setTimeout((self: CompletableFuture<T>) => {
+      self.reject?.(new FutureTimeoutError(self, callerStack));
+    }, timeoutMilliseconds, this);
+    const result = await this.promise;
+    clearTimeout(timer);
+    return result;
   }
 }

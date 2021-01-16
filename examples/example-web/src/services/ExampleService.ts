@@ -1,7 +1,7 @@
 import {
   inject,
   injectable,
-  Logger
+  Logger,
 } from '@launchtray/hatch-util';
 
 @injectable()

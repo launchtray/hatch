@@ -1,9 +1,9 @@
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {containerSingleton, inject, injectAll, Logger} from '@launchtray/hatch-util';
 import cookie from 'cookie';
-import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import {UserInfo, UserManagementClient} from '@launchtray/hatch-user-management-client';
 import {Route} from '@launchtray/hatch-server';
+import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 
 export const AUTH_WHITELIST_KEY = 'AUTH_WHITELIST_KEY';
 export const AUTH_BLACKLIST_KEY = 'AUTH_BLACKLIST_KEY';
@@ -75,9 +75,8 @@ export default class UserInfoRequest {
       const token = cookies[AUTH_ACCESS_TOKEN_COOKIE_NAME];
       this.logger.debug('Authorization cookie found: ', token);
       return token;
-    } else {
-      return;
     }
+    return undefined;
   }
 
   private extractAuthenticationHeader() {
@@ -92,7 +91,6 @@ export default class UserInfoRequest {
         return token;
       }
     }
-    return;
+    return undefined;
   }
-
 }

@@ -32,7 +32,7 @@ const requestLogger = (serverLogFile: string) => {
             : `[${REQUEST_LEVEL_TAG}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
           info[Symbol.for('message')] = `[${timestamp}] ${paddedLevel}: ${message}${metaMessage}`;
           return info;
-        }
+        },
       },
     ),
     meta: true,
@@ -44,7 +44,7 @@ const requestLogger = (serverLogFile: string) => {
 export default class RequestLogger implements ServerMiddleware {
   constructor(
     @inject('appName') private readonly appName: string,
-    @inject('serverLogFile') private readonly serverLogFile: string
+    @inject('serverLogFile') private readonly serverLogFile: string,
   ) {}
 
   public async register(app: Application) {

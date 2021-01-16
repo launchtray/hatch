@@ -7,10 +7,10 @@ import commander from 'commander';
 import tmp from 'tmp';
 import {CompletableFuture} from '@launchtray/hatch-util';
 import replace from 'replace-in-file';
-import {spawnSync} from "child_process";
+import {spawnSync} from 'child_process';
 import {RushConfiguration, RushConfigurationProject} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
-import YAML from 'yaml'
+import YAML from 'yaml';
 import {Pair, YAMLMap} from 'yaml/types';
 import dotenv from 'dotenv';
 
@@ -49,8 +49,12 @@ export const withSpinner = async (message: string, task: () => Promise<void>): P
   }
 };
 
-export const createClientSDK = async (parentDirectory: string, projectName: string, clientSDKOptions: ClientSDKOptions,
-                                      projectFolder?: ProjectFolder) => {
+export const createClientSDK = async (
+  parentDirectory: string,
+  projectName: string,
+  clientSDKOptions: ClientSDKOptions,
+  projectFolder?: ProjectFolder,
+) => {
   if (!projectName) {
     throw new Error('Client SDK name must be specified');
   }
@@ -69,21 +73,21 @@ export const createClientSDK = async (parentDirectory: string, projectName: stri
   } else {
     console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
   }
-}
+};
 
 export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
   return (clientOptions: ClientSDKOptions) => {
     if (!clientOptions.dependency && !clientOptions.spec) {
-      throw new Error('Dependency or input spec must be specified')
+      throw new Error('Dependency or input spec must be specified');
     }
     if (clientOptions.spec && !clientOptions.name) {
-      throw new Error('Name must be specified when generating a client SDK from an input spec')
+      throw new Error('Name must be specified when generating a client SDK from an input spec');
     }
-    const projectName = (clientOptions.dependency && !clientOptions.name) ?
-      clientOptions.dependency + '-sdk' : clientOptions.name as string;
+    const projectName = (clientOptions.dependency && !clientOptions.name)
+      ? clientOptions.dependency + '-sdk' : clientOptions.name as string;
     return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
-  }
-}
+  };
+};
 
 export const createMonorepo = async (parentDirectory: string, monorepoName: string) => {
   if (!monorepoName) {
@@ -97,12 +101,12 @@ export const createMonorepo = async (parentDirectory: string, monorepoName: stri
     templateType: 'monorepo',
   });
   console.log(chalk.green('Created \'' + monorepoPath + '\' monorepo'));
-}
+};
 
 export const monorepoCreator = (parentDirectory: string) => {
   return (monorepoName: string) => {
     return createMonorepo(parentDirectory, monorepoName);
-  }
+  };
 };
 
 export const createProject = async (parentDirectory: string, projectName: string, projectFolder?: ProjectFolder) => {
@@ -128,7 +132,7 @@ export const createProject = async (parentDirectory: string, projectName: string
 export const projectCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
   return (projectName: string) => {
     return createProject(parentDirectory, projectName, projectFolder);
-  }
+  };
 };
 
 export const createModule = async (parentDirectory: string, moduleName: string, extension = 'ts') => {
@@ -147,14 +151,14 @@ export const createModule = async (parentDirectory: string, moduleName: string, 
 export const moduleCreator = (parentDirectory: string, extension = 'ts') => {
   return (moduleName: string) => {
     return createModule(parentDirectory, moduleName, extension);
-  }
+  };
 };
 
 export const componentCreator = (parentDirectory: string) => {
   return async (moduleName: string) => {
     await createModule(parentDirectory, moduleName, 'tsx');
     await createModule(path.resolve(parentDirectory, '../story/'), moduleName, 'stories.tsx');
-  }
+  };
 };
 
 const toShortName = (name: string) => {
@@ -194,7 +198,7 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
       './prod.env',
     ];
     service.value.environment = {
-      STATIC_ASSETS_BASE_URL: 'http://localhost:${'+ toPortName(shortName, true) + '}',
+      STATIC_ASSETS_BASE_URL: 'http://localhost:${' + toPortName(shortName, true) + '}',
     };
   }
   const pair = new Pair(service.key, service.value);
@@ -226,7 +230,7 @@ const MAX_PORT = 65535;
 // dev, where (port + 1) is used for the static file server
 // and the webpack server, respectively.
 const findAvailablePortPair = (dotEnv: any) => {
-  let dotEnvPorts = {};
+  const dotEnvPorts = {};
   const foundPorts = [];
   for (const key of Object.keys(dotEnv)) {
     if (key.endsWith('_PORT')) {
@@ -309,12 +313,12 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
 
     const prodEnvPath = path.resolve(monorepoRootDir, 'prod.env');
     appendToFile(prodEnvPath, [
-      `${toEnvName(shortName)}_BASE_URL=http://${toDockerServiceName(shortName, false)}`
+      `${toEnvName(shortName)}_BASE_URL=http://${toDockerServiceName(shortName, false)}`,
     ]);
 
     const devEnvPath = path.resolve(monorepoRootDir, 'dev.env');
     appendToFile(devEnvPath, [
-      `${toEnvName(shortName)}_BASE_URL=http://localhost:$${toPortName(shortName, false)}`
+      `${toEnvName(shortName)}_BASE_URL=http://localhost:$${toPortName(shortName, false)}`,
     ]);
   }
 };
@@ -372,7 +376,7 @@ const updateCustomCommands = (monorepoPath: string) => {
     safeForSimultaneousRushProcesses: false,
     ignoreDependencyOrder: true,
     ignoreMissingScript: true,
-    allowWarningsInSuccessfulBuild: true
+    allowWarningsInSuccessfulBuild: true,
   });
   commandLineParsed.commands.push({
     commandKind: 'bulk',
@@ -383,7 +387,7 @@ const updateCustomCommands = (monorepoPath: string) => {
     safeForSimultaneousRushProcesses: false,
     ignoreDependencyOrder: true,
     ignoreMissingScript: true,
-    allowWarningsInSuccessfulBuild: true
+    allowWarningsInSuccessfulBuild: true,
   });
 
   const commandLineRawUpdated = stringify(commandLineParsed, null, 2);
@@ -418,7 +422,7 @@ const generateClientSDK = (clientSDKOptions: ClientSDKOptions, tempFilePath: str
 };
 
 export const createFromTemplate = async (
-  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions
+  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions,
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
   let inMonorepo = false;
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
@@ -457,8 +461,8 @@ export const createFromTemplate = async (
     const [tempFilePath, cleanUp] = await tempFileFuture.get();
     try {
       if (templateType === 'monorepo') {
-        const rushExecutable = path.resolve(__dirname, '../node_modules/.bin/rush')
-        const rushInitCmd = spawnSync(rushExecutable, ['init'], {encoding : 'utf8', cwd: tempFilePath});
+        const rushExecutable = path.resolve(__dirname, '../node_modules/.bin/rush');
+        const rushInitCmd = spawnSync(rushExecutable, ['init'], {encoding: 'utf8', cwd: tempFilePath});
         if (rushInitCmd.error) {
           throw new Error('Error initializing monorepo: ' + rushInitCmd.error.message);
         }

@@ -1,4 +1,3 @@
-import {middlewareFor} from '@launchtray/hatch-server';
 import {
   JSONBodyParser,
   RequestLogger,

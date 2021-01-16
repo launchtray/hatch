@@ -48,15 +48,15 @@ function *takeLatest(actionPattern: ActionDefinition<any> | Array<ActionDefiniti
   return yield sagaTakeLatest(actionPattern, worker);
 }
 
-function *call<Method extends (...args: any) => any>(method: [any, Method], ...args: Parameters<Method>):
+function *call<Method extends(...args: any) => any>(method: [any, Method], ...args: Parameters<Method>):
   ValueGenerator<Unpromisify<ReturnType<Method>>> {
 
   // Disallow call without context. Must be set to null explicitly for free functions.
   if (method[0]) {
     return yield sagaCall(method, ...args);
-  } else {
-    return yield sagaCall(method[1], ...args);
   }
+  return yield sagaCall(method[1], ...args);
+
 }
 
 function race<T extends object>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}>;

@@ -6,7 +6,7 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --fix .",
-    "build": "rimraf dist && npm run lint && tsc"
+    "build": "rimraf dist && tsc"
   },
   "bin": {
     "hatch-client-sdk": "./bin/hatch-client-sdk"

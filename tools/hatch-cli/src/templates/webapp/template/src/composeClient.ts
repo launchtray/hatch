@@ -1,5 +1,5 @@
 import {
-  ROOT_CONTAINER
+  ROOT_CONTAINER,
 } from '@launchtray/hatch-util';
 import {WebClientComposition} from '@launchtray/hatch-web-client';
 import composeCommon from './composeCommon';

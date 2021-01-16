@@ -1,8 +1,8 @@
 import {inject, injectable, injectAll} from '@launchtray/hatch-util';
-import UserPermissionsManager, {
-  SelfOnlyUserPermissionsManager
-} from './UserPermissionsManager';
 import {UserAttributes, UserManagementClient, UserManager} from '@launchtray/hatch-user-management-client';
+import UserPermissionsManager, {
+  SelfOnlyUserPermissionsManager,
+} from './UserPermissionsManager';
 
 @injectable()
 export default class LocalUserManager implements UserManager {
@@ -10,7 +10,7 @@ export default class LocalUserManager implements UserManager {
 
   constructor(
     @inject('UserManagementClient') private readonly userManagementClient: UserManagementClient,
-    @injectAll('UserPermissionsManager') permissionsManagers: UserPermissionsManager[]
+    @injectAll('UserPermissionsManager') permissionsManagers: UserPermissionsManager[],
   ) {
     if (permissionsManagers.length == 0) {
       // By default, only allow the client to get/set own attributes
@@ -36,10 +36,9 @@ export default class LocalUserManager implements UserManager {
     queriedUserId: string,
     attributes: UserAttributes,
     accessToken: string,
-    tenantId?: string
+    tenantId?: string,
   ): Promise<UserAttributes> {
-    const writableAttributes = await this.permissionsManager.getWriteableAttributes(
-      clientUserId, queriedUserId, attributes);
+    const writableAttributes = await this.permissionsManager.getWriteableAttributes(clientUserId, queriedUserId, attributes);
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to set any permissions for queried user');
     } else {

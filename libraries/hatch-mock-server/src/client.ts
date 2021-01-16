@@ -1,6 +1,6 @@
 import {mockServerClient} from 'mockserver-client';
-import {DEFAULT_PORT} from './index';
 import tmp from 'tmp';
+import {DEFAULT_PORT} from './index';
 import {retry, withTimeout} from './util';
 
 export interface SimpleMockResponseOptions {

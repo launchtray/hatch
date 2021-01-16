@@ -80,7 +80,7 @@ const customLogFormat = (colorized: boolean) => {
         const paddedLevel = `[${level}]`.padEnd((colorized ? COLORIZED_LEVEL_MAX_LENGTH : RAW_LEVEL_MAX_LENGTH) + 2);
         info[Symbol.for('message')] = `[${timestamp}] ${paddedLevel}: ${messageWithArgs}`;
         return info;
-      }
+      },
     },
   );
 };
@@ -116,7 +116,7 @@ const createServerLogger = async (appName: string) => {
       maxsize: 10 ** 8,
       maxFiles: 5,
       zippedArchive: true,
-      tailable: true
+      tailable: true,
     }));
   }
   rootContainer.registerInstance('Logger', logger);
@@ -124,11 +124,21 @@ const createServerLogger = async (appName: string) => {
 };
 
 const sentryMonitor: SentryMonitor = {
-  addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },
-  captureException: (error: any) => { captureException(error); },
-  init: (options: Options) => { init(options); },
-  setExtra: (key: string, extra: any) => { setExtra(key, extra); },
-  setTag: (key: string, value: string) => { setTag(key, value); },
+  addBreadcrumb: (breadcrumb: Breadcrumb) => {
+    addBreadcrumb(breadcrumb);
+  },
+  captureException: (error: any) => {
+    captureException(error);
+  },
+  init: (options: Options) => {
+    init(options);
+  },
+  setExtra: (key: string, extra: any) => {
+    setExtra(key, extra);
+  },
+  setTag: (key: string, value: string) => {
+    setTag(key, value);
+  },
 };
 
 const getLivenessStatus = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<HealthStatus> => {
@@ -169,7 +179,7 @@ const getAppInfo = async (logger: Logger, serverMiddlewareList: ServerMiddleware
     try {
       overallInfo = {
         ...overallInfo,
-        ...(await serverMiddleware.getAppInfo?.())
+        ...(await serverMiddleware.getAppInfo?.()),
       };
     } catch (err) {
       logger.error('Error gathering app info:', err);
@@ -198,7 +208,7 @@ const addHealthChecks = async (
   logger: Logger,
   app: Application,
   container: DependencyContainer,
-  serverMiddlewareList: ServerMiddleware[]
+  serverMiddlewareList: ServerMiddleware[],
 ) => {
   let healthRoute = '/api/health';
   if (container.isRegistered(CUSTOM_OVERALL_HEALTH_ROUTE)) {
@@ -356,8 +366,7 @@ const createServerAsync = async <T extends ServerComposition>(
   }
 };
 
-export default <T extends ServerComposition>(options: CreateServerOptions<T>,
-                                             serverExtension?: ServerExtension<T>) => {
+export default <T extends ServerComposition>(options: CreateServerOptions<T>, serverExtension?: ServerExtension<T>) => {
   initializeInjection(options.injectionOptions);
   const serverComposer = options.reloadComposeModule().default;
   createServerAsync(serverComposer, serverExtension).catch((err) => {

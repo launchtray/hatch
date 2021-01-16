@@ -12,10 +12,14 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
   }
   const args = [
     'generate',
-    '--input-spec', inputSpec,
-    '--output', outputPath,
-    '--generator-name', 'typescript-fetch',
-    '--template-dir', templatePath,
+    '--input-spec',
+    inputSpec,
+    '--output',
+    outputPath,
+    '--generator-name',
+    'typescript-fetch',
+    '--template-dir',
+    templatePath,
     '--additional-properties=supportsES6=true,typescriptThreePlus=true',
     '--skip-validate-spec',
     '--type-mappings object=any',
@@ -43,9 +47,9 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
     const env = Object.create(process.env);
     env.PRINT_API_SPEC_ONLY = 'true';
     const printSpecCmd = spawnSync('node', [serverExec], {
-      encoding : 'utf8',
+      encoding: 'utf8',
       env,
-      maxBuffer: 10 * 1024 * 1024
+      maxBuffer: 10 * 1024 * 1024,
     });
     if (printSpecCmd.error) {
       console.log(printSpecCmd.stdout);

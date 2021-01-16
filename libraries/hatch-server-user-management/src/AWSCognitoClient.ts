@@ -1,4 +1,4 @@
-import {CognitoIdentityServiceProvider, CredentialProviderChain} from 'aws-sdk';
+import {CognitoIdentityServiceProvider, CredentialProviderChain, AWSError} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
@@ -10,9 +10,8 @@ import {
   UserInfo,
   UserManagementClientOptions,
   UserManagementError,
-  UserManagementErrorCodes
+  UserManagementErrorCodes,
 } from '@launchtray/hatch-user-management-client';
-import {AWSError} from 'aws-sdk';
 
 const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
   if (awsError.code == null) {
@@ -29,9 +28,9 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
     case 'NotAuthorizedException':
       if (awsError.message.includes('Password attempts exceeded')) {
         return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);
-      } else {
-        return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, message);
       }
+      return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, message);
+
     case 'PasswordResetRequiredException':
       return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);
     case 'TokenExpiredException':
@@ -51,11 +50,12 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
 export default class AWSCognitoClient implements UserManagementClient {
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
 
-  constructor(@inject('Logger') private readonly logger: Logger,
-              @inject('awsRegion') private readonly awsRegion: string,
-              @inject('awsUserPoolId') private readonly awsUserPoolId: string,
-              @inject('awsClientId') private readonly awsClientId: string)
-  {
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+    @inject('awsRegion') private readonly awsRegion: string,
+    @inject('awsUserPoolId') private readonly awsUserPoolId: string,
+    @inject('awsClientId') private readonly awsClientId: string,
+  ) {
     this.cognitoProvider.config.update({
       region: this.awsRegion,
       credentialProvider: new CredentialProviderChain(),
@@ -79,14 +79,14 @@ export default class AWSCognitoClient implements UserManagementClient {
       return {
         accessToken: response.AuthenticationResult?.AccessToken,
         refreshToken: response.AuthenticationResult?.RefreshToken,
-      }
+      };
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
 
   public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
-    let cognitoUserAttributes: AttributeListType = [];
+    const cognitoUserAttributes: AttributeListType = [];
     const userAttributesWithEmail = {
       email: username,
       ...userAttributes,
@@ -180,7 +180,7 @@ export default class AWSCognitoClient implements UserManagementClient {
       return {
         accessToken: response.AuthenticationResult?.AccessToken,
         refreshToken: response.AuthenticationResult?.RefreshToken,
-      }
+      };
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
@@ -246,7 +246,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     Object.keys(attributes).map((key) => {
       userAttributesList.push({
         Name: key,
-        Value: attributes[key]
+        Value: attributes[key],
       });
       return userAttributesList;
     });
@@ -308,7 +308,7 @@ export default class AWSCognitoClient implements UserManagementClient {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
     });
     const responseBody = await response.json();
@@ -333,11 +333,11 @@ export default class AWSCognitoClient implements UserManagementClient {
     }
     const request: ListUserPoolClientsRequest = {
       UserPoolId: userPoolId,
-    }
+    };
     const response = await this.cognitoProvider.listUserPoolClients(request).promise();
     const userPoolClients = response.UserPoolClients;
     if (userPoolClients?.length !== 1) {
-      throw new Error('Expected number of clients is 1 but found: ' + userPoolClients?.length)
+      throw new Error('Expected number of clients is 1 but found: ' + userPoolClients?.length);
     }
     const userPoolClient = userPoolClients[0];
     this.logger.debug('Found user client: {name=' + userPoolClient.ClientName + ',id=' + userPoolClient.ClientId + '}');

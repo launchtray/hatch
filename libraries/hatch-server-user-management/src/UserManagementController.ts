@@ -2,15 +2,17 @@ import {controller, requestMatchesRouteList, route} from '@launchtray/hatch-serv
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
-import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import {
   UserManager,
   UserManagementErrorCodes,
   UserManagementClient,
-  UserManagementEndpoints
+  UserManagementEndpoints,
 } from '@launchtray/hatch-user-management-client';
-import UserInfoRequest from './UserInfoRequest';
 import {TokenExpiredError} from 'jsonwebtoken';
+import * as HttpStatus from 'http-status-codes';
+import cookie from 'cookie';
+import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
+import UserInfoRequest from './UserInfoRequest';
 import {
   AuthenticateRequest,
   ConfirmUserRegistrationRequest,
@@ -26,12 +28,10 @@ import {
   GetUserInfoRequest,
 } from './UserManagementRequests';
 import UserContext, {extractTenantID} from './UserContext';
-import * as HttpStatus from 'http-status-codes';
-import cookie from 'cookie';
 
 const isMethodSideEffectSafe = (method: string): boolean => {
   return ['GET', 'HEAD', 'OPTIONS'].includes(method.toUpperCase());
-}
+};
 
 const isCsrfSafe = (params: BasicRouteParams): boolean => {
   // If the auth header is set, this cannot be CSRF, since an attacker cannot set headers
@@ -301,7 +301,7 @@ export default class UserManagementController {
 
   @route.post(UserManagementEndpoints.REFRESH_AUTHENTICATION, RefreshAuthenticationRequest.apiMetadata)
   public async refreshAuthentication(userInfoRequest: UserInfoRequest) {
-    const params = userInfoRequest.params;
+    const {params} = userInfoRequest;
     const tenantId = extractTenantID(params);
     this.logger.debug('Refreshing user authentication tokens...');
     if (!isCsrfSafe(params)) {
@@ -315,7 +315,7 @@ export default class UserManagementController {
       await userInfoRequest.getUserInfo(tenantId);
     } catch (err) {
       if (err instanceof TokenExpiredError) {
-        this.logger.debug('Token signature verified but expired at', err.expiredAt)
+        this.logger.debug('Token signature verified but expired at', err.expiredAt);
       } else {
         this.logger.error('Error refreshing user authentication tokens: Invalid token');
         params.res.status(HttpStatus.UNAUTHORIZED).send({
@@ -368,9 +368,9 @@ export default class UserManagementController {
   // all methods defined after this method are authenticated as defined below
   @route.all('*')
   public async verifyUser(userInfoRequest: UserInfoRequest) {
-    const params = userInfoRequest.params;
-    let whitelisted = requestMatchesRouteList(params.req, userInfoRequest.authWhitelist);
-    let blacklisted = requestMatchesRouteList(params.req, userInfoRequest.authBlacklist);
+    const {params} = userInfoRequest;
+    const whitelisted = requestMatchesRouteList(params.req, userInfoRequest.authWhitelist);
+    const blacklisted = requestMatchesRouteList(params.req, userInfoRequest.authBlacklist);
 
     this.logger.debug('Validating token', {url: params.req.url, whitelisted, blacklisted});
     if (whitelisted && !blacklisted) {
@@ -405,7 +405,7 @@ export default class UserManagementController {
   }
 
   private async extractUserIds(userContext: UserContext): Promise<{clientUserId: string, queriedUserId: string}> {
-    const params = userContext.params;
+    const {params} = userContext;
     const clientUserId = userContext.userId;
     const useQueryParams = isMethodSideEffectSafe(params.req.method);
     const paramsSource = (useQueryParams ? params.req.query : params.req.body);
@@ -415,8 +415,11 @@ export default class UserManagementController {
     if (queriedUserId == null) {
       if (queriedUsername != null) {
         if (this.userManagementClient.getUserId != null) {
-          queriedUserId = await this.userManagementClient.getUserId(queriedUsername,
-            userContext.accessToken, {tenantId: userContext.tenantId});
+          queriedUserId = await this.userManagementClient.getUserId(
+            queriedUsername,
+            userContext.accessToken,
+            {tenantId: userContext.tenantId},
+          );
         } else {
           throw new Error('User ID lookup is not supported');
         }
@@ -429,7 +432,7 @@ export default class UserManagementController {
 
   @route.post(UserManagementEndpoints.SIGN_OUT_USER, SignOutUserRequest.apiMetadata)
   public async signOutUser(userContext: UserContext) {
-    const params = userContext.params;
+    const {params} = userContext;
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
       await this.userManager.signOutUser(clientUserId, queriedUserId, userContext.accessToken, userContext.tenantId);
@@ -446,7 +449,7 @@ export default class UserManagementController {
 
   @route.get(UserManagementEndpoints.GET_USER_ATTRIBUTES, GetUserAttributesRequest.apiMetadata)
   public async getUserAttributes(userContext: UserContext) {
-    const params = userContext.params;
+    const {params} = userContext;
     this.logger.debug('Getting user attributes...');
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
@@ -466,7 +469,7 @@ export default class UserManagementController {
 
   @route.post(UserManagementEndpoints.SET_USER_ATTRIBUTES, SetUserAttributesRequest.apiMetadata)
   public async setUserAttributes(userContext: UserContext) {
-    const params = userContext.params;
+    const {params} = userContext;
     this.logger.debug('Setting user attributes...');
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
@@ -478,8 +481,13 @@ export default class UserManagementController {
           error: errMsg,
         });
       } else {
-        const attributes = await this.userManager.setUserAttributes(clientUserId, queriedUserId,
-          userAttributes, userContext.accessToken, userContext.tenantId);
+        const attributes = await this.userManager.setUserAttributes(
+          clientUserId,
+          queriedUserId,
+          userAttributes,
+          userContext.accessToken,
+          userContext.tenantId,
+        );
         this.logger.debug('User attributes set:', attributes);
         params.res.sendStatus(HttpStatus.OK);
       }
@@ -500,13 +508,13 @@ export default class UserManagementController {
         userId: userContext.userId,
         username: userContext.username,
         accessToken: userContext.accessToken,
-      }
+      },
     });
   }
 
   @route.get(UserManagementEndpoints.GET_USER_ID, GetUserIdRequest.apiMetadata)
   public async getUserId(userContext: UserContext) {
-    const params = userContext.params;
+    const {params} = userContext;
     this.logger.debug('Getting user ID...');
     try {
       const clientUserId = userContext.userId;

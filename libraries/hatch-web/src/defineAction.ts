@@ -40,5 +40,5 @@ export default {
     return {
       payload: <P>() => createActionCreator<P>(type),
     };
-  }
+  },
 };

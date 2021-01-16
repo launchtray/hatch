@@ -28,4 +28,5 @@ export default connect(
     onButtonPress: () => {
       dispatch(navActions.navigate({route: '/hello'}));
     },
-}))(Home);
+  }),
+)(Home);

@@ -37,7 +37,7 @@ export default class ExampleManager {
 
   @onLocationChange()
   public *handleEveryLocationChange() {
-    yield *effects.call([this.logger, this.logger.info], 'ExampleManager.handleEveryLocationChange');
+    yield* effects.call([this.logger, this.logger.info], 'ExampleManager.handleEveryLocationChange');
     yield effects.put({type: 'TEST_ACTION.handleEveryLocationChange'});
   }
 
@@ -48,7 +48,7 @@ export default class ExampleManager {
 
   @onLocationChange({path: '/:route'})
   public async prepRoute(context: LocationChangeContext<{route: string}>) {
-    const route = context.pathMatch.params.route;
+    const {route} = context.pathMatch.params;
     this.logger.info('ExampleManager.prepRoute delaying...');
     await delay(100);
     context.store.dispatch({type: 'TEST_ACTION.prepRoute'});
@@ -56,13 +56,13 @@ export default class ExampleManager {
   }
 
   @onLocationChange('/:page')
-  public async prepPage({pathMatch, location, store}: LocationChangeContext) {
+  public async prepPage({pathMatch, location}: LocationChangeContext) {
     this.logger.info('ExampleManager.prepPage', {pathMatch, location});
   }
 
   @onClientLoad()
   public *handleClientLoad() {
-    console.log('Runtime config:', runtimeConfig);
+    this.logger.info('Runtime config:', runtimeConfig);
     while (true) {
       yield effects.delay(5000);
       yield effects.put({type: 'ExampleManager3Action', payload: {result: this.dependency.getResult()}});

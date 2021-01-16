@@ -11,7 +11,7 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --fix .",
-    "build": "rimraf dist && npm run lint && tsc",
+    "build": "rimraf dist && tsc",
     "cdk": "cdk"
   },
   "peerDependencies": {

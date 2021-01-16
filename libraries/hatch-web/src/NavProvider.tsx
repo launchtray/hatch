@@ -111,7 +111,7 @@ class NavigationProviderComponent extends React.Component<{dispatch: Dispatch}> 
 
 const NavProvider = connect(
   null,
-  (dispatch) => ({dispatch})
+  (dispatch) => ({dispatch}),
 )(NavigationProviderComponent);
 
 export const createNavMiddleware = (locationForServerSideRendering?: string) => {

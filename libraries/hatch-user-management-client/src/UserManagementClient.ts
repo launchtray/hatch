@@ -1,16 +1,18 @@
 import UserAttributes from './UserAttributes';
 
 export class UserInfo {
-  constructor(public readonly userId?: string,
-              public readonly username?: string,
-              public readonly accessToken?: string) {
-  }
+  constructor(
+    public readonly userId?: string,
+    public readonly username?: string,
+    public readonly accessToken?: string,
+  ) {}
 }
 
 export class AuthTokens {
-  constructor(public readonly accessToken?: string,
-              public readonly refreshToken?: string) {
-  }
+  constructor(
+    public readonly accessToken?: string,
+    public readonly refreshToken?: string,
+  ) {}
 }
 
 export enum UserManagementEndpoints {

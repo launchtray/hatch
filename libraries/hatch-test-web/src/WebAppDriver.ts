@@ -43,7 +43,7 @@ export abstract class WebAppDriver extends WebDriver {
 
 const extendWebDriver = (driver: WebAppDriver): WebAppDriver => {
   driver.waitForElement = async (locator: ElementLocator): Promise<WebElement> => {
-    const testID = (locator as ElementLocatorByTestID).testID;
+    const {testID} = locator as ElementLocatorByTestID;
     const timeout = locator.timeoutInMS ?? 2000;
     const el = await driver.wait(until.elementLocated(By.css('*[data-testid="' + testID + '"]')), timeout);
     return driver.wait(until.elementIsVisible(el), timeout);

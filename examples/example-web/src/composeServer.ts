@@ -18,7 +18,6 @@ import composeCommon from './composeCommon';
 import ExampleController from './controllers/ExampleController';
 
 export default async (): Promise<WebServerComposition> => {
-
   runtimeConfig.TEST_VAR = 'Hello!';
 
   ROOT_CONTAINER.register('appName', {useValue: 'example-web'});

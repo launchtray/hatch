@@ -36,14 +36,14 @@ export default class ExampleManager {
   }
 
   @onLocationChange()
-  public *handleEveryLocationChange() {
+  public* handleEveryLocationChange() {
     yield* effects.call([this.logger, this.logger.info], 'ExampleManager.handleEveryLocationChange');
     yield effects.put({type: 'TEST_ACTION.handleEveryLocationChange'});
   }
 
   @onLocationChange({path: '/hi'})
   public async prepHI(context: LocationChangeContext<{route: string}>) {
-    this.logger.info('HELLO, WORLD. Cookie: ' + context.cookie);
+    this.logger.info(`HELLO, WORLD. Cookie: ${context.cookie}`);
   }
 
   @onLocationChange({path: '/:route'})
@@ -61,7 +61,7 @@ export default class ExampleManager {
   }
 
   @onClientLoad()
-  public *handleClientLoad() {
+  public* handleClientLoad() {
     this.logger.info('Runtime config:', runtimeConfig);
     while (true) {
       yield effects.delay(5000);

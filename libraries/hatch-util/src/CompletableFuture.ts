@@ -7,7 +7,7 @@ export class FutureTimeoutError<T> extends Error {
   constructor(future: CompletableFuture<T>, stack?: string) {
     let message = 'timed out waiting for future';
     if (future.name != null) {
-      message += ': ' + future.name;
+      message += `: ${future.name}`;
     }
     super(message);
     this.name = 'FutureTimeoutError';

@@ -106,9 +106,9 @@ export default class ExampleController implements ServerMiddleware {
   public parseQueryParam(responder: CustomResponder) {
     const {name} = responder.params.req.query;
     if (name) {
-      responder.ok(responder.testField + `: Hello, ${responder.params.req.query.name}!`);
+      responder.ok(`${responder.testField}: Hello, ${responder.params.req.query.name}!`);
     } else {
-      responder.ok(responder.testField + ': Hello!');
+      responder.ok(`${responder.testField}: Hello!`);
     }
   }
 
@@ -159,7 +159,7 @@ export default class ExampleController implements ServerMiddleware {
     },
   })
   public personEndpoint(params: BasicRouteParams) {
-    params.res.status(200).send('Person: ' + params.req.params.id);
+    params.res.status(200).send(`Person: ${params.req.params.id}`);
   }
 
   @route.get('/api/example/error')
@@ -170,12 +170,12 @@ export default class ExampleController implements ServerMiddleware {
 
   @route.websocket('/ws/:id')
   public async handleWebsocket(params: WebSocketRouteParams) {
-    this.logger.debug('handleWebsocket: ' + params.req.url);
+    this.logger.debug(`handleWebsocket: ${params.req.url}`);
     const ws = params.webSocket;
     ws.on('message', (msg: string) => {
       params.webSocketServer.clients.forEach((client: WebSocket) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
-          client.send(params.req.params.id + ': ' + msg);
+          client.send(`${params.req.params.id}: ${msg}`);
         }
       });
     });

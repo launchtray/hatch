@@ -160,35 +160,37 @@ const getDomainInfo = (
         zoneName: props.domain.zoneName ?? domainName,
       }) : undefined;
 
-    const regionCertificate = props.domain.regionCertificateArn != null
-      ? certificatemanager.Certificate.fromCertificateArn(
+    let regionCertificate: certificatemanager.ICertificate | undefined;
+    if (props.domain.regionCertificateArn != null) {
+      regionCertificate = certificatemanager.Certificate.fromCertificateArn(
         stack,
         'regionCertificate',
         props.domain.regionCertificateArn,
-      )
-      : props.domain.createCertificates
-        ? new certificatemanager.Certificate(stack, 'regionCertificate', {
-          domainName,
-          subjectAlternativeNames,
-          validation: certificatemanager.CertificateValidation.fromDns(publicHostedZone ?? privateHostedZone),
-        })
-        : undefined;
+      );
+    } else if (props.domain.createCertificates) {
+      regionCertificate = new certificatemanager.Certificate(stack, 'regionCertificate', {
+        domainName,
+        subjectAlternativeNames,
+        validation: certificatemanager.CertificateValidation.fromDns(publicHostedZone ?? privateHostedZone),
+      });
+    }
 
-    const distroCertificate = props.domain.cloudFrontDistributionCertificateArn != null
-      ? certificatemanager.Certificate.fromCertificateArn(
+    let distroCertificate: certificatemanager.ICertificate | undefined;
+    if (props.domain.cloudFrontDistributionCertificateArn != null) {
+      distroCertificate = certificatemanager.Certificate.fromCertificateArn(
         stack,
         'distributionCertificate',
         props.domain.cloudFrontDistributionCertificateArn,
-      )
-      : (props.domain.createCertificates && props.useCloudFront && (publicHostedZone ?? privateHostedZone))
-        ? new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
-          domainName,
-          subjectAlternativeNames,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked just a few lines up
-          hostedZone: (publicHostedZone ?? privateHostedZone)!,
-          region: 'us-east-1', // Must be us-east-1 for CloudFront
-        })
-        : undefined;
+      );
+    } else if (props.domain.createCertificates && props.useCloudFront && (publicHostedZone ?? privateHostedZone)) {
+      distroCertificate = new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
+        domainName,
+        subjectAlternativeNames,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked just a few lines up
+        hostedZone: (publicHostedZone ?? privateHostedZone)!,
+        region: 'us-east-1', // Must be us-east-1 for CloudFront
+      });
+    }
 
     let loadBalancerPrefix = props.domain.loadBalancerDomainPrefix;
     if (loadBalancerPrefix == null && regionCertificate != null) {
@@ -495,7 +497,7 @@ export class HatchService extends cdk.Stack {
         modifier(taskRole);
       }
     }
-    const defaultLogGroupName = 'HatchService-' + id;
+    const defaultLogGroupName = `HatchService-${id}`;
     const logGroupProps: logs.LogGroupProps = {
       logGroupName: defaultLogGroupName,
       retention: logs.RetentionDays.THREE_MONTHS,

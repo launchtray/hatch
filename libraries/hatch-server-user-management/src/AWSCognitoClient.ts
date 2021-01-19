@@ -18,7 +18,7 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
   if (awsError.code == null) {
     return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, awsError.message);
   }
-  const message = awsError.code + ' - ' + awsError.message;
+  const message = `${awsError.code} - ${awsError.message}`;
   switch (awsError.code) {
     case 'CodeMismatchException':
       return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);
@@ -242,17 +242,17 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         Limit: 1,
-        Filter: 'sub = "' + userId + '"',
+        Filter: `sub = "${userId}"`,
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
-      this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
+      this.logger.debug(`Fetched user attributes: ${JSON.stringify(response)}`);
       const userAttrsResp: Record<string, unknown> = {};
       if (response && response.Users && response.Users.length > 0 && response.Users[0].Attributes) {
         response.Users[0].Attributes.forEach((attr) => {
           userAttrsResp[attr.Name] = attr.Value;
         });
       } else {
-        throw new Error('User not found: ' + userId);
+        throw new Error(`User not found: ${userId}`);
       }
       return userAttrsResp;
     } catch (err) {
@@ -268,14 +268,14 @@ export default class AWSCognitoClient implements UserManagementClient {
       Username: username,
       /* eslint-enable @typescript-eslint/naming-convention */
     }).promise();
-    this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
+    this.logger.debug(`Fetched user attributes: ${JSON.stringify(response)}`);
     const userAttrsResp: Record<string, unknown> = {};
     if (response && response.UserAttributes) {
       response.UserAttributes.forEach((attr) => {
         userAttrsResp[attr.Name] = attr.Value;
       });
     } else {
-      throw new Error('User not found: ' + username);
+      throw new Error(`User not found: ${username}`);
     }
     return userAttrsResp;
   }
@@ -333,7 +333,7 @@ export default class AWSCognitoClient implements UserManagementClient {
 
     const payload = decodedJwt.payload as Record<string, unknown>;
     if (payload && payload.token_use !== 'access') {
-      throw new Error('Expected access token but received ' + payload.token_use + ' token');
+      throw new Error(`Expected access token but received ${payload.token_use} token`);
     }
 
     const header = decodedJwt.header as Record<string, unknown>;
@@ -358,7 +358,7 @@ export default class AWSCognitoClient implements UserManagementClient {
   private async getPemCerts(provideUserPoolId?: string) {
     const userPoolId = provideUserPoolId ?? this.awsUserPoolId;
     const postFix = '/.well-known/jwks.json';
-    const iss = 'https://cognito-idp.' + this.awsRegion + '.amazonaws.com/' + userPoolId;
+    const iss = `https://cognito-idp.${this.awsRegion}.amazonaws.com/${userPoolId}`;
     const request = iss + postFix;
     const response = await fetch(request, {
       method: 'GET',
@@ -379,7 +379,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         const keyType = key.kty;
         const jwk = {kty: keyType, n: modulus, e: exponent};
         pemCerts[keyId] = jwkToPem(jwk);
-        this.logger.debug('Public key [' + keyId + '] decoded: ', pemCerts[keyId]);
+        this.logger.debug(`Public key [${keyId}] decoded: `, pemCerts[keyId]);
       }
     }
     return pemCerts;
@@ -397,14 +397,13 @@ export default class AWSCognitoClient implements UserManagementClient {
     const response = await this.cognitoProvider.listUserPoolClients(request).promise();
     const userPoolClients = response.UserPoolClients;
     if (userPoolClients?.length !== 1) {
-      throw new Error('Expected number of clients is 1 but found: ' + userPoolClients?.length);
+      throw new Error(`Expected number of clients is 1 but found: ${userPoolClients?.length}`);
     }
     const userPoolClient = userPoolClients[0];
-    this.logger.debug('Found user client: {name=' + userPoolClient.ClientName + ',id=' + userPoolClient.ClientId + '}');
+    this.logger.debug(`Found user client: {name=${userPoolClient.ClientName},id=${userPoolClient.ClientId}}`);
     if (userPoolClient.ClientId == null) {
-      throw new Error('Unable to find client id for user pool id: ' + userPoolClient.UserPoolId);
+      throw new Error(`Unable to find client id for user pool id: ${userPoolClient.UserPoolId}`);
     }
     return userPoolClient.ClientId;
   }
-
 }

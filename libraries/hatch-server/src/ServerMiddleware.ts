@@ -68,9 +68,9 @@ export const resolveServerMiddleware = async (
   logger?: Logger,
 ): Promise<ServerMiddleware[]> => {
   const middlewareList = await container.resolveAll<ServerMiddleware>(serverMiddlewareKey);
-  logger?.debug('Total server middleware count: ' + middlewareList.length);
+  logger?.debug(`Total server middleware count: ${middlewareList.length}`);
   for (const middleware of middlewareList) {
-    logger?.debug('- ' + middleware.constructor.name);
+    logger?.debug(`- ${middleware.constructor.name}`);
   }
   return middlewareList;
 };

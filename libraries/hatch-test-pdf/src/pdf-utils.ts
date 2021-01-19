@@ -50,7 +50,7 @@ export const toPixel = (point: number) => {
 };
 
 const writeBufferToTempFile = async (buffer: Buffer, description = ''): Promise<string> => {
-  const path = tmp.fileSync({postfix: description + '.png'}).name;
+  const path = tmp.fileSync({postfix: `${description}.png`}).name;
   fs.writeFileSync(path, buffer);
   return path;
 };
@@ -120,7 +120,7 @@ export class PDF {
           },
         });
       } else {
-        throw new Error('Failed to fetch PDF: ' + response.statusText);
+        throw new Error(`Failed to fetch PDF: ${response.statusText}`);
       }
     }
   }
@@ -152,7 +152,7 @@ export class PDF {
   public async matchesAsset(options: TestIDComparisonOptions): Promise<boolean> {
     await this.requirePDF(this.pdfUrl);
     if (this.pdfTestMetadata?.[options.testID] == null) {
-      throw new Error('Test ID was not found in PDF: ' + options.testID);
+      throw new Error(`Test ID was not found in PDF: ${options.testID}`);
     }
     const {pageNumber, layout} = this.pdfTestMetadata?.[options.testID];
     return this.frameMatchesAsset({
@@ -225,8 +225,8 @@ export class PDF {
       /* eslint-disable no-console -- intentional log statements */
       console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, `
         + `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
-      console.log('               Actual path: ' + actualImagePath);
-      console.log('               Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
+      console.log(`               Actual path: ${actualImagePath}`);
+      console.log(`               Actual image : ${fs.readFileSync(actualImagePath).toString('base64')}`);
       /* eslint-enable no-console  */
       return false;
     }
@@ -278,15 +278,15 @@ export class PDF {
       const diffImagePath = await writeImageToTempFile(diffImage, 'diff');
       const pdfPath = this.tmpPdfFile.name;
       /* eslint-disable no-console -- intentional log statements */
-      console.log('Image mismatch. Pixel Δ count: ' + pixelDiffCount);
-      console.log('                Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
-      console.log('                Diff image   : ' + fs.readFileSync(diffImagePath).toString('base64'));
-      console.log('                Actual PDF   : ' + fs.readFileSync(pdfPath).toString('base64'));
+      console.log(`Image mismatch. Pixel Δ count: ${pixelDiffCount}`);
+      console.log(`                Actual image : ${fs.readFileSync(actualImagePath).toString('base64')}`);
+      console.log(`                Diff image   : ${fs.readFileSync(diffImagePath).toString('base64')}`);
+      console.log(`                Actual PDF   : ${fs.readFileSync(pdfPath).toString('base64')}`);
       /* eslint-enable no-console  */
     }
     if (process.env.PRINT_TEMP_PDF_PATH) {
       // eslint-disable-next-line no-console -- intentional log statements
-      console.log('PDF Path: ' + this.getTempPDFPath());
+      console.log(`PDF Path: ${this.getTempPDFPath()}`);
     }
     return matches;
   }

@@ -4,12 +4,12 @@ import commander from 'commander';
 import {runCommander} from './util';
 
 const optionsForTemplate = (name: string) => ({
-  executableFile: 'templates/' + name + '/command.js',
+  executableFile: `templates/${name}/command.js`,
 });
 
 const commandForTemplate = (name: string, description: string): [string, string, commander.CommandOptions] => [
-  name + ' <name>',
-  'creates a ' + description,
+  `${name} <name>`,
+  `creates a ${description}`,
   optionsForTemplate(name),
 ];
 

@@ -11,7 +11,6 @@ import UserAttributes from './UserAttributes';
 
 @injectable()
 export class UserManagementClientSdk implements UserManagementClient {
-
   constructor(
     @inject('Logger') private readonly logger: Logger,
     @inject('userManagementBaseAPIURL') private readonly userManagementBaseAPIURL: string,
@@ -29,7 +28,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request user authentication response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request user authentication response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error authenticating user');
     }
@@ -54,7 +53,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to start user registration response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to start user registration response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error starting user registration');
     }
@@ -72,7 +71,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to resend user registration code response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to resend user registration code response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error resending user registration code');
     }
@@ -95,7 +94,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to confirm user registration response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to confirm user registration response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error confirming user registration');
     }
@@ -113,7 +112,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to start user password reset response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to start user password reset response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error starting password reset');
     }
@@ -138,7 +137,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to confirm user password reset response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to confirm user password reset response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error confirming password reset');
     }
@@ -156,7 +155,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to refresh user authentication response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to refresh user authentication response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error refreshing user authentication');
     }
@@ -174,7 +173,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to sign out user response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to sign out user response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error signing out user');
     }
@@ -183,13 +182,13 @@ export class UserManagementClientSdk implements UserManagementClient {
 
   public async getUserAttributes(userId: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user attributes...');
-    const params = '?userId=' + encodeURIComponent(userId);
+    const params = `?userId=${encodeURIComponent(userId)}`;
     const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ATTRIBUTES + params, {
       method: 'GET',
       headers: this.buildHeaders(options?.tenantId, accessToken),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to get user attributes response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to get user attributes response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error getting user attributes');
     }
@@ -213,7 +212,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       body: JSON.stringify(post),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to set user attributes response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to set user attributes response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error setting user attributes');
     }
@@ -227,7 +226,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       headers: this.buildHeaders(options?.tenantId, accessToken),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to get user info response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to get user info response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error getting user info');
     }
@@ -236,13 +235,13 @@ export class UserManagementClientSdk implements UserManagementClient {
 
   public async getUserId(username: string, accessToken: string, options?: UserManagementClientOptions) {
     this.logger.debug('Requesting to get user ID...');
-    const params = '?username=' + encodeURIComponent(username);
+    const params = `?username=${encodeURIComponent(username)}`;
     const response = await fetch(this.userManagementBaseAPIURL + UserManagementEndpoints.GET_USER_ID + params, {
       method: 'GET',
       headers: this.buildHeaders(options?.tenantId, accessToken),
     });
     const responseBody = await response.json();
-    this.logger.debug('Request to get user ID response body: ' + JSON.stringify(responseBody));
+    this.logger.debug(`Request to get user ID response body: ${JSON.stringify(responseBody)}`);
     if (!response.ok) {
       throw new UserManagementError(responseBody.error, 'Error getting user ID');
     }
@@ -260,7 +259,7 @@ export class UserManagementClientSdk implements UserManagementClient {
       headers.set(TENANT_ID_HEADER, tenantId);
     }
     if (accessToken != null) {
-      headers.set('Authorization', 'Bearer ' + accessToken);
+      headers.set('Authorization', `Bearer ${accessToken}`);
     }
     return headers;
   }

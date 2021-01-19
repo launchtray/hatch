@@ -11,7 +11,7 @@ const {assets, assetsPrefix} = loadStaticAssetsMetadata();
 
 const renderClient = async (): Promise<string> => {
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
-  const faviconPath = assetsPrefix + '/favicon.ico';
+  const faviconPath = `${assetsPrefix}/favicon.ico`;
   const assetsScript = crossOrigin
     ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
     : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;

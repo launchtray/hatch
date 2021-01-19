@@ -1,10 +1,10 @@
 /* eslint-disable import/first -- __webpack_public_path__ needs to be set before imports */
-/* eslint-disable no-undef, @typescript-eslint/no-explicit-any */
+/* eslint-disable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
 const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
 if (staticAssetsBaseURL !== '/') {
   __webpack_public_path__ = staticAssetsBaseURL;
 }
-/* eslint-enable no-undef, @typescript-eslint/no-explicit-any */
+/* eslint-enable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
 
 import {
   ConsoleLogger,
@@ -163,7 +163,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions as any});
       middleware = composeEnhancers(middleware);
     }
-    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any -- global window object
+    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
     store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);
   } else {
     store.replaceReducer(composition.createRootReducer());
@@ -181,7 +181,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
 
   if (rootSaga != null) {
     onSagaError = (error) => {
-      logger.error('Root saga error: ' + error.message + ', stack trace: ' + error.stack);
+      logger.error(`Root saga error: ${error.message}, stack trace: ${error.stack}`);
       sentry.captureException(error);
     };
   }

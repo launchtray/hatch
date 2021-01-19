@@ -81,9 +81,9 @@ const customLogFormat = (colorized: boolean) => {
         const args = info[Symbol.for('splat')];
         let messageWithArgs = formatObjectForLog(message);
         if (args != null) {
-          messageWithArgs += ' ' + args.map((obj: unknown) => {
+          messageWithArgs += ` ${args.map((obj: unknown) => {
             return formatObjectForLog(obj);
-          }).join(' ');
+          }).join(' ')}`;
         }
         const paddedLevel = `[${level}]`.padEnd((colorized ? COLORIZED_LEVEL_MAX_LENGTH : RAW_LEVEL_MAX_LENGTH) + 2);
         // eslint-disable-next-line no-param-reassign -- using API as intended
@@ -97,7 +97,7 @@ const customLogFormat = (colorized: boolean) => {
 const createServerLogger = async (appName: string) => {
   const rootContainer: DependencyContainer = ROOT_CONTAINER;
   const logger = createLogger({});
-  const defaultServerLogFile = process.env.LOG_FILE ?? (appName + '.log');
+  const defaultServerLogFile = process.env.LOG_FILE ?? (`${appName}.log`);
   if (!rootContainer.isRegistered('serverLogFile')) {
     rootContainer.register('serverLogFile', {useValue: defaultServerLogFile});
   }
@@ -225,7 +225,7 @@ const addHealthChecks = async (
   }
 
   if (healthRoute != null) {
-    let livenessRoute = healthRoute + '/liveness';
+    let livenessRoute = `${healthRoute}/liveness`;
     if (container.isRegistered(CUSTOM_LIVENESS_ROUTE)) {
       livenessRoute = await container.resolve(CUSTOM_LIVENESS_ROUTE);
     }
@@ -239,7 +239,7 @@ const addHealthChecks = async (
       });
     }
 
-    let readinessRoute = healthRoute + '/readiness';
+    let readinessRoute = `${healthRoute}/readiness`;
     if (container.isRegistered(CUSTOM_READINESS_ROUTE)) {
       readinessRoute = await container.resolve(CUSTOM_READINESS_ROUTE);
     }
@@ -252,7 +252,7 @@ const addHealthChecks = async (
       });
     }
 
-    let infoRoute = healthRoute + '/info';
+    let infoRoute = `${healthRoute}/info`;
     if (container.isRegistered(CUSTOM_INFO_ROUTE)) {
       infoRoute = await container.resolve(CUSTOM_INFO_ROUTE);
     }
@@ -325,7 +325,7 @@ const getPortAndHostname = (logger: Logger): {port: number, hostname: string | u
   }
   const hostname = process.env.HOSTNAME ?? process.env.HATCH_BUILDTIME_HOSTNAME;
   if (process.env.NODE_ENV === 'development') {
-    logger.info('Listening at http://' + (hostname ?? '0.0.0.0') + ':' + port);
+    logger.info(`Listening at http://${hostname ?? '0.0.0.0'}:${port}`);
   }
   return {port, hostname};
 };

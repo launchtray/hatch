@@ -22,7 +22,7 @@ export const retry = async <T> (totalAttempts: number, task: () => Promise<T>): 
       return await task();
     } catch (err) {
       caughtError = err;
-      attemptsRemaining--;
+      attemptsRemaining -= 1;
     }
   }
   throw caughtError;

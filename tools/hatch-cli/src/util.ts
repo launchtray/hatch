@@ -68,16 +68,16 @@ export const createClientSDK = async (
   if (!projectName) {
     throw new Error('Client SDK name must be specified');
   }
-  const clientPath = process.cwd() + '/' + projectName;
+  const clientPath = `${process.cwd()}/${projectName}`;
   const {dstPath, inMonorepo} = await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: clientPath,
     name: projectName,
     templateType: 'project',
-    projectFolder: projectFolder,
-    clientSDKOptions: clientSDKOptions,
+    projectFolder,
+    clientSDKOptions,
   });
-  log(chalk.green('Created \'' + dstPath + '\''));
+  log(chalk.green(`Created '${dstPath}'`));
   if (inMonorepo) {
     log('Now might be a good time run to `rush update`');
   } else {
@@ -94,7 +94,7 @@ export const clientSDKCreator = (parentDirectory: string, projectFolder?: Projec
       throw new Error('Name must be specified when generating a client SDK from an input spec');
     }
     const projectName = (clientOptions.dependency && !clientOptions.name)
-      ? clientOptions.dependency + '-sdk' : clientOptions.name as string;
+      ? `${clientOptions.dependency}-sdk` : clientOptions.name as string;
     return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
   };
 };
@@ -103,14 +103,14 @@ export const createMonorepo = async (parentDirectory: string, monorepoName: stri
   if (!monorepoName) {
     throw new Error('Monorepo name must be specified');
   }
-  const monorepoPath = process.cwd() + '/' + monorepoName;
+  const monorepoPath = `${process.cwd()}/${monorepoName}`;
   await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: monorepoPath,
     name: monorepoName,
     templateType: 'monorepo',
   });
-  log(chalk.green('Created \'' + monorepoPath + '\' monorepo'));
+  log(chalk.green(`Created '${monorepoPath}' monorepo`));
 };
 
 export const monorepoCreator = (parentDirectory: string) => {
@@ -123,15 +123,15 @@ export const createProject = async (parentDirectory: string, projectName: string
   if (!projectName) {
     throw new Error('Project name must be specified');
   }
-  const projectPath = process.cwd() + '/' + projectName;
+  const projectPath = `${process.cwd()}/${projectName}`;
   const {dstPath, inMonorepo} = await createFromTemplate({
     srcPath: templateDir(parentDirectory),
     dstPath: projectPath,
     name: projectName,
     templateType: 'project',
-    projectFolder: projectFolder,
+    projectFolder,
   });
-  log(chalk.green('Created \'' + dstPath + '\''));
+  log(chalk.green(`Created '${dstPath}'`));
   if (inMonorepo) {
     log('Now might be a good time run to `rush update`');
   } else {
@@ -149,13 +149,13 @@ export const createModule = async (parentDirectory: string, moduleName: string, 
   if (!moduleName) {
     throw new Error('Module name must be specified');
   }
-  const modulePath = process.cwd() + '/' + moduleName + '.' + extension;
+  const modulePath = `${process.cwd()}/${moduleName}.${extension}`;
   await createFromTemplate({
     srcPath: templateFile(parentDirectory, extension),
     dstPath: modulePath,
     name: moduleName,
   });
-  log(chalk.green('Created \'' + modulePath + '\''));
+  log(chalk.green(`Created '${modulePath}'`));
 };
 
 export const moduleCreator = (parentDirectory: string, extension = 'ts') => {
@@ -186,7 +186,7 @@ const toDockerServiceName = (shortName: string, isStaticServer: boolean) => {
 
 const toPortName = (shortName: string, isStaticServer: boolean) => {
   const envName = toEnvName(shortName);
-  return (isStaticServer ? '_STATIC_' : '') + envName + '_PORT';
+  return `${(isStaticServer ? '_STATIC_' : '') + envName}_PORT`;
 };
 
 interface DockerServiceDefinition {
@@ -215,7 +215,7 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
         // eslint-disable-next-line @typescript-eslint/naming-convention -- following typical ARG naming convention
         args: {APP_NAME: shortName},
       },
-      ports: ['${' + toPortName(shortName, isStaticServer) + '}:80'],
+      ports: [`\${${toPortName(shortName, isStaticServer)}}:80`],
     },
   };
   if (!isStaticServer) {
@@ -225,7 +225,7 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
     ];
     service.value.environment = {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- following typical ENV_VAR naming convention
-      STATIC_ASSETS_BASE_URL: 'http://localhost:${' + toPortName(shortName, true) + '}',
+      STATIC_ASSETS_BASE_URL: `http://localhost:\${${toPortName(shortName, true)}}`,
     };
   }
   const pair = new Pair(service.key, service.value);
@@ -269,7 +269,8 @@ const findAvailablePortPair = (dotEnv: Record<string, string>) => {
   }
   for (let port = MIN_PORT; port <= MAX_PORT; port++) {
     if (!dotEnvPorts[port] && !dotEnvPorts[port + 1]) {
-      foundPorts.push(port++);
+      foundPorts.push(port);
+      port += 1;
       foundPorts.push(port);
       break;
     }
@@ -291,7 +292,7 @@ const appendToFile = (filePath: string, lines: string[]) => {
   const stream = fs.createWriteStream(filePath, {flags: 'a'});
   try {
     for (const line of lines) {
-      stream.write(line + '\n');
+      stream.write(`${line}\n`);
     }
   } finally {
     stream.end();
@@ -448,11 +449,11 @@ const generateClientSDK = (
   const clientSDKPackageParsed = parse(clientSDKPackage);
   if (clientSDKOptions.dependency != null) {
     clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
-    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency
-      + ' && rimraf dist && tsc';
+    clientSDKPackageParsed.scripts.build = `hatch-client-sdk --dependency ${clientSDKOptions.dependency
+    } && rimraf dist && tsc`;
   } else if (clientSDKOptions.spec != null) {
-    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec
-      + ' && rimraf dist && tsc';
+    clientSDKPackageParsed.scripts.build = `hatch-client-sdk --spec ${clientSDKOptions.spec
+    } && rimraf dist && tsc`;
   }
   const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
   fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
@@ -475,10 +476,10 @@ export const createFromTemplate = async (
     }
   }
   if (fs.existsSync(adjustedDstPath)) {
-    throw new Error('Failed to create ' + adjustedDstPath + ' as it already exits!');
+    throw new Error(`Failed to create ${adjustedDstPath} as it already exits!`);
   }
   // eslint-disable-next-line complexity -- refactor on future addition / cleanup
-  await withSpinner('Creating \'' + name + '\'', async () => {
+  await withSpinner(`Creating '${name}'`, async () => {
     const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
     if (templateType === 'monorepo' || templateType === 'project') {
       tmp.dir({unsafeCleanup: true}, (err, tmpPath, cleanUp) => {
@@ -503,7 +504,7 @@ export const createFromTemplate = async (
         const rushExecutable = path.resolve(__dirname, '../node_modules/.bin/rush');
         const rushInitCmd = spawnSync(rushExecutable, ['init'], {encoding: 'utf8', cwd: tempFilePath});
         if (rushInitCmd.error) {
-          throw new Error('Error initializing monorepo: ' + rushInitCmd.error.message);
+          throw new Error(`Error initializing monorepo: ${rushInitCmd.error.message}`);
         }
         // remove files that will be replaced by template
         const rushGitIgnorePath = path.resolve(tempFilePath, '.gitignore');
@@ -521,7 +522,7 @@ export const createFromTemplate = async (
       if (templateType === 'monorepo') {
         // Replace template names with generated project name
         await replace({
-          files: tempFilePath + '/**/*',
+          files: `${tempFilePath}/**/*`,
           from: /HATCH_CLI_TEMPLATE_VAR_monorepoName/g,
           to: name,
         });
@@ -564,18 +565,18 @@ export const createFromTemplate = async (
 
         // Replace template names with generated project name
         await replace({
-          files: tempFilePath + '/**/*',
+          files: `${tempFilePath}/**/*`,
           from: /HATCH_CLI_TEMPLATE_VAR_projectName/g,
           to: name,
         });
         await replace({
-          files: tempFilePath + '/**/*',
+          files: `${tempFilePath}/**/*`,
           from: /HATCH_CLI_TEMPLATE_VAR_projectShortName/g,
           to: toShortName(name),
         });
         await replace({
-          files: tempFilePath + '/package.json',
-          from: '@launchtray/hatch-template-' + templateName,
+          files: `${tempFilePath}/package.json`,
+          from: `@launchtray/hatch-template-${templateName}`,
           to: name,
         });
 
@@ -686,7 +687,7 @@ export const templateDir = (parentDirectory: string, dirName = 'template') => {
 };
 
 export const templateFile = (parentDirectory: string, extension = 'ts', moduleName = 'template') => {
-  return templatePath(parentDirectory, moduleName + '.' + extension);
+  return templatePath(parentDirectory, `${moduleName}.${extension}`);
 };
 
 export const runCommander = () => {

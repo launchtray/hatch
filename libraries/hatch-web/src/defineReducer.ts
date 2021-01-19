@@ -35,7 +35,7 @@ class ReducerDefinitionImpl<S> implements ReducerDefinition<S> {
 
   public on<P>(actionCreator: ActionDefinition<P>, reducer: PayloadReducer<S, P>): CallableReducerDefinition<S> {
     if (this.handlers[actionCreator.type]) {
-      throw new Error('Duplicate definition of reducer handler for action: ' + actionCreator.type);
+      throw new Error(`Duplicate definition of reducer handler for action: ${actionCreator.type}`);
     }
     this.handlers[actionCreator.type] = (state: S, action: AnyAction): S => {
       if (isActionType(actionCreator, action)) {

@@ -16,7 +16,6 @@ export default class extends React.Component<PropTypes> {
   public render() {
     const {props} = this;
     if (isPropTypesWithRoute(props)) {
-
       const {testID, onPressRoute, ...otherProps} = props;
       return (
         <View>

@@ -25,7 +25,7 @@ function take<P>(actionPattern: ActionDefinition<P>): ActionGenerator<P>;
 // The result of this should be checked with isActionType to narrow the type
 function take(actionDefs: Array<ActionDefinition<any>>): ActionGenerator<any>;
 
-function *take(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>) {
+function* take(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>) {
   return yield sagaTake(actionPattern);
 }
 
@@ -36,7 +36,7 @@ function takeEvery<P>(actionPattern: ActionDefinition<P>, worker: Worker<P>): An
 // The result of this should be checked with isActionType to narrow the type
 function takeEvery(actionDefs: Array<ActionDefinition<any>>, worker: Worker<any>): AnyGenerator;
 
-function *takeEvery(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>) {
+function* takeEvery(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>) {
   return yield sagaTakeEvery(actionPattern, worker);
 }
 
@@ -45,13 +45,12 @@ function takeLatest<P>(actionPattern: ActionDefinition<P>, worker: Worker<P>): A
 // The result of this should be checked with isActionType to narrow the type
 function takeLatest(actionDefs: Array<ActionDefinition<any>>, worker: Worker<any>): AnyGenerator;
 
-function *takeLatest(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>) {
+function* takeLatest(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>) {
   return yield sagaTakeLatest(actionPattern, worker);
 }
 
-function *call<Method extends(...methodArgs: any[]) => any>(method: [any, Method], ...args: Parameters<Method>):
+function* call<Method extends(...methodArgs: any[]) => any>(method: [any, Method], ...args: Parameters<Method>):
   ValueGenerator<Unpromisify<ReturnType<Method>>> {
-
   // Disallow call without context. Must be set to null explicitly for free functions.
   if (method[0]) {
     return yield sagaCall(method, ...args);
@@ -63,7 +62,7 @@ function race<T extends {[k: string]: any}>(effects: T): ValueGenerator<{[E in k
 
 function race<T>(effects: T[]): ValueGenerator<GeneratorReturnType<T>>;
 
-function *race<T extends {[k: string]: any}>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}> {
+function* race<T extends {[k: string]: any}>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}> {
   return yield sagaRace(effects as any);
 }
 

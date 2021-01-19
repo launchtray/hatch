@@ -28,13 +28,13 @@ export abstract class WebAppDriver extends WebDriver {
     const headless = options?.headless ?? true;
 
     const browserBuilder = new Builder().forBrowser(browserName);
-    const browserModule = await import('selenium-webdriver/' + browserName);
+    const browserModule = await import(`selenium-webdriver/${browserName}`);
     const browserOptions = new browserModule.Options();
     if (headless) {
       browserOptions.headless?.();
     }
     const capitalizedBrowserName = browserName.charAt(0).toUpperCase() + browserName.slice(1);
-    const driverBuilder = browserBuilder['set' + capitalizedBrowserName + 'Options'](browserOptions);
+    const driverBuilder = browserBuilder[`set${capitalizedBrowserName}Options`](browserOptions);
     return extendWebDriver(await driverBuilder.build());
   }
 
@@ -46,7 +46,7 @@ const extendWebDriver = (driver: WebAppDriver): WebAppDriver => {
   driver.waitForElement = async (locator: ElementLocator): Promise<WebElement> => {
     const {testID} = locator as ElementLocatorByTestID;
     const timeout = locator.timeoutInMS ?? 2000;
-    const el = await driver.wait(until.elementLocated(By.css('*[data-testid="' + testID + '"]')), timeout);
+    const el = await driver.wait(until.elementLocated(By.css(`*[data-testid="${testID}"]`)), timeout);
     return driver.wait(until.elementIsVisible(el), timeout);
   };
   return driver;

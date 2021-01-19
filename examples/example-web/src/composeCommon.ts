@@ -5,7 +5,6 @@ import App from './components/App';
 import ExampleManager, {ExampleDependencyForManager} from './managers/ExampleManager';
 
 export default async (): Promise<WebCommonComposition> => {
-
   ROOT_CONTAINER.registerSingleton(ExampleDependencyForManager);
 
   return {

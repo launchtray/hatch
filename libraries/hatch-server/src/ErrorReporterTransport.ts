@@ -26,9 +26,9 @@ export class ErrorReporterTransport extends TransportStream {
     const args = info[Symbol.for('splat')];
     let messageWithArgs = formatObjectForLog(message);
     if (args != null) {
-      messageWithArgs += ' ' + args.map((obj: unknown) => {
+      messageWithArgs += ` ${args.map((obj: unknown) => {
         return formatObjectForLog(obj);
-      }).join(' ');
+      }).join(' ')}`;
     }
     const paddedLevel = `[${level}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
     this.errorReporter.captureLog(`${paddedLevel}: ${messageWithArgs}`);

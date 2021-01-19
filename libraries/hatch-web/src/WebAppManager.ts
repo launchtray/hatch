@@ -97,10 +97,10 @@ export const createSagaForWebAppManagers = async (
   ssrEnabled = true,
 ): Promise<Saga> => {
   const sagas: Effect[] = [];
-  logger.debug('Total web app manager count: ' + webAppManagers.length);
+  logger.debug(`Total web app manager count: ${webAppManagers.length}`);
   webAppManagers.forEach((manager) => {
     const className = manager.constructor.name;
-    logger?.debug('- ' + className);
+    logger?.debug(`- ${className}`);
     if (!hasWebAppManagerMethods(manager)) {
       throw new Error(`${className} does not have any web app manager decorators, but is registered as a manager.`);
     }
@@ -124,7 +124,7 @@ export const createSagaForWebAppManagers = async (
     navActions.locationChange,
     navActions.serverLocationLoaded,
   ];
-  const navWorker = function *navWorker(action: AnyAction) {
+  const navWorker = function* navWorker(action: AnyAction) {
     let location: Location;
     let isFirstRendering: boolean;
     if (isActionType(navActions.serverLocationLoaded, action)) {
@@ -162,16 +162,16 @@ export const createSagaForWebAppManagers = async (
     }
   };
   if (isServer) {
-    sagas.push(effects.fork(function *navActionSaga() {
+    sagas.push(effects.fork(function* navActionSaga() {
       const navAction = yield* effects.take(navigateActions);
       yield effects.fork(navWorker, navAction);
     }));
   } else {
-    sagas.push(effects.fork(function *navActionSaga() {
+    sagas.push(effects.fork(function* navActionSaga() {
       yield* effects.takeLatest(navigateActions, navWorker);
     }));
   }
-  return function *rootSaga() {
+  return function* rootSaga() {
     yield effects.all(sagas);
   };
 };

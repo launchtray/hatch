@@ -35,7 +35,7 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
   if (!fs.existsSync(openApiVersionFile)) {
     // eslint-disable-next-line no-console -- intentional stdout
     console.log(generatorCmd.stdout);
-    throw new Error('Error generating client sdk: ' + generatorCmd.stderr);
+    throw new Error(`Error generating client sdk: ${generatorCmd.stderr}`);
   }
 };
 

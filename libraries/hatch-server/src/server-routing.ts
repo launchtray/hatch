@@ -164,11 +164,13 @@ const registerRouteTokens = (ctlr: any, metadata: APIMetadataParameters, route: 
 };
 
 const getResponseId = (response: string, totalResponseCount: number) => {
-  return totalResponseCount === 1
-    ? ''
-    : Number.isNaN(Number(response))
-      ? response
-      : HttpStatus.getStatusText(Number(response));
+  if (totalResponseCount === 1) {
+    return '';
+  }
+  if (Number.isNaN(Number(response))) {
+    return response;
+  }
+  return HttpStatus.getStatusText(Number(response));
 };
 
 const addTitleToRequestBody = (
@@ -179,7 +181,7 @@ const addTitleToRequestBody = (
     const {operationId} = apiMetadata;
     const schema = apiMetadata.requestBody?.content?.[mediaType]?.schema;
     if (operationId != null && schema != null && schema.title == null) {
-      apiMetadata.requestBody.content[mediaType].schema.title = operationId + 'Payload';
+      apiMetadata.requestBody.content[mediaType].schema.title = `${operationId}Payload`;
     }
   }
 };
@@ -193,7 +195,7 @@ const addTitleToResponses = (apiMetadata: {operationId: string | undefined, resp
       const schema = response != null && apiMetadata.responses?.[response]?.content?.[mediaType]?.schema;
       if (operationId != null && schema != null && schema.title == null) {
         const id = getResponseId(response, responses.length);
-        apiMetadata.responses[response].content[mediaType].schema.title = operationId + id + 'Response';
+        apiMetadata.responses[response].content[mediaType].schema.title = `${operationId + id}Response`;
       }
     });
   }
@@ -298,7 +300,7 @@ const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
         });
       }
       const wss = new WebSocket.Server({noServer: true});
-      wss.on('connection',  (webSocket: WebSocket, req: Request) => {
+      wss.on('connection', (webSocket: WebSocket, req: Request) => {
         requestHandler(ctlr, webSocket, req, wss)
           .catch(() => {
             webSocket.terminate();

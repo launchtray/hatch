@@ -1,4 +1,4 @@
-import {Breadcrumb, Options,  Severity} from '@sentry/types';
+import {Breadcrumb, Options, Severity} from '@sentry/types';
 import {Action, ErrorReporter} from './ErrorReporter';
 import {SentryMonitor} from './SentryMonitor';
 import {Logger} from './Logger';
@@ -47,7 +47,7 @@ export default class SentryReporter implements ErrorReporter {
         }
         this.sentry.captureException(exception);
       } catch (error) {
-        this.logger.error('Error reporting exception: ' + error.message);
+        this.logger.error(`Error reporting exception: ${error.message}`);
       }
     }
   }
@@ -66,5 +66,4 @@ export default class SentryReporter implements ErrorReporter {
       }
     }
   }
-
 }

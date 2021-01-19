@@ -1,5 +1,4 @@
 describe('Add test group description here', () => {
-
   beforeAll(async () => {
   });
 
@@ -14,5 +13,4 @@ describe('Add test group description here', () => {
 
   test('Add test case description here', async () => {
   });
-
 });

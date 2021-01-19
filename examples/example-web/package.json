@@ -9,7 +9,7 @@
   "scripts": {
     "start": "razzle start",
     "lint": "eslint --max-warnings=0 .",
-    "lint:fix": "eslint --fix .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf build && razzle build",
     "test": "razzle test --env=jsdom",
     "start:prod": "NODE_ENV=production node build/server.js"

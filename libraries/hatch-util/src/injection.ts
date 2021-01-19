@@ -44,7 +44,7 @@ const remapToken = ({tokenRegisteredByProject, tokenUsedByDependency, dependency
 const getToken = (tokenUsedByDependency: TokenKey, dependency: unknown, propertyKey?: string | symbol): TokenKey => {
   let dependencyName = (dependency as {name: string})?.name;
   if (propertyKey) {
-    dependencyName = (dependency as {constructor: {name: string}})?.constructor?.name + '.' + String(propertyKey);
+    dependencyName = `${(dependency as {constructor: {name: string}})?.constructor?.name}.${String(propertyKey)}`;
   }
   if (dependencySpecificTokens == null) {
     if (process && process.env && (process.env.JEST_WORKER_ID || process.env.NODE_ENV === 'test')) {
@@ -53,7 +53,7 @@ const getToken = (tokenUsedByDependency: TokenKey, dependency: unknown, property
       initializeInjection();
       ROOT_CONTAINER.registerInstance('Logger', new NonLogger());
     } else {
-      throw new Error('Injectable "' + dependencyName + '" cannot be imported before composition module');
+      throw new Error(`Injectable "${dependencyName}" cannot be imported before composition module`);
     }
   }
   const tokenMap = dependencySpecificTokens.get(dependencyName) ?? globalTokens;

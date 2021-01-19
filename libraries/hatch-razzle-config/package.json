@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-razzle-config",
-  "version": "0.12.5",
+  "version": "0.13.0-alpha.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -10,18 +10,18 @@
     "access": "public"
   },
   "peerDependencies": {
-    "eslint": "^7.17.0",
-    "@typescript-eslint/parser": "^4.13.0",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
-    "razzle-plugin-typescript": "3.1.8",
+    "@typescript-eslint/parser": "^4.13.0",
+    "eslint": "^7.17.0",
     "razzle-dev-utils": "3.1.8",
+    "razzle-plugin-typescript": "3.1.8",
     "sockjs-client": "^1.4.0",
     "webpack": "^4",
     "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
-    "razzle-plugin-typescript": "3.1.8",
     "razzle-dev-utils": "3.1.8",
+    "razzle-plugin-typescript": "3.1.8",
     "sockjs-client": "^1.4.0",
     "webpack": "^4",
     "webpack-dev-server": "^3.11.0"

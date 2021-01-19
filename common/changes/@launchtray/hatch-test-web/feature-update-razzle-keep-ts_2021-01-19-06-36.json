@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-test-web",
+      "comment": "Migrate to ESLint, fix issues",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-test-web",
+  "email": "kiltyj@gmail.com"
+}

@@ -27,6 +27,7 @@ export interface InjectionInitializationContext {
   tokenRemaps?: TokenMapping[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- rest args are not known for this generic type
 export type Class<T> = new (...args: any[]) => T;
 
 const remapToken = ({tokenRegisteredByProject, tokenUsedByDependency, dependencyName}: TokenMapping) => {
@@ -40,18 +41,19 @@ const remapToken = ({tokenRegisteredByProject, tokenUsedByDependency, dependency
   tokenMap.set(tokenUsedByDependency, tokenRegisteredByProject);
 };
 
-const getToken = (tokenUsedByDependency: TokenKey, dependency: any, propertyKey?: string | symbol): TokenKey => {
-  let dependencyName = dependency?.name;
+const getToken = (tokenUsedByDependency: TokenKey, dependency: unknown, propertyKey?: string | symbol): TokenKey => {
+  let dependencyName = (dependency as {name: string})?.name;
   if (propertyKey) {
-    dependencyName = dependency?.constructor?.name + '.' + String(propertyKey);
+    dependencyName = `${(dependency as {constructor: {name: string}})?.constructor?.name}.${String(propertyKey)}`;
   }
   if (dependencySpecificTokens == null) {
     if (process && process.env && (process.env.JEST_WORKER_ID || process.env.NODE_ENV === 'test')) {
+      // eslint-disable-next-line no-console -- intentional warning to console
       console.info('Using default dependency injection initialization for testing');
       initializeInjection();
       ROOT_CONTAINER.registerInstance('Logger', new NonLogger());
     } else {
-      throw new Error('Injectable "' + dependencyName + '" cannot be imported before composition module');
+      throw new Error(`Injectable "${dependencyName}" cannot be imported before composition module`);
     }
   }
   const tokenMap = dependencySpecificTokens.get(dependencyName) ?? globalTokens;
@@ -59,14 +61,14 @@ const getToken = (tokenUsedByDependency: TokenKey, dependency: any, propertyKey?
   return resolvedToken ?? tokenUsedByDependency;
 };
 
-export const inject = (token: TokenKey): (target: any, propertyKey: string | symbol, paramIndex: number) => any => {
-  return (target: any, propertyKey: string | symbol, paramIndex: number) => {
+export const inject = (token: TokenKey) => {
+  return (target: unknown, propertyKey: string | symbol, paramIndex: number) => {
     return tsyringe_inject(getToken(token, target, propertyKey))(target, propertyKey, paramIndex);
   };
 };
 
-export const injectAll = (token: TokenKey): (target: any, propertyKey: string | symbol, paramIndex: number) => any => {
-  return (target: any, propertyKey: string | symbol, paramIndex: number) => {
+export const injectAll = (token: TokenKey) => {
+  return (target: unknown, propertyKey: string | symbol, paramIndex: number) => {
     return tsyringe_injectAll(getToken(token, target, propertyKey))(target, propertyKey, paramIndex);
   };
 };
@@ -74,7 +76,7 @@ export const injectAll = (token: TokenKey): (target: any, propertyKey: string | 
 export const initializeInjection = (context?: InjectionInitializationContext) => {
   const tokenRemaps = context?.tokenRemaps ?? [];
   globalTokens = new Map<string, string>();
-  dependencySpecificTokens = new Map<any, Map<string, string>>();
+  dependencySpecificTokens = new Map<string, Map<TokenKey, TokenKey>>();
   tsyringe_container.reset();
   for (const tokenRemap of tokenRemaps) {
     remapToken(tokenRemap);
@@ -86,14 +88,16 @@ export const ROOT_CONTAINER: DependencyContainer = tsyringe_container;
 export const containerSingleton = <T>() => (target: Class<T>) => {
   return tsyringe_scoped(Lifecycle.ContainerScoped)(target);
 };
+
+/* eslint-disable @typescript-eslint/no-explicit-any -- intentionally dynamic code */
 export const resolveParams: (
   container: DependencyContainer,
-  target: any,
+  target: unknown,
   propertyKey: string | symbol | undefined,
   ...args: any[]
 ) => Promise<any[]> = tsyringe_resolveParams;
 export const initializer: () => (
-  target: any,
+  target: unknown,
   propertyKey: string | symbol,
   descriptor: PropertyDescriptor
 ) => any = tsyringe_initializer;

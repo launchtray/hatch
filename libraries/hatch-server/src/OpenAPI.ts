@@ -19,12 +19,14 @@ export interface OpenAPISchemaObject {
   // TODO: Flesh this out more to improve IDE help
   // For now, see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#schemaObject
   title?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- keeping this open for now, see TODO above
   [key: string]: any;
 }
 
 export interface OpenAPIExampleObject {
   summary?: string;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- will likely refactor with "API first" redesign
   value: any;
 }
 
@@ -50,6 +52,7 @@ export type OpenAPIEncodings = {
 
 export interface OpenAPIMediaTypeObject {
   schema: OpenAPISchemaObject;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- will likely refactor with "API first" redesign
   example?: any;
   examples?: OpenAPIExamples;
   encoding?: OpenAPIEncodings;
@@ -142,9 +145,9 @@ export class OpenAPISpecBuilder {
         securitySchemes: {
           [bearerAuth]: {
             type: 'http',
-            scheme: 'bearer'
+            scheme: 'bearer',
           },
-        }
+        },
       },
     };
   }
@@ -160,8 +163,8 @@ export class OpenAPISpecBuilder {
         operationId: apiMetadata.operationId,
         tags: apiMetadata.tags,
         security: apiMetadata.security,
-      }
-    }
+      },
+    };
   }
 
   build(): OpenAPISpec {

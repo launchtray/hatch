@@ -1,9 +1,9 @@
-import * as Sentry from '@sentry/types';
+import {Breadcrumb, Options} from '@sentry/types';
 
 export interface SentryMonitor {
-  addBreadcrumb(breadcrumb: Sentry.Breadcrumb): void;
-  captureException(error: any): void;
-  init(options: any): void;
-  setExtra(key: string, extra: any): void;
+  addBreadcrumb(breadcrumb: Breadcrumb): void;
+  captureException(error: Error): void;
+  init(options: Options): void;
+  setExtra(key: string, extra: unknown): void;
   setTag(key: string, value: string): void;
 }

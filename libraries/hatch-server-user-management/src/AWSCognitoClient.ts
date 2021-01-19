@@ -1,4 +1,4 @@
-import {CognitoIdentityServiceProvider, CredentialProviderChain} from 'aws-sdk';
+import {CognitoIdentityServiceProvider, CredentialProviderChain, AWSError} from 'aws-sdk';
 import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
@@ -10,15 +10,15 @@ import {
   UserInfo,
   UserManagementClientOptions,
   UserManagementError,
-  UserManagementErrorCodes
+  UserManagementErrorCodes,
 } from '@launchtray/hatch-user-management-client';
-import {AWSError} from 'aws-sdk';
 
+// eslint-disable-next-line complexity -- simple enum conversion
 const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
   if (awsError.code == null) {
     return new UserManagementError(UserManagementErrorCodes.INTERNAL_ERROR, awsError.message);
   }
-  const message = awsError.code + ' - ' + awsError.message;
+  const message = `${awsError.code} - ${awsError.message}`;
   switch (awsError.code) {
     case 'CodeMismatchException':
       return new UserManagementError(UserManagementErrorCodes.INVALID_CODE, message);
@@ -29,9 +29,9 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
     case 'NotAuthorizedException':
       if (awsError.message.includes('Password attempts exceeded')) {
         return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);
-      } else {
-        return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, message);
       }
+      return new UserManagementError(UserManagementErrorCodes.UNAUTHORIZED, message);
+
     case 'PasswordResetRequiredException':
       return new UserManagementError(UserManagementErrorCodes.ACCOUNT_LOCKED, message);
     case 'TokenExpiredException':
@@ -51,11 +51,12 @@ const convertAWSErrorToUserManagementError = (awsError: AWSError) => {
 export default class AWSCognitoClient implements UserManagementClient {
   private readonly cognitoProvider = new CognitoIdentityServiceProvider();
 
-  constructor(@inject('Logger') private readonly logger: Logger,
-              @inject('awsRegion') private readonly awsRegion: string,
-              @inject('awsUserPoolId') private readonly awsUserPoolId: string,
-              @inject('awsClientId') private readonly awsClientId: string)
-  {
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+    @inject('awsRegion') private readonly awsRegion: string,
+    @inject('awsUserPoolId') private readonly awsUserPoolId: string,
+    @inject('awsClientId') private readonly awsClientId: string,
+  ) {
     this.cognitoProvider.config.update({
       region: this.awsRegion,
       credentialProvider: new CredentialProviderChain(),
@@ -68,6 +69,7 @@ export default class AWSCognitoClient implements UserManagementClient {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
       const response = await this.cognitoProvider.adminInitiateAuth({
+        /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         ClientId: clientId,
         AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
@@ -75,36 +77,46 @@ export default class AWSCognitoClient implements UserManagementClient {
           USERNAME: username,
           PASSWORD: password,
         },
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
       return {
         accessToken: response.AuthenticationResult?.AccessToken,
         refreshToken: response.AuthenticationResult?.RefreshToken,
-      }
+      };
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
 
-  public async startUserRegistration(username: string, password: string, userAttributes: UserAttributes, options?: UserManagementClientOptions) {
-    let cognitoUserAttributes: AttributeListType = [];
+  public async startUserRegistration(
+    username: string,
+    password: string,
+    userAttributes: UserAttributes,
+    options?: UserManagementClientOptions,
+  ) {
+    const cognitoUserAttributes: AttributeListType = [];
     const userAttributesWithEmail = {
       email: username,
       ...userAttributes,
     };
     Object.keys(userAttributesWithEmail).forEach((key) => {
       cognitoUserAttributes.push({
+        /* eslint-disable @typescript-eslint/naming-convention */
         Name: key,
         Value: userAttributesWithEmail[key],
+        /* eslint-enable @typescript-eslint/naming-convention */
       });
     });
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.signUp({
+        /* eslint-disable @typescript-eslint/naming-convention */
         ClientId: clientId,
         Username: username,
         Password: password,
         UserAttributes: cognitoUserAttributes,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
@@ -116,22 +128,30 @@ export default class AWSCognitoClient implements UserManagementClient {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.resendConfirmationCode({
+        /* eslint-disable @typescript-eslint/naming-convention */
         ClientId: clientId,
         Username: username,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
 
-  public async confirmUserRegistration(username: string, confirmationCode: string, options?: UserManagementClientOptions) {
+  public async confirmUserRegistration(
+    username: string,
+    confirmationCode: string,
+    options?: UserManagementClientOptions,
+  ) {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.confirmSignUp({
+        /* eslint-disable @typescript-eslint/naming-convention */
         ClientId: clientId,
         Username: username,
         ConfirmationCode: confirmationCode,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
@@ -142,45 +162,60 @@ export default class AWSCognitoClient implements UserManagementClient {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       await this.cognitoProvider.adminResetUserPassword({
+        /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         Username: username,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
 
-  public async confirmPasswordReset(username: string, confirmationCode: string, password: string, options?: UserManagementClientOptions) {
+  public async confirmPasswordReset(
+    username: string,
+    confirmationCode: string,
+    password: string,
+    options?: UserManagementClientOptions,
+  ) {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
       await this.cognitoProvider.confirmForgotPassword({
+        /* eslint-disable @typescript-eslint/naming-convention */
         ClientId: clientId,
         Username: username,
         ConfirmationCode: confirmationCode,
         Password: password,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
   }
 
-  public async refreshAuthentication(refreshToken: string, accessToken: string, options?: UserManagementClientOptions) {
+  public async refreshAuthentication(
+    refreshToken: string,
+    accessToken?: string,
+    options?: UserManagementClientOptions,
+  ) {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const clientId = await this.getClientId(userPoolId);
       const response = await this.cognitoProvider.adminInitiateAuth({
+        /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         ClientId: clientId,
         AuthFlow: 'REFRESH_TOKEN',
         AuthParameters: {
           REFRESH_TOKEN: refreshToken,
         },
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
       return {
         accessToken: response.AuthenticationResult?.AccessToken,
         refreshToken: response.AuthenticationResult?.RefreshToken,
-      }
+      };
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
     }
@@ -190,8 +225,10 @@ export default class AWSCognitoClient implements UserManagementClient {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       await this.cognitoProvider.adminUserGlobalSignOut({
+        /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         Username: username,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
@@ -202,16 +239,20 @@ export default class AWSCognitoClient implements UserManagementClient {
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
       const response = await this.cognitoProvider.listUsers({
+        /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         Limit: 1,
-        Filter: 'sub = "' + userId + '"',
+        Filter: `sub = "${userId}"`,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
-      this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
-      const userAttrsResp: {[key: string]: any} = {};
+      this.logger.debug(`Fetched user attributes: ${JSON.stringify(response)}`);
+      const userAttrsResp: Record<string, unknown> = {};
       if (response && response.Users && response.Users.length > 0 && response.Users[0].Attributes) {
-        response.Users[0].Attributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+        response.Users[0].Attributes.forEach((attr) => {
+          userAttrsResp[attr.Name] = attr.Value;
+        });
       } else {
-        throw new Error('User not found: ' + userId);
+        throw new Error(`User not found: ${userId}`);
       }
       return userAttrsResp;
     } catch (err) {
@@ -222,41 +263,54 @@ export default class AWSCognitoClient implements UserManagementClient {
   private async getUserAttributesByUsername(username: string, userPoolId: string): Promise<UserAttributes> {
     this.logger.debug('Getting user by username:', username);
     const response = await this.cognitoProvider.adminGetUser({
+      /* eslint-disable @typescript-eslint/naming-convention */
       UserPoolId: userPoolId,
       Username: username,
+      /* eslint-enable @typescript-eslint/naming-convention */
     }).promise();
-    this.logger.debug('Fetched user attributes: ' + JSON.stringify(response));
-    const userAttrsResp: {[key: string]: any} = {};
+    this.logger.debug(`Fetched user attributes: ${JSON.stringify(response)}`);
+    const userAttrsResp: Record<string, unknown> = {};
     if (response && response.UserAttributes) {
-      response.UserAttributes.forEach((attr) => (userAttrsResp[attr.Name] = attr.Value));
+      response.UserAttributes.forEach((attr) => {
+        userAttrsResp[attr.Name] = attr.Value;
+      });
     } else {
-      throw new Error('User not found: ' + username);
+      throw new Error(`User not found: ${username}`);
     }
     return userAttrsResp;
   }
 
   public async getUserId(username: string, accessToken: string, options?: UserManagementClientOptions) {
     const userPoolId = options?.tenantId ?? this.awsUserPoolId;
-    return (await this.getUserAttributesByUsername(username, userPoolId))!.sub;
+    return (await this.getUserAttributesByUsername(username, userPoolId))?.sub as string;
   }
 
-  public async setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions) {
+  public async setUserAttributes(
+    userId: string,
+    userAttributes: UserAttributes,
+    accessToken: string,
+    options?: UserManagementClientOptions,
+  ) {
     const userAttributesList: AttributeListType = [];
     const attributes = userAttributes || {};
     Object.keys(attributes).map((key) => {
       userAttributesList.push({
+        /* eslint-disable @typescript-eslint/naming-convention */
         Name: key,
-        Value: attributes[key]
+        Value: attributes[key] as string,
+        /* eslint-enable @typescript-eslint/naming-convention */
       });
       return userAttributesList;
     });
     try {
       const userPoolId = options?.tenantId ?? this.awsUserPoolId;
-      const username = (await this.getUserAttributes(userId)).email;
+      const username = (await this.getUserAttributes(userId)).email as string;
       await this.cognitoProvider.adminUpdateUserAttributes({
+        /* eslint-disable @typescript-eslint/naming-convention */
         UserPoolId: userPoolId,
         Username: username,
         UserAttributes: userAttributesList,
+        /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
       throw convertAWSErrorToUserManagementError(err);
@@ -271,17 +325,19 @@ export default class AWSCognitoClient implements UserManagementClient {
     if (pemCerts == null) {
       throw new Error('Missing public keys from AWS Cognito to verify token');
     }
-    const decodedJwt: any = jwt.decode(accessToken, {complete: true});
+    const decodedJwt = jwt.decode(accessToken, {complete: true}) as Record<string, unknown>;
     if (decodedJwt == null) {
       throw new Error('Error decoding token');
     }
     this.logger.debug('Decoded JWT Token: ', decodedJwt);
 
-    if (decodedJwt.payload && decodedJwt.payload.token_use !== 'access') {
-      throw new Error('Expected access token but received ' + decodedJwt.payload.token_use + ' token');
+    const payload = decodedJwt.payload as Record<string, unknown>;
+    if (payload && payload.token_use !== 'access') {
+      throw new Error(`Expected access token but received ${payload.token_use} token`);
     }
 
-    const kid = decodedJwt.header && decodedJwt.header.kid;
+    const header = decodedJwt.header as Record<string, unknown>;
+    const kid = header && header.kid as string;
     if (kid == null) {
       throw new Error('Missing kid field from token supplied');
     }
@@ -294,21 +350,23 @@ export default class AWSCognitoClient implements UserManagementClient {
       throw err;
     }
 
-    const username = decodedJwt.payload && decodedJwt.payload.username;
-    const userId = decodedJwt.payload && decodedJwt.payload.sub;
+    const username = payload?.username as string;
+    const userId = payload?.sub as string;
     return new UserInfo(userId, username, accessToken);
   }
 
   private async getPemCerts(provideUserPoolId?: string) {
     const userPoolId = provideUserPoolId ?? this.awsUserPoolId;
     const postFix = '/.well-known/jwks.json';
-    const iss = 'https://cognito-idp.' + this.awsRegion + '.amazonaws.com/' + userPoolId;
+    const iss = `https://cognito-idp.${this.awsRegion}.amazonaws.com/${userPoolId}`;
     const request = iss + postFix;
     const response = await fetch(request, {
       method: 'GET',
       headers: {
+        /* eslint-disable @typescript-eslint/naming-convention */
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
+        /* eslint-enable @typescript-eslint/naming-convention */
       },
     });
     const responseBody = await response.json();
@@ -321,7 +379,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         const keyType = key.kty;
         const jwk = {kty: keyType, n: modulus, e: exponent};
         pemCerts[keyId] = jwkToPem(jwk);
-        this.logger.debug('Public key [' + keyId + '] decoded: ', pemCerts[keyId]);
+        this.logger.debug(`Public key [${keyId}] decoded: `, pemCerts[keyId]);
       }
     }
     return pemCerts;
@@ -332,19 +390,20 @@ export default class AWSCognitoClient implements UserManagementClient {
       return this.awsClientId;
     }
     const request: ListUserPoolClientsRequest = {
+      /* eslint-disable @typescript-eslint/naming-convention */
       UserPoolId: userPoolId,
-    }
+      /* eslint-enable @typescript-eslint/naming-convention */
+    };
     const response = await this.cognitoProvider.listUserPoolClients(request).promise();
     const userPoolClients = response.UserPoolClients;
     if (userPoolClients?.length !== 1) {
-      throw new Error('Expected number of clients is 1 but found: ' + userPoolClients?.length)
+      throw new Error(`Expected number of clients is 1 but found: ${userPoolClients?.length}`);
     }
     const userPoolClient = userPoolClients[0];
-    this.logger.debug('Found user client: {name=' + userPoolClient.ClientName + ',id=' + userPoolClient.ClientId + '}');
+    this.logger.debug(`Found user client: {name=${userPoolClient.ClientName},id=${userPoolClient.ClientId}}`);
     if (userPoolClient.ClientId == null) {
-      throw new Error('Unable to find client id for user pool id: ' + userPoolClient.UserPoolId);
+      throw new Error(`Unable to find client id for user pool id: ${userPoolClient.UserPoolId}`);
     }
     return userPoolClient.ClientId;
   }
-
 }

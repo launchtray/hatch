@@ -1,6 +1,7 @@
 import {APIMetadataParameters} from '@launchtray/hatch-server';
 
 export const addCsrfCheckApiMetadata = (metadataParams: APIMetadataParameters) => {
+  /* eslint-disable no-param-reassign -- intentionally modifying reference  */
   if (metadataParams.parameters == null) {
     metadataParams.parameters = {};
   }
@@ -31,9 +32,11 @@ export const addCsrfCheckApiMetadata = (metadataParams: APIMetadataParameters) =
   metadataParams.requestBody.content['application/json'].schema.properties.doubleSubmitCookie = {
     type: 'string',
   };
+  /* eslint-enable no-param-reassign */
 };
 
 const addTenantIDHeader = (metadataParams: APIMetadataParameters) => {
+  /* eslint-disable no-param-reassign -- intentionally modifying reference  */
   if (metadataParams.parameters == null) {
     metadataParams.parameters = {};
   }
@@ -45,22 +48,25 @@ const addTenantIDHeader = (metadataParams: APIMetadataParameters) => {
       type: 'string',
     },
   };
+  /* eslint-enable no-param-reassign */
 };
 
 const addBearerAuthHeader = (metadataParams: APIMetadataParameters) => {
+  /* eslint-disable no-param-reassign -- intentionally modifying reference  */
   if (metadataParams.security == null) {
     metadataParams.security = [];
   }
   metadataParams.security.push({
     bearerAuth: [],
   });
-}
+  /* eslint-enable no-param-reassign */
+};
 
 export class AuthenticateRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Authenticates a user and retrieves valid access and refresh tokens',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'authenticate',
     requestBody: {
@@ -74,18 +80,18 @@ export class AuthenticateRequest {
             ],
             properties: {
               username: {
-                type: 'string'
+                type: 'string',
               },
               password: {
-                type: 'string'
+                type: 'string',
               },
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     responses: {
-      '200': {
+      200: {
         description: 'The authenticated user\'s auth tokens',
         content: {
           'application/json': {
@@ -93,17 +99,17 @@ export class AuthenticateRequest {
               type: 'object',
               properties: {
                 accessToken: {
-                  type: 'string'
+                  type: 'string',
                 },
                 refreshToken: {
-                  type: 'string'
+                  type: 'string',
                 },
-              }
-            }
-          }
-        }
-      }
-    }
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -115,7 +121,7 @@ export class StartUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Sign\'s up a user account',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'startUserRegistration',
     requestBody: {
@@ -129,19 +135,19 @@ export class StartUserRegistrationRequest {
             ],
             properties: {
               username: {
-                type: 'string'
+                type: 'string',
               },
               password: {
-                type: 'string'
+                type: 'string',
               },
               userAttributes: {
-                type: 'object'
-              }
-            }
-          }
-        }
-      }
-    }
+                type: 'object',
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -151,7 +157,7 @@ export class ResendUserRegistrationCodeRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Resend user registration code',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'resendUserRegistrationCode',
     requestBody: {
@@ -164,13 +170,13 @@ export class ResendUserRegistrationCodeRequest {
             ],
             properties: {
               username: {
-                type: 'string'
+                type: 'string',
               },
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -180,7 +186,7 @@ export class ConfirmUserRegistrationRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Confirms a user registration',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'confirmUserRegistration',
     requestBody: {
@@ -194,16 +200,16 @@ export class ConfirmUserRegistrationRequest {
             ],
             properties: {
               username: {
-                type: 'string'
+                type: 'string',
               },
               confirmationCode: {
-                type: 'string'
-              }
-            }
-          }
-        }
-      }
-    }
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -213,7 +219,7 @@ export class StartPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Resets a user account password',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'startPasswordReset',
     requestBody: {
@@ -226,13 +232,13 @@ export class StartPasswordResetRequest {
             ],
             properties: {
               username: {
-                type: 'string'
+                type: 'string',
               },
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -242,7 +248,7 @@ export class ConfirmPasswordResetRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Confirms a users password reset',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'confirmPasswordReset',
     requestBody: {
@@ -257,19 +263,19 @@ export class ConfirmPasswordResetRequest {
             ],
             properties: {
               username: {
-                type: 'string'
+                type: 'string',
               },
               confirmationCode: {
-                type: 'string'
+                type: 'string',
               },
               password: {
-                type: 'string'
+                type: 'string',
               },
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -279,7 +285,7 @@ export class RefreshAuthenticationRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Refreshes a user\'s access token',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'refreshAuthentication',
     requestBody: {
@@ -292,15 +298,15 @@ export class RefreshAuthenticationRequest {
             ],
             properties: {
               refreshToken: {
-                type: 'string'
+                type: 'string',
               },
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     responses: {
-      '200': {
+      200: {
         description: 'The authenticated user\'s auth tokens',
         content: {
           'application/json': {
@@ -308,21 +314,21 @@ export class RefreshAuthenticationRequest {
               type: 'object',
               properties: {
                 accessToken: {
-                  type: 'string'
+                  type: 'string',
                 },
                 refreshToken: {
-                  type: 'string'
+                  type: 'string',
                 },
-              }
-            }
-          }
-        }
-      }
-    }
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 
-addBearerAuthHeader(RefreshAuthenticationRequest.apiMetadata)
+addBearerAuthHeader(RefreshAuthenticationRequest.apiMetadata);
 
 addTenantIDHeader(RefreshAuthenticationRequest.apiMetadata);
 
@@ -332,7 +338,7 @@ export class SignOutUserRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Signs out a user',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'signOutUser',
     requestBody: {
@@ -340,10 +346,10 @@ export class SignOutUserRequest {
         'application/json': {
           schema: {
             type: 'object',
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   };
 }
 
@@ -357,7 +363,7 @@ export class SetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Sets a user\'s attributes',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'setUserAttributes',
     requestBody: {
@@ -367,13 +373,13 @@ export class SetUserAttributesRequest {
             type: 'object',
             properties: {
               userAttributes: {
-                type: 'object'
-              }
-            }
-          }
-        }
-      }
-    }
+                type: 'object',
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -387,7 +393,7 @@ export class GetUserAttributesRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Gets a user\'s attributes',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'getUserAttributes',
     parameters: {
@@ -403,18 +409,18 @@ export class GetUserAttributesRequest {
       },
     },
     responses: {
-      '200': {
+      200: {
         description: 'User Attributes object',
         content: {
           'application/json': {
             schema: {
               type: 'object',
               additionalProperties: true,
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   };
 }
 
@@ -426,7 +432,7 @@ export class GetUserIdRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Gets a user\'s ID',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'getUserId',
     parameters: {
@@ -437,7 +443,7 @@ export class GetUserIdRequest {
       },
     },
     responses: {
-      '200': {
+      200: {
         description: 'The user ID',
         content: {
           'application/json': {
@@ -448,18 +454,18 @@ export class GetUserIdRequest {
               ],
               properties: {
                 userId: {
-                  type: 'string'
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 
-addBearerAuthHeader(GetUserIdRequest.apiMetadata)
+addBearerAuthHeader(GetUserIdRequest.apiMetadata);
 
 addTenantIDHeader(GetUserIdRequest.apiMetadata);
 
@@ -467,11 +473,11 @@ export class GetUserInfoRequest {
   public static apiMetadata: APIMetadataParameters = {
     description: 'Gets a user\'s info',
     tags: [
-      'User Management Service'
+      'User Management Service',
     ],
     operationId: 'getUserInfo',
     responses: {
-      '200': {
+      200: {
         description: 'The user info',
         content: {
           'application/json': {
@@ -480,24 +486,24 @@ export class GetUserInfoRequest {
               required: [
                 'userId',
                 'username',
-                'accessToken'
+                'accessToken',
               ],
               properties: {
                 userId: {
-                  type: 'string'
+                  type: 'string',
                 },
                 username: {
-                  type: 'string'
+                  type: 'string',
                 },
                 accessToken: {
-                  type: 'string'
+                  type: 'string',
                 },
-              }
-            }
-          }
-        }
-      }
-    }
+              },
+            },
+          },
+        },
+      },
+    },
   };
 }
 

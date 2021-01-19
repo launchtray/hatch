@@ -1,8 +1,8 @@
 import {inject, injectable, injectAll} from '@launchtray/hatch-util';
-import UserPermissionsManager, {
-  SelfOnlyUserPermissionsManager
-} from './UserPermissionsManager';
 import {UserAttributes, UserManagementClient, UserManager} from '@launchtray/hatch-user-management-client';
+import UserPermissionsManager, {
+  SelfOnlyUserPermissionsManager,
+} from './UserPermissionsManager';
 
 @injectable()
 export default class LocalUserManager implements UserManager {
@@ -10,20 +10,29 @@ export default class LocalUserManager implements UserManager {
 
   constructor(
     @inject('UserManagementClient') private readonly userManagementClient: UserManagementClient,
-    @injectAll('UserPermissionsManager') permissionsManagers: UserPermissionsManager[]
+    @injectAll('UserPermissionsManager') permissionsManagers: UserPermissionsManager[],
   ) {
-    if (permissionsManagers.length == 0) {
+    if (permissionsManagers.length === 0) {
       // By default, only allow the client to get/set own attributes
       this.permissionsManager = new SelfOnlyUserPermissionsManager();
     } else if (permissionsManagers.length > 1) {
       throw new Error('Only one UserPermissionsManager should be injected');
     } else {
-      this.permissionsManager = permissionsManagers[0];
+      [this.permissionsManager] = permissionsManagers;
     }
   }
 
-  async getUserAttributes(clientUserId: string, queriedUserId: string, accessToken: string, tenantId?: string): Promise<UserAttributes> {
-    const allAttributes = await this.userManagementClient.getUserAttributes(queriedUserId, accessToken, {tenantId});
+  async getUserAttributes(
+    clientUserId: string,
+    queriedUserId: string,
+    accessToken: string,
+    tenantId?: string,
+  ): Promise<UserAttributes> {
+    const allAttributes = await this.userManagementClient.getUserAttributes(
+      queriedUserId,
+      accessToken,
+      {tenantId},
+    );
     const attributes = await this.permissionsManager.getReadableAttributes(clientUserId, queriedUserId, allAttributes);
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to read any permissions for queried user');
@@ -36,10 +45,13 @@ export default class LocalUserManager implements UserManager {
     queriedUserId: string,
     attributes: UserAttributes,
     accessToken: string,
-    tenantId?: string
+    tenantId?: string,
   ): Promise<UserAttributes> {
     const writableAttributes = await this.permissionsManager.getWriteableAttributes(
-      clientUserId, queriedUserId, attributes);
+      clientUserId,
+      queriedUserId,
+      attributes,
+    );
     if (attributes == null || Object.keys(attributes).length === 0) {
       throw new Error('User is not allowed to set any permissions for queried user');
     } else {
@@ -56,7 +68,7 @@ export default class LocalUserManager implements UserManager {
       throw new Error('User ID lookup is not supported');
     }
 
-    const allowed = await this.permissionsManager.isUserAllowedToLookUpUserId(clientUserId, userId);
+    const allowed = userId != null && await this.permissionsManager.isUserAllowedToLookUpUserId(clientUserId, userId);
     if (!allowed) {
       throw new Error('User is not allowed to read user ID for queried user');
     }

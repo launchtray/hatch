@@ -1,16 +1,19 @@
 import {Class} from '@launchtray/hatch-util';
-import {Reducer} from 'redux';
+import {ActionCreator, Reducer} from 'redux';
+import {ElementType} from 'react';
 
 export interface TranslationsDictionary {
   [key: string]: TranslationsDictionary;
 }
 
+export type ActionsObject = {[key: string]: ActionsObject | ActionCreator<unknown>};
+
 export interface WebCommonComposition {
   translations?: TranslationsDictionary;
   createRootReducer: () => Reducer;
-  actions: any;
-  App: any;
-  webAppManagers?: Array<Class<any>>;
+  actions: ActionsObject;
+  appComponent: ElementType;
+  webAppManagers?: Array<Class<unknown>>;
 }
 
 export type WebCommonComposer = () => Promise<WebCommonComposition>;

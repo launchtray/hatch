@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-mock-server",
+      "comment": "Migrate to ESLint, fix issues",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-mock-server",
+  "email": "kiltyj@gmail.com"
+}

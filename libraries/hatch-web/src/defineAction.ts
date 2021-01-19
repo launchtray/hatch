@@ -14,8 +14,6 @@ export interface ActionDefinition<P> extends ActionCreator<Action<P>> {
   toString: () => string;
 }
 
-export type PayloadOf<T extends ActionDefinition<any>> = T extends ActionDefinition<infer P> ? P : never;
-
 const createActionCreator = <P>(type: string) => {
   const actionCreator: ActionDefinition<P> = (payload: P) => ({type, payload});
   actionCreator.type = type;
@@ -33,12 +31,12 @@ export default {
   type: (type: string) => {
     if (DETECT_DUPLICATE_ACTIONS) {
       if (definedActions[type]) {
-        throw new Error('Duplicate definition of action type: ' + type);
+        throw new Error(`Duplicate definition of action type: ${type}`);
       }
       definedActions[type] = true;
     }
     return {
       payload: <P>() => createActionCreator<P>(type),
     };
-  }
+  },
 };

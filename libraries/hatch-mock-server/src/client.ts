@@ -1,6 +1,6 @@
 import {mockServerClient} from 'mockserver-client';
-import {DEFAULT_PORT} from './index';
 import tmp from 'tmp';
+import {DEFAULT_PORT} from './index';
 import {retry, withTimeout} from './util';
 
 export interface SimpleMockResponseOptions {
@@ -10,7 +10,7 @@ export interface SimpleMockResponseOptions {
   queryParams?: {[key: string]: string[]};
   requestHeaders?: {[key: string]: string[]};
   requestCookies?: {[key: string]: string};
-  responseBody?: string | {[key: string]: any};
+  responseBody?: string | {[key: string]: unknown};
   responseHeaders?: {[key: string]: string[]};
   responseCookies?: {[key: string]: string};
 }

@@ -39,7 +39,9 @@ export const selectFirstRenderingFromLocationChangeAction = (action: AnyAction) 
 
 interface NavActionDef<P> {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rest args are not known for this generic type
   actionCreator(...args: any[]): any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- varied return array not known for this generic type
   convertArgs(payload: P): any[];
 }
 
@@ -111,7 +113,7 @@ class NavigationProviderComponent extends React.Component<{dispatch: Dispatch}> 
 
 const NavProvider = connect(
   null,
-  (dispatch) => ({dispatch})
+  (dispatch) => ({dispatch}),
 )(NavigationProviderComponent);
 
 export const createNavMiddleware = (locationForServerSideRendering?: string) => {
@@ -133,32 +135,32 @@ export const createNavMiddleware = (locationForServerSideRendering?: string) => 
   };
 };
 
-export const selectLocation = (state: any) => {
+export const selectLocation = (state: {router: RouterState}) => {
   return selectPath(state) + selectQuery(state) + selectFragment(state);
 };
 
-export const selectPath = (state: any) => {
-  const {router}: {router: RouterState} = state;
+export const selectPath = (state: {router: RouterState}) => {
+  const {router} = state;
   return router.location.pathname;
 };
 
-export const selectQuery = (state: any) => {
-  const {router}: {router: RouterState} = state;
+export const selectQuery = (state: {router: RouterState}) => {
+  const {router} = state;
   return router.location.search;
 };
 
-export const selectFragment = (state: any) => {
-  const {router}: {router: RouterState} = state;
+export const selectFragment = (state: {router: RouterState}) => {
+  const {router} = state;
   return router.location.hash;
 };
 
-export const selectIsMobile = (state: any) => {
-  const {mediaQueryMatches}: {mediaQueryMatches: {[key: string]: boolean}} = state;
+export const selectIsMobile = (state: {mediaQueryMatches: {[key: string]: boolean}}) => {
+  const {mediaQueryMatches} = state;
   return mediaQueryMatches.mobile;
 };
 
-export const selectIsPortrait = (state: any) => {
-  const {mediaQueryMatches}: {mediaQueryMatches: {[key: string]: boolean}} = state;
+export const selectIsPortrait = (state: {mediaQueryMatches: {[key: string]: boolean}}) => {
+  const {mediaQueryMatches} = state;
   return mediaQueryMatches.portrait;
 };
 

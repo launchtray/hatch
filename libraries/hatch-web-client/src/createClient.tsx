@@ -1,7 +1,11 @@
+/* eslint-disable import/first -- __webpack_public_path__ needs to be set before imports */
+/* eslint-disable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
 const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
 if (staticAssetsBaseURL !== '/') {
   __webpack_public_path__ = staticAssetsBaseURL;
 }
+/* eslint-enable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
+
 import {
   ConsoleLogger,
   initializeInjection,
@@ -28,7 +32,8 @@ import {
   init,
   Integrations,
   setExtra,
-  setTag} from '@sentry/browser';
+  setTag,
+} from '@sentry/browser';
 import {Options} from '@sentry/types';
 import React from 'react';
 import {HelmetProvider} from 'react-helmet-async';
@@ -43,19 +48,23 @@ import 'swagger-ui-react/swagger-ui.css';
 
 import {WebClientComposer, WebClientComposition} from './WebClientComposer';
 
+/* eslint-enable import/first */
+
 export interface CreateClientOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reloadComposeModule: () => any;
   injectionOptions?: InjectionInitializationContext;
 }
 
-const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
+const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
   return (
     <StoreProvider store={reduxStore}>
       <NavProvider>
         <HelmetProvider>
           <Switch>
             <Route path={'/api'}>
-              <SwaggerUI url='/api.json' docExpansion={'list'}/>
+              <SwaggerUI url={'/api.json'} docExpansion={'list'}/>
             </Route>
             <Route>
               <RootApp/>
@@ -67,7 +76,8 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
   );
 };
 
-const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: any, RootApp: any}) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
+const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
   return (
     <StoreProvider store={reduxStore}>
       <NavProvider>
@@ -88,9 +98,11 @@ let store: Store;
 let runningRootSagaTask: Task;
 if (module.hot) {
   module.hot.dispose((data) => {
+    /* eslint-disable no-param-reassign -- intentional mutation */
     data.runningRootSagaTask = runningRootSagaTask;
     data.store = store;
     data.sagaMiddleware = sagaMiddleware;
+    /* eslint-enable no-param-reassign  */
   });
   if (module.hot.data) {
     runningRootSagaTask = module.hot.data.runningRootSagaTask;
@@ -100,11 +112,21 @@ if (module.hot) {
 }
 
 const sentryMonitor: SentryMonitor = {
-  addBreadcrumb: (breadcrumb: Breadcrumb) => { addBreadcrumb(breadcrumb); },
-  captureException: (error: any) => { captureException(error); },
-  init: (options: Options) => { init(options); },
-  setExtra: (key: string, extra: any) => { setExtra(key, extra); },
-  setTag: (key: string, value: string) => { setTag(key, value); },
+  addBreadcrumb: (breadcrumb: Breadcrumb) => {
+    addBreadcrumb(breadcrumb);
+  },
+  captureException: (error: Error) => {
+    captureException(error);
+  },
+  init: (options: Options) => {
+    init(options);
+  },
+  setExtra: (key: string, extra: unknown) => {
+    setExtra(key, extra);
+  },
+  setTag: (key: string, value: string) => {
+    setTag(key, value);
+  },
 };
 
 const createClientAsync = async (clientComposer: WebClientComposer) => {
@@ -119,8 +141,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger();
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {
-    dsn: runtimeConfig.SENTRY_DSN,
-    integrations: consoleBreadcrumbs
+    dsn: runtimeConfig.SENTRY_DSN as string,
+    integrations: consoleBreadcrumbs,
   });
   container.registerInstance('ErrorReporter', sentry);
 
@@ -137,9 +159,11 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     const {navMiddleware} = createNavMiddleware();
     let middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(sentry));
     if (process.env.NODE_ENV !== 'production') {
-      const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions});
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
+      const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions as any});
       middleware = composeEnhancers(middleware);
     }
+    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
     store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);
   } else {
     store.replaceReducer(composition.createRootReducer());
@@ -152,19 +176,16 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   );
 
   const webAppManagerInstances = await resolveWebAppManagers(container);
-  const rootSaga = await createSagaForWebAppManagers(
-    logger, webAppManagerInstances, store, container, document.cookie
-  );
+  // eslint-disable-next-line no-undef -- global document object
+  const rootSaga = await createSagaForWebAppManagers(logger, webAppManagerInstances, store, container, document.cookie);
 
   if (rootSaga != null) {
     onSagaError = (error) => {
-      logger.error('Root saga error: ' + error.message + ', stack trace: ' + error.stack);
+      logger.error(`Root saga error: ${error.message}, stack trace: ${error.stack}`);
       sentry.captureException(error);
     };
   }
   runningRootSagaTask = sagaMiddleware.run(rootSaga);
-
-  const App = composition.App;
 
   if (runtimeConfig.ENABLE_API_SPEC === 'true') {
     AppRegistry.registerComponent('RNApp', () => RNApp);
@@ -172,7 +193,9 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);
   }
   AppRegistry.runApplication('RNApp', {
-    initialProps: {reduxStore: store, RootApp: App},
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- React Component should be PascalCase
+    initialProps: {reduxStore: store, RootApp: composition.appComponent},
+    // eslint-disable-next-line no-undef -- global document object
     rootTag: document.getElementById('root'),
   });
 };
@@ -182,6 +205,7 @@ export default (options: CreateClientOptions) => {
   initializeInjection(options.injectionOptions);
   const clientComposer = options.reloadComposeModule().default;
   createClientAsync(clientComposer).catch((err) => {
+    // eslint-disable-next-line no-console -- intentional error logging
     console.error(err);
   });
 };

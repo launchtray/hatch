@@ -39,7 +39,8 @@
     "**/template.ts",
     "**/template.tsx",
     "**/template.stories.ts",
-    "**/template.stories.tsx"
+    "**/template.stories.tsx",
+    "**/*eslintrc*.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

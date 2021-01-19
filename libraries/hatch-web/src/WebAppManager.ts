@@ -8,7 +8,7 @@ import {
   Location,
   navActions,
   selectLocationFromLocationChangeAction,
-  selectFirstRenderingFromLocationChangeAction
+  selectFirstRenderingFromLocationChangeAction,
 } from './NavProvider';
 import {isActionType} from './defineAction';
 
@@ -16,16 +16,22 @@ export const webAppManager = injectable;
 const pathMatchersKey = Symbol('pathMatchers');
 const clientLoadersKey = Symbol('clientLoaders');
 const webAppManagerKey = Symbol('webAppManager');
-export type PathMatcher = (path: string) => match;
+export type PathMatcher = (path: string) => match | null;
 
+interface WebAppManager extends Object {
+  [pathMatchersKey]?: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher}>;
+  [clientLoadersKey]?: Array<{propertyKey: string | symbol}>;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- rest args are not known
 export const registerWebAppManagers = (container: DependencyContainer, ...webAppManagers: Array<Class<any>>) => {
   for (const manager of webAppManagers) {
     container.registerSingleton(webAppManagerKey, manager);
   }
 };
 
-export const resolveWebAppManagers = async (container: DependencyContainer): Promise<any[]> => {
-  return await container.resolveAll<Class<any>>(webAppManagerKey);
+export const resolveWebAppManagers = async (container: DependencyContainer): Promise<WebAppManager[]> => {
+  return await container.resolveAll(webAppManagerKey);
 };
 
 export const onLocationChange = <Params extends { [K in keyof Params]?: string }>(
@@ -34,50 +40,55 @@ export const onLocationChange = <Params extends { [K in keyof Params]?: string }
   const pathMatcher = (path: string) => {
     return matchPath(path, props ?? {path});
   };
-  return (target: any, propertyKey: string | symbol) => {
-    if (target[pathMatchersKey] == null) {
-      target[pathMatchersKey] = [];
+  return (target: unknown, propertyKey: string | symbol) => {
+    const asWebAppManager = target as WebAppManager;
+    if (asWebAppManager[pathMatchersKey] == null) {
+      asWebAppManager[pathMatchersKey] = [];
     }
-    target[pathMatchersKey].push({propertyKey, pathMatcher});
+    asWebAppManager[pathMatchersKey]?.push({propertyKey, pathMatcher});
   };
 };
 
 export const onClientLoad = () => {
-  return (target: any, propertyKey: string | symbol) => {
-    if (target[clientLoadersKey] == null) {
-      target[clientLoadersKey] = [];
+  return (target: unknown, propertyKey: string | symbol) => {
+    const asWebAppManager = target as WebAppManager;
+    if (asWebAppManager[clientLoadersKey] == null) {
+      asWebAppManager[clientLoadersKey] = [];
     }
-    target[clientLoadersKey].push({propertyKey});
+    asWebAppManager[clientLoadersKey]?.push({propertyKey});
   };
 };
 
 const forEachPathMatcher = async (
-  target: any,
-  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => Promise<void>
+  target: unknown,
+  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => Promise<void>,
 ) => {
-  const pathMatchers: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher}> = target?.[pathMatchersKey] ?? [];
+  const asWebAppManager = target as WebAppManager;
+  const pathMatchers = asWebAppManager?.[pathMatchersKey] ?? [];
   for (const {propertyKey, pathMatcher} of pathMatchers) {
     await iterator(propertyKey, pathMatcher);
   }
 };
 
 const forEachClientLoader = async (
-  target: any,
-  iterator: (propertyKey: string | symbol) => Promise<void>
+  target: unknown,
+  iterator: (propertyKey: string | symbol) => Promise<void>,
 ) => {
-  const clientLoaders: Array<{propertyKey: string | symbol}> = target?.[clientLoadersKey] ?? [];
+  const asWebAppManager = target as WebAppManager;
+  const clientLoaders = asWebAppManager?.[clientLoadersKey] ?? [];
   for (const {propertyKey} of clientLoaders) {
     await iterator(propertyKey);
   }
 };
 
-const hasWebAppManagerMethods = (target: any): boolean => {
-  return (target[clientLoadersKey] != null) || (target[pathMatchersKey] != null);
+const hasWebAppManagerMethods = (target: unknown): boolean => {
+  const asWebAppManager = target as WebAppManager;
+  return (asWebAppManager[clientLoadersKey] != null) || (asWebAppManager[pathMatchersKey] != null);
 };
 
 export const createSagaForWebAppManagers = async (
   logger: Logger,
-  webAppManagers: any[],
+  webAppManagers: WebAppManager[],
   store: Store,
   rootContainer: DependencyContainer,
   cookie?: string,
@@ -86,10 +97,10 @@ export const createSagaForWebAppManagers = async (
   ssrEnabled = true,
 ): Promise<Saga> => {
   const sagas: Effect[] = [];
-  logger.debug('Total web app manager count: ' + webAppManagers.length);
-  webAppManagers.forEach((manager: any) => {
+  logger.debug(`Total web app manager count: ${webAppManagers.length}`);
+  webAppManagers.forEach((manager) => {
     const className = manager.constructor.name;
-    logger?.debug('- ' + className);
+    logger?.debug(`- ${className}`);
     if (!hasWebAppManagerMethods(manager)) {
       throw new Error(`${className} does not have any web app manager decorators, but is registered as a manager.`);
     }
@@ -111,9 +122,9 @@ export const createSagaForWebAppManagers = async (
   }
   const navigateActions = [
     navActions.locationChange,
-    navActions.serverLocationLoaded
+    navActions.serverLocationLoaded,
   ];
-  const navWorker = function *(action: AnyAction) {
+  const navWorker = function* navWorker(action: AnyAction) {
     let location: Location;
     let isFirstRendering: boolean;
     if (isActionType(navActions.serverLocationLoaded, action)) {
@@ -141,8 +152,7 @@ export const createSagaForWebAppManagers = async (
             container.registerInstance('authHeader', authHeader ?? '');
 
             const args = await resolveParams(container, target, propertyKey);
-            handleLocationChangeSagas.push(call(
-              [manager, manager[propertyKey]], ...args));
+            handleLocationChangeSagas.push(call([manager, manager[propertyKey]], ...args));
           }
         });
       }
@@ -152,16 +162,16 @@ export const createSagaForWebAppManagers = async (
     }
   };
   if (isServer) {
-    sagas.push(effects.fork(function *() {
-      const navAction = yield *effects.take(navigateActions);
+    sagas.push(effects.fork(function* navActionSaga() {
+      const navAction = yield* effects.take(navigateActions);
       yield effects.fork(navWorker, navAction);
     }));
   } else {
-    sagas.push(effects.fork(function *() {
-      yield *effects.takeLatest(navigateActions, navWorker);
+    sagas.push(effects.fork(function* navActionSaga() {
+      yield* effects.takeLatest(navigateActions, navWorker);
     }));
   }
-  return function*() {
+  return function* rootSaga() {
     yield effects.all(sagas);
   };
 };

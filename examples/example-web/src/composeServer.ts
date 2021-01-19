@@ -9,7 +9,7 @@ import {
   AUTH_WHITELIST_KEY,
   AWSCognitoClient,
   LocalUserManager,
-  UserManagementController
+  UserManagementController,
 } from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {runtimeConfig} from '@launchtray/hatch-web';
@@ -18,7 +18,6 @@ import composeCommon from './composeCommon';
 import ExampleController from './controllers/ExampleController';
 
 export default async (): Promise<WebServerComposition> => {
-
   runtimeConfig.TEST_VAR = 'Hello!';
 
   ROOT_CONTAINER.register('appName', {useValue: 'example-web'});

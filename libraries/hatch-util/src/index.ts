@@ -1,7 +1,8 @@
+import {DependencyContainer} from '@launchtray/tsyringe-async';
+import {AnyJson, AnyJsonObject} from './AnyJson';
 import {ConsoleLogger} from './ConsoleLogger';
 import delay from './delay';
 import {ErrorReporter} from './ErrorReporter';
-import {DependencyContainer} from '@launchtray/tsyringe-async';
 import {
   Class,
   containerSingleton,
@@ -21,6 +22,8 @@ import SentryReporter from './SentryReporter';
 import CompletableFuture from './CompletableFuture';
 
 export {
+  AnyJson,
+  AnyJsonObject,
   delay,
   inject,
   injectAll,

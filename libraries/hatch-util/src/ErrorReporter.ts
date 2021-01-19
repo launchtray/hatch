@@ -1,10 +1,10 @@
-export interface Action<T = any> {
-  payload?: any;
-  type: T;
+export interface Action<T> {
+  payload?: T;
+  type?: string;
 }
 
 export interface ErrorReporter {
-  captureAction(action: Action, prevState: any): void;
+  captureAction(action: Action<unknown>, prevState: unknown): void;
   captureException(exception: Error): void;
   captureLog(message: string): void;
 }

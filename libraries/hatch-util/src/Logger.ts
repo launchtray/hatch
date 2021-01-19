@@ -1,6 +1,6 @@
 export interface Logger {
-  debug(...args: any[]): any;
-  info(...args: any[]): any;
-  warn(...args: any[]): any;
-  error(...args: any[]): any;
+  debug(...args: unknown[]): void;
+  info(...args: unknown[]): void;
+  warn(...args: unknown[]): void;
+  error(...args: unknown[]): void;
 }

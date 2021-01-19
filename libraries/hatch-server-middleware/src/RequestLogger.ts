@@ -5,7 +5,7 @@ import expressWinston from 'express-winston';
 import util from 'util';
 import {format, transports} from 'winston';
 
-const formatObjectForLog = (obj: any) => {
+const formatObjectForLog = (obj: unknown) => {
   if (typeof obj === 'string') {
     return obj;
   }
@@ -23,16 +23,19 @@ const requestLogger = (serverLogFile: string) => {
     format: format.combine(
       format.timestamp(),
       {
-        transform(info: any) {
+        transform(info: {timestamp: string, message: string, meta: unknown}) {
           const {timestamp, message, meta} = info;
-          const metaMessage = meta ? ' ' + formatObjectForLog(meta) : '';
+          const metaMessage = meta ? ` ${formatObjectForLog(meta)}` : '';
           const useColor = useConsole && process.env.COLORIZE_LOG === 'true';
           const paddedLevel = useColor
             ? `[\x1b[${REQUEST_LEVEL_COLOR_CODE}m${REQUEST_LEVEL_TAG}\x1b[39m]`.padEnd(COLORIZED_LEVEL_MAX_LENGTH + 2)
             : `[${REQUEST_LEVEL_TAG}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
-          info[Symbol.for('message')] = `[${timestamp}] ${paddedLevel}: ${message}${metaMessage}`;
+          // eslint-disable-next-line no-param-reassign -- using API as intended
+          info[Symbol.for('message') as unknown as string] = (
+            `[${timestamp}] ${paddedLevel}: ${message}${metaMessage}`
+          );
           return info;
-        }
+        },
       },
     ),
     meta: true,
@@ -44,7 +47,7 @@ const requestLogger = (serverLogFile: string) => {
 export default class RequestLogger implements ServerMiddleware {
   constructor(
     @inject('appName') private readonly appName: string,
-    @inject('serverLogFile') private readonly serverLogFile: string
+    @inject('serverLogFile') private readonly serverLogFile: string,
   ) {}
 
   public async register(app: Application) {

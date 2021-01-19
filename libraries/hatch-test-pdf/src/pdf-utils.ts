@@ -49,13 +49,13 @@ export const toPixel = (point: number) => {
   return (point * PNG_PIXELS_PER_INCH) / PDF_POINTS_PER_INCH;
 };
 
-const writeBufferToTempFile = async (buffer: Buffer, description: string = ''): Promise<string> => {
-  const path = tmp.fileSync({postfix: description + '.png'}).name;
+const writeBufferToTempFile = async (buffer: Buffer, description = ''): Promise<string> => {
+  const path = tmp.fileSync({postfix: `${description}.png`}).name;
   fs.writeFileSync(path, buffer);
   return path;
 };
 
-const writeImageToTempFile = async (image: Sharp, description: string = ''): Promise<string> => {
+const writeImageToTempFile = async (image: Sharp, description = ''): Promise<string> => {
   return writeBufferToTempFile(await image.toBuffer(), description);
 };
 
@@ -79,16 +79,15 @@ export class PDF {
     private fetchOptions: {
       headers?: {[key: string]: string},
       method?: string,
-      body?: any,
+      body?: unknown,
     },
     private imageMagickVersion: string = defaultRequiredImageMagickVersion,
   ) {
     const versionInfo = execSync('convert --version', {encoding: 'utf8'});
     if (!versionInfo.includes(`Version: ImageMagick ${imageMagickVersion}`)) {
-      throw new Error(`ImageMagick version ${imageMagickVersion} must be installed to run these tests. ` +
-        'If this version is no longer available, the CI machine may need to be upgraded along with any screenshots ' +
-        'that are checked into this repository.',
-      );
+      throw new Error(`ImageMagick version ${imageMagickVersion} must be installed to run these tests. `
+        + 'If this version is no longer available, the CI machine may need to be upgraded along with any screenshots '
+        + 'that are checked into this repository.');
     }
     if (jest != null) {
       // Set default test timeout to be larger, since PDF manipulation and comparison can take tens of seconds
@@ -121,7 +120,7 @@ export class PDF {
           },
         });
       } else {
-        throw new Error('Failed to fetch PDF: ' + response.statusText);
+        throw new Error(`Failed to fetch PDF: ${response.statusText}`);
       }
     }
   }
@@ -131,7 +130,10 @@ export class PDF {
     page: number,
   ) {
     await this.requirePDF(url);
-    return this.pdfImage!.convertPage(page);
+    if (this.pdfImage == null) {
+      throw new Error('Unexpected null PDF image');
+    }
+    return this.pdfImage.convertPage(page);
   }
 
   private async getPageImagePath(page: number): Promise<string> {
@@ -150,7 +152,7 @@ export class PDF {
   public async matchesAsset(options: TestIDComparisonOptions): Promise<boolean> {
     await this.requirePDF(this.pdfUrl);
     if (this.pdfTestMetadata?.[options.testID] == null) {
-      throw new Error('Test ID was not found in PDF: ' + options.testID);
+      throw new Error(`Test ID was not found in PDF: ${options.testID}`);
     }
     const {pageNumber, layout} = this.pdfTestMetadata?.[options.testID];
     return this.frameMatchesAsset({
@@ -167,8 +169,8 @@ export class PDF {
     const pageImage = sharp(pageImagePath);
 
     let actualImage: Sharp;
-    let actualWidth: number;
-    let actualHeight: number;
+    let actualWidth: number | undefined;
+    let actualHeight: number | undefined;
     if (options.frame != null) {
       const {left, top, width, height} = options.frame;
       const widthInPixels = toPixel(width);
@@ -192,8 +194,8 @@ export class PDF {
     } else {
       actualImage = pageImage;
       const actualMetadata = await actualImage.metadata();
-      actualWidth = actualMetadata.width!;
-      actualHeight = actualMetadata.height!;
+      actualWidth = actualMetadata.width;
+      actualHeight = actualMetadata.height;
     }
 
     const actualImagePath = await writeImageToTempFile(actualImage, 'actual');
@@ -204,6 +206,7 @@ export class PDF {
     try {
       expectedImagePng = PNG.sync.read(fs.readFileSync(options.expectedAssetPath));
     } catch (err) {
+      // eslint-disable-next-line no-console -- intentional log statement
       console.log('Error reading expected file:', err);
       if (process.env.OVERWRITE_EXPECTED_IMAGES === 'true') {
         fs.copyFileSync(actualImagePath, options.expectedAssetPath);
@@ -219,13 +222,40 @@ export class PDF {
       } else {
         fs.copyFileSync(actualImagePath, actualImagePathOnFailure);
       }
-      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, ` +
-        `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
-      console.log('               Actual path: ' + actualImagePath);
-      console.log('               Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
+      /* eslint-disable no-console -- intentional log statements */
+      console.log(`Size mismatch. Expected: ${expectedImagePng.width}x${expectedImagePng.height}, `
+        + `Actual: ${actualImagePng.width}x${actualImagePng.height}`);
+      console.log(`               Actual path: ${actualImagePath}`);
+      console.log(`               Actual image : ${fs.readFileSync(actualImagePath).toString('base64')}`);
+      /* eslint-enable no-console  */
       return false;
     }
 
+    return await this.compareImages(
+      actualWidth,
+      actualHeight,
+      expectedImagePng,
+      actualImagePng,
+      actualImagePath,
+      options,
+      actualImagePathOnFailure,
+    );
+  }
+
+  private async compareImages(
+    actualWidth: number | undefined,
+    actualHeight: number | undefined,
+    expectedImagePng: PNGWithMetadata,
+    actualImagePng: PNGWithMetadata,
+    actualImagePath: string,
+    options: FrameComparisonOptions,
+    actualImagePathOnFailure: string,
+  ) {
+    if (actualWidth == null || actualHeight == null) {
+      // eslint-disable-next-line no-console -- intentional log statements
+      console.log('Unable to determine dimensions of actual image');
+      return false;
+    }
     const maxDataLength = actualWidth * actualHeight * 4;
     const diffBuffer = Buffer.allocUnsafe(maxDataLength);
 
@@ -247,13 +277,16 @@ export class PDF {
       const diffImage = sharp(diffBuffer, {raw: {width: actualWidth, height: actualHeight, channels: 4}}).png();
       const diffImagePath = await writeImageToTempFile(diffImage, 'diff');
       const pdfPath = this.tmpPdfFile.name;
-      console.log('Image mismatch. Pixel Δ count: ' + pixelDiffCount);
-      console.log('                Actual image : ' + fs.readFileSync(actualImagePath).toString('base64'));
-      console.log('                Diff image   : ' + fs.readFileSync(diffImagePath).toString('base64'));
-      console.log('                Actual PDF   : ' + fs.readFileSync(pdfPath).toString('base64'));
+      /* eslint-disable no-console -- intentional log statements */
+      console.log(`Image mismatch. Pixel Δ count: ${pixelDiffCount}`);
+      console.log(`                Actual image : ${fs.readFileSync(actualImagePath).toString('base64')}`);
+      console.log(`                Diff image   : ${fs.readFileSync(diffImagePath).toString('base64')}`);
+      console.log(`                Actual PDF   : ${fs.readFileSync(pdfPath).toString('base64')}`);
+      /* eslint-enable no-console  */
     }
     if (process.env.PRINT_TEMP_PDF_PATH) {
-      console.log('PDF Path: ' + this.getTempPDFPath());
+      // eslint-disable-next-line no-console -- intentional log statements
+      console.log(`PDF Path: ${this.getTempPDFPath()}`);
     }
     return matches;
   }

@@ -5,11 +5,15 @@ import {Route, Switch} from 'react-router';
 
 const App = () => (
   <Switch>
-    <Route exact={true} path='/'>
+    <Route exact={true} path={'/'}>
       <Helmet>
-        <title>Home</title>
+        <title>
+          {'Home'}
+        </title>
       </Helmet>
-      <Text>Hello, world!</Text>
+      <Text>
+        {'Hello, world!'}
+      </Text>
     </Route>
   </Switch>
 );

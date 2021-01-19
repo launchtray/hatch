@@ -100,7 +100,21 @@ const patchWebpackConfig = (config, isServer, webpack) => {
 };
 
 module.exports = {
-  plugins: ['typescript'],
+  plugins: [
+    {
+      name: 'typescript',
+      options: {
+        useEslint: true,
+        forkTsChecker: {
+          tsconfig: resolveApp('tsconfig.json'),
+          tslint: undefined,
+          eslint: true,
+          watch: resolveApp('src'),
+          typeCheck: true,
+        },
+      },
+    },
+  ],
   patchWebpackConfig,
   modify(config, {target, dev}, webpack) {
     return patchWebpackConfig(config, target !== 'web', webpack);

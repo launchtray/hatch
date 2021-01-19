@@ -1,6 +1,13 @@
 import RemoteUserManager from './RemoteUserManager';
 import UserAttributes from './UserAttributes';
-import {AuthTokens, TENANT_ID_HEADER, UserInfo, UserManagementClient, UserManagementClientOptions, UserManagementEndpoints} from './UserManagementClient';
+import {
+  AuthTokens,
+  TENANT_ID_HEADER,
+  UserInfo,
+  UserManagementClient,
+  UserManagementClientOptions,
+  UserManagementEndpoints,
+} from './UserManagementClient';
 import {UserManagementClientSdk} from './UserManagementClientSdk';
 import {UserManagementError, UserManagementErrorCodes} from './UserManagementError';
 import {UserManager} from './UserManager';

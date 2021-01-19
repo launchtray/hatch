@@ -3,7 +3,7 @@ import util from 'util';
 import {LogCallback} from 'winston';
 import TransportStream, {TransportStreamOptions} from 'winston-transport';
 
-const formatObjectForLog = (obj: any) => {
+const formatObjectForLog = (obj: unknown) => {
   if (typeof obj === 'string') {
     return obj;
   }
@@ -16,6 +16,7 @@ export class ErrorReporterTransport extends TransportStream {
     super(opts);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- signature is defined by winston
   public log(info: any, callback: LogCallback) {
     setImmediate(() => {
       this.emit('logged', info);
@@ -25,13 +26,12 @@ export class ErrorReporterTransport extends TransportStream {
     const args = info[Symbol.for('splat')];
     let messageWithArgs = formatObjectForLog(message);
     if (args != null) {
-      messageWithArgs += ' ' + args.map((obj: any) => {
+      messageWithArgs += ` ${args.map((obj: unknown) => {
         return formatObjectForLog(obj);
-      }).join(' ');
+      }).join(' ')}`;
     }
     const paddedLevel = `[${level}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
     this.errorReporter.captureLog(`${paddedLevel}: ${messageWithArgs}`);
     callback();
   }
-
 }

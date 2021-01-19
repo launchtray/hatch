@@ -1,11 +1,11 @@
-import {Breadcrumb, Options,  Severity} from '@sentry/types';
+import {Breadcrumb, Options, Severity} from '@sentry/types';
 import {Action, ErrorReporter} from './ErrorReporter';
 import {SentryMonitor} from './SentryMonitor';
 import {Logger} from './Logger';
 
 export default class SentryReporter implements ErrorReporter {
   private readonly initialized?: boolean;
-  private initializedWarningShown: boolean = false;
+  private initializedWarningShown = false;
 
   constructor(private readonly sentry: SentryMonitor, private readonly logger: Logger, options: Options) {
     if (options && options.dsn) {
@@ -17,7 +17,7 @@ export default class SentryReporter implements ErrorReporter {
     this.logger.info('Error reporting initialized:', this.initialized);
   }
 
-  public captureAction(action: Action, prevState: any) {
+  public captureAction(action: Action<unknown>, prevState: unknown) {
     if (this.initialized) {
       try {
         this.sentry.setExtra('stateBeforeLastAction', prevState);
@@ -47,7 +47,7 @@ export default class SentryReporter implements ErrorReporter {
         }
         this.sentry.captureException(exception);
       } catch (error) {
-        this.logger.error('Error reporting exception: ' + error.message);
+        this.logger.error(`Error reporting exception: ${error.message}`);
       }
     }
   }
@@ -66,5 +66,4 @@ export default class SentryReporter implements ErrorReporter {
       }
     }
   }
-
 }

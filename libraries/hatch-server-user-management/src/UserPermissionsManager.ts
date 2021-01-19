@@ -1,9 +1,17 @@
 import {UserAttributes} from '@launchtray/hatch-user-management-client';
 import {injectable} from '@launchtray/hatch-util';
 
-export default interface UserPermissionsManager {
-  getReadableAttributes(clientUserId: string, queriedUserId: string, attributes: UserAttributes): Promise<UserAttributes>;
-  getWriteableAttributes(clientUserId: string, queriedUserId: string, attributes: UserAttributes): Promise<UserAttributes>;
+interface UserPermissionsManager {
+  getReadableAttributes(
+    clientUserId: string,
+    queriedUserId: string,
+    attributes: UserAttributes,
+  ): Promise<UserAttributes>;
+  getWriteableAttributes(
+    clientUserId: string,
+    queriedUserId: string,
+    attributes: UserAttributes,
+  ): Promise<UserAttributes>;
   isUserAllowedToLookUpUserId(clientUserId: string, queriedUserId: string): Promise<boolean>;
   isUserAllowedToSignOutUser(clientUserId: string, userIdToSignOut: string): Promise<boolean>;
 }
@@ -26,3 +34,5 @@ export class SelfOnlyUserPermissionsManager implements UserPermissionsManager {
     return clientUserId === userIdToSignOut;
   }
 }
+
+export default UserPermissionsManager;

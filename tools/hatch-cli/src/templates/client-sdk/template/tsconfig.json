@@ -36,7 +36,8 @@
     "**/scripts",
     "**/acceptance-tests",
     "**/webpack",
-    "**/jest"
+    "**/jest",
+    "**/*eslintrc*.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

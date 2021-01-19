@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore -- type definitions not provided, and api is simple
 import mockserver from 'mockserver-node';
 import {mockServerClient} from 'mockserver-client';
@@ -11,9 +12,9 @@ export default class MockServer {
 
   constructor(
     port: number,
-    private options?: {[key: string]: any}
+    private options?: {[key: string]: unknown},
   ) {
-    this.port = port ?? this.options?.serverPort ?? DEFAULT_PORT;
+    this.port = port ?? this.options?.serverPort as number ?? DEFAULT_PORT;
   }
 
   async start() {
@@ -30,7 +31,7 @@ export default class MockServer {
       });
       await mockServerClient('localhost', this.port).mockAnyResponse({
         httpRequest: {
-          path: this.options?.statusCheckPath ?? '/mock-server-status',
+          path: this.options?.statusCheckPath as string ?? '/mock-server-status',
         },
         httpResponse: {
           statusCode: 200,

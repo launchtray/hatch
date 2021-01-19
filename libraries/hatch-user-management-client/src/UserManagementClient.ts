@@ -1,16 +1,18 @@
 import UserAttributes from './UserAttributes';
 
 export class UserInfo {
-  constructor(public readonly userId?: string,
-              public readonly username?: string,
-              public readonly accessToken?: string) {
-  }
+  constructor(
+    public readonly userId?: string,
+    public readonly username?: string,
+    public readonly accessToken?: string,
+  ) {}
 }
 
 export class AuthTokens {
-  constructor(public readonly accessToken?: string,
-              public readonly refreshToken?: string) {
-  }
+  constructor(
+    public readonly accessToken?: string,
+    public readonly refreshToken?: string,
+  ) {}
 }
 
 export enum UserManagementEndpoints {
@@ -36,15 +38,42 @@ export type UserManagementClientOptions = {
 
 export interface UserManagementClient {
   authenticate(username: string, password: string, options?: UserManagementClientOptions): Promise<AuthTokens>;
-  startUserRegistration(username: string, password: string, userAttributes: UserAttributes, options?: UserManagementClientOptions): Promise<void>;
+  startUserRegistration(
+    username: string,
+    password: string,
+    userAttributes: UserAttributes,
+    options?: UserManagementClientOptions,
+  ): Promise<void>;
   resendUserRegistrationCode(username: string, options?: UserManagementClientOptions): Promise<void>;
-  confirmUserRegistration(username: string, confirmationCode: string, options?: UserManagementClientOptions): Promise<void>;
+  confirmUserRegistration(
+    username: string,
+    confirmationCode: string,
+    options?: UserManagementClientOptions
+  ): Promise<void>;
   startPasswordReset(username: string, options?: UserManagementClientOptions): Promise<void>;
-  confirmPasswordReset(username: string, confirmationCode: string, password: string, options?: UserManagementClientOptions): Promise<void>;
-  refreshAuthentication(refreshToken: string, accessToken: string, options?: UserManagementClientOptions): Promise<AuthTokens>;
+  confirmPasswordReset(
+    username: string,
+    confirmationCode: string,
+    password: string,
+    options?: UserManagementClientOptions,
+  ): Promise<void>;
+  refreshAuthentication(
+    refreshToken: string,
+    accessToken?: string,
+    options?: UserManagementClientOptions,
+  ): Promise<AuthTokens>;
   signOutUser(userId: string, accessToken: string, options?: UserManagementClientOptions): Promise<void>;
-  getUserAttributes(userId: string, accessToken: string, options?: UserManagementClientOptions): Promise<UserAttributes>;
-  setUserAttributes(userId: string, userAttributes: UserAttributes, accessToken: string, options?: UserManagementClientOptions): Promise<void>;
+  getUserAttributes(
+    userId: string,
+    accessToken: string,
+    options?: UserManagementClientOptions,
+  ): Promise<UserAttributes>;
+  setUserAttributes(
+    userId: string,
+    userAttributes: UserAttributes,
+    accessToken: string,
+    options?: UserManagementClientOptions,
+  ): Promise<void>;
   getUserInfo(accessToken: string, options?: UserManagementClientOptions): Promise<UserInfo>;
-  getUserId?(username: string, accessToken: string, options?: UserManagementClientOptions): Promise<string>;
+  getUserId?(username: string, accessToken: string, options?: UserManagementClientOptions): Promise<string | undefined>;
 }

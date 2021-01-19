@@ -6,7 +6,6 @@ import {
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
 import {AUTH_BLACKLIST_KEY, AUTH_WHITELIST_KEY, UserContext} from '@launchtray/hatch-server-user-management';
 import {containerSingleton, delay, initializer, inject, Logger} from '@launchtray/hatch-util';
-import {Application} from 'express';
 import WebSocket from 'ws';
 
 @containerSingleton()
@@ -25,7 +24,7 @@ class CustomResponder {
     this.testField = 'CustomResponder';
   }
 
-  public ok(body?: any) {
+  public ok(body?: string) {
     this.responder.ok(body);
   }
 
@@ -90,7 +89,7 @@ export default class ExampleController implements ServerMiddleware {
     responder.ok(userContext.username);
   }
 
-  @route.custom((app, server, handler) => {
+  @route.custom((app, _, handler) => {
     app.get('/api/example2', handler);
   })
   public exampleEndpoint2(responder: CustomResponder) {
@@ -105,11 +104,11 @@ export default class ExampleController implements ServerMiddleware {
     },
   })
   public parseQueryParam(responder: CustomResponder) {
-    const name = responder.params.req.query.name;
+    const {name} = responder.params.req.query;
     if (name) {
-      responder.ok(responder.testField + `: Hello, ${responder.params.req.query.name}!`);
+      responder.ok(`${responder.testField}: Hello, ${responder.params.req.query.name}!`);
     } else {
-      responder.ok(responder.testField + ': Hello!');
+      responder.ok(`${responder.testField}: Hello!`);
     }
   }
 
@@ -121,26 +120,25 @@ export default class ExampleController implements ServerMiddleware {
           schema: {
             type: 'object',
             required: [
-              'name'
+              'name',
             ],
             properties: {
               name: {
-                type: 'string'
+                type: 'string',
               },
               age: {
                 type: 'integer',
                 format: 'int32',
-                minimum: 0
-              }
-            }
-          }
-        }
-      }
-    }
+                minimum: 0,
+              },
+            },
+          },
+        },
+      },
+    },
   })
   public processBody(responder: CustomResponder) {
-    const name = responder.params.req.body.name;
-    const age = responder.params.req.body.age;
+    const {age, name} = responder.params.req.body;
     if (age != null) {
       responder.ok(`Processed age of ${name}: ${age}`);
     } else {
@@ -161,29 +159,29 @@ export default class ExampleController implements ServerMiddleware {
     },
   })
   public personEndpoint(params: BasicRouteParams) {
-    params.res.status(200).send('Person: ' + params.req.params.id);
+    params.res.status(200).send(`Person: ${params.req.params.id}`);
   }
 
   @route.get('/api/example/error')
-  public async errorEndpoint(params: BasicRouteParams) {
+  public async errorEndpoint() {
     await delay(1000);
     throw new Error('Test error');
   }
 
   @route.websocket('/ws/:id')
   public async handleWebsocket(params: WebSocketRouteParams) {
-    this.logger.debug('handleWebsocket: ' + params.req.url);
+    this.logger.debug(`handleWebsocket: ${params.req.url}`);
     const ws = params.webSocket;
     ws.on('message', (msg: string) => {
       params.webSocketServer.clients.forEach((client: WebSocket) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
-          client.send(params.req.params.id + ': ' + msg);
+          client.send(`${params.req.params.id}: ${msg}`);
         }
       });
     });
   }
 
-  public async register(app: Application): Promise<void> {
+  public async register(): Promise<void> {
     this.logger.info('Calling original register:', this.testVar);
   }
 }

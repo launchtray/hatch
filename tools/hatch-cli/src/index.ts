@@ -4,13 +4,13 @@ import commander from 'commander';
 import {runCommander} from './util';
 
 const optionsForTemplate = (name: string) => ({
-  executableFile: 'templates/' + name + '/command.js'
+  executableFile: `templates/${name}/command.js`,
 });
 
 const commandForTemplate = (name: string, description: string): [string, string, commander.CommandOptions] => [
-  name + ' <name>',
-  'creates a ' + description,
-  optionsForTemplate(name)
+  `${name} <name>`,
+  `creates a ${description}`,
+  optionsForTemplate(name),
 ];
 
 commander
@@ -25,7 +25,5 @@ commander
   .command(...commandForTemplate('story', 'storybook story'))
   .command(...commandForTemplate('library', 'library project'))
   .command(...commandForTemplate('monorepo', 'monorepo project'))
-  .command(...commandForTemplate('client-sdk', 'client-sdk project'))
-;
-
+  .command(...commandForTemplate('client-sdk', 'client-sdk project'));
 runCommander();

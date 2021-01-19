@@ -1,11 +1,12 @@
-import i18n from 'i18next';
+import i18n, {Resource} from 'i18next';
 import {DateTime, DurationUnit, Interval} from 'luxon';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore -- No types package exists for this, and this is the only place we need to import it
 import ReactPostprocessor from 'i18next-react-postprocessor';
 
 // Initializes translations library with the same configuration as the translation test tool
-export const initializeTranslations = async (translations: any) => {
+export const initializeTranslations = async (translations: Resource) => {
   await i18n
     .use(new ReactPostprocessor({keepUnknownVariables: true}))
     .init({

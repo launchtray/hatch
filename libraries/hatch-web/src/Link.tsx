@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension -- this is a React component which might someday have JSX */
 import React from 'react';
 import {StyleProp, TextProps, TextStyle} from 'react-native';
 import {Link, LinkProps} from 'react-router-dom';
@@ -10,7 +11,7 @@ interface PropTypes extends InheritedProps {
   textStyle?: StyleProp<TextStyle>;
 }
 
-export default class extends React.Component<PropTypes> {
+export default class extends React.PureComponent<PropTypes> {
   public render() {
     // Pull out textStyle so we can map it to props.style of Link below.
     const {textStyle, ...otherProps} = this.props;

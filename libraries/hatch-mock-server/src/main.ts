@@ -12,6 +12,7 @@ process.on('beforeExit', async () => {
 
 mockServer.start()
   .catch((err) => {
+    // eslint-disable-next-line no-console -- intentional printing of unexpected issues to console
     console.error(err);
     process.exit(1);
   });

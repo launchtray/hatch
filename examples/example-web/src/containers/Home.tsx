@@ -7,20 +7,18 @@ interface PropTypes {
   onButtonPress: () => void;
 }
 
-class Home extends React.Component<PropTypes> {
-  public render() {
-    return (
-      <View style={{height: 200, justifyContent: 'space-around'}}>
-        <Image
-          style={{height: 100, width: 68, alignSelf: 'center'}}
-          source={require('../assets/hatch_eyes.png')}
-        />
-        <Button testID={'helloButton'} onPressRoute={'/hello?a=1#b'} title={'Nav via link'}/>
-        <Button testID={'helloButton2'} onPress={this.props.onButtonPress} title={'Nav via action'}/>
-      </View>
-    );
-  }
-}
+const Home = (props: PropTypes) => {
+  return (
+    <View style={{height: 200, justifyContent: 'space-around'}}>
+      <Image
+        style={{height: 100, width: 68, alignSelf: 'center'}}
+        source={require('../assets/hatch_eyes.png')}
+      />
+      <Button testID={'helloButton'} onPressRoute={'/hello?a=1#b'} title={'Nav via link'}/>
+      <Button testID={'helloButton2'} onPress={props.onButtonPress} title={'Nav via action'}/>
+    </View>
+  );
+};
 
 export default connect(
   null,
@@ -28,4 +26,5 @@ export default connect(
     onButtonPress: () => {
       dispatch(navActions.navigate({route: '/hello'}));
     },
-}))(Home);
+  }),
+)(Home);

@@ -5,7 +5,7 @@ import {Location} from '@launchtray/hatch-web';
 import {inject, containerSingleton} from '@launchtray/hatch-util';
 
 @containerSingleton()
-export default class LocationChangeContext<Params extends { [K in keyof Params]?: string } = {}> {
+export default class LocationChangeContext<Params extends {[K in keyof Params]?: string} = Record<string, never>> {
   constructor(
     @inject('pathMatch') public readonly pathMatch: match<Params>,
     @inject('Location') public readonly location: Location,

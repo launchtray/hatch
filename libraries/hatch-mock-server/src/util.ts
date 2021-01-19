@@ -3,7 +3,7 @@ export const withTimeout = async <T> (durationMs: number, promise: Promise<T>): 
   const timeout = new Promise<T>((resolve, reject) => {
     const rejectCallback = () => {
       timer = null;
-      reject('Task timed out');
+      reject(new Error('Task timed out'));
     };
     timer = setTimeout(rejectCallback, durationMs);
   });
@@ -22,7 +22,7 @@ export const retry = async <T> (totalAttempts: number, task: () => Promise<T>): 
       return await task();
     } catch (err) {
       caughtError = err;
-      attemptsRemaining--;
+      attemptsRemaining -= 1;
     }
   }
   throw caughtError;

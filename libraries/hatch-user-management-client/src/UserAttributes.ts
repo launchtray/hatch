@@ -1,2 +1,2 @@
-type UserAttributes = {[key: string]: any} | null | undefined;
+type UserAttributes = Record<string, unknown> | null | undefined;
 export default UserAttributes;

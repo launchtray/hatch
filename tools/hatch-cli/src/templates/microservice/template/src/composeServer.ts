@@ -1,4 +1,4 @@
-import {middlewareFor, ServerComposition} from '@launchtray/hatch-server';
+import {ServerComposition} from '@launchtray/hatch-server';
 import {
   JSONBodyParser,
   RequestLogger,

@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc"
   },
   "publishConfig": {
@@ -35,6 +37,13 @@
     "express": "^4",
     "utf-8-validate": "^5",
     "winston": "^3",
-    "ws": "^7"
+    "ws": "^7",
+    "eslint": "^7.17.0",
+    "@launchtray/hatch-eslint-config": "^0.12.5",
+    "@typescript-eslint/parser": "^4.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3"
   }
 }

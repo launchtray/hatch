@@ -20,7 +20,7 @@ import {
 import crypto from 'crypto';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import {HelmetProvider} from 'react-helmet-async';
+import {HelmetData, HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
@@ -59,20 +59,29 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   );
   const webAppManagerInstances = await resolveWebAppManagers(clientContainer);
   const rootSaga = await createSagaForWebAppManagers(
-    logger, webAppManagerInstances, store, clientContainer, cookie, authHeader, true
+    logger,
+    webAppManagerInstances,
+    store,
+    clientContainer,
+    cookie,
+    authHeader,
+    true,
   );
 
   const rootSagaTask = sagaMiddleware.run(rootSaga);
   store.dispatch(navActions.serverLocationLoaded({location}));
 
-  const rootTaskWithTimeout = new Promise(async (resolve, reject) => {
-    setTimeout(() => reject('SSR timeout'), SSR_TIMEOUT_MS);
-    resolve(await rootSagaTask.toPromise());
+  const rootTaskWithTimeout = new Promise((resolve, reject) => {
+    setTimeout(() => reject(new Error('SSR timeout')), SSR_TIMEOUT_MS);
+    rootSagaTask.toPromise()
+      .then(resolve)
+      .catch(reject);
   });
   await rootTaskWithTimeout;
 
-  const App = composition.App;
-  const helmetContext: any = {};
+  // eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
+  const App = composition.appComponent;
+  const helmetContext = {} as unknown as {helmet: HelmetData};
 
   if (requestContext.stateOnly) {
     // 'unsafe' option relies on response being 'application/json' and not html
@@ -83,6 +92,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
     return serialize({state: store.getState()}, options);
   }
 
+  // eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
   const RNApp = () => (
     <StoreProvider store={store}>
       <NavProvider>
@@ -95,6 +105,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 
   AppRegistry.registerComponent('RNApp', () => RNApp);
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore Ignore warning for getApplication, which is only in react-native-web and not @types/react-native
   const {element, getStyleElement} = AppRegistry.getApplication('RNApp', {});
   const html = ReactDOMServer.renderToString(element);
@@ -102,7 +113,10 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 
   const {helmet} = helmetContext;
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
-  const faviconPath = assetsPrefix + '/favicon.ico';
+  const faviconPath = `${assetsPrefix}/favicon.ico`;
+  const assetsScript = crossOrigin
+    ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
+    : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
 
   return (`<!doctype html>
     <html lang="" ${helmet.htmlAttributes.toString()}>
@@ -121,10 +135,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
       ${assets.client.css ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
-      ${crossOrigin
-        ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-        : `<script src="${assetsPrefix + assets.client.js}" defer></script>`
-      }
+      ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
       <div id="root">${html}</div>
@@ -165,8 +176,8 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         renderClient(requestContext).then((body) => {
           res.cookie('double_submit', buf.toString('hex'));
           res.status(200).send(body);
-        }).catch((err: Error) => {
-          next?.(err);
+        }).catch((renderError: Error) => {
+          next?.(renderError);
         });
       });
     });

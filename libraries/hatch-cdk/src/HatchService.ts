@@ -128,7 +128,7 @@ const domainForPrefix = (prefix: string | undefined, parentDomain?: string) => {
     return undefined;
   }
   return `${prefix.replace(/\.+$/, '')}.${parentDomain}`;
-}
+};
 
 interface DomainInfo {
   domainName: string;
@@ -141,11 +141,11 @@ interface DomainInfo {
 
 const getDomainInfo = (
   stack: cdk.Stack,
-  props: {domain?: HatchServiceDomainProps, useCloudFront?: boolean}
+  props: {domain?: HatchServiceDomainProps, useCloudFront?: boolean},
 ): DomainInfo | undefined => {
   if (props.domain != null) {
     const {publicHostedZoneId, privateHostedZoneId} = props.domain;
-    const domainName = props.domain.domainName;
+    const {domainName} = props.domain;
     const subjectAlternativeNames = [`*.${domainName}`];
 
     const publicHostedZone = publicHostedZoneId != null
@@ -160,28 +160,37 @@ const getDomainInfo = (
         zoneName: props.domain.zoneName ?? domainName,
       }) : undefined;
 
-    const regionCertificate = props.domain.regionCertificateArn != null
-      ? certificatemanager.Certificate.fromCertificateArn(stack, 'regionCertificate',
-        props.domain.regionCertificateArn)
-      : props.domain.createCertificates
-        ? new certificatemanager.Certificate(stack, 'regionCertificate', {
-          domainName,
-          subjectAlternativeNames,
-          validation: certificatemanager.CertificateValidation.fromDns(publicHostedZone ?? privateHostedZone),
-        })
-        : undefined;
+    let regionCertificate: certificatemanager.ICertificate | undefined;
+    if (props.domain.regionCertificateArn != null) {
+      regionCertificate = certificatemanager.Certificate.fromCertificateArn(
+        stack,
+        'regionCertificate',
+        props.domain.regionCertificateArn,
+      );
+    } else if (props.domain.createCertificates) {
+      regionCertificate = new certificatemanager.Certificate(stack, 'regionCertificate', {
+        domainName,
+        subjectAlternativeNames,
+        validation: certificatemanager.CertificateValidation.fromDns(publicHostedZone ?? privateHostedZone),
+      });
+    }
 
-    const distroCertificate = props.domain.cloudFrontDistributionCertificateArn != null
-      ? certificatemanager.Certificate.fromCertificateArn(stack, 'distributionCertificate',
-        props.domain.cloudFrontDistributionCertificateArn)
-      : (props.domain.createCertificates && props.useCloudFront && (publicHostedZone ?? privateHostedZone))
-        ? new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
-          domainName,
-          subjectAlternativeNames,
-          hostedZone: (publicHostedZone ?? privateHostedZone)!,
-          region: 'us-east-1', // Must be us-east-1 for CloudFront
-        })
-        : undefined;
+    let distroCertificate: certificatemanager.ICertificate | undefined;
+    if (props.domain.cloudFrontDistributionCertificateArn != null) {
+      distroCertificate = certificatemanager.Certificate.fromCertificateArn(
+        stack,
+        'distributionCertificate',
+        props.domain.cloudFrontDistributionCertificateArn,
+      );
+    } else if (props.domain.createCertificates && props.useCloudFront && (publicHostedZone ?? privateHostedZone)) {
+      distroCertificate = new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
+        domainName,
+        subjectAlternativeNames,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked just a few lines up
+        hostedZone: (publicHostedZone ?? privateHostedZone)!,
+        region: 'us-east-1', // Must be us-east-1 for CloudFront
+      });
+    }
 
     let loadBalancerPrefix = props.domain.loadBalancerDomainPrefix;
     if (loadBalancerPrefix == null && regionCertificate != null) {
@@ -212,7 +221,6 @@ const getUserManagementInfo = (stack: cdk.Stack, domainInfo: DomainInfo | undefi
     }
 
     let userPool: cognito.IUserPool;
-    let userPoolClient: cognito.UserPoolClient;
     if (props.userPoolArn != null) {
       userPool = cognito.UserPool.fromUserPoolArn(stack, 'userPool', props.userPoolArn);
     } else {
@@ -229,7 +237,7 @@ const getUserManagementInfo = (stack: cdk.Stack, domainInfo: DomainInfo | undefi
       });
     }
 
-    userPoolClient = userPool.addClient('userPoolClient', {
+    const userPoolClient = userPool.addClient('userPoolClient', {
       disableOAuth: true,
       authFlows: {
         adminUserPassword: true,
@@ -254,7 +262,7 @@ const configureCloudFront = (
     additionalCloudfrontBehaviors?: Record<string, cloudfront.BehaviorOptions>,
     apiCachePolicy?: cloudfront.ICachePolicy,
     webAclId?: string,
-  }
+  },
 ): string | undefined => {
   let cloudFrontHost: string | undefined;
   if (props.useCloudFront) {
@@ -268,7 +276,7 @@ const configureCloudFront = (
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       };
 
-      staticDeploymentOptions.paths.forEach(path => {
+      staticDeploymentOptions.paths.forEach((path) => {
         staticContentBehaviors[path] = staticContentBehavior;
       });
       additionalBehaviors = {
@@ -349,7 +357,7 @@ const configureCloudFront = (
     }
   }
   return cloudFrontHost;
-}
+};
 
 type StaticDeploymentOptions = {paths: string[], bucket: s3.IBucket};
 
@@ -373,7 +381,8 @@ const configureStaticDeployment = (
           buildArgs,
         }),
         command: [
-          'cp', '-R',
+          'cp',
+          '-R',
           '/app/build/public/static',
           '/app/build/public/favicon.ico',
           '/app/build/public/robots.txt',
@@ -398,7 +407,7 @@ const configureStaticDeployment = (
     staticDeploymentOptions = {paths: staticContentPaths, bucket: staticContentBucket};
   }
   return staticDeploymentOptions;
-}
+};
 
 type TaskRoleModifier = (taskRole: iam.IRole) => void;
 
@@ -442,23 +451,23 @@ export class HatchService extends cdk.Stack {
       ...props.clusterProps,
     });
 
-    let buildArgs = props.containerOptions.buildArgs;
+    const {buildArgs} = props.containerOptions;
     const container = new ecr_assets.DockerImageAsset(this, 'container', {
       directory: props.containerOptions.directory,
       target: props.containerOptions.appTarget ?? 'production-app-no-static',
       buildArgs,
     });
-    let staticDeploymentOptions = configureStaticDeployment(this, props, buildArgs);
+    const staticDeploymentOptions = configureStaticDeployment(this, props, buildArgs);
 
     const externalSecurityGroupIds = props.externalSecurityGroupIds ?? [];
     const internalSecurityGroupIds = props.internalSecurityGroupIds ?? [];
-    const externalSecurityGroups = externalSecurityGroupIds.map((id: string) => (
-      ec2.SecurityGroup.fromSecurityGroupId(this, id, id, {
+    const externalSecurityGroups = externalSecurityGroupIds.map((secGroupId: string) => (
+      ec2.SecurityGroup.fromSecurityGroupId(this, secGroupId, secGroupId, {
         mutable: false,
       })
     ));
-    const internalSecurityGroups = internalSecurityGroupIds.map((id: string) => (
-      ec2.SecurityGroup.fromSecurityGroupId(this, id, id, {
+    const internalSecurityGroups = internalSecurityGroupIds.map((secGroupId: string) => (
+      ec2.SecurityGroup.fromSecurityGroupId(this, secGroupId, secGroupId, {
         mutable: false,
       })
     ));
@@ -488,7 +497,7 @@ export class HatchService extends cdk.Stack {
         modifier(taskRole);
       }
     }
-    const defaultLogGroupName = 'HatchService-' + id;
+    const defaultLogGroupName = `HatchService-${id}`;
     const logGroupProps: logs.LogGroupProps = {
       logGroupName: defaultLogGroupName,
       retention: logs.RetentionDays.THREE_MONTHS,
@@ -506,6 +515,7 @@ export class HatchService extends cdk.Stack {
         ...props.fargateOptions?.taskImageOptions,
         image: props.fargateOptions?.taskImageOptions?.image ?? ecs.ContainerImage.fromDockerImageAsset(container),
         environment: {
+          /* eslint-disable @typescript-eslint/naming-convention -- using typical ENV_VAR naming convention */
           LOG_TO_CONSOLE: 'true',
           LOG_LEVEL: 'info',
           HOSTNAME: '0.0.0.0',
@@ -513,6 +523,7 @@ export class HatchService extends cdk.Stack {
           ...featureBasedEnvVars,
           AWS_REGION: cdk.Stack.of(this).region,
           ...props.fargateOptions?.taskImageOptions?.environment,
+          /* eslint-enable @typescript-eslint/naming-convention */
         },
         taskRole,
         logDriver: props.fargateOptions?.taskImageOptions?.logDriver ?? new ecs.AwsLogDriver({
@@ -568,6 +579,7 @@ export class HatchService extends cdk.Stack {
       const listener = privateLoadBalancer.addListener('PrivateListener', {
         protocol: useHttps ? ApplicationProtocol.HTTPS : ApplicationProtocol.HTTP,
         open: true,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- proven non-null by useHttps definition
         certificates: useHttps ? [domainInfo!.regionCertificate!] : undefined,
       });
       this.privateLoadBalancerListener = listener;
@@ -582,8 +594,10 @@ export class HatchService extends cdk.Stack {
         });
       }
       if (useHttps) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- proven non-null by useHttps definition
         this.privateUrl = `https://${domainInfo!.domainName}`;
       } else if (domainInfo?.privateHostedZone != null) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- proven non-null by else-if check
         this.privateUrl = `http://${domainInfo!.domainName}`;
       } else {
         this.privateUrl = `http://${privateLoadBalancer.loadBalancerDnsName}`;
@@ -641,7 +655,7 @@ export class HatchService extends cdk.Stack {
   }
 
   public modifyLoadBalancerListeners(
-    modifier: (listener: ApplicationListener, idPrefix: string, basePriority: number) => void
+    modifier: (listener: ApplicationListener, idPrefix: string, basePriority: number) => void,
   ) {
     modifier(this.loadBalancerListener, 'mainLB-', 2);
     if (this.privateLoadBalancerListener) {

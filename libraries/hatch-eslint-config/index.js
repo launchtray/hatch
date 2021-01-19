@@ -13,6 +13,7 @@ module.exports = {
     'jest/globals': true,
   },
   extends: [
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'airbnb-base',
   ],
@@ -47,10 +48,10 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error', {
       variables: false
     }],
-
     'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': 'off', // replaced by @typescript version
     '@typescript-eslint/no-unused-vars': ['error'],
@@ -96,36 +97,6 @@ module.exports = {
     }],
     '@typescript-eslint/no-shadow': ['error'],
     'no-shadow': 'off',
-
-    'arrow-body-style': 'off',
-    'class-methods-use-this': 'off',
-    'eol-last': 'off',
-    'generator-star-spacing': 'off',
-    'global-require': 'off',
-    'import/no-cycle': 'error',
-    'import/no-unresolved': 'off',
-    'import/prefer-default-export': 'off',
-    'max-classes-per-file': 'off',
-    'no-await-in-loop': 'off',
-    'no-empty-function': 'off',
-    'no-loop-func': 'off',
-    'no-mixed-operators': 'off',
-    'no-multi-spaces': 'off',
-    'no-nested-ternary': 'off',
-    'no-plusplus': 'off',
-    'no-restricted-properties': 'off',
-    'no-restricted-syntax': 'off',
-    'no-return-await': 'off',
-    'no-underscore-dangle': 'off',
-    'no-use-before-define': 'off',
-    'no-useless-escape': 'off',
-    'object-shorthand': 'off',
-    'padded-blocks': 'off',
-    'prefer-template': 'off',
-    'quotes': ['error', 'single'],
-    'require-jsdoc': 'off',
-    'require-yield': 'warn',
-    'spaced-comment': 'off',
     'camelcase': 'off', // Replaced by @typescript-eslint/naming-convention
     '@typescript-eslint/naming-convention': [
       'error',
@@ -170,5 +141,42 @@ module.exports = {
         format: ['PascalCase'],
       },
     ],
+    'arrow-body-style': 'off',
+    'class-methods-use-this': 'off',
+    'eol-last': ['warn', 'always'],
+    'generator-star-spacing': ['warn', 'after'],
+    'global-require': 'off',
+    'import/no-cycle': 'error',
+    'import/no-unresolved': 'off',
+    'import/prefer-default-export': 'off',
+    'max-classes-per-file': 'off',
+    'no-await-in-loop': 'off',
+    'no-empty-function': 'off',
+    'no-loop-func': 'off',
+    'no-mixed-operators': 'error',
+    'no-multi-spaces': 'warn',
+    'no-nested-ternary': 'error',
+    'no-restricted-properties': 'off',
+    'no-restricted-syntax': 'off',
+    'no-prototype-builtins': 'error',
+    'guard-for-in': 'error',
+    'no-return-await': 'off',
+    'no-plusplus': ['error', {
+      allowForLoopAfterthoughts: true
+    }],
+    'no-underscore-dangle': ['warn', {
+      allowFunctionParams: true
+    }],
+    'no-useless-escape': 'error',
+    'object-shorthand': 'warn',
+    'padded-blocks': ['warn', 'never'],
+    'prefer-template': 'warn',
+    'quotes': ['warn', 'single'],
+    'require-jsdoc': 'off',
+    'require-yield': 'off',
+    'spaced-comment': ['warn', 'always'],
+
+    // TODO: review rules pulled in by plugins
+    // TODO: review final list for error vs warn
   },
 }

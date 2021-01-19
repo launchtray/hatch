@@ -16,3 +16,7 @@ script:
   - echo 'Building...' && echo -en 'travis_fold:start:build\\r'
   - CI=false node common/scripts/install-run-rush.js rebuild --verbose
   - echo -en 'travis_fold:end:build\\r'
+
+  - echo 'Linting...' && echo -en 'travis_fold:start:lint\\r'
+  - CI=false node common/scripts/install-run-rush.js lint --verbose
+  - echo -en 'travis_fold:end:lint\\r'

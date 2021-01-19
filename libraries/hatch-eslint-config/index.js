@@ -44,6 +44,7 @@ module.exports = {
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
+    '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-use-before-define': ['error', {
@@ -68,7 +69,9 @@ module.exports = {
     }],
     'function-call-argument-newline': ['warn', 'consistent'],
     'function-paren-newline': ['warn', 'multiline-arguments'],
-    'func-call-spacing': ['warn', 'never'],
+    'no-spaced-func': 'off', // replaced by @typescript-eslint/func-call-spacing
+    'func-call-spacing': 'off', // replaced by @typescript version
+    '@typescript-eslint/func-call-spacing': ['warn', 'never'],
     'array-element-newline': ['warn', 'consistent'],
     'array-bracket-spacing': ['warn', 'never'],
     'array-bracket-newline': ['warn', 'consistent'],
@@ -148,6 +151,13 @@ module.exports = {
         format: ['camelCase'],
         leadingUnderscore: 'forbid',
         trailingUnderscore: 'forbid',
+      },
+      {
+        selector: 'parameter',
+        format: ['camelCase'],
+        modifiers: ['unused'],
+        leadingUnderscore: 'allow',
+        trailingUnderscore: 'allow',
       },
       {
         selector: 'memberLike',

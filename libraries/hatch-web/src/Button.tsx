@@ -12,19 +12,16 @@ const isPropTypesWithRoute = (props: PropTypes): props is PropTypesWithRoute => 
   return (props as PropTypesWithRoute).onPressRoute !== undefined;
 };
 
-export default class extends React.Component<PropTypes> {
-  public render() {
-    const {props} = this;
-    if (isPropTypesWithRoute(props)) {
-      const {testID, onPressRoute, ...otherProps} = props;
-      return (
-        <View>
-          <Link to={onPressRoute} testID={testID} textStyle={{textDecorationLine: 'none'}}>
-            <Button onPress={() => null} {...otherProps}/>
-          </Link>
-        </View>
-      );
-    }
-    return <Button {...props}/>;
+export default (props: PropTypes) => {
+  if (isPropTypesWithRoute(props)) {
+    const {testID, onPressRoute, ...otherProps} = props;
+    return (
+      <View>
+        <Link to={onPressRoute} testID={testID} textStyle={{textDecorationLine: 'none'}}>
+          <Button onPress={() => null} {...otherProps}/>
+        </Link>
+      </View>
+    );
   }
-}
+  return <Button {...props}/>;
+};

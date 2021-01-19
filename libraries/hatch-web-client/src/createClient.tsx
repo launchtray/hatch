@@ -64,7 +64,7 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.Element
         <HelmetProvider>
           <Switch>
             <Route path={'/api'}>
-              <SwaggerUI url='/api.json' docExpansion={'list'}/>
+              <SwaggerUI url={'/api.json'} docExpansion={'list'}/>
             </Route>
             <Route>
               <RootApp/>

@@ -135,7 +135,7 @@ export const createSagaForWebAppManagers = async (
       isFirstRendering = selectFirstRenderingFromLocationChangeAction(action);
     }
 
-    if (!ssrEnabled || !isFirstRendering || location.fragment) {
+    if (!ssrEnabled || !isFirstRendering || location.fragment != null) {
       const handleLocationChangeSagas: Effect[] = [];
       for (const manager of webAppManagers) {
         const target = manager.constructor.prototype;

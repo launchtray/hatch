@@ -8,7 +8,7 @@ export default class SentryReporter implements ErrorReporter {
   private initializedWarningShown = false;
 
   constructor(private readonly sentry: SentryMonitor, private readonly logger: Logger, options: Options) {
-    if (options && options.dsn) {
+    if (options?.dsn != null) {
       this.sentry.init({dsn: options.dsn, integrations: options.integrations});
       this.initialized = true;
     } else {
@@ -42,7 +42,7 @@ export default class SentryReporter implements ErrorReporter {
   public captureException(exception: Error) {
     if (this.initialized) {
       try {
-        if (exception && exception.stack != null) {
+        if (exception?.stack != null) {
           this.sentry.setExtra('exceptionContext', exception.stack);
         }
         this.sentry.captureException(exception);

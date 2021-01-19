@@ -182,7 +182,11 @@ const getDomainInfo = (
         'distributionCertificate',
         props.domain.cloudFrontDistributionCertificateArn,
       );
-    } else if (props.domain.createCertificates && props.useCloudFront && (publicHostedZone ?? privateHostedZone)) {
+    } else if (
+      props.domain.createCertificates
+      && props.useCloudFront
+      && (publicHostedZone != null || privateHostedZone != null)
+    ) {
       distroCertificate = new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
         domainName,
         subjectAlternativeNames,
@@ -290,7 +294,7 @@ const configureCloudFront = (
     if (domainInfo?.distroCertificate != null && domainInfo?.domainName != null) {
       domainNames = [domainInfo.domainName];
       const wwwDomain = domainForPrefix('www', domainInfo.domainName);
-      if (props.domain?.addWwwAlias && wwwDomain) {
+      if (props.domain?.addWwwAlias && wwwDomain != null) {
         domainNames.push(wwwDomain);
       }
     }
@@ -320,7 +324,12 @@ const configureCloudFront = (
       webAclId: props.webAclId,
     });
 
-    cloudFrontHost = ((domainInfo?.distroCertificate && domainInfo?.domainName) ?? distribution.domainName);
+    if (domainInfo?.distroCertificate != null) {
+      cloudFrontHost = domainInfo?.domainName;
+    }
+    if (cloudFrontHost == null) {
+      cloudFrontHost = distribution.domainName;
+    }
 
     if (domainInfo?.distroCertificate != null && domainInfo.publicHostedZone != null) {
       const cloudFrontTarget = route53.RecordTarget.fromAlias(new route53targets.CloudFrontTarget(distribution));
@@ -586,7 +595,7 @@ export class HatchService extends cdk.Stack {
       const targetGroup = listener.addTargets('fargatePrivateTarget', {port: 80});
       targetGroup.addTarget(fargateService.service);
       targetGroup.configureHealthCheck(healthCheck);
-      if (domainInfo?.privateHostedZone) {
+      if (domainInfo?.privateHostedZone != null) {
         new route53.ARecord(this, 'privateDomainName', {
           zone: domainInfo.privateHostedZone,
           recordName: domainInfo.domainName,
@@ -658,7 +667,7 @@ export class HatchService extends cdk.Stack {
     modifier: (listener: ApplicationListener, idPrefix: string, basePriority: number) => void,
   ) {
     modifier(this.loadBalancerListener, 'mainLB-', 2);
-    if (this.privateLoadBalancerListener) {
+    if (this.privateLoadBalancerListener != null) {
       modifier(this.privateLoadBalancerListener, 'privateLB-', 2);
     }
   }

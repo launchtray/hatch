@@ -53,7 +53,7 @@ export const createClientSDKByDependency = async (dependencyName: string) => {
       env,
       maxBuffer: 10 * 1024 * 1024,
     });
-    if (printSpecCmd.error) {
+    if (printSpecCmd.error != null) {
       // eslint-disable-next-line no-console -- intentional stdout
       console.log(printSpecCmd.stdout);
       throw new Error(printSpecCmd.error.message);

@@ -7,6 +7,6 @@ createClient({
   },
 });
 
-if (module.hot) {
+if (module.hot != null) {
   module.hot.accept();
 }

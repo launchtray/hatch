@@ -134,7 +134,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
-      ${assets.client.css ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets.client.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
       ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
@@ -169,7 +169,7 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         authHeader: req.headers.authorization,
       };
       crypto.randomBytes(32, (err, buf) => {
-        if (err) {
+        if (err != null) {
           next(err);
           return;
         }

@@ -65,7 +65,7 @@ export const createClientSDK = async (
   clientSDKOptions: ClientSDKOptions,
   projectFolder?: ProjectFolder,
 ) => {
-  if (!projectName) {
+  if (projectName == null) {
     throw new Error('Client SDK name must be specified');
   }
   const clientPath = `${process.cwd()}/${projectName}`;
@@ -87,20 +87,20 @@ export const createClientSDK = async (
 
 export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
   return (clientOptions: ClientSDKOptions) => {
-    if (!clientOptions.dependency && !clientOptions.spec) {
+    if (clientOptions.dependency == null && clientOptions.spec == null) {
       throw new Error('Dependency or input spec must be specified');
     }
-    if (clientOptions.spec && !clientOptions.name) {
+    if (clientOptions.spec != null && clientOptions.name == null) {
       throw new Error('Name must be specified when generating a client SDK from an input spec');
     }
-    const projectName = (clientOptions.dependency && !clientOptions.name)
+    const projectName = (clientOptions.dependency != null && clientOptions.name == null)
       ? `${clientOptions.dependency}-sdk` : clientOptions.name as string;
     return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
   };
 };
 
 export const createMonorepo = async (parentDirectory: string, monorepoName: string) => {
-  if (!monorepoName) {
+  if (monorepoName == null) {
     throw new Error('Monorepo name must be specified');
   }
   const monorepoPath = `${process.cwd()}/${monorepoName}`;
@@ -120,7 +120,7 @@ export const monorepoCreator = (parentDirectory: string) => {
 };
 
 export const createProject = async (parentDirectory: string, projectName: string, projectFolder?: ProjectFolder) => {
-  if (!projectName) {
+  if (projectName == null) {
     throw new Error('Project name must be specified');
   }
   const projectPath = `${process.cwd()}/${projectName}`;
@@ -146,7 +146,7 @@ export const projectCreator = (parentDirectory: string, projectFolder?: ProjectF
 };
 
 export const createModule = async (parentDirectory: string, moduleName: string, extension = 'ts') => {
-  if (!moduleName) {
+  if (moduleName == null) {
     throw new Error('Module name must be specified');
   }
   const modulePath = `${process.cwd()}/${moduleName}.${extension}`;
@@ -268,7 +268,7 @@ const findAvailablePortPair = (dotEnv: Record<string, string>) => {
     }
   }
   for (let port = MIN_PORT; port <= MAX_PORT; port++) {
-    if (!dotEnvPorts[port] && !dotEnvPorts[port + 1]) {
+    if (dotEnvPorts[port] == null && dotEnvPorts[port + 1] == null) {
       foundPorts.push(port);
       port += 1;
       foundPorts.push(port);
@@ -467,9 +467,9 @@ export const createFromTemplate = async (
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
   let monorepoRootDir: string | undefined;
-  if (templateType === 'project' && projectFolder) {
+  if (templateType === 'project' && projectFolder != null) {
     rushConfigPath = RushConfiguration.tryFindRushJsonLocation({startingFolder: dstPath});
-    if (rushConfigPath) {
+    if (rushConfigPath != null) {
       inMonorepo = true;
       monorepoRootDir = path.dirname(rushConfigPath);
       adjustedDstPath = path.resolve(monorepoRootDir, projectFolder, toShortName(name));
@@ -483,7 +483,7 @@ export const createFromTemplate = async (
     const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
     if (templateType === 'monorepo' || templateType === 'project') {
       tmp.dir({unsafeCleanup: true}, (err, tmpPath, cleanUp) => {
-        if (err) {
+        if (err != null) {
           cleanUp();
           tempFileFuture.completeExceptionally(err);
         }
@@ -491,7 +491,7 @@ export const createFromTemplate = async (
       });
     } else {
       tmp.file((err, tmpPath, fd, cleanUp) => {
-        if (err) {
+        if (err != null) {
           cleanUp();
           tempFileFuture.completeExceptionally(err);
         }
@@ -503,7 +503,7 @@ export const createFromTemplate = async (
       if (templateType === 'monorepo') {
         const rushExecutable = path.resolve(__dirname, '../node_modules/.bin/rush');
         const rushInitCmd = spawnSync(rushExecutable, ['init'], {encoding: 'utf8', cwd: tempFilePath});
-        if (rushInitCmd.error) {
+        if (rushInitCmd.error != null) {
           throw new Error(`Error initializing monorepo: ${rushInitCmd.error.message}`);
         }
         // remove files that will be replaced by template
@@ -638,7 +638,7 @@ export const createFromTemplate = async (
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${toShortName(name)}.test.ts`));
         }
-        if (rushConfigPath && monorepoRootDir && projectFolder) {
+        if (rushConfigPath != null && monorepoRootDir != null && projectFolder != null) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
           if (clientSDKOptions != null) {

@@ -284,7 +284,7 @@ export class PDF {
       console.log(`                Actual PDF   : ${fs.readFileSync(pdfPath).toString('base64')}`);
       /* eslint-enable no-console  */
     }
-    if (process.env.PRINT_TEMP_PDF_PATH) {
+    if (process.env.PRINT_TEMP_PDF_PATH != null && process.env.PRINT_TEMP_PDF_PATH !== 'false') {
       // eslint-disable-next-line no-console -- intentional log statements
       console.log(`PDF Path: ${this.getTempPDFPath()}`);
     }

@@ -43,11 +43,11 @@ const remapToken = ({tokenRegisteredByProject, tokenUsedByDependency, dependency
 
 const getToken = (tokenUsedByDependency: TokenKey, dependency: unknown, propertyKey?: string | symbol): TokenKey => {
   let dependencyName = (dependency as {name: string})?.name;
-  if (propertyKey) {
+  if (propertyKey != null) {
     dependencyName = `${(dependency as {constructor: {name: string}})?.constructor?.name}.${String(propertyKey)}`;
   }
   if (dependencySpecificTokens == null) {
-    if (process && process.env && (process.env.JEST_WORKER_ID || process.env.NODE_ENV === 'test')) {
+    if (process?.env?.JEST_WORKER_ID != null || process.env.NODE_ENV === 'test') {
       // eslint-disable-next-line no-console -- intentional warning to console
       console.info('Using default dependency injection initialization for testing');
       initializeInjection();

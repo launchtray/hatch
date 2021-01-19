@@ -30,6 +30,7 @@ export default class MediaQueryContext {
         },
       }));
     };
+    // eslint-disable-next-line no-undef -- global window object
     const mediaQueryList = window.matchMedia(query);
     mediaQueryList.addListener(listener);
     listener(mediaQueryList);

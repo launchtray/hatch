@@ -1,7 +1,13 @@
-import {Class, DependencyContainer, Logger} from '@launchtray/hatch-util';
+import {AnyJsonObject, Class, DependencyContainer, Logger} from '@launchtray/hatch-util';
 import {Application} from 'express';
 import http from 'http';
-import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses, OpenAPIOperationSecurity} from './OpenAPI';
+import {
+  OpenAPIMethod,
+  OpenAPIParameter,
+  OpenAPIRequestBody,
+  OpenAPIResponses,
+  OpenAPIOperationSecurity,
+} from './OpenAPI';
 import {LivenessState, ReadinessState} from './server-routing';
 
 export type Server = http.Server;
@@ -37,7 +43,7 @@ export interface ServerMiddleware {
   register(app: Application, server: Server): Promise<void>;
   getLivenessState?(): Promise<LivenessState | boolean | undefined>;
   getReadinessState?(): Promise<ReadinessState | boolean | undefined>;
-  getAppInfo?(): Promise<{[key: string]: any}>
+  getAppInfo?(): Promise<AnyJsonObject | undefined>
 }
 
 export interface ServerMiddlewareClass extends Class<ServerMiddleware> {

@@ -184,6 +184,7 @@ const getDomainInfo = (
         ? new certificatemanager.DnsValidatedCertificate(stack, 'distributionCertificate', {
           domainName,
           subjectAlternativeNames,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked just a few lines up
           hostedZone: (publicHostedZone ?? privateHostedZone)!,
           region: 'us-east-1', // Must be us-east-1 for CloudFront
         })
@@ -218,7 +219,6 @@ const getUserManagementInfo = (stack: cdk.Stack, domainInfo: DomainInfo | undefi
     }
 
     let userPool: cognito.IUserPool;
-    let userPoolClient: cognito.UserPoolClient;
     if (props.userPoolArn != null) {
       userPool = cognito.UserPool.fromUserPoolArn(stack, 'userPool', props.userPoolArn);
     } else {
@@ -235,7 +235,7 @@ const getUserManagementInfo = (stack: cdk.Stack, domainInfo: DomainInfo | undefi
       });
     }
 
-    userPoolClient = userPool.addClient('userPoolClient', {
+    const userPoolClient = userPool.addClient('userPoolClient', {
       disableOAuth: true,
       authFlows: {
         adminUserPassword: true,
@@ -459,13 +459,13 @@ export class HatchService extends cdk.Stack {
 
     const externalSecurityGroupIds = props.externalSecurityGroupIds ?? [];
     const internalSecurityGroupIds = props.internalSecurityGroupIds ?? [];
-    const externalSecurityGroups = externalSecurityGroupIds.map((id: string) => (
-      ec2.SecurityGroup.fromSecurityGroupId(this, id, id, {
+    const externalSecurityGroups = externalSecurityGroupIds.map((secGroupId: string) => (
+      ec2.SecurityGroup.fromSecurityGroupId(this, secGroupId, secGroupId, {
         mutable: false,
       })
     ));
-    const internalSecurityGroups = internalSecurityGroupIds.map((id: string) => (
-      ec2.SecurityGroup.fromSecurityGroupId(this, id, id, {
+    const internalSecurityGroups = internalSecurityGroupIds.map((secGroupId: string) => (
+      ec2.SecurityGroup.fromSecurityGroupId(this, secGroupId, secGroupId, {
         mutable: false,
       })
     ));
@@ -513,6 +513,7 @@ export class HatchService extends cdk.Stack {
         ...props.fargateOptions?.taskImageOptions,
         image: props.fargateOptions?.taskImageOptions?.image ?? ecs.ContainerImage.fromDockerImageAsset(container),
         environment: {
+          /* eslint-disable @typescript-eslint/naming-convention -- using typical ENV_VAR naming convention */
           LOG_TO_CONSOLE: 'true',
           LOG_LEVEL: 'info',
           HOSTNAME: '0.0.0.0',
@@ -520,6 +521,7 @@ export class HatchService extends cdk.Stack {
           ...featureBasedEnvVars,
           AWS_REGION: cdk.Stack.of(this).region,
           ...props.fargateOptions?.taskImageOptions?.environment,
+          /* eslint-enable @typescript-eslint/naming-convention */
         },
         taskRole,
         logDriver: props.fargateOptions?.taskImageOptions?.logDriver ?? new ecs.AwsLogDriver({
@@ -575,6 +577,7 @@ export class HatchService extends cdk.Stack {
       const listener = privateLoadBalancer.addListener('PrivateListener', {
         protocol: useHttps ? ApplicationProtocol.HTTPS : ApplicationProtocol.HTTP,
         open: true,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- proven non-null by useHttps definition
         certificates: useHttps ? [domainInfo!.regionCertificate!] : undefined,
       });
       this.privateLoadBalancerListener = listener;
@@ -589,8 +592,10 @@ export class HatchService extends cdk.Stack {
         });
       }
       if (useHttps) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- proven non-null by useHttps definition
         this.privateUrl = `https://${domainInfo!.domainName}`;
       } else if (domainInfo?.privateHostedZone != null) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- proven non-null by else-if check
         this.privateUrl = `http://${domainInfo!.domainName}`;
       } else {
         this.privateUrl = `http://${privateLoadBalancer.loadBalancerDnsName}`;

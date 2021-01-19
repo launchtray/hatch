@@ -49,6 +49,16 @@ export const withSpinner = async (message: string, task: () => Promise<void>): P
   }
 };
 
+const log = (message: string) => {
+  // eslint-disable-next-line no-console -- intentional log to console
+  console.log(message);
+};
+
+const logError = (message: string) => {
+  // eslint-disable-next-line no-console -- intentional log to console
+  console.error(chalk.red(message));
+};
+
 export const createClientSDK = async (
   parentDirectory: string,
   projectName: string,
@@ -67,11 +77,11 @@ export const createClientSDK = async (
     projectFolder: projectFolder,
     clientSDKOptions: clientSDKOptions,
   });
-  console.log(chalk.green('Created \'' + dstPath + '\''));
+  log(chalk.green('Created \'' + dstPath + '\''));
   if (inMonorepo) {
-    console.log('Now might be a good time run to `rush update`');
+    log('Now might be a good time run to `rush update`');
   } else {
-    console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+    log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
   }
 };
 
@@ -100,7 +110,7 @@ export const createMonorepo = async (parentDirectory: string, monorepoName: stri
     name: monorepoName,
     templateType: 'monorepo',
   });
-  console.log(chalk.green('Created \'' + monorepoPath + '\' monorepo'));
+  log(chalk.green('Created \'' + monorepoPath + '\' monorepo'));
 };
 
 export const monorepoCreator = (parentDirectory: string) => {
@@ -121,11 +131,11 @@ export const createProject = async (parentDirectory: string, projectName: string
     templateType: 'project',
     projectFolder: projectFolder,
   });
-  console.log(chalk.green('Created \'' + dstPath + '\''));
+  log(chalk.green('Created \'' + dstPath + '\''));
   if (inMonorepo) {
-    console.log('Now might be a good time run to `rush update`');
+    log('Now might be a good time run to `rush update`');
   } else {
-    console.log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+    log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
   }
 };
 
@@ -145,7 +155,7 @@ export const createModule = async (parentDirectory: string, moduleName: string, 
     dstPath: modulePath,
     name: moduleName,
   });
-  console.log(chalk.green('Created \'' + modulePath + '\''));
+  log(chalk.green('Created \'' + modulePath + '\''));
 };
 
 export const moduleCreator = (parentDirectory: string, extension = 'ts') => {
@@ -179,14 +189,30 @@ const toPortName = (shortName: string, isStaticServer: boolean) => {
   return (isStaticServer ? '_STATIC_' : '') + envName + '_PORT';
 };
 
+interface DockerServiceDefinition {
+  key: string;
+  value: {
+    build: {
+      context: string;
+      target: string;
+      args: Record<string, string>;
+    };
+    ports: string[];
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- used by Docker
+    env_file?: string[];
+    environment?: Record<string, string>;
+  };
+}
+
 const createDockerService = (doc: YAML.Document, shortName: string, isStaticServer: boolean) => {
   const serviceName = toDockerServiceName(shortName, isStaticServer);
-  const service: any = {
+  const service: DockerServiceDefinition = {
     key: serviceName,
     value: {
       build: {
         context: '.',
         target: (isStaticServer ? 'static-server' : 'production-app'),
+        // eslint-disable-next-line @typescript-eslint/naming-convention -- following typical ARG naming convention
         args: {APP_NAME: shortName},
       },
       ports: ['${' + toPortName(shortName, isStaticServer) + '}:80'],
@@ -198,6 +224,7 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
       './prod.env',
     ];
     service.value.environment = {
+      // eslint-disable-next-line @typescript-eslint/naming-convention -- following typical ENV_VAR naming convention
       STATIC_ASSETS_BASE_URL: 'http://localhost:${' + toPortName(shortName, true) + '}',
     };
   }
@@ -229,13 +256,13 @@ const MAX_PORT = 65535;
 // This allows for the ports to be used for both prod and
 // dev, where (port + 1) is used for the static file server
 // and the webpack server, respectively.
-const findAvailablePortPair = (dotEnv: any) => {
+const findAvailablePortPair = (dotEnv: Record<string, string>) => {
   const dotEnvPorts = {};
   const foundPorts = [];
   for (const key of Object.keys(dotEnv)) {
     if (key.endsWith('_PORT')) {
-      const port = parseInt(dotEnv[key]);
-      if (!isNaN(port) && port >= MIN_PORT && port <= MAX_PORT) {
+      const port = parseInt(dotEnv[key], 10);
+      if (!Number.isNaN(port) && port >= MIN_PORT && port <= MAX_PORT) {
         dotEnvPorts[port] = true;
       }
     }
@@ -257,11 +284,11 @@ const parseDotEnv = (dotEnvPath: string) => {
   return dotenv.parse(fs.readFileSync(dotEnvPath));
 };
 
-const appendToFile = (path: string, lines: string[]) => {
-  if (!fs.existsSync(path)) {
-    fs.createFileSync(path);
+const appendToFile = (filePath: string, lines: string[]) => {
+  if (!fs.existsSync(filePath)) {
+    fs.createFileSync(filePath);
   }
-  const stream = fs.createWriteStream(path, {flags: 'a'});
+  const stream = fs.createWriteStream(filePath, {flags: 'a'});
   try {
     for (const line of lines) {
       stream.write(line + '\n');
@@ -394,9 +421,15 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
-const generateClientSDK = (clientSDKOptions: ClientSDKOptions, tempFilePath: string, rushConfigParsed?: any, monorepoRootDir?: string) => {
-  if (clientSDKOptions.dependency != null && clientSDKOptions.ver == null) {
-    const dependencyProject = rushConfigParsed.projects?.find((project: RushConfigurationProject) => {
+const generateClientSDK = (
+  clientSDKOptions: ClientSDKOptions,
+  tempFilePath: string,
+  rushConfigParsed?: {projects?: RushConfigurationProject[]},
+  monorepoRootDir?: string,
+) => {
+  let dependencyVersion = clientSDKOptions.ver;
+  if (clientSDKOptions.dependency != null && dependencyVersion == null) {
+    const dependencyProject = rushConfigParsed?.projects?.find((project: RushConfigurationProject) => {
       return project.packageName === clientSDKOptions.dependency;
     });
     const dependencyProjectFolder = dependencyProject?.projectFolder;
@@ -404,18 +437,22 @@ const generateClientSDK = (clientSDKOptions: ClientSDKOptions, tempFilePath: str
       const dependencyPackagePath = path.resolve(monorepoRootDir, dependencyProjectFolder, 'package.json');
       const dependencyPackage = fs.readFileSync(dependencyPackagePath).toString();
       const dependencyPackageParsed = parse(dependencyPackage);
-      clientSDKOptions.ver = dependencyPackageParsed?.version;
+      dependencyVersion = dependencyPackageParsed?.version;
     }
+  }
+  if (dependencyVersion == null) {
+    dependencyVersion = 'latest';
   }
   const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
   const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
   const clientSDKPackageParsed = parse(clientSDKPackage);
   if (clientSDKOptions.dependency != null) {
-    const dependencyVersion = clientSDKOptions.ver ?? 'latest';
     clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
-    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency + ' && rimraf dist && tsc';
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --dependency ' + clientSDKOptions.dependency
+      + ' && rimraf dist && tsc';
   } else if (clientSDKOptions.spec != null) {
-    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec + ' && rimraf dist && tsc';
+    clientSDKPackageParsed.scripts.build = 'hatch-client-sdk --spec ' + clientSDKOptions.spec
+      + ' && rimraf dist && tsc';
   }
   const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
   fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
@@ -424,6 +461,7 @@ const generateClientSDK = (clientSDKOptions: ClientSDKOptions, tempFilePath: str
 export const createFromTemplate = async (
   {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions,
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
+  let adjustedDstPath = dstPath;
   let inMonorepo = false;
   const templateName = path.basename(path.dirname(path.resolve(srcPath)));
   let rushConfigPath: string | undefined;
@@ -433,29 +471,30 @@ export const createFromTemplate = async (
     if (rushConfigPath) {
       inMonorepo = true;
       monorepoRootDir = path.dirname(rushConfigPath);
-      dstPath = path.resolve(monorepoRootDir, projectFolder, toShortName(name));
+      adjustedDstPath = path.resolve(monorepoRootDir, projectFolder, toShortName(name));
     }
   }
-  if (fs.existsSync(dstPath)) {
-    throw new Error('Failed to create ' + dstPath + ' as it already exits!');
+  if (fs.existsSync(adjustedDstPath)) {
+    throw new Error('Failed to create ' + adjustedDstPath + ' as it already exits!');
   }
+  // eslint-disable-next-line complexity -- refactor on future addition / cleanup
   await withSpinner('Creating \'' + name + '\'', async () => {
     const tempFileFuture: CompletableFuture<[string, () => void]> = new CompletableFuture<[string, () => void]>();
     if (templateType === 'monorepo' || templateType === 'project') {
-      tmp.dir({unsafeCleanup: true}, (err, path, cleanUp) => {
+      tmp.dir({unsafeCleanup: true}, (err, tmpPath, cleanUp) => {
         if (err) {
           cleanUp();
           tempFileFuture.completeExceptionally(err);
         }
-        tempFileFuture.complete([path, cleanUp]);
+        tempFileFuture.complete([tmpPath, cleanUp]);
       });
     } else {
-      tmp.file((err, path, fd, cleanUp) => {
+      tmp.file((err, tmpPath, fd, cleanUp) => {
         if (err) {
           cleanUp();
           tempFileFuture.completeExceptionally(err);
         }
-        tempFileFuture.complete([path, cleanUp]);
+        tempFileFuture.complete([tmpPath, cleanUp]);
       });
     }
     const [tempFilePath, cleanUp] = await tempFileFuture.get();
@@ -471,9 +510,9 @@ export const createFromTemplate = async (
         if (fs.existsSync(rushGitIgnorePath)) {
           await fs.remove(rushGitIgnorePath);
         }
-        const rushConfigPath = path.resolve(tempFilePath, 'rush.json');
-        if (fs.existsSync(rushConfigPath)) {
-          await fs.remove(rushConfigPath);
+        const templateRushConfigPath = path.resolve(tempFilePath, 'rush.json');
+        if (fs.existsSync(templateRushConfigPath)) {
+          await fs.remove(templateRushConfigPath);
         }
         updateVersionPolicies(tempFilePath);
         updateCustomCommands(tempFilePath);
@@ -589,7 +628,12 @@ export const createFromTemplate = async (
         if (fs.existsSync(dockerfilePath) && inMonorepo) {
           await fs.remove(dockerfilePath);
         }
-        const testPath = path.resolve(tempFilePath, 'src', '__test__', 'HATCH_CLI_TEMPLATE_VAR_projectShortName.test.ts');
+        const testPath = path.resolve(
+          tempFilePath,
+          'src',
+          '__test__',
+          'HATCH_CLI_TEMPLATE_VAR_projectShortName.test.ts',
+        );
         if (fs.existsSync(testPath)) {
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${toShortName(name)}.test.ts`));
         }
@@ -600,7 +644,7 @@ export const createFromTemplate = async (
             generateClientSDK(clientSDKOptions, tempFilePath, rushConfigParsed, monorepoRootDir);
           }
           const projectRelativePath = path.join(projectFolder, toShortName(name));
-          const project: {[key: string]: any} = {
+          const project: Record<string, string> & {shouldPublish?: boolean} = {
             packageName: name,
             projectFolder: projectRelativePath,
           };
@@ -625,12 +669,12 @@ export const createFromTemplate = async (
           to: name,
         });
       }
-      await fs.copy(tempFilePath, dstPath);
+      await fs.copy(tempFilePath, adjustedDstPath);
     } finally {
       cleanUp();
     }
   });
-  return {dstPath, inMonorepo};
+  return {dstPath: adjustedDstPath, inMonorepo};
 };
 
 export const templatePath = (parentDirectory: string, templateFile: string) => {
@@ -648,7 +692,7 @@ export const templateFile = (parentDirectory: string, extension = 'ts', moduleNa
 export const runCommander = () => {
   commander.parseAsync(process.argv)
     .catch((err) => {
-      console.error(chalk.red(err.message));
+      logError(err.message);
       commander.help();
     });
 };

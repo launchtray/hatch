@@ -1,4 +1,5 @@
 import {
+  AnyJsonObject,
   CompletableFuture,
   DependencyContainer,
   ErrorReporter,
@@ -17,7 +18,7 @@ import serialize, {SerializeJSOptions} from 'serialize-javascript';
 import util from 'util';
 import {createLogger, format, transports} from 'winston';
 import {ErrorReporterTransport} from './ErrorReporterTransport';
-import {OpenAPISpecBuilder} from './OpenAPI';
+import {OpenAPISpec, OpenAPISpecBuilder} from './OpenAPI';
 import {
   assignRootContainerToController,
   cleanUpRouting,
@@ -31,7 +32,12 @@ import {
   ReadinessState,
 } from './server-routing';
 import {ServerComposer, ServerComposition} from './ServerComposer';
-import {registerServerMiddleware, resolveServerMiddleware, Server, ServerMiddleware} from './ServerMiddleware';
+import {
+  registerServerMiddleware,
+  resolveServerMiddleware,
+  Server,
+  ServerMiddleware,
+} from './ServerMiddleware';
 
 export type ServerExtension<T extends ServerComposition> =
   (server: Server, app: Application, composition: T, logger: Logger, errorReporter: ErrorReporter) => void;
@@ -46,8 +52,10 @@ let runningServerApp: Application;
 
 if (module.hot) {
   module.hot.dispose((data) => {
+    /* eslint-disable no-param-reassign -- intentional mutation */
     data.runningServerApp = runningServerApp;
     data.runningServer = runningServer;
+    /* eslint-enable no-param-reassign */
   });
   if (module.hot.data) {
     runningServerApp = module.hot.data.runningServerApp;
@@ -55,7 +63,7 @@ if (module.hot) {
   }
 }
 
-const formatObjectForLog = (obj: any) => {
+const formatObjectForLog = (obj: unknown) => {
   if (typeof obj === 'string') {
     return obj;
   }
@@ -68,17 +76,18 @@ const customLogFormat = (colorized: boolean) => {
   return format.combine(
     format.timestamp(),
     {
-      transform(info: any) {
+      transform(info: {timestamp: string, level: string, message: string, meta: unknown}) {
         const {timestamp, level, message} = info;
         const args = info[Symbol.for('splat')];
         let messageWithArgs = formatObjectForLog(message);
         if (args != null) {
-          messageWithArgs += ' ' + args.map((obj: any) => {
+          messageWithArgs += ' ' + args.map((obj: unknown) => {
             return formatObjectForLog(obj);
           }).join(' ');
         }
         const paddedLevel = `[${level}]`.padEnd((colorized ? COLORIZED_LEVEL_MAX_LENGTH : RAW_LEVEL_MAX_LENGTH) + 2);
-        info[Symbol.for('message')] = `[${timestamp}] ${paddedLevel}: ${messageWithArgs}`;
+        // eslint-disable-next-line no-param-reassign -- using API as intended
+        info[Symbol.for('message') as unknown as string] = `[${timestamp}] ${paddedLevel}: ${messageWithArgs}`;
         return info;
       },
     },
@@ -127,13 +136,13 @@ const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => {
     addBreadcrumb(breadcrumb);
   },
-  captureException: (error: any) => {
+  captureException: (error: unknown) => {
     captureException(error);
   },
   init: (options: Options) => {
     init(options);
   },
-  setExtra: (key: string, extra: any) => {
+  setExtra: (key: string, extra: unknown) => {
     setExtra(key, extra);
   },
   setTag: (key: string, value: string) => {
@@ -173,8 +182,8 @@ const getReadinessStatus = async (logger: Logger, serverMiddlewareList: ServerMi
   return overallStatus ?? HealthStatus.UP;
 };
 
-const getAppInfo = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<{[key: string]: any}> => {
-  let overallInfo: {[key: string]: any} = {};
+const getAppInfo = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<AnyJsonObject> => {
+  let overallInfo: AnyJsonObject = {};
   for (const serverMiddleware of serverMiddlewareList) {
     try {
       overallInfo = {
@@ -276,24 +285,58 @@ const addHealthChecks = async (
   }
 };
 
-const createServerAsync = async <T extends ServerComposition>(
-  serverComposer: ServerComposer<T>,
-  serverExtension?: ServerExtension<T>,
-) => {
+const cleanUpHotReloading = () => {
   if (runningServer != null && runningServerApp != null) {
     runningServer.removeAllListeners('request');
     cleanUpRouting(runningServerApp, runningServer);
   }
-  const composition: T = await serverComposer();
+};
 
-  runningServerApp = express();
+const getOrCreateServer = () => {
   let newRunningServer: boolean;
+  runningServerApp = express();
   if (runningServer == null) {
     runningServer = http.createServer(runningServerApp);
     newRunningServer = true;
   } else {
     newRunningServer = false;
   }
+  return newRunningServer;
+};
+
+const handlePrintApiSpecMode = async (apiSpec: OpenAPISpec) => {
+  if (process.env.PRINT_API_SPEC_ONLY === 'true') {
+    const flushed = new CompletableFuture('stdout flushed');
+    process.stdout.write(JSON.stringify(apiSpec), 'utf8', () => {
+      flushed.complete();
+    });
+    await flushed.get();
+    process.exit(0);
+  }
+};
+
+const getPortAndHostname = (logger: Logger): {port: number, hostname: string | undefined} => {
+  const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
+  let port: number;
+  if (portString != null) {
+    port = parseInt(portString, 10);
+  } else {
+    port = 3000;
+  }
+  const hostname = process.env.HOSTNAME ?? process.env.HATCH_BUILDTIME_HOSTNAME;
+  if (process.env.NODE_ENV === 'development') {
+    logger.info('Listening at http://' + (hostname ?? '0.0.0.0') + ':' + port);
+  }
+  return {port, hostname};
+};
+
+const createServerAsync = async <T extends ServerComposition>(
+  serverComposer: ServerComposer<T>,
+  serverExtension?: ServerExtension<T>,
+) => {
+  cleanUpHotReloading();
+  const composition: T = await serverComposer();
+  const newRunningServer = getOrCreateServer();
 
   // Make caching opt-in for app-defined endpoints
   runningServerApp.use((req, res, next) => {
@@ -312,22 +355,10 @@ const createServerAsync = async <T extends ServerComposition>(
 
   await registerServerMiddleware(rootContainer, serverMiddlewareClasses, apiMetadataConsumer);
   const apiSpec = apiSpecBuilder.build();
-  if (process.env.PRINT_API_SPEC_ONLY === 'true') {
-    const flushed = new CompletableFuture('stdout flushed');
-    process.stdout.write(JSON.stringify(apiSpec), 'utf8', () => {
-      flushed.complete();
-    });
-    await flushed.get();
-    process.exit(0);
-  }
+  await handlePrintApiSpecMode(apiSpec);
 
   const logger = await createServerLogger(appName);
-  const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
-  const port = (portString && parseInt(portString)) || 3000;
-  const hostname = process.env.HOSTNAME || process.env.HATCH_BUILDTIME_HOSTNAME;
-  if (process.env.NODE_ENV === 'development') {
-    logger.info('Listening at http://' + (hostname ?? 'localhost') + ':' + port);
-  }
+  const {port, hostname} = getPortAndHostname(logger);
   const errorReporter = new SentryReporter(sentryMonitor, logger, {dsn: process.env.SENTRY_DSN});
   rootContainer.registerInstance('ErrorReporter', errorReporter);
   logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
@@ -359,6 +390,7 @@ const createServerAsync = async <T extends ServerComposition>(
     runningServer
       .listen(port, hostname)
       .on('error', (err: Error) => {
+        // eslint-disable-next-line no-console -- intentional error log to console
         console.error(err);
       });
   } else {
@@ -370,6 +402,7 @@ export default <T extends ServerComposition>(options: CreateServerOptions<T>, se
   initializeInjection(options.injectionOptions);
   const serverComposer = options.reloadComposeModule().default;
   createServerAsync(serverComposer, serverExtension).catch((err) => {
+    // eslint-disable-next-line no-console -- intentional error log to console
     console.error(err);
   });
 };

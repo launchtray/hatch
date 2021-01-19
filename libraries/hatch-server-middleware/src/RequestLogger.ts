@@ -30,7 +30,7 @@ const requestLogger = (serverLogFile: string) => {
           const paddedLevel = useColor
             ? `[\x1b[${REQUEST_LEVEL_COLOR_CODE}m${REQUEST_LEVEL_TAG}\x1b[39m]`.padEnd(COLORIZED_LEVEL_MAX_LENGTH + 2)
             : `[${REQUEST_LEVEL_TAG}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
-          // eslint-disable-next-line no-param-reassign
+          // eslint-disable-next-line no-param-reassign -- using API as intended
           info[Symbol.for('message') as unknown as string] = (
             `[${timestamp}] ${paddedLevel}: ${message}${metaMessage}`
           );

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign --
+ * This code is very dynamic by nature, so I'm making some lint exceptions for now to make things easier while APIs are
+ * still in flux. This may get cleaned up with a future "API-first" redesign. Do as I say, not as I do.
+ */
 import {
   Class,
   DependencyContainer,
@@ -13,7 +17,7 @@ import {
   Server,
   ServerMiddlewareClass,
 } from './ServerMiddleware';
-import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody} from './OpenAPI';
+import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses} from './OpenAPI';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
 
@@ -71,6 +75,9 @@ const isRouteObject = (route: Route): route is {method?: HTTPMethod, path: PathP
   return route != null && (route as {path?: string}).path != null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function -- intenional no-op for route matching
+const noop = () => {};
+
 export const requestMatchesRouteList = (req: {url: string, method: string}, routeList: Route[]) => {
   let matches = false;
   if (routeList && routeList.length > 0) {
@@ -89,7 +96,7 @@ export const requestMatchesRouteList = (req: {url: string, method: string}, rout
         router.all(item, matchesSetter);
       }
     });
-    router({url: req.url, method: req.method} as any, {} as any, () => {});
+    router({url: req.url, method: req.method} as any, {} as any, noop);
   }
   return matches;
 };
@@ -156,6 +163,77 @@ const registerRouteTokens = (ctlr: any, metadata: APIMetadataParameters, route: 
   }
 };
 
+const getResponseId = (response: string, totalResponseCount: number) => {
+  return totalResponseCount === 1
+    ? ''
+    : Number.isNaN(Number(response))
+      ? response
+      : HttpStatus.getStatusText(Number(response));
+};
+
+const addTitleToRequestBody = (
+  apiMetadata: {operationId: string | undefined, requestBody: OpenAPIRequestBody | undefined},
+) => {
+  if (apiMetadata.requestBody != null) {
+    const mediaType = 'application/json';
+    const {operationId} = apiMetadata;
+    const schema = apiMetadata.requestBody?.content?.[mediaType]?.schema;
+    if (operationId != null && schema != null && schema.title == null) {
+      apiMetadata.requestBody.content[mediaType].schema.title = operationId + 'Payload';
+    }
+  }
+};
+
+const addTitleToResponses = (apiMetadata: {operationId: string | undefined, responses: Partial<OpenAPIResponses>}) => {
+  if (apiMetadata.responses != null) {
+    const mediaType = 'application/json';
+    const {operationId} = apiMetadata;
+    const responses = Object.keys(apiMetadata.responses);
+    responses.forEach((response) => {
+      const schema = response != null && apiMetadata.responses?.[response]?.content?.[mediaType]?.schema;
+      if (operationId != null && schema != null && schema.title == null) {
+        const id = getResponseId(response, responses.length);
+        apiMetadata.responses[response].content[mediaType].schema.title = operationId + id + 'Response';
+      }
+    });
+  }
+};
+
+const createAPIMetadataWithDefaults = (
+  target: any,
+  propertyKey: string | symbol,
+  metadata: APIMetadataParameters,
+  apiMethod: OpenAPIMethod,
+  apiPath: string,
+  parameters: OpenAPIParameter[],
+) => {
+  const controllerName = target.constructor.name.replace(/Controller$/, '');
+  const defaultTags = [controllerName];
+  const defaultOperationId = String(propertyKey);
+  return {
+    description: metadata.description ?? '',
+    method: apiMethod,
+    path: apiPath,
+    requestBody: metadata.requestBody ?? defaultRequestBody(apiMethod, metadata),
+    parameters,
+    responses: metadata.responses ?? {
+      default: {
+        description: '',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+      },
+    },
+    operationId: metadata.operationId ?? defaultOperationId,
+    tags: (metadata.tags != null && metadata.tags.length > 0) ? metadata.tags : defaultTags,
+    security: metadata.security,
+  };
+};
+
 const consumeAPIMetadata = (
   target: any,
   propertyKey: string | symbol,
@@ -169,53 +247,10 @@ const consumeAPIMetadata = (
   const parameters: OpenAPIParameter[] = [];
   const apiPath = convertExpressPathToOpenAPIPath(path, metadata.parameters ?? {}, parameters);
   if (apiMethod && apiPath) {
-    const controllerName = target.constructor.name.replace(/Controller$/, '');
-    const defaultTags = [controllerName];
-    const defaultOperationId = String(propertyKey);
-    const apiMetadata = {
-      description: metadata.description ?? '',
-      method: apiMethod,
-      path: apiPath,
-      requestBody: metadata.requestBody ?? defaultRequestBody(apiMethod, metadata),
-      parameters,
-      responses: metadata.responses ?? {
-        default: {
-          description: '',
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-              },
-            },
-          },
-        },
-      },
-      operationId: metadata.operationId ?? defaultOperationId,
-      tags: (metadata.tags != null && metadata.tags.length > 0) ? metadata.tags : defaultTags,
-      security: metadata.security,
-    };
+    const apiMetadata = createAPIMetadataWithDefaults(target, propertyKey, metadata, apiMethod, apiPath, parameters);
     if (apiMetadata.operationId != null) {
-      const mediaType = 'application/json';
-      // add title to request body schema based on operation id if it exists and title does not
-      if (apiMetadata.requestBody != null) {
-        const {operationId} = apiMetadata;
-        const schema = apiMetadata.requestBody?.content?.[mediaType]?.schema;
-        if (operationId != null && schema != null && schema.title == null) {
-          apiMetadata.requestBody.content[mediaType].schema.title = operationId + 'Payload';
-        }
-      }
-      // add title(s) to responses schema based on operation id if it exists and title does not
-      if (apiMetadata.responses != null) {
-        const {operationId} = apiMetadata;
-        const responses = Object.keys(apiMetadata.responses);
-        responses.forEach((response) => {
-          const schema = response != null && apiMetadata.responses?.[response]?.content?.[mediaType]?.schema;
-          if (operationId != null && schema != null && schema.title == null) {
-            const id = responses.length === 1 ? '' : Number.isNaN(Number(response)) ? response : HttpStatus.getStatusText(Number(response));
-            apiMetadata.responses[response].content[mediaType].schema.title = operationId + id + 'Response';
-          }
-        });
-      }
+      addTitleToRequestBody(apiMetadata);
+      addTitleToResponses(apiMetadata);
     }
     apiMetadataConsumer(apiMetadata);
   }
@@ -273,10 +308,10 @@ const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
         matches: (req: Request) => {
           const router = express.Router();
           let matchingRequest = null;
-          router.get(path, (req: Request) => {
-            matchingRequest = req;
+          router.get(path, (routerReq: Request) => {
+            matchingRequest = routerReq;
           });
-          router(req, {} as any, () => {});
+          router(req, {} as any, noop);
           return matchingRequest;
         },
         wss,
@@ -321,7 +356,7 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
   }
 
   const originalRegister = target.prototype.register;
-  target.prototype.register = async function(
+  target.prototype.register = async function registerWrapper(
     app: Application,
     server: Server,
     apiMetadataConsumer: APIMetadataConsumer,
@@ -336,7 +371,7 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
 
   if (target.prototype[livenessChecksKey] != null && target.prototype[livenessChecksKey].length > 0) {
     const originalGetLivenessState = target.prototype.getLivenessState;
-    target.prototype.getLivenessState = async function() {
+    target.prototype.getLivenessState = async function getLivenessStateWrapper() {
       let overallState: LivenessState | undefined;
       if (originalGetLivenessState != null) {
         const state = await originalGetLivenessState.bind(this)();
@@ -356,7 +391,7 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
 
   if (target.prototype[readinessChecksKey] != null && target.prototype[readinessChecksKey].length > 0) {
     const originalGetReadinessState = target.prototype.getReadinessState;
-    target.prototype.getReadinessState = async function() {
+    target.prototype.getReadinessState = async function getReadinessStateWrapper() {
       let overallState: ReadinessState | undefined;
       if (originalGetReadinessState != null) {
         const state = await originalGetReadinessState.bind(this)();
@@ -376,7 +411,7 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
 
   if (target.prototype[appInfoKey] != null && target.prototype[appInfoKey].length > 0) {
     const originalGetAppInfo = target.prototype.getAppInfo;
-    target.prototype.getAppInfo = async function() {
+    target.prototype.getAppInfo = async function getAppInfoWrapper() {
       let overalInfo: {[key: string]: any} = {};
       if (originalGetAppInfo != null) {
         const info = await originalGetAppInfo.bind(this)();
@@ -397,7 +432,9 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
   }
 
   const originalRegisterMetadata = target.constructor.prototype.registerAPIMetadata;
-  target.constructor.prototype.registerAPIMetadata = async function(apiMetadataConsumer: APIMetadataConsumer) {
+  target.constructor.prototype.registerAPIMetadata = async function registerAPIMetadataWrapper(
+    apiMetadataConsumer: APIMetadataConsumer,
+  ) {
     if (originalRegisterMetadata != null) {
       await originalRegisterMetadata.bind(this)(apiMetadataConsumer);
     }
@@ -440,6 +477,7 @@ export type StandardRouteDefiners = {
 
 export interface NonStandardRouteDefiners {
   custom: (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrar) => any;
+  // eslint-disable-next-line @typescript-eslint/naming-convention -- intentionally using name similar to HTTP method
   m_search: (path: PathParams, metadata?: APIMetadataParameters) => any;
   websocket: (path: PathParams, metadata?: APIMetadataParameters) => any;
 }
@@ -458,7 +496,7 @@ export const convertExpressPathToOpenAPIPath = (
   const nonPathParams = {...paramsIn};
   let newPath: string | undefined;
   if (typeof path === 'string') {
-    newPath = path.replace(/:([A-Za-z0-0_]*)/g, (_, param) => {
+    newPath = path.replace(/:([A-Za-z0-9_]*)/g, (_, param) => {
       delete nonPathParams[param];
       paramsOut.push({
         ...paramsIn[param],
@@ -512,7 +550,7 @@ const defaultRequestBody = (method: OpenAPIMethod, metadata: APIMetadataParamete
 };
 
 const proxy = {
-  get(target: RouteDefiners, method: keyof RouteDefiners) {
+  get(proxyTarget: RouteDefiners, method: keyof RouteDefiners) {
     let adjustedMethod: string = method;
     if (method === 'custom') {
       return custom;
@@ -544,7 +582,12 @@ const proxy = {
 
 export default new Proxy({custom} as any, proxy) as RouteDefiners;
 
-const addHealthCheck = (checkKey: symbol, target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+const addHealthCheck = (
+  checkKey: symbol,
+  target: any,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor,
+) => {
   const originalMethod = descriptor.value;
   if (target[checkKey] == null) {
     target[checkKey] = [];

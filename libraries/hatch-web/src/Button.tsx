@@ -20,7 +20,7 @@ export default class extends React.Component<PropTypes> {
       const {testID, onPressRoute, ...otherProps} = props;
       return (
         <View>
-          <Link to={props.onPressRoute} testID={testID} textStyle={{textDecorationLine: 'none'}}>
+          <Link to={onPressRoute} testID={testID} textStyle={{textDecorationLine: 'none'}}>
             <Button onPress={() => null} {...otherProps}/>
           </Link>
         </View>

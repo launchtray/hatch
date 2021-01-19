@@ -1,10 +1,10 @@
 export class FutureTimeoutError<T> extends Error {
   name: string;
-  stack: any;
+  stack?: string;
 
   private future: CompletableFuture<T>;
 
-  constructor(future: CompletableFuture<T>, stack: any) {
+  constructor(future: CompletableFuture<T>, stack?: string) {
     let message = 'timed out waiting for future';
     if (future.name != null) {
       message += ': ' + future.name;
@@ -16,7 +16,7 @@ export class FutureTimeoutError<T> extends Error {
   }
 }
 
-export default class CompletableFuture<T> {
+export default class CompletableFuture<T = void> {
   private resolve?: (value: T | PromiseLike<T>) => void;
   private reject?: (reason: Error) => void;
   private promise: Promise<T>;
@@ -28,6 +28,7 @@ export default class CompletableFuture<T> {
 
   // Must be called after a timeout before .get() is called again, otherwise .get() will time out immediately
   reset() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- intentional this alias to capture promise callbacks
     const self = this;
     this.promise = new Promise((resolve, reject) => {
       self.resolve = resolve;
@@ -37,8 +38,8 @@ export default class CompletableFuture<T> {
   }
 
   // Call to complete future, so that .get() call returns a value
-  complete(value?: T) {
-    this.resolve?.(value!);
+  public complete(value: T) {
+    this.resolve?.(value);
   }
 
   // Call to complete future exceptionally, so that .get() call throws an exception

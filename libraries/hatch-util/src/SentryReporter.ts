@@ -17,7 +17,7 @@ export default class SentryReporter implements ErrorReporter {
     this.logger.info('Error reporting initialized:', this.initialized);
   }
 
-  public captureAction(action: Action, prevState: any) {
+  public captureAction(action: Action<unknown>, prevState: unknown) {
     if (this.initialized) {
       try {
         this.sentry.setExtra('stateBeforeLastAction', prevState);

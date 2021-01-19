@@ -89,7 +89,7 @@ export default class ExampleController implements ServerMiddleware {
     responder.ok(userContext.username);
   }
 
-  @route.custom((app, server, handler) => {
+  @route.custom((app, _, handler) => {
     app.get('/api/example2', handler);
   })
   public exampleEndpoint2(responder: CustomResponder) {

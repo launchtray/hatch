@@ -115,7 +115,7 @@ const sentryMonitor: SentryMonitor = {
   addBreadcrumb: (breadcrumb: Breadcrumb) => {
     addBreadcrumb(breadcrumb);
   },
-  captureException: (error: unknown) => {
+  captureException: (error: Error) => {
     captureException(error);
   },
   init: (options: Options) => {
@@ -141,7 +141,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger();
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {
-    dsn: runtimeConfig.SENTRY_DSN,
+    dsn: runtimeConfig.SENTRY_DSN as string,
     integrations: consoleBreadcrumbs,
   });
   container.registerInstance('ErrorReporter', sentry);
@@ -159,7 +159,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     const {navMiddleware} = createNavMiddleware();
     let middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(sentry));
     if (process.env.NODE_ENV !== 'production') {
-      const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions});
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
+      const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions as any});
       middleware = composeEnhancers(middleware);
     }
     // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any -- global window object

@@ -49,8 +49,8 @@ export default (options: CreateServerOptions<ServerComposition>) => {
           renderClient().then((body) => {
             res.cookie('double_submit', buf.toString('hex'));
             res.status(200).send(body);
-          }).catch((err: Error) => {
-            next?.(err);
+          }).catch((renderErr: Error) => {
+            next?.(renderErr);
           });
         });
       });

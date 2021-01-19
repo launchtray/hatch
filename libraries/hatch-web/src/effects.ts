@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare, @typescript-eslint/no-explicit-any -- intentional overloads and heterogeneous arrays */
 import {Saga} from 'redux-saga';
 import {
   all as sagaAll,
@@ -48,7 +49,7 @@ function *takeLatest(actionPattern: ActionDefinition<any> | Array<ActionDefiniti
   return yield sagaTakeLatest(actionPattern, worker);
 }
 
-function *call<Method extends(...args: any) => any>(method: [any, Method], ...args: Parameters<Method>):
+function *call<Method extends(...methodArgs: any[]) => any>(method: [any, Method], ...args: Parameters<Method>):
   ValueGenerator<Unpromisify<ReturnType<Method>>> {
 
   // Disallow call without context. Must be set to null explicitly for free functions.
@@ -56,14 +57,13 @@ function *call<Method extends(...args: any) => any>(method: [any, Method], ...ar
     return yield sagaCall(method, ...args);
   }
   return yield sagaCall(method[1], ...args);
-
 }
 
-function race<T extends object>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}>;
+function race<T extends {[k: string]: any}>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}>;
 
 function race<T>(effects: T[]): ValueGenerator<GeneratorReturnType<T>>;
 
-function *race<T extends object>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}> {
+function *race<T extends {[k: string]: any}>(effects: T): ValueGenerator<{[E in keyof T]?: GeneratorReturnType<T[E]>}> {
   return yield sagaRace(effects as any);
 }
 

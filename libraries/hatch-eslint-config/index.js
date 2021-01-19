@@ -175,8 +175,5 @@ module.exports = {
     'require-jsdoc': 'off',
     'require-yield': 'off',
     'spaced-comment': ['warn', 'always'],
-
-    // TODO: review rules pulled in by plugins
-    // TODO: review final list for error vs warn
   },
 }

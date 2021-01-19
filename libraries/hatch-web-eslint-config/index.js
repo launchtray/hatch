@@ -9,8 +9,10 @@ module.exports = {
     'react-native',
   ],
   extends: [
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'airbnb',
+    'plugin:react/recommended',
   ],
   rules: {
     ...baseConfig.rules,

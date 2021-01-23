@@ -10,7 +10,7 @@ export interface SimpleMockResponseOptions {
   queryParams?: {[key: string]: string[]};
   requestHeaders?: {[key: string]: string[]};
   requestCookies?: {[key: string]: string};
-  responseBody?: string | {[key: string]: unknown};
+  responseBody?: unknown;
   responseHeaders?: {[key: string]: string[]};
   responseCookies?: {[key: string]: string};
 }

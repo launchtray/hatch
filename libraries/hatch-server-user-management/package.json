@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server-user-management",
-  "version": "0.13.0-alpha.1",
+  "version": "0.13.0-alpha.2",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -22,18 +22,18 @@
     "jwk-to-pem": "^2.0.3"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server": "^0.13.0-alpha.1",
-    "@launchtray/hatch-server-middleware": "^0.13.0-alpha.1",
-    "@launchtray/hatch-user-management-client": "^0.13.0-alpha.1",
-    "@launchtray/hatch-util": "^0.13.0-alpha.1",
+    "@launchtray/hatch-server": "^0.13.0-alpha.2",
+    "@launchtray/hatch-server-middleware": "^0.13.0-alpha.2",
+    "@launchtray/hatch-user-management-client": "^0.13.0-alpha.2",
+    "@launchtray/hatch-util": "^0.13.0-alpha.2",
     "@launchtray/tsyringe-async": "4.3.2"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.13.0-alpha.1",
-    "@launchtray/hatch-server": "^0.13.0-alpha.1",
-    "@launchtray/hatch-server-middleware": "^0.13.0-alpha.1",
-    "@launchtray/hatch-user-management-client": "^0.13.0-alpha.1",
-    "@launchtray/hatch-util": "^0.13.0-alpha.1",
+    "@launchtray/hatch-eslint-config": "^0.13.0-alpha.2",
+    "@launchtray/hatch-server": "^0.13.0-alpha.2",
+    "@launchtray/hatch-server-middleware": "^0.13.0-alpha.2",
+    "@launchtray/hatch-user-management-client": "^0.13.0-alpha.2",
+    "@launchtray/hatch-util": "^0.13.0-alpha.2",
     "@launchtray/tsyringe-async": "4.3.2",
     "@types/cookie": "^0.4.0",
     "@types/jsonwebtoken": "^8.5.0",

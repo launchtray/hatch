@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-client",
+      "comment": "Lint refinements",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-client",
+  "email": "kiltyj@gmail.com"
+}

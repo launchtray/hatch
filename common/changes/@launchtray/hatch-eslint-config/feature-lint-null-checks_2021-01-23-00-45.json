@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-eslint-config",
+      "comment": "Lint refinements",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-eslint-config",
+  "email": "kiltyj@gmail.com"
+}

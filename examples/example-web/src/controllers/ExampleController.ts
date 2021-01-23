@@ -105,7 +105,7 @@ export default class ExampleController implements ServerMiddleware {
   })
   public parseQueryParam(responder: CustomResponder) {
     const {name} = responder.params.req.query;
-    if (name) {
+    if (name != null) {
       responder.ok(`${responder.testField}: Hello, ${responder.params.req.query.name}!`);
     } else {
       responder.ok(`${responder.testField}: Hello!`);

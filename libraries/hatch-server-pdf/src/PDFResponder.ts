@@ -14,7 +14,12 @@ export default class PDFResponder {
     this.params.res.contentType('application/pdf');
     const testIdOutputData = {};
     const readStream = await ReactPDF.renderToStream(document, {testIdOutputData});
-    if (this.params.req.header('x-pdf-test-metadata')) {
+    const testMetadataHeaderValue = this.params.req.header('x-pdf-test-metadata');
+    if (
+      testMetadataHeaderValue != null
+      && testMetadataHeaderValue !== '0'
+      && testMetadataHeaderValue.toLowerCase() !== 'false'
+    ) {
       this.params.res.header('x-pdf-test-metadata', JSON.stringify(testIdOutputData));
     }
     readStream.pipe(this.params.res);

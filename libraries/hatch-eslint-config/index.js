@@ -35,13 +35,13 @@ module.exports = {
     ],
   },
   ignorePatterns: [
-    '.eslintrc.js',
+    '*eslintrc*.js',
     'razzle.config.js',
     'build',
     'dist',
-    'dot-eslintrc.js',
     'dot-storybook',
     '.storybook',
+    'cdk.out',
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -175,5 +175,11 @@ module.exports = {
     'require-jsdoc': 'off',
     'require-yield': 'off',
     'spaced-comment': ['warn', 'always'],
+    '@typescript-eslint/strict-boolean-expressions': ['error', {
+      allowString: false,
+      allowNumber: false,
+      allowNullableObject: false,
+      allowNullableBoolean: true,
+    }],
   },
 }

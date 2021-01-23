@@ -30,7 +30,7 @@ let definedActions = {};
 export default {
   type: (type: string) => {
     if (DETECT_DUPLICATE_ACTIONS) {
-      if (definedActions[type]) {
+      if (definedActions[type] != null) {
         throw new Error(`Duplicate definition of action type: ${type}`);
       }
       definedActions[type] = true;

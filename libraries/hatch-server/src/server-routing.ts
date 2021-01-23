@@ -80,7 +80,7 @@ const noop = () => {};
 
 export const requestMatchesRouteList = (req: {url: string, method: string}, routeList: Route[]) => {
   let matches = false;
-  if (routeList && routeList.length > 0) {
+  if (routeList != null && routeList.length > 0) {
     const matchesSetter = () => {
       matches = true;
     };
@@ -248,7 +248,7 @@ const consumeAPIMetadata = (
   const apiMethod = convertExpressMethodToOpenAPIMethod(method);
   const parameters: OpenAPIParameter[] = [];
   const apiPath = convertExpressPathToOpenAPIPath(path, metadata.parameters ?? {}, parameters);
-  if (apiMethod && apiPath) {
+  if (apiMethod != null && apiPath != null) {
     const apiMetadata = createAPIMetadataWithDefaults(target, propertyKey, metadata, apiMethod, apiPath, parameters);
     if (apiMetadata.operationId != null) {
       addTitleToRequestBody(apiMetadata);
@@ -281,7 +281,7 @@ const websocket = (path: PathParams, metadata: APIMetadataParameters = {}) => {
     }
     const routeDefiner = (ctlr: any, app: Application, server: Server) => {
       registerRouteTokens(ctlr, metadata, {path, method: 'get'});
-      if (!server[wsRoutesKey]) {
+      if (server[wsRoutesKey] == null) {
         server[wsRoutesKey] = [];
         server.on('upgrade', (req, socket, head) => {
           let foundRoute = false;

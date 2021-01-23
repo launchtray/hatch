@@ -26,7 +26,7 @@ const renderClient = async (): Promise<string> => {
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      ${assets.client.css ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets.client.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
       ${assetsScript}
     </head>
     <body>
@@ -42,7 +42,7 @@ export default (options: CreateServerOptions<ServerComposition>) => {
       addStaticRoutes(app, assetsPrefix);
       app.get('/api', (req, res, next) => {
         crypto.randomBytes(32, (err, buf) => {
-          if (err) {
+          if (err != null) {
             next(err);
             return;
           }

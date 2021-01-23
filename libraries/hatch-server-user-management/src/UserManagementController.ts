@@ -50,7 +50,7 @@ const isCsrfSafe = (params: BasicRouteParams): boolean => {
   }
   // Otherwise, guard against CRSF via a double-submit cookie
   let cookies = null;
-  if (params.req.headers.cookie) {
+  if (params.req.headers.cookie != null) {
     cookies = cookie.parse(params.req.headers.cookie);
   }
   const doubleSubmitCookie = cookies?.double_submit;
@@ -83,7 +83,7 @@ export default class UserManagementController {
     }
     try {
       const {username, password} = params.req.body;
-      if (!username || !password) {
+      if (username == null || password == null) {
         const errMsg = 'Missing required field(s), username and password are required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -101,7 +101,7 @@ export default class UserManagementController {
         params.res.status(HttpStatus.OK).send(authTokens);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error authenticating user: ${errorMessage}`);
       if (err.code === UserManagementErrorCodes.ACCOUNT_LOCKED) {
         params.res.status(HttpStatus.FORBIDDEN).send({
@@ -132,7 +132,7 @@ export default class UserManagementController {
     this.logger.debug('Starting user registration...');
     try {
       const {username, password, userAttributes} = params.req.body;
-      if (!username || !password) {
+      if (username == null || password == null) {
         const errMsg = 'Missing required field(s), username and password are required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -145,7 +145,7 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error starting user registration: ${errorMessage}`);
       if (err.code === UserManagementErrorCodes.USERNAME_EXISTS) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
@@ -164,7 +164,7 @@ export default class UserManagementController {
     this.logger.debug('Resending user registration code...');
     try {
       const {username} = params.req.body;
-      if (!username) {
+      if (username == null) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -177,7 +177,7 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error resending user registration: ${errorMessage}`);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
@@ -196,7 +196,7 @@ export default class UserManagementController {
     this.logger.debug('Confirming user registration...');
     try {
       const {username, confirmationCode} = params.req.body;
-      if (!username || !confirmationCode) {
+      if (username == null || confirmationCode == null) {
         const errMsg = 'Missing required field(s), username and confirmationCode are required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -209,7 +209,7 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error confirming user: ${errorMessage}`);
       if (err.code === UserManagementErrorCodes.INVALID_CODE) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
@@ -232,7 +232,7 @@ export default class UserManagementController {
     this.logger.debug('Starting user password reset...');
     try {
       const {username} = params.req.body;
-      if (!username) {
+      if (username == null) {
         const errMsg = 'Missing required field, username is required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -245,7 +245,7 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error resetting user password: ${errorMessage}`);
       if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
@@ -264,7 +264,7 @@ export default class UserManagementController {
     this.logger.debug('Confirming user password reset...');
     try {
       const {username, confirmationCode, password} = params.req.body;
-      if (!username || !confirmationCode || !password) {
+      if (username == null || confirmationCode == null || password == null) {
         const errMsg = 'Missing required field(s), username, confirmation code, and password are required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -277,7 +277,7 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error confirming resetting user password: ${errorMessage}`);
       if (
         err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
@@ -325,7 +325,7 @@ export default class UserManagementController {
     }
     try {
       const {refreshToken} = params.req.body;
-      if (!refreshToken) {
+      if (refreshToken == null) {
         const errMsg = 'Missing required field, refreshToken is required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -343,7 +343,7 @@ export default class UserManagementController {
         params.res.status(HttpStatus.OK).send(authTokens);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.error(`Error refreshing user authentication tokens: ${errorMessage}`);
       if (
         err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
@@ -385,7 +385,7 @@ export default class UserManagementController {
       try {
         const tenantId = extractTenantID(params);
         const userInfo = await userInfoRequest.getUserInfo(tenantId);
-        if (userInfo) {
+        if (userInfo != null) {
           this.logger.debug(`User authenticated {username:${userInfo.username}}`);
           params.next();
         } else {
@@ -439,7 +439,7 @@ export default class UserManagementController {
       this.logger.debug('User signed out');
       params.res.sendStatus(HttpStatus.OK);
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.info(`Failed to sign out user: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -464,7 +464,7 @@ export default class UserManagementController {
         userAttributes: attributes,
       });
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.info(`Failed to read user attributes: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -479,7 +479,7 @@ export default class UserManagementController {
     try {
       const {clientUserId, queriedUserId} = await this.extractUserIds(userContext);
       const {userAttributes} = params.req.body;
-      if (!userAttributes) {
+      if (userAttributes == null) {
         const errMsg = 'Missing required field: userAttributes is required';
         this.logger.debug(errMsg);
         params.res.status(HttpStatus.BAD_REQUEST).send({
@@ -497,7 +497,7 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.info(`Failed to set user attributes: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -542,7 +542,7 @@ export default class UserManagementController {
         });
       }
     } catch (err) {
-      const errorMessage = err.code ? `${err.code} - ${err.message}` : err;
+      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
       this.logger.info(`Failed to read user ID: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,

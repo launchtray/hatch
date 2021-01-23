@@ -11,7 +11,7 @@ export class FutureTimeoutError<T> extends Error {
     }
     super(message);
     this.name = 'FutureTimeoutError';
-    this.stack = stack || (new Error(message)).stack;
+    this.stack = stack ?? (new Error(message)).stack;
     this.future = future;
   }
 }

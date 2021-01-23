@@ -96,7 +96,7 @@ const RNAppWithoutSwagger = ({reduxStore, RootApp}: {reduxStore: Store, RootApp:
 let sagaMiddleware: Middleware & {run: (rootSaga: Saga) => Task};
 let store: Store;
 let runningRootSagaTask: Task;
-if (module.hot) {
+if (module.hot != null) {
   module.hot.dispose((data) => {
     /* eslint-disable no-param-reassign -- intentional mutation */
     data.runningRootSagaTask = runningRootSagaTask;
@@ -104,7 +104,7 @@ if (module.hot) {
     data.sagaMiddleware = sagaMiddleware;
     /* eslint-enable no-param-reassign  */
   });
-  if (module.hot.data) {
+  if (module.hot.data != null) {
     runningRootSagaTask = module.hot.data.runningRootSagaTask;
     store = module.hot.data.store;
     sagaMiddleware = module.hot.data.sagaMiddleware;

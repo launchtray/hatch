@@ -52,7 +52,7 @@ function* takeLatest(actionPattern: ActionDefinition<any> | Array<ActionDefiniti
 function* call<Method extends(...methodArgs: any[]) => any>(method: [any, Method], ...args: Parameters<Method>):
   ValueGenerator<Unpromisify<ReturnType<Method>>> {
   // Disallow call without context. Must be set to null explicitly for free functions.
-  if (method[0]) {
+  if (method[0] != null) {
     return yield sagaCall(method, ...args);
   }
   return yield sagaCall(method[1], ...args);

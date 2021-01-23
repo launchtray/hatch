@@ -67,11 +67,11 @@ export default class UserInfoRequest {
   private extractAuthenticationCookie() {
     this.logger.debug('Checking for authorization cookie...');
     let cookies = null;
-    if (this.params.req.headers.cookie) {
+    if (this.params.req.headers.cookie != null) {
       this.logger.debug('Header cookies found: ', this.params.req.headers.cookie);
       cookies = cookie.parse(this.params.req.headers.cookie);
     }
-    if (cookies && cookies[AUTH_ACCESS_TOKEN_COOKIE_NAME]) {
+    if (cookies?.[AUTH_ACCESS_TOKEN_COOKIE_NAME] != null) {
       const token = cookies[AUTH_ACCESS_TOKEN_COOKIE_NAME];
       this.logger.debug('Authorization cookie found: ', token);
       return token;
@@ -81,7 +81,7 @@ export default class UserInfoRequest {
 
   private extractAuthenticationHeader() {
     this.logger.debug('Checking for authorization header...');
-    if (this.params.req && this.params.req.headers && this.params.req.headers.authorization) {
+    if (this.params.req?.headers?.authorization != null) {
       let token = this.params.req.headers.authorization;
       this.logger.debug('Authorization header token: ', token);
       const bearerPrefix = 'Bearer ';

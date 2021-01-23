@@ -4,7 +4,7 @@ import {
 import {WebClientComposition} from '@launchtray/hatch-web-client';
 import composeCommon from './composeCommon';
 
-const appName = process.env.APP_NAME || 'hatch-client';
+const appName = process.env.APP_NAME ?? 'hatch-client';
 
 export default async (): Promise<WebClientComposition> => {
   ROOT_CONTAINER.register('appName', {useValue: appName});

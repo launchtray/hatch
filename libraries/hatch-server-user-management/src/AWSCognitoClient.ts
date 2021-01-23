@@ -247,7 +247,7 @@ export default class AWSCognitoClient implements UserManagementClient {
       }).promise();
       this.logger.debug(`Fetched user attributes: ${JSON.stringify(response)}`);
       const userAttrsResp: Record<string, unknown> = {};
-      if (response && response.Users && response.Users.length > 0 && response.Users[0].Attributes) {
+      if (response?.Users?.[0]?.Attributes != null) {
         response.Users[0].Attributes.forEach((attr) => {
           userAttrsResp[attr.Name] = attr.Value;
         });
@@ -270,7 +270,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     }).promise();
     this.logger.debug(`Fetched user attributes: ${JSON.stringify(response)}`);
     const userAttrsResp: Record<string, unknown> = {};
-    if (response && response.UserAttributes) {
+    if (response?.UserAttributes != null) {
       response.UserAttributes.forEach((attr) => {
         userAttrsResp[attr.Name] = attr.Value;
       });
@@ -292,7 +292,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     options?: UserManagementClientOptions,
   ) {
     const userAttributesList: AttributeListType = [];
-    const attributes = userAttributes || {};
+    const attributes = userAttributes ?? {};
     Object.keys(attributes).map((key) => {
       userAttributesList.push({
         /* eslint-disable @typescript-eslint/naming-convention */
@@ -332,12 +332,12 @@ export default class AWSCognitoClient implements UserManagementClient {
     this.logger.debug('Decoded JWT Token: ', decodedJwt);
 
     const payload = decodedJwt.payload as Record<string, unknown>;
-    if (payload && payload.token_use !== 'access') {
+    if (payload != null && payload.token_use !== 'access') {
       throw new Error(`Expected access token but received ${payload.token_use} token`);
     }
 
     const header = decodedJwt.header as Record<string, unknown>;
-    const kid = header && header.kid as string;
+    const kid = header?.kid as string;
     if (kid == null) {
       throw new Error('Missing kid field from token supplied');
     }
@@ -371,7 +371,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     });
     const responseBody = await response.json();
     const pemCerts = {};
-    if (responseBody && responseBody.keys) {
+    if (responseBody?.keys != null) {
       for (const key of responseBody.keys) {
         const keyId = key.kid;
         const modulus = key.n;

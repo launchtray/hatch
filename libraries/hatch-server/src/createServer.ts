@@ -50,14 +50,14 @@ export interface CreateServerOptions<T extends ServerComposition> {
 let runningServer: Server;
 let runningServerApp: Application;
 
-if (module.hot) {
+if (module.hot != null) {
   module.hot.dispose((data) => {
     /* eslint-disable no-param-reassign -- intentional mutation */
     data.runningServerApp = runningServerApp;
     data.runningServer = runningServer;
     /* eslint-enable no-param-reassign */
   });
-  if (module.hot.data) {
+  if (module.hot.data != null) {
     runningServerApp = module.hot.data.runningServerApp;
     runningServer = module.hot.data.runningServer;
   }
@@ -377,7 +377,7 @@ const createServerAsync = async <T extends ServerComposition>(
     runningServerApp.get('/api.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       const options: SerializeJSOptions = {unsafe: true, isJSON: true};
-      if (req.query.pretty) {
+      if (req.query.pretty != null) {
         options.space = 2;
       }
       res.status(200).send(serialize(apiSpec, options));

@@ -1,6 +1,14 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Wed, 13 Jan 2021 22:30:04 GMT and should not be manually modified.
+This log was last generated on Sat, 23 Jan 2021 03:47:21 GMT and should not be manually modified.
+
+## 0.13.0
+Sat, 23 Jan 2021 03:47:21 GMT
+
+### Updates
+
+- Lint refinements
+- Migrate to ESLint, fix issues
 
 ## 0.12.5
 Wed, 13 Jan 2021 22:30:04 GMT

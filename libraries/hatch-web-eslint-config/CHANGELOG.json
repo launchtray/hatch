@@ -1,0 +1,20 @@
+{
+  "name": "@launchtray/hatch-web-eslint-config",
+  "entries": [
+    {
+      "version": "0.13.0",
+      "tag": "@launchtray/hatch-web-eslint-config_v0.13.0",
+      "date": "Sat, 23 Jan 2021 03:47:21 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Lint refinements"
+          },
+          {
+            "comment": "Migrate to ESLint, fix issues"
+          }
+        ]
+      }
+    }
+  ]
+}

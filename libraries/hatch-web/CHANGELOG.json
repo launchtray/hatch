@@ -2,6 +2,21 @@
   "name": "@launchtray/hatch-web",
   "entries": [
     {
+      "version": "0.13.0",
+      "tag": "@launchtray/hatch-web_v0.13.0",
+      "date": "Sat, 23 Jan 2021 03:47:21 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Lint refinements"
+          },
+          {
+            "comment": "Migrate to ESLint, fix issues"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.12.5",
       "tag": "@launchtray/hatch-web_v0.12.5",
       "date": "Wed, 13 Jan 2021 22:30:04 GMT",

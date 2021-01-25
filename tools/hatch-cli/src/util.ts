@@ -613,9 +613,15 @@ export const createFromTemplate = async (
         if (fs.existsSync(dotGitIgnorePath)) {
           await fs.move(dotGitIgnorePath, path.resolve(tempFilePath, '.gitignore'));
         }
+        // .eslintrc.js will be copied over, but in some cases we might want the template directory within hatch
+        // to have different rules than the hatched project. In these cases, dot-eslintrc.js can be defined.
         const dotEslintRcPath = path.resolve(tempFilePath, 'dot-eslintrc.js');
         if (fs.existsSync(dotEslintRcPath)) {
-          await fs.move(dotEslintRcPath, path.resolve(tempFilePath, '.eslintrc.js'));
+          const destEslintPath = path.resolve(tempFilePath, '.eslintrc.js');
+          if (fs.existsSync(destEslintPath)) {
+            await fs.remove(destEslintPath);
+          }
+          await fs.move(dotEslintRcPath, destEslintPath);
         }
         const dotDockerIgnorePath = path.resolve(tempFilePath, 'dot-dockerignore');
         if (fs.existsSync(dotDockerIgnorePath)) {

@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-razzle-config",
   "entries": [
     {
+      "version": "0.13.1",
+      "tag": "@launchtray/hatch-razzle-config_v0.13.1",
+      "date": "Mon, 25 Jan 2021 21:57:11 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.13.0",
       "tag": "@launchtray/hatch-razzle-config_v0.13.0",
       "date": "Sat, 23 Jan 2021 03:47:21 GMT",

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-cli",
   "entries": [
     {
+      "version": "0.13.1",
+      "tag": "@launchtray/hatch-cli_v0.13.1",
+      "date": "Mon, 25 Jan 2021 21:57:11 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix hatching of projects with embedded eslint config files"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.13.0",
       "tag": "@launchtray/hatch-cli_v0.13.0",
       "date": "Sat, 23 Jan 2021 03:47:21 GMT",

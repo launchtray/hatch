@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-mock-server",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "main": "./dist/index.js",
   "bin": {
     "mock-server": "./dist/main.js"
@@ -22,7 +22,7 @@
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.13.0",
+    "@launchtray/hatch-eslint-config": "^0.13.1",
     "@types/node": "^12",
     "@types/tmp": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^4.13.0",

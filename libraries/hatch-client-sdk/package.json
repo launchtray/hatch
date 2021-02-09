@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-client-sdk",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",
@@ -20,7 +20,7 @@
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.13.1",
+    "@launchtray/hatch-eslint-config": "^0.14.0",
     "@types/fs-extra": "^8",
     "@types/node": "^12",
     "@types/tmp": "^0.2.0",

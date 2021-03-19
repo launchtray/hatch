@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-mock-server",
+      "comment": "Reorder dependencies per Rush",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-mock-server",
+  "email": "rosshnaylor@gmail.com"
+}

@@ -14,6 +14,7 @@ const commandForTemplate = (name: string, description: string): [string, string,
 ];
 
 commander
+  .version(require('../package.json').version)
   .command(...commandForTemplate('webapp', 'web application project'))
   .command(...commandForTemplate('microservice', 'microservice project'))
   .command(...commandForTemplate('component', 'component module'))
@@ -26,4 +27,5 @@ commander
   .command(...commandForTemplate('library', 'library project'))
   .command(...commandForTemplate('monorepo', 'monorepo project'))
   .command(...commandForTemplate('client-sdk', 'client-sdk project'));
+
 runCommander();

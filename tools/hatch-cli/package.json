@@ -32,7 +32,7 @@
     "ora": "^4",
     "replace-in-file": "^5",
     "tmp": "^0.2.1",
-    "yaml": "^2.0.0-0"
+    "yaml": "2.0.0-3"
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "^0.14.0",

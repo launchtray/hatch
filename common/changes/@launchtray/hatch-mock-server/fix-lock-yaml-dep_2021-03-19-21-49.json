@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@launchtray/hatch-mock-server",
-      "comment": "Reorder dependencies per Rush,
+      "comment": "Reorder dependencies per Rush",
       "type": "none"
     }
   ],

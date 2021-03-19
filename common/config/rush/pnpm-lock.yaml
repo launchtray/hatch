@@ -182,7 +182,7 @@ dependencies:
   winston: 3.3.3
   winston-transport: 4.4.0
   ws: 7.4.2_c70f8fc5586dd378b8c866035dbe710b
-  yaml: 2.0.0-4
+  yaml: 2.0.0-3
 lockfileVersion: 5.1
 packages:
   /@aws-cdk/assets/1.73.0:
@@ -20898,12 +20898,12 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==
-  /yaml/2.0.0-4:
+  /yaml/2.0.0-3:
     dev: false
     engines:
       node: '>= 10'
     resolution:
-      integrity: sha512-MoQoNhTFI400tkaeod+X0Vety1KD2L9dUa6pa1CVcyfcATjC/iDxoMLvqZ6U3D8c5KzxBrU2HnJH+PfaXOqI7w==
+      integrity: sha512-gvtVaY+/mQ0OsXgaWy2Tf830JuXN7qEUYdXWsuiJVSkMRsBBQ90YVpQQofaURbhoA1xSbLBf7965oH6ddzNbBQ==
   /yargs-parser/11.1.1:
     dependencies:
       camelcase: 5.3.1
@@ -21200,7 +21200,7 @@ packages:
       rimraf: 3.0.0
       tmp: 0.2.1
       typescript: 4.1.3
-      yaml: 2.0.0-4
+      yaml: 2.0.0-3
     dev: false
     id: 'file:projects/hatch-cli.tgz'
     name: '@rush-temp/hatch-cli'
@@ -21208,7 +21208,7 @@ packages:
       debug: '*'
       supports-color: '*'
     resolution:
-      integrity: sha512-zDGx/nYABlwpl6BYpUqnG5Ajt0PtCAaOAdhXr8mHFZ13B+zi55qCgiOATbOiXyr8N6Ml7dq+JRfzddonlhewMg==
+      integrity: sha512-TuyTPsMHwif+vT+ekU2mL+oYuxmBVwpcZziP7zauibz0Y+O/Scr4uZPowM63ZPY+6ME8K8dDtUELXS7Qk/qj3A==
       tarball: 'file:projects/hatch-cli.tgz'
     version: 0.0.0
   'file:projects/hatch-client-sdk.tgz_supports-color@7.2.0':
@@ -22156,4 +22156,4 @@ specifiers:
   winston: ^3
   winston-transport: ^4
   ws: ^7
-  yaml: 2.0.0-4
+  yaml: 2.0.0-3

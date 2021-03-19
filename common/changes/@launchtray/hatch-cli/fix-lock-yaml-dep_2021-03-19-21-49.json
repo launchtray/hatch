@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-cli",
+      "comment": "lock yaml dependency version and add version option to hatch-cli",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-cli",
+  "email": "rosshnaylor@gmail.com"
+}

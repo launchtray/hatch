@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-mock-server
 
-This log was last generated on Tue, 09 Feb 2021 06:42:22 GMT and should not be manually modified.
+This log was last generated on Sun, 21 Mar 2021 03:33:00 GMT and should not be manually modified.
+
+## 0.14.1
+Sun, 21 Mar 2021 03:33:00 GMT
+
+### Updates
+
+- Reorder dependencies per Rush
 
 ## 0.14.0
 Tue, 09 Feb 2021 06:42:22 GMT

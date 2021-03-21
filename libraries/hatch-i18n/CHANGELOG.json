@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-i18n",
   "entries": [
     {
+      "version": "0.14.1",
+      "tag": "@launchtray/hatch-i18n_v0.14.1",
+      "date": "Sun, 21 Mar 2021 03:33:00 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.14.0",
       "tag": "@launchtray/hatch-i18n_v0.14.0",
       "date": "Tue, 09 Feb 2021 06:42:22 GMT",

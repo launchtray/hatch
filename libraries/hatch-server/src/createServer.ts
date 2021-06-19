@@ -340,7 +340,7 @@ const createServerAsync = async <T extends ServerComposition>(
 
   // Make caching opt-in for app-defined endpoints
   runningServerApp.use((req, res, next) => {
-    res.setHeader('Cache-Control', 'max-age=0');
+    res.setHeader('Cache-Control', 'max-age=0, must-revalidate');
     next();
   });
 

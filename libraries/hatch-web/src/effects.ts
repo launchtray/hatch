@@ -37,7 +37,8 @@ function takeEvery<P>(actionPattern: ActionDefinition<P>, worker: Worker<P>): An
 function takeEvery(actionDefs: Array<ActionDefinition<any>>, worker: Worker<any>): AnyGenerator;
 
 function* takeEvery(
-  actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>
+  actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>,
+  worker: Worker<any>,
 ): AnyGenerator {
   return yield sagaTakeEvery(actionPattern, worker);
 }
@@ -48,7 +49,8 @@ function takeLatest<P>(actionPattern: ActionDefinition<P>, worker: Worker<P>): A
 function takeLatest(actionDefs: Array<ActionDefinition<any>>, worker: Worker<any>): AnyGenerator;
 
 function* takeLatest(
-  actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>
+  actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>,
+  worker: Worker<any>,
 ): AnyGenerator {
   return yield sagaTakeLatest(actionPattern, worker);
 }

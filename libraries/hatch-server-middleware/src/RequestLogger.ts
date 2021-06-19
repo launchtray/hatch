@@ -52,4 +52,7 @@ export default class RequestLogger implements ServerMiddleware {
   public async registerBeforeRoutes(app: Application) {
     app.use(requestLogger(this.serverLogFile));
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public async register() {}
 }

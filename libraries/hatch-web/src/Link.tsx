@@ -5,9 +5,10 @@ import {Link, LinkProps} from 'react-router-dom';
 
 import createReactNativeElement from './createReactNativeElement';
 
-type InheritedProps = Pick<LinkProps, 'to'> & Pick<TextProps, 'testID'>;
+type InheritedProps = Pick<LinkProps, 'to'> & Pick<TextProps, 'testID' | 'style'>;
 
 interface PropTypes extends InheritedProps {
+  // Support for backwards compatibility
   textStyle?: StyleProp<TextStyle>;
 }
 

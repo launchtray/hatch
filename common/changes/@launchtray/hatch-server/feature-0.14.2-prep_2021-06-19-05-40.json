@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server",
+      "comment": "Fix caching header, add middleware hooks before and after route registration",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server",
+  "email": "kiltyj@gmail.com"
+}

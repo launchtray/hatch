@@ -364,13 +364,19 @@ const createServerAsync = async <T extends ServerComposition>(
   logger.add(new ErrorReporterTransport({level: 'debug', format: format.label({label: appName})}, errorReporter));
 
   const serverMiddlewareList = await resolveServerMiddleware(rootContainer, logger);
-  await addHealthChecks(logger, runningServerApp, rootContainer, serverMiddlewareList);
 
+  for (const serverMiddleware of serverMiddlewareList) {
+    await serverMiddleware.registerBeforeRoutes?.(runningServerApp, runningServer);
+  }
+  await addHealthChecks(logger, runningServerApp, rootContainer, serverMiddlewareList);
   for (const serverMiddleware of serverMiddlewareList) {
     if (hasControllerRoutes(serverMiddleware.constructor)) {
       assignRootContainerToController(serverMiddleware, rootContainer);
     }
-    await serverMiddleware.register(runningServerApp, runningServer);
+    await serverMiddleware.register?.(runningServerApp, runningServer);
+  }
+  for (const serverMiddleware of serverMiddlewareList) {
+    await serverMiddleware.registerAfterRoutes?.(runningServerApp, runningServer);
   }
 
   if (process.env.ENABLE_API_SPEC === 'true') {

@@ -46,11 +46,10 @@ const requestLogger = (serverLogFile: string) => {
 @injectable()
 export default class RequestLogger implements ServerMiddleware {
   constructor(
-    @inject('appName') private readonly appName: string,
     @inject('serverLogFile') private readonly serverLogFile: string,
   ) {}
 
-  public async register(app: Application) {
+  public async registerBeforeRoutes(app: Application) {
     app.use(requestLogger(this.serverLogFile));
   }
 }

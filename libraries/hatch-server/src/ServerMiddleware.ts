@@ -40,7 +40,9 @@ export interface APIMetadata {
 export type APIMetadataConsumer = (metadata: APIMetadata) => void;
 
 export interface ServerMiddleware {
-  register(app: Application, server: Server): Promise<void>;
+  registerBeforeRoutes?(app: Application, server: Server): Promise<void>;
+  register?(app: Application, server: Server): Promise<void>;
+  registerAfterRoutes?(app: Application, server: Server): Promise<void>;
   getLivenessState?(): Promise<LivenessState | boolean | undefined>;
   getReadinessState?(): Promise<ReadinessState | boolean | undefined>;
   getAppInfo?(): Promise<AnyJsonObject | undefined>

@@ -325,7 +325,7 @@ export default class AWSCognitoClient implements UserManagementClient {
     if (pemCerts == null) {
       throw new Error('Missing public keys from AWS Cognito to verify token');
     }
-    const decodedJwt = jwt.decode(accessToken, {complete: true}) as Record<string, unknown>;
+    const decodedJwt = jwt.decode(accessToken, {complete: true}) as unknown as Record<string, unknown>;
     if (decodedJwt == null) {
       throw new Error('Error decoding token');
     }

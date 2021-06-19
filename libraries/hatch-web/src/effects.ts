@@ -25,7 +25,7 @@ function take<P>(actionPattern: ActionDefinition<P>): ActionGenerator<P>;
 // The result of this should be checked with isActionType to narrow the type
 function take(actionDefs: Array<ActionDefinition<any>>): ActionGenerator<any>;
 
-function* take(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>) {
+function* take(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>): ActionGenerator<any> {
   return yield sagaTake(actionPattern);
 }
 
@@ -36,7 +36,9 @@ function takeEvery<P>(actionPattern: ActionDefinition<P>, worker: Worker<P>): An
 // The result of this should be checked with isActionType to narrow the type
 function takeEvery(actionDefs: Array<ActionDefinition<any>>, worker: Worker<any>): AnyGenerator;
 
-function* takeEvery(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>) {
+function* takeEvery(
+  actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>
+): AnyGenerator {
   return yield sagaTakeEvery(actionPattern, worker);
 }
 
@@ -45,7 +47,9 @@ function takeLatest<P>(actionPattern: ActionDefinition<P>, worker: Worker<P>): A
 // The result of this should be checked with isActionType to narrow the type
 function takeLatest(actionDefs: Array<ActionDefinition<any>>, worker: Worker<any>): AnyGenerator;
 
-function* takeLatest(actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>) {
+function* takeLatest(
+  actionPattern: ActionDefinition<any> | Array<ActionDefinition<any>>, worker: Worker<any>
+): AnyGenerator {
   return yield sagaTakeLatest(actionPattern, worker);
 }
 

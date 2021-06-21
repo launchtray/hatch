@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web",
+      "comment": "Prevent client-side location change on first load",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web",
+  "email": "kiltyj@gmail.com"
+}

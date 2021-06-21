@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.15.0",
+      "tag": "@launchtray/hatch-server_v0.15.0",
+      "date": "Mon, 21 Jun 2021 23:43:57 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix caching header, add middleware hooks before and after route registration"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.14.1",
       "tag": "@launchtray/hatch-server_v0.14.1",
       "date": "Sun, 21 Mar 2021 03:33:00 GMT",

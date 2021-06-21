@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Sun, 21 Mar 2021 03:33:00 GMT and should not be manually modified.
+This log was last generated on Mon, 21 Jun 2021 23:43:57 GMT and should not be manually modified.
+
+## 0.15.0
+Mon, 21 Jun 2021 23:43:57 GMT
+
+### Updates
+
+- Prevent client-side location change on first load
 
 ## 0.14.1
 Sun, 21 Mar 2021 03:33:00 GMT

@@ -621,7 +621,6 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/custom-resources': 1.73.0_@aws-cdk+assets@1.73.0
       constructs: 3.3.90
-      punycode: 2.1.1
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -661,7 +660,6 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       constructs: 3.3.90
-      minimatch: 3.0.4
     dev: false
     bundledDependencies:
       - minimatch
@@ -1059,9 +1057,6 @@ packages:
   /@aws-cdk/cloud-assembly-schema/1.73.0:
     resolution: {integrity: sha512-3m5nJDLSApAuUMra2WrQF7GHt6xgxqFET91WShtKtj48brZk4MBJ3dLre2LjDVsmMMOVdd6FpjY7tE5C1v9Hyw==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
-    dependencies:
-      jsonschema: 1.4.0
-      semver: 7.3.5
     dev: false
     bundledDependencies:
       - jsonschema
@@ -1086,11 +1081,7 @@ packages:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      '@balena/dockerignore': 1.0.2
       constructs: 3.3.90
-      fs-extra: 9.1.0
-      ignore: 5.1.8
-      minimatch: 3.0.4
     dev: false
     bundledDependencies:
       - fs-extra
@@ -1118,7 +1109,6 @@ packages:
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     dependencies:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
-      semver: 7.3.5
     dev: false
     bundledDependencies:
       - semver
@@ -1131,8 +1121,6 @@ packages:
   /@aws-cdk/yaml-cfn/1.73.0:
     resolution: {integrity: sha512-m65JeI5dXdMfhKy6rgNrMgcIpeoYkKpZmB6zCKoazgu/VjOoKs9OHs+4mhdvvYrdEcclKJw3NxJH1bTBMT2BPA==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
-    dependencies:
-      yaml: 1.10.0
     dev: false
     bundledDependencies:
       - yaml
@@ -2587,10 +2575,6 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': 7.14.5
       to-fast-properties: 2.0.0
-    dev: false
-
-  /@balena/dockerignore/1.0.2:
-    resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
     dev: false
 
   /@bcoe/v8-coverage/0.2.3:
@@ -5408,7 +5392,7 @@ packages:
     hasBin: true
     dependencies:
       browserslist: 4.16.6
-      caniuse-lite: 1.0.30001239
+      caniuse-lite: 1.0.30001240
       colorette: 1.2.2
       normalize-range: 0.1.2
       num2fraction: 1.2.2
@@ -6203,7 +6187,7 @@ packages:
     resolution: {integrity: sha512-TpfK0TDgv71dzuTsEAlQiHeWQ/tiPqgNZVdv046fvNtBZrjbv2O3TsWCDU0AWGJJKCF/KsjNdLzR9hXOsh/CfA==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001239
+      caniuse-lite: 1.0.30001240
       electron-to-chromium: 1.3.759
       node-releases: 1.1.73
       pkg-up: 3.1.0
@@ -6214,7 +6198,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001239
+      caniuse-lite: 1.0.30001240
       colorette: 1.2.2
       electron-to-chromium: 1.3.759
       escalade: 3.1.1
@@ -6225,7 +6209,7 @@ packages:
     resolution: {integrity: sha512-9rGNDtnj+HaahxiVV38Gn8n8Lr8REKsel68v1sPFfIGEK6uSXTY3h9acgiT1dZVtOOUtifo/Dn8daDQ5dUgVsA==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001239
+      caniuse-lite: 1.0.30001240
       electron-to-chromium: 1.3.759
       node-releases: 1.1.73
     dev: false
@@ -6459,13 +6443,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.16.6
-      caniuse-lite: 1.0.30001239
+      caniuse-lite: 1.0.30001240
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: false
 
-  /caniuse-lite/1.0.30001239:
-    resolution: {integrity: sha512-cyBkXJDMeI4wthy8xJ2FvDU6+0dtcZSJW3voUF8+e9f1bBeuvyZfc3PNbkOETyhbR+dGCPzn9E7MA3iwzusOhQ==}
+  /caniuse-lite/1.0.30001240:
+    resolution: {integrity: sha512-nb8mDzfMdxBDN7ZKx8chWafAdBp5DAAlpWvNyUGe5tcDWd838zpzDN3Rah9cjCqhfOKkrvx40G2SDtP0qiWX/w==}
     dev: false
 
   /capture-exit/2.0.0:
@@ -7039,7 +7023,6 @@ packages:
     resolution: {integrity: sha512-SRgNfU0cINLIDEWSqSOS5g1uhhvwA++6ohNEN1ZbItHo8x6f9HPbIppewAcxawop8PS+dIKPuTAo8lBKnZ/PMw==}
     engines: {node: '>= 10.17.0'}
     dev: false
-    bundledDependencies: []
 
   /content-disposition/0.5.3:
     resolution: {integrity: sha512-ExO0774ikEObIAEV9kDo50o+79VCUdEB6n6lzKgGwupcVeRlhrj3qGAfwq8G6uBJjkqLrhT0qEYFcWng8z1z0g==}
@@ -12379,10 +12362,6 @@ packages:
     engines: {node: '>=10.0'}
     dev: false
 
-  /jsonschema/1.4.0:
-    resolution: {integrity: sha512-/YgW6pRMr6M7C+4o8kS+B/2myEpHCrxO4PEWnqJNBFMjn7EWXqlQ4tGwL6xTHeRplwuZmcAncdvfOad1nT2yMw==}
-    dev: false
-
   /jsonwebtoken/8.5.1:
     resolution: {integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==}
     engines: {node: '>=4', npm: '>=1.4.28'}
@@ -14934,7 +14913,7 @@ packages:
     dependencies:
       autoprefixer: 9.8.6
       browserslist: 4.16.6
-      caniuse-lite: 1.0.30001239
+      caniuse-lite: 1.0.30001240
       css-blank-pseudo: 0.1.4
       css-has-pseudo: 0.10.0
       css-prefers-color-scheme: 3.1.1
@@ -19392,11 +19371,6 @@ packages:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
     dev: false
 
-  /yaml/1.10.0:
-    resolution: {integrity: sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==}
-    engines: {node: '>= 6'}
-    dev: false
-
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
@@ -19545,7 +19519,7 @@ packages:
     dev: false
 
   file:projects/example-web.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-gyqqWhkrfTxtsq0KNStWhr96dL4nBInnx1QsNmDlmZLBh7SUMltu9tJCEops5fYXkGWcG/fZ52cD/ZrruaDOug==, tarball: file:projects/example-web.tgz}
+    resolution: {integrity: sha512-27dXIab/++KEG9+dV9JZKlUOhZCYx1h89gkvaLAFe/m44l8T4GyO3ThaenTA/xoNYlikLoT+9jKVk/tIzz5gxA==, tarball: file:projects/example-web.tgz}
     id: file:projects/example-web.tgz
     name: '@rush-temp/example-web'
     version: 0.0.0
@@ -19639,7 +19613,7 @@ packages:
     dev: false
 
   file:projects/hatch-cdk.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-F5+jdJeDJc2h0Hb1ZsMHxRaNR0YyzX3dA6992y4Nf1LsMif281hnfhWNg8VPlHuM8luK+pb7AoK2rMoM2c8nCw==, tarball: file:projects/hatch-cdk.tgz}
+    resolution: {integrity: sha512-UsAJsKKihzj2C2EzC/Z4EdwVuhYUQAWXWRzHCz5/7tdn6yGGOJ8Rfpu3J+Mmos3kgBdkQI6/gyvUa6i+5yYwBg==, tarball: file:projects/hatch-cdk.tgz}
     id: file:projects/hatch-cdk.tgz
     name: '@rush-temp/hatch-cdk'
     version: 0.0.0
@@ -19678,7 +19652,7 @@ packages:
     dev: false
 
   file:projects/hatch-cli.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-qMbbGU/2gl1oeU2TqjjySCfWgG/qNJamV9l6qj/n93oeF0PY4kjnn8aJtOtVDq+kA0tzBQR98igKV8G/Em53FQ==, tarball: file:projects/hatch-cli.tgz}
+    resolution: {integrity: sha512-owL1LiygyrxvRrm1yzZ+WKv1+sXBmjYMtnRO4DvSJYLECXBt2A+bzfvDdIfO0m93gc9/ZKohqESmXn+kbCv1JA==, tarball: file:projects/hatch-cli.tgz}
     id: file:projects/hatch-cli.tgz
     name: '@rush-temp/hatch-cli'
     version: 0.0.0
@@ -19714,7 +19688,7 @@ packages:
     dev: false
 
   file:projects/hatch-client-sdk.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-GSi9uDzh2HD3PP4qgde/cysXqv54cZpRE1Ccla0Etm4kXBi+U1jTSWrxC2T2qf7QTyJnl+4CmpNmifnOfomj7Q==, tarball: file:projects/hatch-client-sdk.tgz}
+    resolution: {integrity: sha512-IhORk8P1x6Mmyfx7gqaqIN/3VANUZ4GCE4pAe7Q1JO60z/1g83EmXG1JVsohr/ub+cCy3tCNWFMsHtg9yhaWUg==, tarball: file:projects/hatch-client-sdk.tgz}
     id: file:projects/hatch-client-sdk.tgz
     name: '@rush-temp/hatch-client-sdk'
     version: 0.0.0
@@ -19755,7 +19729,7 @@ packages:
     dev: false
 
   file:projects/hatch-i18n.tgz_4911166e8765a9454f60307e53215304:
-    resolution: {integrity: sha512-fC+e7ZNC4h4tPi6ZvmstUQZpFRw9cDorjyiqoDAlol4Y2M96Na6O40vkADxig2nm/BEJV9+4SZQ3m9JCB+lBpg==, tarball: file:projects/hatch-i18n.tgz}
+    resolution: {integrity: sha512-zcAO721c6L3bQPc+TkOz5k2YF/EuyYVCH4Kjad+VP0XEI/dd0u6zlCEd1DwL6yEkr3AMZttA3j799iiOTTZ0CQ==, tarball: file:projects/hatch-i18n.tgz}
     id: file:projects/hatch-i18n.tgz
     name: '@rush-temp/hatch-i18n'
     version: 0.0.0
@@ -19779,7 +19753,7 @@ packages:
     dev: false
 
   file:projects/hatch-mock-server.tgz_355e9081df59db0c7c1fd505f3f864e9:
-    resolution: {integrity: sha512-8fYZUj3jyhqJDVaYGMnROnQp7+0ZEZ3HKKkU0xcYTT2wcF68WksBx+yIa0h8KvPUg401zUl6TXL5BQZaZt3Flw==, tarball: file:projects/hatch-mock-server.tgz}
+    resolution: {integrity: sha512-toklEMxdk2A+iZWl6Av4GEiy8M4B3Cfc+9yc7zU6NPULtfMwyjWdshchuzRRJbmFW5zjusXgoz3DErX/DE4dHQ==, tarball: file:projects/hatch-mock-server.tgz}
     id: file:projects/hatch-mock-server.tgz
     name: '@rush-temp/hatch-mock-server'
     version: 0.0.0
@@ -19833,7 +19807,7 @@ packages:
     dev: false
 
   file:projects/hatch-rpc-node.tgz_2f6034e98e0cbdc3121a5aa4e40e7cf0:
-    resolution: {integrity: sha512-Ok8uwsXcAMev7wEtMKjpq2/jXnMo36HNfLhfUT6aa+2GgdLUksiCZvEit/a1nODpcNqt3Yu9aj1j2Lm10Nz3cA==, tarball: file:projects/hatch-rpc-node.tgz}
+    resolution: {integrity: sha512-rLBKufALsExWRX0maRncW8lBBnQUA1G8Zkd7kM6gwL+oNsn9WHyHb7TH6XgVmer6J8uaO+Il2LFJIsHrqjC1GQ==, tarball: file:projects/hatch-rpc-node.tgz}
     id: file:projects/hatch-rpc-node.tgz
     name: '@rush-temp/hatch-rpc-node'
     version: 0.0.0
@@ -19861,7 +19835,7 @@ packages:
     dev: false
 
   file:projects/hatch-rpc.tgz_2f6034e98e0cbdc3121a5aa4e40e7cf0:
-    resolution: {integrity: sha512-NXU1RCduXP4WFAfnR6jA5lk6pbZKcWhMGh4uXgF84gyDj4I7hxVoGvwP6NHsDrmmqmbK6jfDq4fpejc0BrnsTw==, tarball: file:projects/hatch-rpc.tgz}
+    resolution: {integrity: sha512-JrlndYnSjOaYUThMdtstEf0LXpPxv2ll4P5j6/azGXuFsi0dO8wO9bY72Q8k0+aFygyptvACmSRzz6z8gweZEQ==, tarball: file:projects/hatch-rpc.tgz}
     id: file:projects/hatch-rpc.tgz
     name: '@rush-temp/hatch-rpc'
     version: 0.0.0
@@ -19887,7 +19861,7 @@ packages:
     dev: false
 
   file:projects/hatch-server-middleware.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-REIPte7l+EvAUkDL0viOWGnxa+4wl7xa6naQTFnEuxiRW8kZFle/y/RkDISBnCX6U8DYGwdh+QmYMJsyESxC2A==, tarball: file:projects/hatch-server-middleware.tgz}
+    resolution: {integrity: sha512-IuXzUiRl/B/Kpo9ycehUG5m/ZHiOZQaDvLDnEHwa3jXFjgO0Oe8O0PBu1KmSeNd5UceYViW8FYkkmsv2Ff4fXg==, tarball: file:projects/hatch-server-middleware.tgz}
     id: file:projects/hatch-server-middleware.tgz
     name: '@rush-temp/hatch-server-middleware'
     version: 0.0.0
@@ -19914,7 +19888,7 @@ packages:
     dev: false
 
   file:projects/hatch-server-pdf.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-zINM0ccg2+MkcaR9e/419F40ODSaI93JG5wmOrJbjEkmZ3PJzkwsWVtoUHkuuubedwMxfvZjuPoCNBSx6oN3Vw==, tarball: file:projects/hatch-server-pdf.tgz}
+    resolution: {integrity: sha512-SP0xE/5+gKQROsCIHC6mFMeT1JhPD5lbERcqT0wsOJwUfSRVswzH93i4XrGRyHKQlpUyNcNj7eZVgHRr3Qza6g==, tarball: file:projects/hatch-server-pdf.tgz}
     id: file:projects/hatch-server-pdf.tgz
     name: '@rush-temp/hatch-server-pdf'
     version: 0.0.0
@@ -19941,7 +19915,7 @@ packages:
     dev: false
 
   file:projects/hatch-server-user-management.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-IwhPHz+++pdaVC7EIuK8lOipoUG6DfVXZsxitRlAbOE5wOg4nXuObgLMYoMkg5iYvcUy4bqn+6NESyGx+rLvkA==, tarball: file:projects/hatch-server-user-management.tgz}
+    resolution: {integrity: sha512-+SpSBrvrqMgU9hjoegaYDL51mzxUl4M9vb9SHNQijKltcI5fqw7wHXCayU5xbBZHQRpaSf0s7M0+JGpf+RVs1A==, tarball: file:projects/hatch-server-user-management.tgz}
     id: file:projects/hatch-server-user-management.tgz
     name: '@rush-temp/hatch-server-user-management'
     version: 0.0.0
@@ -19969,7 +19943,7 @@ packages:
     dev: false
 
   file:projects/hatch-server.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-N9chBHc3j77ooIM4eRIjjDkLotJtnz4XX2mqisCCurYCBHMixNSZWtVImdq6yFvsqy8buTuBaqcDOi012LCkeQ==, tarball: file:projects/hatch-server.tgz}
+    resolution: {integrity: sha512-Cp5WUg/7DEJ+GVZn8f1NR7nNuKVpEXK6aGajH7aO40hpcY4gFr574hEk4VrUqgF5tTZKUC1cwbDZ63YPpWANOQ==, tarball: file:projects/hatch-server.tgz}
     id: file:projects/hatch-server.tgz
     name: '@rush-temp/hatch-server'
     version: 0.0.0
@@ -20003,7 +19977,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-client-sdk.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-zL39M2SXROjagFt0uAifLbCxnIEu7ZLvn/Ess2Repi0neVAe1xm8fC0ahtpk38IpLmpR6885GoggvN6hmHFl+w==, tarball: file:projects/hatch-template-client-sdk.tgz}
+    resolution: {integrity: sha512-Nd1CLHsOw8aTVyc1hjhVtLmdx19+eI6uYvsF0hd7o+HcO1Fot+igUIs1pWKYhBb7rMYl1VmDtbmXQClqIdS8/g==, tarball: file:projects/hatch-template-client-sdk.tgz}
     id: file:projects/hatch-template-client-sdk.tgz
     name: '@rush-temp/hatch-template-client-sdk'
     version: 0.0.0
@@ -20023,7 +19997,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-library.tgz_2f6034e98e0cbdc3121a5aa4e40e7cf0:
-    resolution: {integrity: sha512-S02jSWUKst/V8DslYshBudZ2BWNdXn++1DQJAeyDw/KLHzm9GwAvXKWDJuvP3jYlKbWyQIw5KvtAEKb44tjRqw==, tarball: file:projects/hatch-template-library.tgz}
+    resolution: {integrity: sha512-ZFz+CU/AcQ3NBJuf4+ehGSLXweKYWVoLxXbUSOP4LrKe7iKgG67dfRi9Z8IQviO8EPss6YDGE/CWzjpbpEd9IQ==, tarball: file:projects/hatch-template-library.tgz}
     id: file:projects/hatch-template-library.tgz
     name: '@rush-temp/hatch-template-library'
     version: 0.0.0
@@ -20049,7 +20023,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-microservice.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-1MEiVQ0XCDG5SprlkIBVtRhlggrNznMe0XHXPruirDNaH9xcc99PPWM517cBdQsEcfznzKffcrwPHJBHexPfLA==, tarball: file:projects/hatch-template-microservice.tgz}
+    resolution: {integrity: sha512-vhks/z9kW+HBU2rqQnHm24+7xkU5uzjf7GByimaI8oCONZz8meOXKObHRGVkfBQwN1Sb800cOFQU8Y4uTlANlQ==, tarball: file:projects/hatch-template-microservice.tgz}
     id: file:projects/hatch-template-microservice.tgz
     name: '@rush-temp/hatch-template-microservice'
     version: 0.0.0
@@ -20109,7 +20083,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-webapp.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-CUMDC/zkpzHN5ArTLUGMpQJr556M0mXyTbs0e6Xa6iI0nKmzw7s6cFtTQxu8E+3loRSPG2Iskjs9mgH6uUh8+g==, tarball: file:projects/hatch-template-webapp.tgz}
+    resolution: {integrity: sha512-lkKl84IxKgGJ5U7Pc0p3M8t1z/X8PG2svc3vwq/unYCEiNDzJ2sbzeObkJTjxH8NbSrZ8HMdNH0IJGQWMs/UsQ==, tarball: file:projects/hatch-template-webapp.tgz}
     id: file:projects/hatch-template-webapp.tgz
     name: '@rush-temp/hatch-template-webapp'
     version: 0.0.0
@@ -20210,7 +20184,7 @@ packages:
     dev: false
 
   file:projects/hatch-test-pdf.tgz_2f6034e98e0cbdc3121a5aa4e40e7cf0:
-    resolution: {integrity: sha512-QtxWh2b/zlxTKnKMDBSvSqAC/AbzzXuXQ1G/4z3i5EPPtVz1nqDVQp9FBcupD9u7MNSOzn5Q7nVM2m5NMgLPYA==, tarball: file:projects/hatch-test-pdf.tgz}
+    resolution: {integrity: sha512-xy/wAkaG5rYNrT0T2+8grwyLMW5OeGdy3HKFrnVWL22h/9rv/LkVvaKc2M73sKoNzvAGCxAlBWa4jgS2bTCdDg==, tarball: file:projects/hatch-test-pdf.tgz}
     id: file:projects/hatch-test-pdf.tgz
     name: '@rush-temp/hatch-test-pdf'
     version: 0.0.0
@@ -20248,7 +20222,7 @@ packages:
     dev: false
 
   file:projects/hatch-test-web.tgz_cf487070404211dc82dd0e4291b8ef1d:
-    resolution: {integrity: sha512-KtD7kQoFXmxtnmm907F42ICMbykiq/WqjY0mqVTm5NyTsT1+TyfASA37KwclNUErB8FxHU1SNCM0hdZqnB1bWg==, tarball: file:projects/hatch-test-web.tgz}
+    resolution: {integrity: sha512-8dGoq0iOSnCfMuBPvThwKmBdf4YDTwYO9nhpSxpq9ullZM6Xfj06L9+gPek7joNqXCsQdl/57w/B4vgZ/NtAmA==, tarball: file:projects/hatch-test-web.tgz}
     id: file:projects/hatch-test-web.tgz
     name: '@rush-temp/hatch-test-web'
     version: 0.0.0
@@ -20270,7 +20244,7 @@ packages:
     dev: false
 
   file:projects/hatch-test.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-30JaeZ1QM/oCu9KDC8OjP0T5s4xdbqnZrPW2MhBk+V1IU7CV3sJ258gd3oxXRyj97lgD748nyMaNg0udygXr0Q==, tarball: file:projects/hatch-test.tgz}
+    resolution: {integrity: sha512-9oxlDBGiUmEVs4YsyAAWzKkxvTZC8luEqCHmsYP1dfWbtCpJZ3qXvnib+m+y0oA40VeaCR7aBccHo8gY8c8aPQ==, tarball: file:projects/hatch-test.tgz}
     id: file:projects/hatch-test.tgz
     name: '@rush-temp/hatch-test'
     version: 0.0.0
@@ -20288,7 +20262,7 @@ packages:
     dev: false
 
   file:projects/hatch-user-management-client.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-wbjtDPD4XNWbzMy1MiYcbCtJ/qnXRxg2eV2wEAglOwjIhBVLMBIU1caPf/S8iiHs5G7S/kMtyV9+48MPiget1w==, tarball: file:projects/hatch-user-management-client.tgz}
+    resolution: {integrity: sha512-m+ypGEmIzGU5ZC6tLkSVRaLb8k9AdIFjtzCazF3/Ml5gxmkPFmFaYRIUJ+nnLxzyr7eiz1wz61dKxz+rK0ZU3w==, tarball: file:projects/hatch-user-management-client.tgz}
     id: file:projects/hatch-user-management-client.tgz
     name: '@rush-temp/hatch-user-management-client'
     version: 0.0.0
@@ -20308,7 +20282,7 @@ packages:
     dev: false
 
   file:projects/hatch-util.tgz_supports-color@7.2.0:
-    resolution: {integrity: sha512-wXeg27UsFJ4W1oo2d0lnWCZQTgyikGx5tYEYLKufqHhgEIwDTULQNduzuawUehY+QnYBF02f/84J1WGqLwNS8w==, tarball: file:projects/hatch-util.tgz}
+    resolution: {integrity: sha512-NDb80D2+37T9RiliZrGrk8o10zHHZPS+rS601f9KHk8HzgHHwPj/WdjBa6BhEYY5JsPS80oVUVPXKGfyTbydJQ==, tarball: file:projects/hatch-util.tgz}
     id: file:projects/hatch-util.tgz
     name: '@rush-temp/hatch-util'
     version: 0.0.0
@@ -20330,7 +20304,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-client.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-YMA4IvWwcYDxpxxl6qklynYaKvEJIDapi1p6hLzn3WrtbGDj1bdT03oKV2dAgWH49zpvle9eoTFMJYDfQxELwQ==, tarball: file:projects/hatch-web-client.tgz}
+    resolution: {integrity: sha512-sGVnY4C9zDeFqxF/tP9poMDSLSNlR0OwZUCoP2eAVP3+ZUtlJCgVUaFOTzTNXT4sU4UwALEbaZx1zEqdrdgGog==, tarball: file:projects/hatch-web-client.tgz}
     id: file:projects/hatch-web-client.tgz
     name: '@rush-temp/hatch-web-client'
     version: 0.0.0
@@ -20379,7 +20353,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-eslint-config.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-SZnuulTrMxGTcfh7hMME8fstqgemOlURjkQdUQegGyrf34vjqTT8DGjrvSsDczFIIJH3PAkW0ymaIEz8cgfeEg==, tarball: file:projects/hatch-web-eslint-config.tgz}
+    resolution: {integrity: sha512-9fl1q2NMbCEFdQIUZU5qou7yi2vX2RVUpRi7YOsOkDupgVB1Mskm6lQb/aab0rdgcFXMlvbZcGFWPIZjl2gbPQ==, tarball: file:projects/hatch-web-eslint-config.tgz}
     id: file:projects/hatch-web-eslint-config.tgz
     name: '@rush-temp/hatch-web-eslint-config'
     version: 0.0.0
@@ -20401,7 +20375,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-injectables.tgz_cf93b59870c2452c051ac6b3afeed313:
-    resolution: {integrity: sha512-+8JNxXyMIzrWSoy2vKNLDDIoWSKzMGTbTUaGATgewmXWmL3wcXWcB8c2krWg6JGbxbGo2fJtzYks4CH4mBrVJQ==, tarball: file:projects/hatch-web-injectables.tgz}
+    resolution: {integrity: sha512-XZPsrVoV/jrnpWPIGFb6J5w2LqF5Dt9yoGO2uZjmkM5QRM/Y7cHHcdK/xQsifOR4GrrhKQ50WFLJfZa9cfyDjg==, tarball: file:projects/hatch-web-injectables.tgz}
     id: file:projects/hatch-web-injectables.tgz
     name: '@rush-temp/hatch-web-injectables'
     version: 0.0.0
@@ -20427,7 +20401,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-server.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-GaID6EFfnpMe2RtPywZhLksSMf5fgs/FDk9/hbsiENQF7iodmMO2Q5yKcPkOI5M1kXAK1bZeJPWeeqjVm7DXug==, tarball: file:projects/hatch-web-server.tgz}
+    resolution: {integrity: sha512-T8NOsrSpf4Wwrdtk/DKIGIzOgl2752+y3199MMQDurMS2H15Hoxyy2K4wXUDuP+8dtbQX6mQcVl8lOXLOckTRA==, tarball: file:projects/hatch-web-server.tgz}
     id: file:projects/hatch-web-server.tgz
     name: '@rush-temp/hatch-web-server'
     version: 0.0.0
@@ -20476,7 +20450,7 @@ packages:
     dev: false
 
   file:projects/hatch-web.tgz_8f14aff482abb3bad14f3c791b62951e:
-    resolution: {integrity: sha512-HWDjHVmoN/Xd63wkTxsQQYCTw8gUvaIvzBdHUL59b8W617YLPtaG3yR/xE0c3Tl2AiK6tnzzGjImgoKLoPdQsw==, tarball: file:projects/hatch-web.tgz}
+    resolution: {integrity: sha512-ekkxwdJPXLoHjoS9NsUQzSQ65oz+BXY+wG0q4fxtVgjV87mfK5T+EHrGdS0G2AdpczvSQviz5ZsRmYbLerMeNw==, tarball: file:projects/hatch-web.tgz}
     id: file:projects/hatch-web.tgz
     name: '@rush-temp/hatch-web'
     version: 0.0.0

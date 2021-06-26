@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-pdf",
   "entries": [
     {
+      "version": "0.15.1",
+      "tag": "@launchtray/hatch-server-pdf_v0.15.1",
+      "date": "Sat, 26 Jun 2021 06:02:08 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update node types dev dependency"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.15.0",
       "tag": "@launchtray/hatch-server-pdf_v0.15.0",
       "date": "Mon, 21 Jun 2021 23:43:57 GMT",

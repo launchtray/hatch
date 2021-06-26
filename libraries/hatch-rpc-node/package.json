@@ -11,8 +11,7 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc",
-    "test": "jest --passWithNoTests"
+    "build": "rimraf dist && tsc"
   },
   "dependencies": {
     "uuid": "^8.3.2"

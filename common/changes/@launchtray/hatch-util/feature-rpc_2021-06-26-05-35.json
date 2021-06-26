@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-util",
+      "comment": "Update node types dev dependency",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-util",
+  "email": "kiltyj@gmail.com"
+}

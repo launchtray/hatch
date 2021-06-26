@@ -39,7 +39,7 @@
     "@sentry/types": "^5",
     "@types/express": "^4",
     "@types/express-serve-static-core": "^4",
-    "@types/node": "^12",
+    "@types/node": "^14",
     "@launchtray/hatch-test": "^0.15.0",
     "@launchtray/hatch-razzle-config": "^0.15.0",
     "@types/supertest": "^2.0.8",

@@ -1,6 +1,6 @@
 import {
   AnyJson,
-  AnyJsonObject
+  AnyJsonObject,
 } from '@launchtray/hatch-util';
 import {
   RpcClient,

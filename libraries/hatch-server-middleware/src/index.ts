@@ -5,6 +5,7 @@ import RouteNotFound from './RouteNotFound';
 import BasicRouteParams from './BasicRouteParams';
 import {WebSocketRouteParams} from './WebSocketRouteParams';
 import UrlEncodedMiddleware from './UrlEncodedMiddleware';
+import CsrfMiddleware from './CsrfMiddleware';
 
 export {
   BasicRouteParams,
@@ -14,4 +15,5 @@ export {
   RouteNotFound,
   WebSocketRouteParams,
   UrlEncodedMiddleware,
+  CsrfMiddleware,
 };

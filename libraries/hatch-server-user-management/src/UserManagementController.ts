@@ -1,5 +1,5 @@
 import {controller, requestMatchesRouteList, route} from '@launchtray/hatch-server';
-import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
+import {BasicRouteParams, isCsrfSafe, isMethodSideEffectSafe} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
 import 'cross-fetch/polyfill';
 import {
@@ -10,7 +10,6 @@ import {
 } from '@launchtray/hatch-user-management-client';
 import {TokenExpiredError} from 'jsonwebtoken';
 import * as HttpStatus from 'http-status-codes';
-import cookie from 'cookie';
 import {AUTH_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 import UserInfoRequest from './UserInfoRequest';
 import {
@@ -29,39 +28,6 @@ import {
 } from './UserManagementRequests';
 import UserContext, {extractTenantID} from './UserContext';
 
-const isMethodSideEffectSafe = (method: string): boolean => {
-  return ['GET', 'HEAD', 'OPTIONS'].includes(method.toUpperCase());
-};
-
-const isCsrfSafe = (params: BasicRouteParams): boolean => {
-  // If the auth header is set, this cannot be CSRF, since an attacker cannot set headers
-  if (params.authHeader != null && params.authHeader !== '') {
-    return true;
-  }
-  // If bypass header is set, this cannot be CSRF, since an attacker cannot set headers
-  const bypassDSCHeader = params.req.header('x-bypass-csrf-check');
-  const bypassDSC = (bypassDSCHeader != null && bypassDSCHeader.toLocaleLowerCase() === 'true');
-  if (bypassDSC) {
-    return true;
-  }
-  // Method is (supposed to be) safe. If the request has side effects, the application is flawed.
-  if (isMethodSideEffectSafe(params.req.method)) {
-    return true;
-  }
-  // Otherwise, guard against CRSF via a double-submit cookie
-  let cookies = null;
-  if (params.req.headers.cookie != null) {
-    cookies = cookie.parse(params.req.headers.cookie);
-  }
-  const doubleSubmitCookie = cookies?.double_submit;
-  const doubleSubmitParam = params.req.body.doubleSubmitCookie;
-  return (
-    doubleSubmitCookie != null
-    && doubleSubmitCookie !== ''
-    && doubleSubmitCookie === doubleSubmitParam
-  );
-};
-
 @controller()
 export default class UserManagementController {
   constructor(
@@ -74,7 +40,7 @@ export default class UserManagementController {
   @route.post(UserManagementEndpoints.AUTHENTICATE, AuthenticateRequest.apiMetadata)
   public async authenticate(params: BasicRouteParams) {
     this.logger.debug('Authenticating...');
-    if (!isCsrfSafe(params)) {
+    if (!isCsrfSafe(params.req)) {
       this.logger.error('Rejecting request due to CSRF check');
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -303,7 +269,7 @@ export default class UserManagementController {
     const {params} = userInfoRequest;
     const tenantId = extractTenantID(params);
     this.logger.debug('Refreshing user authentication tokens...');
-    if (!isCsrfSafe(params)) {
+    if (!isCsrfSafe(params.req)) {
       this.logger.error('Rejecting request due to CSRF check');
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -376,7 +342,7 @@ export default class UserManagementController {
       params.next();
       return;
     }
-    if (!isCsrfSafe(params)) {
+    if (!isCsrfSafe(params.req)) {
       this.logger.error('Rejecting request due to CSRF check');
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,

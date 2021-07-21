@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server-middleware",
-  "version": "0.15.3",
+  "version": "0.15.4",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -20,8 +20,8 @@
     "http-status-codes": "2.1.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server": "^0.15.3",
-    "@launchtray/hatch-util": "^0.15.3",
+    "@launchtray/hatch-server": "^0.15.4",
+    "@launchtray/hatch-util": "^0.15.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "bufferutil": "^4",
     "express": "^4",
@@ -30,9 +30,9 @@
     "ws": "^7"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.15.3",
-    "@launchtray/hatch-server": "^0.15.3",
-    "@launchtray/hatch-util": "^0.15.3",
+    "@launchtray/hatch-eslint-config": "^0.15.4",
+    "@launchtray/hatch-server": "^0.15.4",
+    "@launchtray/hatch-util": "^0.15.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "@types/express": "^4",
     "@types/express-serve-static-core": "^4",

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-user-management",
   "entries": [
     {
+      "version": "0.15.4",
+      "tag": "@launchtray/hatch-server-user-management_v0.15.4",
+      "date": "Wed, 21 Jul 2021 05:24:30 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "update to use hatch middleware for csrf check"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.15.3",
       "tag": "@launchtray/hatch-server-user-management_v0.15.3",
       "date": "Sat, 26 Jun 2021 07:09:52 GMT",

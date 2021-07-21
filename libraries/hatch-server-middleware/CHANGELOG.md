@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-middleware
 
-This log was last generated on Sat, 26 Jun 2021 07:09:52 GMT and should not be manually modified.
+This log was last generated on Wed, 21 Jul 2021 05:24:30 GMT and should not be manually modified.
+
+## 0.15.4
+Wed, 21 Jul 2021 05:24:30 GMT
+
+### Updates
+
+- Add url encoded middleware and csrf middleware
 
 ## 0.15.3
 Sat, 26 Jun 2021 07:09:52 GMT

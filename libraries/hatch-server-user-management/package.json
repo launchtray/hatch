@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "aws-sdk": "^2.684.0",
-    "cookie": "^0.4.1",
+    "cookie": "0.4.1",
     "cross-fetch": "^3.0.4",
-    "http-status-codes": "^1.4.0",
+    "http-status-codes": "2.1.4",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.3"
   },
@@ -35,7 +35,7 @@
     "@launchtray/hatch-user-management-client": "^0.15.3",
     "@launchtray/hatch-util": "^0.15.3",
     "@launchtray/tsyringe-async": "4.3.2",
-    "@types/cookie": "^0.4.0",
+    "@types/cookie": "0.4.1",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/jwk-to-pem": "^2.0.0",
     "@types/node": "^14",

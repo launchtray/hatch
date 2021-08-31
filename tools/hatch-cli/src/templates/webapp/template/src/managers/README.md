@@ -24,7 +24,8 @@ type. Note only the following are fields of this interface are really relevant t
 * [`strict`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#strict-bool)
 
 When passing the parameter as an object, the following optional field is allowed:
-* runOnClientLoad - boolean used to specify if it should be run on the client in addition to the server during initial rendering
+* runOnClientLoad - boolean used to specify if it should be run on the client's first load in addition to the server after 
+initial rendering
 
 As an example, here's a method that is only called when the `/hi` route is loaded:
 

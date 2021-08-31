@@ -19,7 +19,8 @@ const webAppManagerKey = Symbol('webAppManager');
 export type PathMatcher = (path: string) => match | null;
 
 interface WebAppManager extends Object {
-  [locationChangeLoadersKey]?: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher, runOnClientLoad: boolean}>;
+  [locationChangeLoadersKey]?:
+    Array<{propertyKey: string | symbol, pathMatcher: PathMatcher, runOnClientLoad: boolean}>;
   [clientLoadersKey]?: Array<{propertyKey: string | symbol}>;
 }
 

@@ -84,7 +84,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         refreshToken: response.AuthenticationResult?.RefreshToken,
       };
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -119,7 +119,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -134,7 +134,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -154,7 +154,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -168,7 +168,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -190,7 +190,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -217,7 +217,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         refreshToken: response.AuthenticationResult?.RefreshToken,
       };
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -231,7 +231,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -256,7 +256,7 @@ export default class AWSCognitoClient implements UserManagementClient {
       }
       return userAttrsResp;
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 
@@ -313,7 +313,7 @@ export default class AWSCognitoClient implements UserManagementClient {
         /* eslint-enable @typescript-eslint/naming-convention */
       }).promise();
     } catch (err) {
-      throw convertAWSErrorToUserManagementError(err);
+      throw convertAWSErrorToUserManagementError(err as AWSError);
     }
   }
 

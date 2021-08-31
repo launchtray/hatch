@@ -7,6 +7,7 @@ import {
   UserManagementErrorCodes,
   UserManagementClient,
   UserManagementEndpoints,
+  UserManagementError,
 } from '@launchtray/hatch-user-management-client';
 import {TokenExpiredError} from 'jsonwebtoken';
 import * as HttpStatus from 'http-status-codes';
@@ -67,27 +68,28 @@ export default class UserManagementController {
         params.res.status(HttpStatus.OK).send(authTokens);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error authenticating user: ${errorMessage}`);
-      if (err.code === UserManagementErrorCodes.ACCOUNT_LOCKED) {
+      if ((err as UserManagementError).code === UserManagementErrorCodes.ACCOUNT_LOCKED) {
         params.res.status(HttpStatus.FORBIDDEN).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
-      } else if (err.code === UserManagementErrorCodes.UNAUTHORIZED) {
+      } else if ((err as UserManagementError).code === UserManagementErrorCodes.UNAUTHORIZED) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
+      } else if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_CONFIRMED) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+      } else if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -111,15 +113,16 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error starting user registration: ${errorMessage}`);
-      if (err.code === UserManagementErrorCodes.USERNAME_EXISTS) {
+      if ((err as UserManagementError).code === UserManagementErrorCodes.USERNAME_EXISTS) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -143,15 +146,16 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error resending user registration: ${errorMessage}`);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+      if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -175,19 +179,20 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error confirming user: ${errorMessage}`);
-      if (err.code === UserManagementErrorCodes.INVALID_CODE) {
+      if ((err as UserManagementError).code === UserManagementErrorCodes.INVALID_CODE) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+      } else if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -211,15 +216,16 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error resetting user password: ${errorMessage}`);
-      if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+      if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -243,22 +249,23 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error confirming resetting user password: ${errorMessage}`);
       if (
-        err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
-        || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED
+        (err as UserManagementError).code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
+        || (err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_CONFIRMED
       ) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+      } else if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -309,22 +316,23 @@ export default class UserManagementController {
         params.res.status(HttpStatus.OK).send(authTokens);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.error(`Error refreshing user authentication tokens: ${errorMessage}`);
       if (
-        err.code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
-        || err.code === UserManagementErrorCodes.USER_NOT_CONFIRMED
+        (err as UserManagementError).code === UserManagementErrorCodes.INVALID_PASSWORD_FORMAT
+        || (err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_CONFIRMED
       ) {
         params.res.status(HttpStatus.PRECONDITION_FAILED).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
-      } else if (err.code === UserManagementErrorCodes.USER_NOT_FOUND) {
+      } else if ((err as UserManagementError).code === UserManagementErrorCodes.USER_NOT_FOUND) {
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
       } else {
         params.res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-          error: err.code,
+          error: (err as UserManagementError).code,
         });
       }
     }
@@ -362,7 +370,7 @@ export default class UserManagementController {
           });
         }
       } catch (err) {
-        this.logger.info('Failed to authenticate user:', err.message);
+        this.logger.info('Failed to authenticate user:', (err as UserManagementError).message);
         params.res.status(HttpStatus.UNAUTHORIZED).send({
           error: UserManagementErrorCodes.UNAUTHORIZED,
         });
@@ -405,7 +413,8 @@ export default class UserManagementController {
       this.logger.debug('User signed out');
       params.res.sendStatus(HttpStatus.OK);
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.info(`Failed to sign out user: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -430,7 +439,8 @@ export default class UserManagementController {
         userAttributes: attributes,
       });
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.info(`Failed to read user attributes: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -463,7 +473,8 @@ export default class UserManagementController {
         params.res.sendStatus(HttpStatus.OK);
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.info(`Failed to set user attributes: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,
@@ -508,7 +519,8 @@ export default class UserManagementController {
         });
       }
     } catch (err) {
-      const errorMessage = err.code != null ? `${err.code} - ${err.message}` : err;
+      const errorMessage = (err as UserManagementError).code != null ? `${(err as UserManagementError).code} - ${(err as UserManagementError).message}`
+        : err;
       this.logger.info(`Failed to read user ID: ${errorMessage}`);
       params.res.status(HttpStatus.UNAUTHORIZED).send({
         error: UserManagementErrorCodes.UNAUTHORIZED,

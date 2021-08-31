@@ -11,7 +11,8 @@ defining two types of methods:
 #### Location change handlers
 Methods decorated with `@onLocationChange()`, which run whenever a UI route is loaded. These methods run both on the
 server and on the client. The server runs them during server-side rendering for the route that has been requested
-by the browser. The client runs them for all client-side navigation events after the initial rendering by the server.
+by the browser. The client runs them for all client-side navigation events after the initial rendering by the server and
+can also be run after the initial server-side rendering when the `runOnClientLoad` field is set to true.
 
 The decorator applied to these methods can optionally constrain which routes will cause the method to run, by passing
 in either a string representing a path, or an object which conforms to
@@ -21,6 +22,9 @@ type. Note only the following are fields of this interface are really relevant t
 * [`exact`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#exact-bool)
 * [`sensitive`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#sensitive-bool)
 * [`strict`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md#strict-bool)
+
+When passing the parameter as an object, the following optional field is allowed:
+* runOnClientLoad - boolean used to specify if it should be run on the client in addition to the server during initial rendering
 
 As an example, here's a method that is only called when the `/hi` route is loaded:
 
@@ -45,8 +49,21 @@ public async prepRoute(context: LocationChangeContext<{id: string}>) {
 }
 ```
 
+As noted, a method is by default only ran by the server during the initial server-side rendering. To have the method 
+additionally ran by client during the initially rendering:
+```typescript
+@onLocationChange({path: '/runOnClientLoad', runOnClientLoad: true})
+public prepRunOnClientLoad({isServer}: LocationChangeContext) {
+  if (!isServer) {
+    this.logger.info('Only logged by client');
+  } else {
+    this.logger.info('Only logged by server');
+  }
+}
+```
+
 As shown above, these methods can take in a `LocationChangeContext` object, which contains information about the 
-route change that has been applied.
+route change that has been applied and whether to run additionally on client load.
 
 However, making use of dependency injection, these methods can also take in any class registered in the dependency 
 injection container. The container used to resolve the dependency will be injected with the fields of

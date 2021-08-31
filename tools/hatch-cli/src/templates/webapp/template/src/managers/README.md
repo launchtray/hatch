@@ -15,7 +15,7 @@ by the browser. If server-side rendering is enabled, by default the client does 
 initial client load, as it would have been run during the initial server-side render. The client does run the location 
 change handler on all client-side navigation events after (but not including) the initial load. Furthermore, if the 
 runOnClientLoad argument is passed to onLocationChange (e.g. @onLocationChange({runOnClientLoad = true}), the handler is 
-run on the client be run during the initial client load. This can be useful for scenarios when you want the client to fetch 
+run on the client during the initial client load. This can be useful for scenarios when you want the client to fetch 
 data after an initial "empty" load from the server. Often, this will be paired with a check for `!isServer` to ensure that 
 the client-side loading of data is not run server-side.
 

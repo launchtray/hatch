@@ -60,6 +60,11 @@ export default class ExampleManager {
     this.logger.info('ExampleManager.prepPage', {pathMatch, location});
   }
 
+  @onLocationChange({path: '/client', runOnClientLoad: true})
+  public prepRunOnClientLoad({isServer}: LocationChangeContext) {
+    this.logger.info('ExampleManager.prepRunOnClientLoad', {isServer});
+  }
+
   @onClientLoad()
   public* handleClientLoad() {
     this.logger.info('Runtime config:', runtimeConfig);

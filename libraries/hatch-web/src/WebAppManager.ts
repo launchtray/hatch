@@ -13,13 +13,13 @@ import {
 import {isActionType} from './defineAction';
 
 export const webAppManager = injectable;
-const pathMatchersKey = Symbol('pathMatchers');
+const locationChangeLoadersKey = Symbol('locationChangeLoaders');
 const clientLoadersKey = Symbol('clientLoaders');
 const webAppManagerKey = Symbol('webAppManager');
 export type PathMatcher = (path: string) => match | null;
 
 interface WebAppManager extends Object {
-  [pathMatchersKey]?: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher}>;
+  [locationChangeLoadersKey]?: Array<{propertyKey: string | symbol, pathMatcher: PathMatcher, runOnClientLoad: boolean}>;
   [clientLoadersKey]?: Array<{propertyKey: string | symbol}>;
 }
 
@@ -34,18 +34,31 @@ export const resolveWebAppManagers = async (container: DependencyContainer): Pro
   return await container.resolveAll(webAppManagerKey);
 };
 
+type OnLocationChangeProps = Pick<RouteProps, 'path' | 'exact' | 'sensitive' | 'strict'> & {runOnClientLoad?: boolean};
+
+const isOnLocationChangeProps = (props: unknown): props is OnLocationChangeProps => {
+  return (props as OnLocationChangeProps)?.runOnClientLoad != null;
+};
+
 export const onLocationChange = <Params extends { [K in keyof Params]?: string }>(
-  props?: string | string[] | Pick<RouteProps, 'path' | 'exact' | 'sensitive' | 'strict'>,
+  props?: string | string[] | OnLocationChangeProps,
 ) => {
+  let runOnClientLoad = false;
+  let otherProps = props;
+  if (isOnLocationChangeProps(props)) {
+    runOnClientLoad = true;
+    otherProps = {...props};
+    delete otherProps.runOnClientLoad;
+  }
   const pathMatcher = (path: string) => {
-    return matchPath(path, props ?? {path});
+    return matchPath(path, otherProps ?? {path});
   };
   return (target: unknown, propertyKey: string | symbol) => {
     const asWebAppManager = target as WebAppManager;
-    if (asWebAppManager[pathMatchersKey] == null) {
-      asWebAppManager[pathMatchersKey] = [];
+    if (asWebAppManager[locationChangeLoadersKey] == null) {
+      asWebAppManager[locationChangeLoadersKey] = [];
     }
-    asWebAppManager[pathMatchersKey]?.push({propertyKey, pathMatcher});
+    asWebAppManager[locationChangeLoadersKey]?.push({propertyKey, pathMatcher, runOnClientLoad});
   };
 };
 
@@ -59,14 +72,14 @@ export const onClientLoad = () => {
   };
 };
 
-const forEachPathMatcher = async (
+const forEachLocationChangeLoader = async (
   target: unknown,
-  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher) => Promise<void>,
+  iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher, runOnClientLoad: boolean) => Promise<void>,
 ) => {
   const asWebAppManager = target as WebAppManager;
-  const pathMatchers = asWebAppManager?.[pathMatchersKey] ?? [];
-  for (const {propertyKey, pathMatcher} of pathMatchers) {
-    await iterator(propertyKey, pathMatcher);
+  const locationChangeLoaders = asWebAppManager?.[locationChangeLoadersKey] ?? [];
+  for (const {propertyKey, pathMatcher, runOnClientLoad} of locationChangeLoaders) {
+    await iterator(propertyKey, pathMatcher, runOnClientLoad);
   }
 };
 
@@ -83,7 +96,7 @@ const forEachClientLoader = async (
 
 const hasWebAppManagerMethods = (target: unknown): boolean => {
   const asWebAppManager = target as WebAppManager;
-  return (asWebAppManager[clientLoadersKey] != null) || (asWebAppManager[pathMatchersKey] != null);
+  return (asWebAppManager[clientLoadersKey] != null) || (asWebAppManager[locationChangeLoadersKey] != null);
 };
 
 export const createSagaForWebAppManagers = async (
@@ -134,12 +147,13 @@ export const createSagaForWebAppManagers = async (
       location = selectLocationFromLocationChangeAction(action);
       isFirstRendering = selectFirstRenderingFromLocationChangeAction(action);
     }
-
-    if (!ssrEnabled || !isFirstRendering || (location.fragment != null && location.fragment !== '')) {
-      const handleLocationChangeSagas: Effect[] = [];
-      for (const manager of webAppManagers) {
-        const target = manager.constructor.prototype;
-        yield forEachPathMatcher(manager, async (propertyKey, pathMatcher) => {
+    const handleLocationChangeSagas: Effect[] = [];
+    for (const manager of webAppManagers) {
+      const target = manager.constructor.prototype;
+      yield forEachLocationChangeLoader(manager, async (propertyKey, pathMatcher, runOnClientLoad) => {
+        const hasFragment = location.fragment != null && location.fragment !== '';
+        const shouldRunOnClient = runOnClientLoad || !ssrEnabled || !isFirstRendering || hasFragment;
+        if (shouldRunOnClient) {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
             const container = rootContainer.createChildContainer();
@@ -154,12 +168,12 @@ export const createSagaForWebAppManagers = async (
             const args = await resolveParams(container, target, propertyKey);
             handleLocationChangeSagas.push(call([manager, manager[propertyKey]], ...args));
           }
-        });
-      }
-      logger.info('Calling web app managers with location change:', action);
-      yield effects.all(handleLocationChangeSagas);
-      yield effects.put(navActions.locationChangeApplied({location}));
+        }
+      });
     }
+    logger.info('Calling web app managers with location change:', action);
+    yield effects.all(handleLocationChangeSagas);
+    yield effects.put(navActions.locationChangeApplied({location}));
   };
   if (isServer) {
     sagas.push(effects.fork(function* navActionSaga() {

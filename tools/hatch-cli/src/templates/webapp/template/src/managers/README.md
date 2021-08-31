@@ -11,7 +11,7 @@ defining two types of methods:
 #### Location change handlers
 Methods decorated with `@onLocationChange()`, which run whenever a UI route is loaded. These methods run both on the
 server and on the client. The server runs them during server-side rendering for the route that has been requested
-by the browser.If server-side rendering is enabled, by default the client does not run onLocationChange handlers on the 
+by the browser. If server-side rendering is enabled, by default the client does not run onLocationChange handlers on the 
 initial client load, as it would have been run during the initial server-side render. The client does run the location 
 change handler on all client-side navigation events after (but not including) the initial load. Furthermore, if the 
 runOnClientLoad argument is passed to onLocationChange (e.g. @onLocationChange({runOnClientLoad = true}), the handler is 

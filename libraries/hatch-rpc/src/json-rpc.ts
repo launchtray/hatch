@@ -102,7 +102,7 @@ export class JsonRpcBus implements RpcServer, RpcClient {
           } catch (err) {
             this.respondWithError(message.id, {
               code: RpcErrorCode.SERVER_ERROR,
-              message: `Error from service: ${err.message}`,
+              message: `Error from service: ${(err as Error).message}`,
             });
           }
         }

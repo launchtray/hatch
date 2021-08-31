@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-util",
+      "comment": "fix all error issues \"Object is of type 'unknown'\" with latest minor typescript release",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-util",
+  "email": "rosshnaylor@gmail.com"
+}

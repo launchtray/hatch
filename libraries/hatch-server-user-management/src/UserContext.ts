@@ -30,7 +30,7 @@ export default class UserContext {
       this.accessToken = userInfo?.accessToken ?? '';
     } catch (error) {
       // We should never get here, as UserManagementController will have already retrieved userInfo
-      this.error = error;
+      this.error = error as Error;
       this.params.res.status(500).send({
         error,
       });

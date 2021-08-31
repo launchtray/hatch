@@ -31,7 +31,7 @@ export default class SentryReporter implements ErrorReporter {
         }
         this.sentry.addBreadcrumb(breadcrumb);
       } catch (error) {
-        this.logger.error('Error reporting action:', error.message);
+        this.logger.error('Error reporting action:', (error as Error).message);
       }
     } else if (this.initialized == null && !this.initializedWarningShown) {
       this.initializedWarningShown = true;
@@ -47,7 +47,7 @@ export default class SentryReporter implements ErrorReporter {
         }
         this.sentry.captureException(exception);
       } catch (error) {
-        this.logger.error(`Error reporting exception: ${error.message}`);
+        this.logger.error(`Error reporting exception: ${(error as Error).message}`);
       }
     }
   }

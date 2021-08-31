@@ -50,7 +50,7 @@ public async prepRoute(context: LocationChangeContext<{id: string}>) {
 ```
 
 As noted, a method is by default only ran by the server during the initial server-side rendering. To have the method 
-additionally ran by client during the initially rendering:
+additionally ran by client on first load:
 ```typescript
 @onLocationChange({path: '/runOnClientLoad', runOnClientLoad: true})
 public prepRunOnClientLoad({isServer}: LocationChangeContext) {

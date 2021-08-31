@@ -11,8 +11,13 @@ defining two types of methods:
 #### Location change handlers
 Methods decorated with `@onLocationChange()`, which run whenever a UI route is loaded. These methods run both on the
 server and on the client. The server runs them during server-side rendering for the route that has been requested
-by the browser. The client runs them for all client-side navigation events after the initial rendering by the server and
-can also be run after the initial server-side rendering when the `runOnClientLoad` field is set to true.
+by the browser.If server-side rendering is enabled, by default the client does not run onLocationChange handlers on the 
+initial client load, as it would have been run during the initial server-side render. The client does run the location 
+change handler on all client-side navigation events after (but not including) the initial load. Furthermore, if the 
+runOnClientLoad argument is passed to onLocationChange (e.g. @onLocationChange({runOnClientLoad = true}), the handler is 
+run on the client be run during the initial client load. This can be useful for scenarios when you want the client to fetch 
+data after an initial "empty" load from the server. Often, this will be paired with a check for `!isServer` to ensure that 
+the client-side loading of data is not run server-side.
 
 The decorator applied to these methods can optionally constrain which routes will cause the method to run, by passing
 in either a string representing a path, or an object which conforms to
@@ -53,7 +58,7 @@ public async prepRoute(context: LocationChangeContext<{id: string}>) {
 As noted, a method is by default only ran by the server during the initial server-side rendering. To have the method 
 additionally ran by client on first load:
 ```typescript
-@onLocationChange({path: '/runOnClientLoad', runOnClientLoad: true})
+@onLocationChange({path: '/hi', runOnClientLoad: true})
 public prepRunOnClientLoad({isServer}: LocationChangeContext) {
   if (!isServer) {
     this.logger.info('Only logged by client');
@@ -64,7 +69,7 @@ public prepRunOnClientLoad({isServer}: LocationChangeContext) {
 ```
 
 As shown above, these methods can take in a `LocationChangeContext` object, which contains information about the 
-route change that has been applied and whether to run additionally on client load.
+route change that has been applied and whether to run additionally on client's first load.
 
 However, making use of dependency injection, these methods can also take in any class registered in the dependency 
 injection container. The container used to resolve the dependency will be injected with the fields of

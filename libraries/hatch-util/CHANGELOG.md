@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-util
 
-This log was last generated on Wed, 21 Jul 2021 05:24:30 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 22:43:18 GMT and should not be manually modified.
+
+## 0.15.5
+Tue, 31 Aug 2021 22:43:18 GMT
+
+### Updates
+
+- fix all error issues "Object is of type 'unknown'" with latest minor typescript release
 
 ## 0.15.4
 Wed, 21 Jul 2021 05:24:30 GMT

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.15.5",
+      "tag": "@launchtray/hatch-server-middleware_v0.15.5",
+      "date": "Tue, 31 Aug 2021 22:43:18 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "fix all error issues \"Object is of type 'unknown'\" with latest minor typescript release"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.15.4",
       "tag": "@launchtray/hatch-server-middleware_v0.15.4",
       "date": "Wed, 21 Jul 2021 05:24:30 GMT",

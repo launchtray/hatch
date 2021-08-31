@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-web-eslint-config",
   "entries": [
     {
+      "version": "0.15.5",
+      "tag": "@launchtray/hatch-web-eslint-config_v0.15.5",
+      "date": "Tue, 31 Aug 2021 22:43:18 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.15.4",
       "tag": "@launchtray/hatch-web-eslint-config_v0.15.4",
       "date": "Wed, 21 Jul 2021 05:24:30 GMT",

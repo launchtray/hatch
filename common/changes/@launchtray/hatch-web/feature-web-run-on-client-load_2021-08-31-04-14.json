@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@launchtray/hatch-web",
-      "comment": "Add ability to run a web app manager location change on client",
+      "comment": "Add ability to run a web app manager location change on client first load",
       "type": "none"
     }
   ],

@@ -37,7 +37,7 @@ export const resolveWebAppManagers = async (container: DependencyContainer): Pro
 
 type OnLocationChangeProps = Pick<RouteProps, 'path' | 'exact' | 'sensitive' | 'strict'> & {runOnClientLoad?: boolean};
 
-const isRunOnClientField = (props: unknown): props is OnLocationChangeProps => {
+const hasRunOnClientLoadField = (props: unknown): props is OnLocationChangeProps => {
   return (props as OnLocationChangeProps)?.runOnClientLoad != null;
 };
 
@@ -46,7 +46,7 @@ export const onLocationChange = <Params extends { [K in keyof Params]?: string }
 ) => {
   let runOnClientLoad = false;
   let otherProps = props;
-  if (isRunOnClientField(props)) {
+  if (hasRunOnClientLoadField(props)) {
     runOnClientLoad = props.runOnClientLoad ?? false;
     otherProps = {...props};
     delete otherProps.runOnClientLoad;

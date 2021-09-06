@@ -65,6 +65,7 @@ specifiers:
   '@storybook/react': ^5.3.19
   '@types/chromedriver': ^2.38.0
   '@types/cookie': 0.4.1
+  '@types/cors': 2.8.12
   '@types/express': ^4
   '@types/express-serve-static-core': ^4
   '@types/fs-extra': ^8
@@ -111,6 +112,7 @@ specifiers:
   comment-json: ^3.0.3
   connected-react-router: 6.5.2
   cookie: 0.4.1
+  cors: 2.8.5
   cross-fetch: ^3.0.4
   debug: ^4.3.1
   dotenv: ^8.2.0
@@ -258,6 +260,7 @@ dependencies:
   '@storybook/react': 5.3.21_e9f9ed2e866375b994763fcc4290f00a
   '@types/chromedriver': 2.38.0
   '@types/cookie': 0.4.1
+  '@types/cors': 2.8.12
   '@types/express': 4.17.13
   '@types/express-serve-static-core': 4.17.24
   '@types/fs-extra': 8.1.2
@@ -304,6 +307,7 @@ dependencies:
   comment-json: 3.0.3
   connected-react-router: 6.5.2_490ffb01b7b4f37274bf2d732d8b19a7
   cookie: 0.4.1
+  cors: 2.8.5
   cross-fetch: 3.1.4
   debug: 4.3.2_supports-color@7.2.0
   dotenv: 8.6.0
@@ -625,6 +629,7 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/custom-resources': 1.73.0_@aws-cdk+assets@1.73.0
       constructs: 3.3.138
+      punycode: 2.1.1
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -664,6 +669,7 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       constructs: 3.3.138
+      minimatch: 3.0.4
     dev: false
     bundledDependencies:
       - minimatch
@@ -1061,6 +1067,9 @@ packages:
   /@aws-cdk/cloud-assembly-schema/1.73.0:
     resolution: {integrity: sha512-3m5nJDLSApAuUMra2WrQF7GHt6xgxqFET91WShtKtj48brZk4MBJ3dLre2LjDVsmMMOVdd6FpjY7tE5C1v9Hyw==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
+    dependencies:
+      jsonschema: 1.4.0
+      semver: 7.3.5
     dev: false
     bundledDependencies:
       - jsonschema
@@ -1085,7 +1094,11 @@ packages:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       '@aws-cdk/region-info': 1.73.0
+      '@balena/dockerignore': 1.0.2
       constructs: 3.3.138
+      fs-extra: 9.1.0
+      ignore: 5.1.8
+      minimatch: 3.0.4
     dev: false
     bundledDependencies:
       - fs-extra
@@ -1113,6 +1126,7 @@ packages:
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     dependencies:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
+      semver: 7.3.5
     dev: false
     bundledDependencies:
       - semver
@@ -1125,6 +1139,8 @@ packages:
   /@aws-cdk/yaml-cfn/1.73.0:
     resolution: {integrity: sha512-m65JeI5dXdMfhKy6rgNrMgcIpeoYkKpZmB6zCKoazgu/VjOoKs9OHs+4mhdvvYrdEcclKJw3NxJH1bTBMT2BPA==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
+    dependencies:
+      yaml: 1.10.0
     dev: false
     bundledDependencies:
       - yaml
@@ -2580,6 +2596,10 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': 7.14.9
       to-fast-properties: 2.0.0
+    dev: false
+
+  /@balena/dockerignore/1.0.2:
+    resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
     dev: false
 
   /@bcoe/v8-coverage/0.2.3:
@@ -4210,6 +4230,10 @@ packages:
 
   /@types/cookiejar/2.1.2:
     resolution: {integrity: sha512-t73xJJrvdTjXrn4jLS9VSGRbz0nUY3cl2DMGDU48lKl+HR9dbbjW2A9r3g40VA++mQpy6uuHg33gy7du2BKpog==}
+    dev: false
+
+  /@types/cors/2.8.12:
+    resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
     dev: false
 
   /@types/express-serve-static-core/4.17.24:
@@ -7036,6 +7060,7 @@ packages:
     resolution: {integrity: sha512-Q353/8IuHuQ7syq4MJQVFSnrWSY139QkpMz2dpGMwf4ins26b7DPXsVknP0KuVK+iwsTxnv1wDVxXOmyxAVuIA==}
     engines: {node: '>= 10.17.0'}
     dev: false
+    bundledDependencies: []
 
   /content-disposition/0.5.3:
     resolution: {integrity: sha512-ExO0774ikEObIAEV9kDo50o+79VCUdEB6n6lzKgGwupcVeRlhrj3qGAfwq8G6uBJjkqLrhT0qEYFcWng8z1z0g==}
@@ -7139,6 +7164,14 @@ packages:
     transitivePeerDependencies:
       - webpack-cli
       - webpack-command
+    dev: false
+
+  /cors/2.8.5:
+    resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      object-assign: 4.1.1
+      vary: 1.1.2
     dev: false
 
   /cosmiconfig/5.2.1:
@@ -12445,6 +12478,10 @@ packages:
   /jsonpath-plus/4.0.0:
     resolution: {integrity: sha512-e0Jtg4KAzDJKKwzbLaUtinCn0RZseWBVRTRGihSpvFlM3wTR7ExSp+PTdeTsDrLNJUe7L7JYJe8mblHX5SCT6A==}
     engines: {node: '>=10.0'}
+    dev: false
+
+  /jsonschema/1.4.0:
+    resolution: {integrity: sha512-/YgW6pRMr6M7C+4o8kS+B/2myEpHCrxO4PEWnqJNBFMjn7EWXqlQ4tGwL6xTHeRplwuZmcAncdvfOad1nT2yMw==}
     dev: false
 
   /jsonwebtoken/8.5.1:
@@ -19462,6 +19499,11 @@ packages:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
     dev: false
 
+  /yaml/1.10.0:
+    resolution: {integrity: sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==}
+    engines: {node: '>= 6'}
+    dev: false
+
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
@@ -19953,13 +19995,14 @@ packages:
     dev: false
 
   file:projects/hatch-server-middleware.tgz_f47c0459b9c906ff81710fcd23f830ea:
-    resolution: {integrity: sha512-6hGlaYEwhYNUYl+nyqFjQ2dM79OFU6KTYDWlsQrRsJLKq/L8r0RzqLVdLpryUEELFDPC2JgyhBZO6nE0kaZ1bA==, tarball: file:projects/hatch-server-middleware.tgz}
+    resolution: {integrity: sha512-niKZgI9Wc3oZF4Vcjya+Xa1wdRhjSLJPII7FqvHpMsI/caWfCXVdZPUe4E+oRzSIO42KzVenTKQQ4JX5YP68fg==, tarball: file:projects/hatch-server-middleware.tgz}
     id: file:projects/hatch-server-middleware.tgz
     name: '@rush-temp/hatch-server-middleware'
     version: 0.0.0
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@types/cookie': 0.4.1
+      '@types/cors': 2.8.12
       '@types/express': 4.17.13
       '@types/express-serve-static-core': 4.17.24
       '@types/http-errors': 1.8.1
@@ -19968,6 +20011,7 @@ packages:
       '@typescript-eslint/parser': 4.30.0_2f2ce2e2cf0ab8694a00ab0ad8750d63
       bufferutil: 4.0.3
       cookie: 0.4.1
+      cors: 2.8.5
       eslint: 7.32.0_supports-color@7.2.0
       eslint-config-airbnb-base: 14.2.1_b7a4de75e7d0094cbe979e30a9a325ab
       eslint-plugin-import: 2.24.2_eslint@7.32.0

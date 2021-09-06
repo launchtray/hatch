@@ -27,7 +27,8 @@
     "express": "^4",
     "utf-8-validate": "^5",
     "winston": "^3",
-    "ws": "^7"
+    "ws": "^7",
+    "cors": "2.8.5"
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "^0.15.5",
@@ -49,6 +50,7 @@
     "express": "^4",
     "utf-8-validate": "^5",
     "winston": "^3",
-    "ws": "^7"
+    "ws": "^7",
+    "@types/cors": "2.8.12"
   }
 }

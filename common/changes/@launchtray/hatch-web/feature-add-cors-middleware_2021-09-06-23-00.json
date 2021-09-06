@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web",
+      "comment": "fix checking for runOnClientLoad field",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web",
+  "email": "rosshnaylor@gmail.com"
+}

@@ -1,7 +1,7 @@
+import cors from 'cors';
+import {Application} from 'express';
 import {ServerMiddleware} from '../../hatch-server';
 import {inject, injectable} from '../../hatch-util';
-import {Application} from 'express';
-import cors from 'cors';
 
 @injectable()
 export default class CorsMiddleware implements ServerMiddleware {

@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-middleware",
+      "comment": "add cors middleware",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-middleware",
+  "email": "rosshnaylor@gmail.com"
+}

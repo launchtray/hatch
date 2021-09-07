@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-server-middleware
 
-This log was last generated on Tue, 31 Aug 2021 22:43:18 GMT and should not be manually modified.
+This log was last generated on Tue, 07 Sep 2021 18:57:29 GMT and should not be manually modified.
+
+## 0.15.6
+Tue, 07 Sep 2021 18:57:29 GMT
+
+### Updates
+
+- add cors middleware
 
 ## 0.15.5
 Tue, 31 Aug 2021 22:43:18 GMT

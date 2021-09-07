@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-server",
   "entries": [
     {
+      "version": "0.15.6",
+      "tag": "@launchtray/hatch-server_v0.15.6",
+      "date": "Tue, 07 Sep 2021 18:57:29 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.15.5",
       "tag": "@launchtray/hatch-server_v0.15.5",
       "date": "Tue, 31 Aug 2021 22:43:18 GMT",

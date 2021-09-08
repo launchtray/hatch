@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-cdk",
   "entries": [
     {
+      "version": "0.15.7",
+      "tag": "@launchtray/hatch-cdk_v0.15.7",
+      "date": "Wed, 08 Sep 2021 15:36:03 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.15.6",
       "tag": "@launchtray/hatch-cdk_v0.15.6",
       "date": "Tue, 07 Sep 2021 18:57:29 GMT",

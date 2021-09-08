@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-server-middleware",
   "entries": [
     {
+      "version": "0.15.7",
+      "tag": "@launchtray/hatch-server-middleware_v0.15.7",
+      "date": "Wed, 08 Sep 2021 15:36:03 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "export cors middleware"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.15.6",
       "tag": "@launchtray/hatch-server-middleware_v0.15.6",
       "date": "Tue, 07 Sep 2021 18:57:29 GMT",

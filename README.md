@@ -148,7 +148,7 @@ necessary if you just want to use hatch.
     
 ## Release process
 
-1. Run `rush unlink && rush update --purge && rush rebuild` to ensure that everything is building as-is.
+1. Run `rush unlink && rush purge && rush install && rush rebuild` to ensure that everything is building as-is.
 1. Run `rush change` and answer all prompts to generate change files.
 1. Review the change files to ensure that they are accurate.
 1. Update `nextBump` in `common/config/rush/version-policies.json` to reflect the largest version bump size from the change files.
@@ -157,6 +157,6 @@ necessary if you just want to use hatch.
    - `rush version --bump`
 1. Review the locally generated version changes and changelog updates.
 1. If everything looks right, commit the changes to a release branch e.g. `release/0.10.0`
-1. Run `rush unlink && rush update --purge && rush rebuild && rush publish --include-all -b master -p` to publish to npm and merge to master.
+1. Run `rush unlink && rush purge && rush install && rush rebuild && rush publish --include-all -b master -p` to publish to npm and merge to master.
 1. Merge `master` back into `develop` to clear out change files from the latter.
 1. Update your local installation of `hatch-cli` and hatch an app to make use of your new features.

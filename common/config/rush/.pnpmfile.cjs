@@ -28,11 +28,12 @@ module.exports = {
  */
 function readPackage(packageJson, context) {
 
-  // // The karma types have a missing dependency on typings from the log4js package.
-  // if (packageJson.name === '@types/karma') {
-  //  context.log('Fixed up dependencies for @types/karma');
-  //  packageJson.dependencies['log4js'] = '0.6.38';
-  // }
+  const sharpVersion = packageJson.dependencies['sharp'];
+  const newSharpVersion = '0.28.0';
+  if (sharpVersion != null) {
+     context.log('Patching sharp from ' + sharpVersion + ' to ' + newSharpVersion);
+     packageJson.dependencies['sharp'] = newSharpVersion;
+  }
 
   return packageJson;
 }

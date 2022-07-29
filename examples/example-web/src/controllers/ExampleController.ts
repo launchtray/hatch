@@ -116,6 +116,7 @@ export default class ExampleController implements ServerMiddleware {
     requestBody: {
       description: 'Example request body',
       content: { // Note: the following below could be defined as a constant for reuse, etc.
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'application/json': {
           schema: {
             type: 'object',

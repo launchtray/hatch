@@ -18,6 +18,14 @@ module.exports = {
   }
 };
 
+function overridePackageVersion(packageJson, context, packageName, desiredVersion) {
+  const existingVersion = packageJson.dependencies[packageName];
+  if (existingVersion != null) {
+    const parent = packageJson.name;
+    context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
+    packageJson.dependencies[packageName] = desiredVersion;
+  }
+}
 /**
  * This hook is invoked during installation before a package's dependencies
  * are selected.
@@ -27,13 +35,7 @@ module.exports = {
  * The return value is the updated object.
  */
 function readPackage(packageJson, context) {
-
-  const sharpVersion = packageJson.dependencies['sharp'];
-  const newSharpVersion = '0.28.0';
-  if (sharpVersion != null) {
-     context.log('Patching sharp from ' + sharpVersion + ' to ' + newSharpVersion);
-     packageJson.dependencies['sharp'] = newSharpVersion;
-  }
-
+  overridePackageVersion(packageJson, context, 'sharp', '0.28.0');
+  overridePackageVersion(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
   return packageJson;
 }

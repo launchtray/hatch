@@ -50,8 +50,12 @@ export interface CreateServerOptions<T extends ServerComposition> {
 let runningServer: Server;
 let runningServerApp: Application;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const module: any;
+
 if (module.hot != null) {
-  module.hot.dispose((data) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  module.hot.dispose((data: any) => {
     /* eslint-disable no-param-reassign -- intentional mutation */
     data.runningServerApp = runningServerApp;
     data.runningServer = runningServer;

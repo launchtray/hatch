@@ -12,17 +12,24 @@ const patchWebpackConfig = (config, isServer, webpack) => {
     }
     config.node.fs = 'empty'; // Prevent winston from trying to load fs on the client.
   } else {
-    config.entry[config.entry.length - 1] = resolveApp('src/server');
+    config.entry.server[config.entry.server.length - 1] = resolveApp('src/server');
   }
 
   delete config.externals;
   config.resolve.alias['react-native'] = 'react-native-web';
   config.resolve.alias['react-native-svg'] = 'react-native-svg/lib/commonjs/ReactNativeSVG.web';
 
-  config.performance = {
-    maxAssetSize: 10000000,
-    maxEntrypointSize: 10000000,
-  };
+  if (isServer) {
+    config.performance = {
+      maxAssetSize: 100 * 1000 * 1000,
+      maxEntrypointSize: 100 * 1000 * 1000,
+    };
+  } else {
+    config.performance = {
+      maxAssetSize: 10 * 1000 * 1000,
+      maxEntrypointSize: 10 * 1000 * 1000,
+    };
+  }
 
   if (isServer) {
     config.optimization = {
@@ -32,6 +39,17 @@ const patchWebpackConfig = (config, isServer, webpack) => {
   }
 
   if (webpack) {
+    // Ignore warning about express being bundled
+    config.plugins.push(
+      new webpack.ContextReplacementPlugin(
+        /\/express\//,
+        (data) => {
+          delete data.dependencies[0].critical;
+          return data;
+        },
+      ),
+    );
+
     const definePluginIndex = config.plugins.findIndex(
       plugin => plugin instanceof webpack.DefinePlugin && plugin.definitions,
     );
@@ -104,19 +122,38 @@ module.exports = {
     {
       name: 'typescript',
       options: {
-        useEslint: true,
+        useBabel: false,
+        tsLoader: {
+          configFile: resolveApp('tsconfig.json'),
+          context: resolveApp('src'),
+        },
         forkTsChecker: {
-          tsconfig: resolveApp('tsconfig.json'),
-          tslint: undefined,
-          eslint: true,
-          watch: resolveApp('src'),
-          typeCheck: true,
+          eslint: {
+            files: ['**/*.ts*'],
+            memoryLimit: 2048,
+          },
+          typescript: {
+            configFile: resolveApp('tsconfig.json'),
+            context: resolveApp('src'),
+          },
         },
       },
     },
   ],
   patchWebpackConfig,
-  modify(config, {target, dev}, webpack) {
-    return patchWebpackConfig(config, target !== 'web', webpack);
+  modifyWebpackConfig({
+    env: {
+      target, // the target 'node' or 'web'
+      dev, // is this a development build? true or false
+    },
+    webpackConfig, // the created webpack config
+    webpackObject, // the imported webpack node module
+    options: {
+      razzleOptions, // the modified options passed to Razzle in the `options` key in `razzle.config.js` (options: { key: 'value'})
+      webpackOptions, // the modified options that was used to configure webpack/ webpack loaders and plugins
+    },
+    paths, // the modified paths that will be used by Razzle.
+  }) {
+    return patchWebpackConfig(webpackConfig, target !== 'web', webpackObject);
   },
 };

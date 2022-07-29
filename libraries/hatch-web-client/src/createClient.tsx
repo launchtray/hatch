@@ -2,6 +2,9 @@
 /* eslint-disable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
 const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
 if (staticAssetsBaseURL !== '/') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line no-undef -- global
   __webpack_public_path__ = staticAssetsBaseURL;
 }
 /* eslint-enable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */

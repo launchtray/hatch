@@ -59,6 +59,8 @@ module.exports = {
     'no-useless-constructor': 'off', // replaced by @typescript version
     '@typescript-eslint/no-useless-constructor': ['warn'],
     'import/extensions': 'off',
+    'import/no-import-module-exports': 'off',
+    'react/function-component-definition': 'off',
     'lines-between-class-members': ['warn', 'always', {
       exceptAfterSingleLine: true,
     }],

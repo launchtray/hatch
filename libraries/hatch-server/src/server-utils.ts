@@ -11,6 +11,8 @@ export const loadStaticAssetsMetadata = () => {
     assetsPrefix = (process.env.STATIC_ASSETS_BASE_URL ?? '').replace(/\/$/, '');
   }
   if (assetsPrefix !== '') {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     // eslint-disable-next-line no-undef -- global
     __webpack_public_path__ = `${assetsPrefix}/`;
   }

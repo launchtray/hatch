@@ -49,7 +49,7 @@
     "@types/source-map": "0.5.2",
     "ajv": "^6.9.1",
     "jest": "^26.4.2",
-    "superagent": "^5.1.1",
+    "superagent": "^8",
     "supertest": "^4.0.2",
     "ts-jest": "^26.3.0",
     "webpack": "4.46.0",

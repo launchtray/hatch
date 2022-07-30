@@ -26,6 +26,7 @@ specifiers:
   '@microsoft/rush': ^5.29.1
   '@microsoft/rush-lib': ^5.29.1
   '@openapitools/openapi-generator-cli': ^1.0.18-4.3.1
+  '@redux-devtools/extension': ^3
   '@redux-saga/core': ^1
   '@rush-temp/example-web': file:./projects/example-web.tgz
   '@rush-temp/hatch-cdk': file:./projects/hatch-cdk.tgz
@@ -165,7 +166,6 @@ specifiers:
   react-router: ^5
   react-router-dom: ^5
   redux: ^4
-  redux-devtools-extension: ^2
   redux-saga: ^1
   reflect-metadata: ^0.1.13
   regenerator-runtime: ^0.13.3
@@ -174,10 +174,10 @@ specifiers:
   rimraf: 3.0.0
   selenium-webdriver: ^4.0.0-alpha.5
   serialize-javascript: ^2.1.0
-  sharp: 0.28.0
+  sharp: ^0.26.1
   sockjs-client: ^1.4.0
   source-map-support: ^0.5.16
-  superagent: ^5.1.1
+  superagent: ^8
   supertest: ^4.0.2
   supports-color: ^7.2.0
   swagger-ui: 3.25.0
@@ -222,6 +222,7 @@ dependencies:
   '@microsoft/rush': 5.75.0_supports-color@7.2.0
   '@microsoft/rush-lib': 5.75.0_supports-color@7.2.0
   '@openapitools/openapi-generator-cli': 1.0.18-5.0.0-beta2
+  '@redux-devtools/extension': 3.2.2_redux@4.2.0
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-web': file:projects/example-web.tgz_ts-node@9.1.1
   '@rush-temp/hatch-cdk': file:projects/hatch-cdk.tgz_jest@26.6.3+supports-color@7.2.0
@@ -314,7 +315,7 @@ dependencies:
   eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
   eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
   eslint-plugin-import: 2.26.0_eslint@8.20.0
-  eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+  eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
   eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
   eslint-plugin-react: 7.30.1_eslint@8.20.0
   eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -361,7 +362,6 @@ dependencies:
   react-router: 5.3.3_react@16.14.0
   react-router-dom: 5.3.3_react@16.14.0
   redux: 4.2.0
-  redux-devtools-extension: 2.13.9_redux@4.2.0
   redux-saga: 1.1.3
   reflect-metadata: 0.1.13
   regenerator-runtime: 0.13.9
@@ -370,10 +370,10 @@ dependencies:
   rimraf: 3.0.0
   selenium-webdriver: 4.3.1_d6955b83f926115bf12ffeabab6deaae
   serialize-javascript: 2.1.2
-  sharp: 0.28.0
+  sharp: 0.26.3
   sockjs-client: 1.6.1
   source-map-support: 0.5.21
-  superagent: 5.3.1_supports-color@7.2.0
+  superagent: 8.0.0_supports-color@7.2.0
   supertest: 4.0.2
   supports-color: 7.2.0
   swagger-ui: 3.25.0
@@ -408,7 +408,7 @@ packages:
     dependencies:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-apigateway/1.73.0:
@@ -427,7 +427,7 @@ packages:
       '@aws-cdk/aws-s3-assets': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-apigatewayv2/1.73.0_@aws-cdk+assets@1.73.0:
@@ -439,7 +439,7 @@ packages:
       '@aws-cdk/aws-ec2': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -452,7 +452,7 @@ packages:
       '@aws-cdk/aws-cloudwatch': 1.73.0
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-autoscaling-common/1.73.0:
@@ -461,7 +461,7 @@ packages:
     dependencies:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-autoscaling-hooktargets/1.73.0_@aws-cdk+assets@1.73.0:
@@ -476,7 +476,7 @@ packages:
       '@aws-cdk/aws-sns-subscriptions': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -493,7 +493,7 @@ packages:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -507,7 +507,7 @@ packages:
       '@aws-cdk/aws-ecs': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -520,7 +520,7 @@ packages:
       '@aws-cdk/aws-lambda': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-route53': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -535,7 +535,7 @@ packages:
       '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -548,7 +548,7 @@ packages:
       '@aws-cdk/aws-elasticloadbalancingv2': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -563,7 +563,7 @@ packages:
       '@aws-cdk/aws-lambda': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -574,7 +574,7 @@ packages:
     dependencies:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-codebuild/1.73.0:
@@ -595,7 +595,7 @@ packages:
       '@aws-cdk/aws-secretsmanager': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-codecommit/1.73.0:
@@ -605,7 +605,7 @@ packages:
       '@aws-cdk/aws-events': 1.73.0
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-codeguruprofiler/1.73.0:
@@ -614,7 +614,7 @@ packages:
     dependencies:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-codepipeline/1.73.0:
@@ -626,7 +626,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-cognito/1.73.0_@aws-cdk+assets@1.73.0:
@@ -638,7 +638,7 @@ packages:
       '@aws-cdk/aws-lambda': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/custom-resources': 1.73.0_@aws-cdk+assets@1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -663,7 +663,7 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-ecr-assets/1.73.0:
@@ -677,7 +677,7 @@ packages:
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
     bundledDependencies:
       - minimatch
@@ -690,7 +690,7 @@ packages:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/custom-resources': 1.73.0_@aws-cdk+assets@1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -712,7 +712,7 @@ packages:
       '@aws-cdk/aws-servicediscovery': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -744,7 +744,7 @@ packages:
       '@aws-cdk/aws-ssm': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -758,7 +758,7 @@ packages:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -769,7 +769,7 @@ packages:
     dependencies:
       '@aws-cdk/aws-ec2': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -788,7 +788,7 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -812,7 +812,7 @@ packages:
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/aws-stepfunctions': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -823,7 +823,7 @@ packages:
     dependencies:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-iam/1.73.0:
@@ -832,7 +832,7 @@ packages:
     dependencies:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-kinesis/1.73.0:
@@ -843,7 +843,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0
       '@aws-cdk/aws-logs': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-kinesisfirehose/1.73.0:
@@ -851,7 +851,7 @@ packages:
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     dependencies:
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-kms/1.73.0:
@@ -860,7 +860,7 @@ packages:
     dependencies:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-lambda/1.73.0_@aws-cdk+assets@1.73.0:
@@ -880,7 +880,7 @@ packages:
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -893,7 +893,7 @@ packages:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/aws-s3-assets': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-route53-targets/1.73.0_@aws-cdk+assets@1.73.0:
@@ -912,7 +912,7 @@ packages:
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -925,7 +925,7 @@ packages:
       '@aws-cdk/aws-logs': 1.73.0
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -940,7 +940,7 @@ packages:
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-s3-deployment/1.73.0_@aws-cdk+assets@1.73.0:
@@ -953,7 +953,7 @@ packages:
       '@aws-cdk/aws-s3': 1.73.0
       '@aws-cdk/aws-s3-assets': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -966,7 +966,7 @@ packages:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/aws-kms': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-sam/1.73.0:
@@ -974,7 +974,7 @@ packages:
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     dependencies:
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-secretsmanager/1.73.0_@aws-cdk+assets@1.73.0:
@@ -987,7 +987,7 @@ packages:
       '@aws-cdk/aws-lambda': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-sam': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -1000,7 +1000,7 @@ packages:
       '@aws-cdk/aws-elasticloadbalancingv2': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/aws-route53': 1.73.0_@aws-cdk+assets@1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -1014,7 +1014,7 @@ packages:
       '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -1029,7 +1029,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-sqs/1.73.0:
@@ -1040,7 +1040,7 @@ packages:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/aws-kms': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-ssm/1.73.0:
@@ -1051,7 +1051,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/aws-stepfunctions/1.73.0:
@@ -1063,7 +1063,7 @@ packages:
       '@aws-cdk/aws-iam': 1.73.0
       '@aws-cdk/aws-logs': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
 
   /@aws-cdk/cfnspec/1.73.0:
@@ -1099,7 +1099,7 @@ packages:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       '@aws-cdk/region-info': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     dev: false
     bundledDependencies:
       - fs-extra
@@ -1117,7 +1117,7 @@ packages:
       '@aws-cdk/aws-logs': 1.73.0
       '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/core': 1.73.0
-      constructs: 3.4.53
+      constructs: 3.4.54
     transitivePeerDependencies:
       - '@aws-cdk/assets'
     dev: false
@@ -3404,6 +3404,15 @@ packages:
       unicode-trie: 0.3.1
     dev: false
 
+  /@redux-devtools/extension/3.2.2_redux@4.2.0:
+    resolution: {integrity: sha512-fKA2TWNzJF7wXSDwBemwcagBFudaejXCzH5hRszN3Z6B7XEJtEmGD77AjV0wliZpIZjA/fs3U7CejFMQ+ipS7A==}
+    peerDependencies:
+      redux: ^3.1.0 || ^4.0.0
+    dependencies:
+      '@babel/runtime': 7.18.9
+      redux: 4.2.0
+    dev: false
+
   /@redux-saga/core/1.1.3:
     resolution: {integrity: sha512-8tInBftak8TPzE6X13ABmEtRJGjtK17w7VUs7qV17S8hCO5S3+aUTWZ/DBsBJPdE8Z5jOPwYALyvofgq1Ws+kg==}
     dependencies:
@@ -5331,6 +5340,10 @@ packages:
     resolution: {integrity: sha512-hNfzcOV8W4NdualtqBFPyVO+54DSJuZGY9qT4pRroB6S9e3iiido2ISIC5h9R2sPJ8H3FHCIiEnsv1lPXO3KtQ==}
     dev: false
 
+  /array-flatten/3.0.0:
+    resolution: {integrity: sha512-zPMVc3ZYlGLNk4mpK1NzP2wg0ml9t7fUgDsayR5Y5rSzxQilzR9FGu/EH2jQOcKSAeAfWeylyW8juy3OkWRvNA==}
+    dev: false
+
   /array-includes/3.1.5:
     resolution: {integrity: sha512-iSDYZMMyTPkiFasVqfuAQnWAYcvO/SeBSCGKePoEthjp4LEMTe4uLc7b025o4jAZpHhihh8xPo99TNWUWWkGDQ==}
     engines: {node: '>= 0.4'}
@@ -7079,8 +7092,8 @@ packages:
     resolution: {integrity: sha512-xFxOwqIzR/e1k1gLiWEophSCMqXcwVHIH7akf7b/vxcUeGunlj3hvZaaqxwHsTgn+IndtkQJgSztIDWeumWJDQ==}
     dev: false
 
-  /constructs/3.4.53:
-    resolution: {integrity: sha512-IAJFLeNWVBgGmX3dkJ5GeJB6ZuVAw+Eutq9ZpujuyynbH/9AjW4P9vgtQFNB9SIKTn2gjFooNqPLwD0t9ZaBBg==}
+  /constructs/3.4.54:
+    resolution: {integrity: sha512-KzwmO+3lcM8J1DGWfH/2FTSG23Tz9w+QnIn8wnU53q/8XLrs84QkptzmO2M1soTndknDyb3ofCHYtDz2IlHy8Q==}
     engines: {node: '>= 14.17.0'}
     dev: false
 
@@ -7708,6 +7721,13 @@ packages:
       mimic-response: 2.1.0
     dev: false
 
+  /decompress-response/6.0.0:
+    resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      mimic-response: 3.1.0
+    dev: false
+
   /deep-assign/3.0.0:
     resolution: {integrity: sha512-YX2i9XjJ7h5q/aQ/IM9PEwEnDqETAIYbggmdDB3HLTlSgo1CxPsj6pvhPG68rq6SVE0+p+6Ywsm5fTYNrYtBWw==}
     engines: {node: '>=0.10.0'}
@@ -7892,6 +7912,13 @@ packages:
     dependencies:
       address: 1.2.0
       debug: 2.6.9
+    dev: false
+
+  /dezalgo/1.0.3:
+    resolution: {integrity: sha512-K7i4zNfT2kgQz3GylDw40ot9GAE47sFZ9EXHFSPP6zONLgH6kWXE0KWJchkbQJLBkRazq4APwZ4OwiFFlT95OQ==}
+    dependencies:
+      asap: 2.0.6
+      wrappy: 1.0.2
     dev: false
 
   /dezalgo/1.0.4:
@@ -8502,8 +8529,8 @@ packages:
       tsconfig-paths: 3.14.1
     dev: false
 
-  /eslint-plugin-jest/26.6.0_3e54b7351e4d21de97a9519543f796b4:
-    resolution: {integrity: sha512-f8n46/97ZFdU4KqeQYqO8AEVGIhHWvkpgNBWHH3jrM28/y8llnbf3IjfIKv6p2pZIMinK1PCqbbROxs9Eud02Q==}
+  /eslint-plugin-jest/26.7.0_3e54b7351e4d21de97a9519543f796b4:
+    resolution: {integrity: sha512-/YNitdfG3o3cC6juZziAdkk6nfJt01jXVfj4AgaYVLs7bupHzRDL5K+eipdzhDXtQsiqaX1TzfwSuRlEgeln1A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5.0.0
@@ -9416,6 +9443,15 @@ packages:
       mime-types: 2.1.35
     dev: false
 
+  /form-data/4.0.0:
+    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
+    engines: {node: '>= 6'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+    dev: false
+
   /format/0.2.2:
     resolution: {integrity: sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==}
     engines: {node: '>=0.4.x'}
@@ -9432,6 +9468,15 @@ packages:
   /formidable/1.2.6:
     resolution: {integrity: sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==}
     deprecated: 'Please upgrade to latest, formidable@v2 or formidable@v3! Check these notes: https://bit.ly/2ZEqIau'
+    dev: false
+
+  /formidable/2.0.1:
+    resolution: {integrity: sha512-rjTMNbp2BpfQShhFbR3Ruk3qk2y9jKpvMW78nJgx8QKtxjDVrwbZG+wvDOmVbifHyOUOQJXxqEy6r0faRrPzTQ==}
+    dependencies:
+      dezalgo: 1.0.3
+      hexoid: 1.0.0
+      once: 1.4.0
+      qs: 6.9.3
     dev: false
 
   /forwarded/0.2.0:
@@ -10150,6 +10195,11 @@ packages:
 
   /hex-color-regex/1.1.0:
     resolution: {integrity: sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==}
+    dev: false
+
+  /hexoid/1.0.0:
+    resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
+    engines: {node: '>=8'}
     dev: false
 
   /highlight.js/9.13.1:
@@ -12590,6 +12640,11 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /mimic-response/3.1.0:
+    resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
+    engines: {node: '>=10'}
+    dev: false
+
   /min-document/2.19.0:
     resolution: {integrity: sha512-9Wy1B3m3f66bPPmU5hdA4DR4PB2OfDU/+GS3yAB7IQozE3tqXaVv2zOjgla7MEGSRv95+ILmOuvhLkOK6wJtCQ==}
     dependencies:
@@ -14612,6 +14667,11 @@ packages:
       side-channel: 1.0.4
     dev: false
 
+  /qs/6.9.3:
+    resolution: {integrity: sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==}
+    engines: {node: '>=0.6'}
+    dev: false
+
   /query-string/4.3.4:
     resolution: {integrity: sha512-O2XLNDBIg1DnTOa+2XrIwSiXEV8h2KImXUnjhhn2+UsvZ+Es2uyd5CCRTNQlDGbzUQOW3aYCBx9rVA6dzsiY7Q==}
     engines: {node: '>=0.10.0'}
@@ -15499,15 +15559,6 @@ packages:
       minimatch: 3.0.4
     dev: false
 
-  /redux-devtools-extension/2.13.9_redux@4.2.0:
-    resolution: {integrity: sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==}
-    deprecated: Package moved to @redux-devtools/extension.
-    peerDependencies:
-      redux: ^3.1.0 || ^4.0.0
-    dependencies:
-      redux: 4.2.0
-    dev: false
-
   /redux-immutable/3.1.0:
     resolution: {integrity: sha512-1W+0w6jKurzRnLLpYXRSOgaBTDpJthbnFJkkRei7598uNkiRYn5BZZ4QcGDX2I5Sin8L7W3hOHzQ9ne0oO8y8A==}
     dependencies:
@@ -16167,17 +16218,19 @@ packages:
     resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
     dev: false
 
-  /sharp/0.28.0:
-    resolution: {integrity: sha512-kGTaWLNMCkLYxkH2Pv7s+5LQBnWQ4mRKXs1XD19AWOxShWvU8b78qaWqTR/4ryNcPORO+qBoBnFF/Lzda5HgkQ==}
+  /sharp/0.26.3:
+    resolution: {integrity: sha512-NdEJ9S6AMr8Px0zgtFo1TJjMK/ROMU92MkDtYn2BBrDjIx3YfH9TUyGdzPC+I/L619GeYQc690Vbaxc5FPCCWg==}
     engines: {node: '>=10'}
     requiresBuild: true
     dependencies:
+      array-flatten: 3.0.0
       color: 3.2.1
       detect-libc: 1.0.3
       node-addon-api: 3.2.1
+      npmlog: 4.1.2
       prebuild-install: 6.1.4
       semver: 7.3.7
-      simple-get: 3.1.1
+      simple-get: 4.0.1
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
     dev: false
@@ -16245,6 +16298,14 @@ packages:
     resolution: {integrity: sha512-CQ5LTKGfCpvE1K0n2us+kuMPbk/q0EKl82s4aheV9oXjFEz6W/Y7oQFVJuU6QG77hRT4Ghb5RURteF5vnWjupA==}
     dependencies:
       decompress-response: 4.2.1
+      once: 1.4.0
+      simple-concat: 1.0.1
+    dev: false
+
+  /simple-get/4.0.1:
+    resolution: {integrity: sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==}
+    dependencies:
+      decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
     dev: false
@@ -16879,17 +16940,16 @@ packages:
       readable-stream: 2.3.7
     dev: false
 
-  /superagent/5.3.1_supports-color@7.2.0:
-    resolution: {integrity: sha512-wjJ/MoTid2/RuGCOFtlacyGNxN9QLMgcpYLDQlWFIhhdJ93kNscFonGvrpAHSCVjRVj++DGCglocF7Aej1KHvQ==}
-    engines: {node: '>= 7.0.0'}
-    deprecated: Please upgrade to v7.0.2+ of superagent.  We have fixed numerous issues with streams, form-data, attach(), filesystem errors not bubbling up (ENOENT on attach()), and all tests are now passing.  See the releases tab for more information at <https://github.com/visionmedia/superagent/releases>.
+  /superagent/8.0.0_supports-color@7.2.0:
+    resolution: {integrity: sha512-iudipXEel+SzlP9y29UBWGDjB+Zzag+eeA1iLosaR2YHBRr1Q1kC29iBrF2zIVD9fqVbpZnXkN/VJmwFMVyNWg==}
+    engines: {node: '>=6.4.0 <13 || >=14'}
     dependencies:
       component-emitter: 1.3.0
       cookiejar: 2.1.3
       debug: 4.3.4_supports-color@7.2.0
       fast-safe-stringify: 2.1.1
-      form-data: 3.0.1
-      formidable: 1.2.6
+      form-data: 4.0.0
+      formidable: 2.0.1
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.11.0
@@ -18685,7 +18745,7 @@ packages:
     dev: false
 
   file:projects/example-web.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-uChcrvtHZSCEMMWVqyqUlgh4rTWRB0tfhzCjLZDd9nb4PF5xiYCzNWJIcAAUKrupsDXlQ0ZW2sNwvR3Sdz1BoA==, tarball: file:projects/example-web.tgz}
+    resolution: {integrity: sha512-5zleriA4mLLXQaVAsbWOag1vopd/+F3jREXaBSF3nonq2UcB2Vrvtt2jo3UliIhQ5nJQ4Nk7lvmGvwG+KeIQFw==, tarball: file:projects/example-web.tgz}
     id: file:projects/example-web.tgz
     name: '@rush-temp/example-web'
     version: 0.0.0
@@ -18693,6 +18753,7 @@ packages:
       '@babel/core': 7.18.9_supports-color@7.2.0
       '@babel/runtime': 7.18.9
       '@launchtray/tsyringe-async': 4.3.2
+      '@redux-devtools/extension': 3.2.2_redux@4.2.0
       '@redux-saga/core': 1.1.3
       '@sentry/browser': 5.30.0
       '@sentry/node': 5.30.0_supports-color@7.2.0
@@ -18724,7 +18785,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -18752,13 +18813,12 @@ packages:
       react-router: 5.3.3_react@16.14.0
       react-router-dom: 5.3.3_react@16.14.0
       redux: 4.2.0
-      redux-devtools-extension: 2.13.9_redux@4.2.0
       redux-saga: 1.1.3
       regenerator-runtime: 0.13.9
       resolve: 1.22.1
       rimraf: 3.0.0
       sockjs-client: 1.6.1
-      superagent: 5.3.1_supports-color@7.2.0
+      superagent: 8.0.0_supports-color@7.2.0
       supertest: 4.0.2
       supports-color: 7.2.0
       swagger-ui-react: 3.25.0_react-dom@16.14.0+react@16.14.0
@@ -18816,7 +18876,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       rimraf: 3.0.0
       source-map-support: 0.5.21
       ts-node: 9.1.1_typescript@4.7.4
@@ -18849,7 +18909,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       fs-extra: 8.1.0
       inquirer: 7.3.3
       ora: 4.1.1
@@ -18879,7 +18939,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       fs-extra: 8.1.0
       rimraf: 3.0.0
       tmp: 0.2.1
@@ -18900,7 +18960,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
     transitivePeerDependencies:
       - jest
       - supports-color
@@ -18920,7 +18980,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       i18next: 19.9.2
       i18next-react-postprocessor: 3.1.0_i18next@19.9.2+react@16.14.0
       luxon: 1.28.0
@@ -18947,7 +19007,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       grunt: 1.5.3
       jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
       mockserver-client: 5.13.2
@@ -19006,7 +19066,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
       rimraf: 3.0.0
       ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
@@ -19033,7 +19093,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
       rimraf: 3.0.0
       ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
@@ -19067,7 +19127,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       express: 4.18.1
       express-winston: 4.2.0_winston@3.8.1
       http-errors: 1.8.0
@@ -19097,7 +19157,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -19130,7 +19190,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       http-status-codes: 2.1.4
       jsonwebtoken: 8.5.1
       jwk-to-pem: 2.0.5
@@ -19163,7 +19223,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       express: 4.18.1
       http-status-codes: 2.1.4
       rimraf: 3.0.0
@@ -19191,7 +19251,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       rimraf: 3.0.0
       typescript: 4.7.4
     transitivePeerDependencies:
@@ -19213,7 +19273,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
       rimraf: 3.0.0
       ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
@@ -19227,7 +19287,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-microservice.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-X+FUCB+6+FGw6gvNQ9M9FvbQV/IsMTuY5eDxCAKD7vR+7Tx/fVsrAxzNdb2Pds3Dw4aQbQ5V5t8pBD0h9Y9edA==, tarball: file:projects/hatch-template-microservice.tgz}
+    resolution: {integrity: sha512-60u56nDUCSG6ceiBZC64H2iFbasi4U93N1P78Al+t+HFYheGYgItIi9Id7+NDYyFvfABiezlIYD0goH4g/WqLg==, tarball: file:projects/hatch-template-microservice.tgz}
     id: file:projects/hatch-template-microservice.tgz
     name: '@rush-temp/hatch-template-microservice'
     version: 0.0.0
@@ -19255,7 +19315,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       express: 4.18.1
       html-webpack-plugin: 4.5.2_webpack@4.46.0
       invariant: 2.2.4
@@ -19270,7 +19330,7 @@ packages:
       resolve: 1.22.1
       rimraf: 3.0.0
       sockjs-client: 1.6.1
-      superagent: 5.3.1_supports-color@7.2.0
+      superagent: 8.0.0_supports-color@7.2.0
       supertest: 4.0.2
       supports-color: 7.2.0
       swagger-ui: 3.25.0
@@ -19296,7 +19356,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-webapp.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-bogUj1l3L2tF7rjBzXCpf+grTwKOA1LP/6/5ZCIqIASy7+yKeolJOnG1oprvKO48OlTtXcW2foPRiamVsSurHA==, tarball: file:projects/hatch-template-webapp.tgz}
+    resolution: {integrity: sha512-CtQoTZZsZ8GjZEJEMaaZmc4BYp5OG9BHvwWuXBgyGL/n6XDLXyEgSgzqyHGTCEAYiVSTCd6mYKHlhYF5vnET5w==, tarball: file:projects/hatch-template-webapp.tgz}
     id: file:projects/hatch-template-webapp.tgz
     name: '@rush-temp/hatch-template-webapp'
     version: 0.0.0
@@ -19304,6 +19364,7 @@ packages:
       '@babel/core': 7.18.9_supports-color@7.2.0
       '@babel/runtime': 7.18.9
       '@launchtray/tsyringe-async': 4.3.2
+      '@redux-devtools/extension': 3.2.2_redux@4.2.0
       '@redux-saga/core': 1.1.3
       '@sentry/browser': 5.30.0
       '@sentry/node': 5.30.0_supports-color@7.2.0
@@ -19341,7 +19402,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -19369,14 +19430,13 @@ packages:
       react-router: 5.3.3_react@16.14.0
       react-router-dom: 5.3.3_react@16.14.0
       redux: 4.2.0
-      redux-devtools-extension: 2.13.9_redux@4.2.0
       redux-saga: 1.1.3
       regenerator-runtime: 0.13.9
       resolve: 1.22.1
       rimraf: 3.0.0
       selenium-webdriver: 4.3.1_d6955b83f926115bf12ffeabab6deaae
       sockjs-client: 1.6.1
-      superagent: 5.3.1_supports-color@7.2.0
+      superagent: 8.0.0_supports-color@7.2.0
       supertest: 4.0.2
       supports-color: 7.2.0
       swagger-ui-react: 3.25.0_react-dom@16.14.0+react@16.14.0
@@ -19422,14 +19482,14 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
       node-fetch: 2.6.7
       pdf-image: 2.0.0
       pixelmatch: 5.3.0
       pngjs: 4.0.1
       rimraf: 3.0.0
-      sharp: 0.28.0
+      sharp: 0.26.3
       tmp: 0.2.1
       ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
       typescript: 4.7.4
@@ -19454,7 +19514,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       rimraf: 3.0.0
       selenium-webdriver: 4.3.1_d6955b83f926115bf12ffeabab6deaae
       typescript: 4.7.4
@@ -19476,7 +19536,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       rimraf: 3.0.0
       typescript: 4.7.4
     transitivePeerDependencies:
@@ -19498,7 +19558,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       rimraf: 3.0.0
       typescript: 4.7.4
     transitivePeerDependencies:
@@ -19521,7 +19581,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       reflect-metadata: 0.1.13
       rimraf: 3.0.0
       typescript: 4.7.4
@@ -19531,12 +19591,13 @@ packages:
     dev: false
 
   file:projects/hatch-web-client.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-VsoW9xedtkfJzQhPiKSs4fHl4N6vXnmbYDMNWfe6zk96ep5/MAZAqL/k+QvzoeAV2OMf+Ag/OKYCIz6WAE2kxw==, tarball: file:projects/hatch-web-client.tgz}
+    resolution: {integrity: sha512-HdaclxyrPOOcGyB2oqibPxRpnn6P3QedbVnR6aG3aHhCfHx+8zO9LgA7JNULSUrOkvXcPkUPmcuNH9NC8ONiZQ==, tarball: file:projects/hatch-web-client.tgz}
     id: file:projects/hatch-web-client.tgz
     name: '@rush-temp/hatch-web-client'
     version: 0.0.0
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
+      '@redux-devtools/extension': 3.2.2_redux@4.2.0
       '@redux-saga/core': 1.1.3
       '@sentry/browser': 5.30.0
       '@sentry/types': 5.30.0
@@ -19555,7 +19616,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -19569,7 +19630,6 @@ packages:
       react-router: 5.3.3_react@16.14.0
       react-router-dom: 5.3.3_react@16.14.0
       redux: 4.2.0
-      redux-devtools-extension: 2.13.9_redux@4.2.0
       redux-saga: 1.1.3
       rimraf: 3.0.0
       swagger-ui-react: 3.25.0_react-dom@16.14.0+react@16.14.0
@@ -19593,7 +19653,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -19619,7 +19679,7 @@ packages:
       eslint: 8.20.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       react-router: 5.3.3_react@16.14.0
       react-router-dom: 5.3.3_react@16.14.0
       redux: 4.2.0
@@ -19656,7 +19716,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0
@@ -19705,7 +19765,7 @@ packages:
       eslint-config-airbnb: 19.0.4_74f8d9be39cb27136c767247a6055351
       eslint-config-airbnb-base: 15.0.0_0157baa8edf6c20407205f3a831c9174
       eslint-plugin-import: 2.26.0_eslint@8.20.0
-      eslint-plugin-jest: 26.6.0_3e54b7351e4d21de97a9519543f796b4
+      eslint-plugin-jest: 26.7.0_3e54b7351e4d21de97a9519543f796b4
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.20.0
       eslint-plugin-react: 7.30.1_eslint@8.20.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.20.0

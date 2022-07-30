@@ -35,7 +35,6 @@ function overridePackageVersion(packageJson, context, packageName, desiredVersio
  * The return value is the updated object.
  */
 function readPackage(packageJson, context) {
-  overridePackageVersion(packageJson, context, 'sharp', '0.28.0');
   overridePackageVersion(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
   return packageJson;
 }

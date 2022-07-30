@@ -59,10 +59,16 @@ export interface CreateClientOptions {
   injectionOptions?: InjectionInitializationContext;
 }
 
+const getServerState = () => {
+  // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
+  return (window as any).__PRELOADED_STATE__;
+};
+
 // eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
 const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
   return (
-    <StoreProvider store={reduxStore}>
+    // eslint-disable-next-line no-undef
+    <StoreProvider store={reduxStore} serverState={getServerState()}>
       <NavProvider>
         <HelmetProvider>
           <Switch>
@@ -166,8 +172,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions as any});
       middleware = composeEnhancers(middleware);
     }
-    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
-    store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);
+    store = createStore(composition.createRootReducer(), getServerState(), middleware);
   } else {
     store.replaceReducer(composition.createRootReducer());
   }

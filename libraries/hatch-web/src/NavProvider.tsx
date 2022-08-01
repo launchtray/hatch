@@ -45,7 +45,7 @@ interface NavActionDef<P> {
   convertArgs(payload: P): any[];
 }
 
-const defineNavAction = <P extends unknown>({type, actionCreator, convertArgs}: NavActionDef<P>) => {
+const defineNavAction = <P, >({type, actionCreator, convertArgs}: NavActionDef<P>) => {
   const wrapperActionCreator: ActionDefinition<P> = (args: P) => {
     return actionCreator(...convertArgs(args));
   };
@@ -167,11 +167,12 @@ export const selectIsPortrait = (state: {mediaQueryMatches: {[key: string]: bool
 export const createNavReducers = () => {
   return {
     // Note: server-side rendering assumes non-mobile
-    mediaQueryMatches: (state = {mobile: false, portrait: false}, action: AnyAction) => {
+    mediaQueryMatches: (state: {mobile: boolean, portrait: boolean}, action: AnyAction) => {
+      const mediaState = state ?? {mobile: false, portrait: false};
       if (isActionType(navActions.mediaChange, action)) {
-        return {...state, ...action.payload.mediaQueryMatches};
+        return {...mediaState, ...action.payload.mediaQueryMatches};
       }
-      return state;
+      return mediaState;
     },
     router: connectRouter(browserHistory),
   };

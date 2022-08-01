@@ -151,10 +151,13 @@ necessary if you just want to use hatch.
 1. Run `rush unlink && rush purge && rush install && rush rebuild` to ensure that everything is building as-is.
 1. Run `rush change` and answer all prompts to generate change files.
 1. Review the change files to ensure that they are accurate.
-1. Update `nextBump` in `common/config/rush/version-policies.json` to reflect the largest version bump size from the change files.
 1. Commit the change files to your pull request.
 1. Once all pull requests for a release are merged, run the following:
-   - `rush version --bump`
+   - For an (e.g.) alpha release, either:
+      - To bump patch: `rush version --bump --override-bump prerelease --override-prerelease-id alpha`, or
+      - To bump minor: `rush version --bump --override-bump preminor --override-prerelease-id alpha`, or
+      - To bump major (substituting X): `rush version --ensure-version-policy --version-policy hatchVersionPolicy --override-version X.0.0-alpha.0` 
+   - For a non-prerelease release: `rush version --bump --override-bump [major/minor/patch]`
 1. Review the locally generated version changes and changelog updates.
 1. If everything looks right, commit the changes to a release branch e.g. `release/0.10.0`
 1. Run `rush unlink && rush purge && rush install && rush rebuild && rush publish --include-all -b master -p` to publish to npm and merge to master.

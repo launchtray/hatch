@@ -91,6 +91,6 @@
     "definitionName": "lockStepVersion",
     "policyName": "hatchVersionPolicy",
     "version": "0.15.7",
-    "nextBump": "patch"
+    "nextBump": "prerelease"
   }
 ]

@@ -20,7 +20,7 @@ import {
 import crypto from 'crypto';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import {HelmetData, HelmetProvider} from 'react-helmet-async';
+import {HelmetServerState, HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
@@ -81,7 +81,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 
   // eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
   const App = composition.appComponent;
-  const helmetContext = {} as unknown as {helmet: HelmetData};
+  const helmetContext = {} as unknown as {helmet: HelmetServerState};
 
   if (requestContext.stateOnly) {
     // 'unsafe' option relies on response being 'application/json' and not html

@@ -17,6 +17,7 @@ module.exports = {
   rules: {
     ...baseConfig.rules,
     'react/prop-types': 'error',
+    'react/require-default-props': 'off', // Replaced by TypeScript static type checking
     'jsx-quotes': 'off', // Replaced by react/jsx-no-literals
     'react/jsx-no-literals': ['error', {
       noStrings: false,

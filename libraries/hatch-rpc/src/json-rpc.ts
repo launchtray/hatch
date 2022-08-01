@@ -70,8 +70,8 @@ type PromiseCallbacks = {resolve: (value: unknown) => void, reject: (reason?: un
 export class JsonRpcBus implements RpcServer, RpcClient {
   public readonly serviceName: string;
   public readonly supportsBuffer: boolean;
-  private incomingRequestHandlers: Map<string, RpcRequestHandler>
-  private incomingNotificationHandlers: Map<string, Array<RpcNotificationHandler>>
+  private incomingRequestHandlers: Map<string, RpcRequestHandler>;
+  private incomingNotificationHandlers: Map<string, Array<RpcNotificationHandler>>;
   private transport: RpcTransport;
   private readonly pendingOutgoingRequests: Map<JsonRpcRequestId, {promiseCallbacks: PromiseCallbacks, method: string}>;
   private nextId: number;

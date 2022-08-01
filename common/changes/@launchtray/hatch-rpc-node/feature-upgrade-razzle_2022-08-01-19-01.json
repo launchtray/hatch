@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-rpc-node",
+      "comment": "Upgrade Razzle, TypeScript, and deprecated dependencies",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-rpc-node",
+  "email": "kiltyj@gmail.com"
+}

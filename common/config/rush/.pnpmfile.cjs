@@ -18,6 +18,14 @@ module.exports = {
   }
 };
 
+function overridePackageVersion(packageJson, context, packageName, desiredVersion) {
+  const existingVersion = packageJson.dependencies[packageName];
+  if (existingVersion != null) {
+    const parent = packageJson.name;
+    context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
+    packageJson.dependencies[packageName] = desiredVersion;
+  }
+}
 /**
  * This hook is invoked during installation before a package's dependencies
  * are selected.
@@ -27,12 +35,6 @@ module.exports = {
  * The return value is the updated object.
  */
 function readPackage(packageJson, context) {
-
-  // // The karma types have a missing dependency on typings from the log4js package.
-  // if (packageJson.name === '@types/karma') {
-  //  context.log('Fixed up dependencies for @types/karma');
-  //  packageJson.dependencies['log4js'] = '0.6.38';
-  // }
-
+  overridePackageVersion(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
   return packageJson;
 }

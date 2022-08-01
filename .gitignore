@@ -100,3 +100,4 @@ coverage
 
 **/.tmp/
 $PRODUCT_WORKSPACE_FILE$
+cache

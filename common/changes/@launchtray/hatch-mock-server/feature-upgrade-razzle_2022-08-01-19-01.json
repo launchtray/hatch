@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-mock-server",
+      "comment": "Upgrade Razzle, TypeScript, and deprecated dependencies",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-mock-server",
+  "email": "kiltyj@gmail.com"
+}

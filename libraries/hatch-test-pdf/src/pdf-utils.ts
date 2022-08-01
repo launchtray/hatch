@@ -151,10 +151,11 @@ export class PDF {
 
   public async matchesAsset(options: TestIDComparisonOptions): Promise<boolean> {
     await this.requirePDF(this.pdfUrl);
-    if (this.pdfTestMetadata?.[options.testID] == null) {
+    const testMetadata = this.pdfTestMetadata?.[options.testID];
+    if (testMetadata == null) {
       throw new Error(`Test ID was not found in PDF: ${options.testID}`);
     }
-    const {pageNumber, layout} = this.pdfTestMetadata?.[options.testID];
+    const {pageNumber, layout} = testMetadata;
     return this.frameMatchesAsset({
       frame: layout,
       page: pageNumber - 1,

@@ -22,12 +22,13 @@ class ReducerDefinitionImpl<S> implements ReducerDefinition<S> {
   constructor(private readonly initialState: S) {
     this.initialState = initialState;
     this.handlers = {};
-    const rootReducer = (state = this.initialState, action: AnyAction): S => {
+    const rootReducer = (state: S | undefined, action: AnyAction): S => {
+      const rootState = state ?? this.initialState;
       const handler = this.handlers[action.type];
       if (handler != null) {
-        return handler(state, action);
+        return handler(rootState, action);
       }
-      return state;
+      return rootState;
     };
     rootReducer.on = this.on.bind(this);
     this.rootReducer = rootReducer;

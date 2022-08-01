@@ -2,6 +2,9 @@
 /* eslint-disable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
 const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
 if (staticAssetsBaseURL !== '/') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line no-undef -- global
   __webpack_public_path__ = staticAssetsBaseURL;
 }
 /* eslint-enable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
@@ -41,7 +44,7 @@ import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import {applyMiddleware, createStore, Middleware, Store} from 'redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
+import {composeWithDevTools} from '@redux-devtools/extension';
 import createSagaMiddleware, {Saga, Task} from 'redux-saga';
 import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
@@ -161,7 +164,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
       const composeEnhancers = composeWithDevTools({trace: true, actionCreators: composition.actions as any});
-      middleware = composeEnhancers(middleware);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
+      middleware = composeEnhancers(middleware) as any;
     }
     // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
     store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);

@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-test-pdf",
+      "comment": "Upgrade Razzle, TypeScript, and deprecated dependencies",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-test-pdf",
+  "email": "kiltyj@gmail.com"
+}

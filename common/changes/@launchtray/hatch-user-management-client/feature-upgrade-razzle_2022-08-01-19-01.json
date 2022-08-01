@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-user-management-client",
+      "comment": "Upgrade Razzle, TypeScript, and deprecated dependencies",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-user-management-client",
+  "email": "kiltyj@gmail.com"
+}

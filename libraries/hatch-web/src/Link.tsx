@@ -12,11 +12,7 @@ interface PropTypes extends InheritedProps {
   textStyle?: StyleProp<TextStyle>;
 }
 
-type DefaultProps = {
-  textStyle: undefined,
-};
-
-export default class extends React.PureComponent<PropTypes & DefaultProps> {
+export default class extends React.PureComponent<PropTypes> {
   public render() {
     // Pull out textStyle so we can map it to props.style of Link below.
     const {textStyle, ...otherProps} = this.props;

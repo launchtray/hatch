@@ -125,7 +125,6 @@ module.exports = {
         useBabel: false,
         tsLoader: {
           configFile: resolveApp('tsconfig.json'),
-          context: resolveApp('src'),
         },
         forkTsChecker: {
           eslint: {
@@ -134,7 +133,6 @@ module.exports = {
           },
           typescript: {
             configFile: resolveApp('tsconfig.json'),
-            context: resolveApp('src'),
           },
         },
       },

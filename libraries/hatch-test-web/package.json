@@ -13,8 +13,12 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@launchtray/hatch-test": "^0.16.0-alpha.1"
+  },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "^0.16.0-alpha.1",
+    "@types/node": "^16",
     "@types/selenium-webdriver": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",

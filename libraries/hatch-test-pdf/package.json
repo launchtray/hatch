@@ -24,7 +24,7 @@
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "^0.16.0-alpha.1",
     "@types/jest": "^26.0.10",
-    "@types/node": "^14",
+    "@types/node": "^16",
     "@types/node-fetch": "^2.5.7",
     "@types/pdf-image": "^2.0.0",
     "@types/pixelmatch": "^5.2.2",

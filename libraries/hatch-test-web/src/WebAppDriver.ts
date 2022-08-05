@@ -16,13 +16,14 @@ import {findFreePort} from 'selenium-webdriver/net/portprober';
 import path from 'path';
 import fs from 'fs';
 import {getCurrentSpecInfo} from '@launchtray/hatch-test';
+import {delegate} from '@launchtray/hatch-util';
 
-export interface WebDriverOptions {
+export interface WebAppDriverOptions {
   testName?: string,
   artifactsPath?: string,
   headless?: boolean;
   windowSize?: {width: number, height: number};
-  patchBuilder?: (builder: Builder, options: WebDriverOptions) => Builder;
+  patchBuilder?: (builder: Builder, options: WebAppDriverOptions) => Builder | void;
 }
 
 export interface ElementLocatorBase {
@@ -45,83 +46,26 @@ export type ElementLocator =
   | ElementLocatorByLocator
   | ElementLocatorByTestID;
 
-export abstract class WebAppDriver extends WebDriver {
-  public static async create(options: WebDriverOptions = {}): Promise<WebAppDriver> {
-    const {headless} = options;
-    const specInfo = getCurrentSpecInfo();
-    let defaultTestName = 'unknown';
-    if (specInfo.suiteName != null && specInfo.specName != null) {
-      defaultTestName = `${specInfo.suiteName}.${specInfo.specName}`;
-    }
-    const testName = options.testName ?? defaultTestName ?? 'unknown';
-    const windowSize = options.windowSize ?? {width: 1920, height: 1200};
-    const artifactsPath = options.artifactsPath ?? process.env.TEST_OUTPUT_PATH;
-    const port = await findFreePort();
-    const chromedriverBuilder = new chrome.ServiceBuilder()
-      .setPort(port)
-      .enableVerboseLogging()
-      .addArguments(
-        '--append-log',
-        '--readable-timestamp',
-        '--disable-dev-shm-usage',
-        '--allowed-ips=',
-        '--whitelisted-ips=',
-      );
-
-    const chromeOptions = new chrome.Options();
-    chromeOptions.addArguments('no-sandbox');
-    chromeOptions.addArguments('disable-dev-shm-usage');
-    chromeOptions.addArguments('disable-web-security');
-    chromeOptions.addArguments('single-process');
-    if (headless) {
-      chromeOptions.addArguments('headless');
-    }
-
-    const loggingPref = new logging.Preferences();
-    loggingPref.setLevel(logging.Type.BROWSER, logging.Level.ALL);
-    loggingPref.setLevel(logging.Type.DRIVER, logging.Level.ALL);
-    loggingPref.setLevel(logging.Type.PERFORMANCE, logging.Level.ALL);
-    chromeOptions.setLoggingPrefs(loggingPref);
-
-    if (artifactsPath != null) {
-      const chromeLog = `${testName}.chrome.log`;
-      const driverLog = `${testName}.chromedriver.log`;
-      const basePath = path.join(artifactsPath, 'analytics-portal');
-      if (!fs.existsSync(basePath)) {
-        fs.mkdirSync(basePath, {recursive: true});
-      }
-      chromeOptions.setChromeLogFile(path.join(basePath, chromeLog));
-      chromedriverBuilder.loggingTo(path.join(basePath, driverLog));
-    }
-    chromeOptions.addArguments(`window-size=${windowSize.width},${windowSize.height}`);
-    chromeOptions.addArguments('window-position=0,0');
-
-    const firefoxOptions = new firefox.Options();
-    firefoxOptions.addArguments(`width=${windowSize.width}`);
-    firefoxOptions.addArguments(`height=${windowSize.height}`);
-
-    const defaultBuilderPatcher = (builder: Builder) => builder;
-    const patchBuilder = options.patchBuilder ?? defaultBuilderPatcher;
-
-    const driverBuilder = patchBuilder(
-      new Builder()
-        .forBrowser('chrome')
-        .setChromeOptions(chromeOptions)
-        .setFirefoxOptions(firefoxOptions)
-        .setChromeService(chromedriverBuilder),
-      options,
-    );
-
-    const driver = await driverBuilder.build();
-    return extendWebDriver(driver);
+const detectTestName = (options: WebAppDriverOptions): string => {
+  const specInfo = getCurrentSpecInfo();
+  let defaultTestName = 'unknown';
+  if (specInfo.suiteName != null && specInfo.specName != null) {
+    defaultTestName = `${specInfo.suiteName}.${specInfo.specName}`;
   }
+  return options.testName ?? defaultTestName ?? 'unknown';
+};
 
-  public abstract waitForElement(locator: ElementLocator): Promise<WebElement>;
-}
+export class WebAppDriverExtension {
+  constructor(
+    private testName: string,
+    private webDriver?: WebDriver,
+    private artifactsPath?: string,
+  ) {}
 
-const extendWebDriver = (driver: WebDriver): WebAppDriver => {
-  // eslint-disable-next-line no-param-reassign -- intentional mutation
-  (driver as WebAppDriver).waitForElement = async (locator: ElementLocator): Promise<WebElement> => {
+  public async waitForElement(locator: ElementLocator): Promise<WebElement> {
+    if (this.webDriver == null) {
+      throw new Error('WebDriver has is no longer valid. Was quit() called?');
+    }
     let byClause: Locator;
     if (isElementLocatorByLocator(locator)) {
       byClause = locator.located;
@@ -129,8 +73,102 @@ const extendWebDriver = (driver: WebDriver): WebAppDriver => {
       byClause = By.css(`*[data-testid="${locator.testID}"]`);
     }
     const timeout = locator.timeoutInMS ?? 2000;
-    const el = await driver.wait(until.elementLocated(byClause), timeout);
-    return driver.wait(until.elementIsVisible(el), timeout);
-  };
-  return (driver as WebAppDriver);
+    const el = await this.webDriver.wait(until.elementLocated(byClause), timeout);
+    return this.webDriver.wait(until.elementIsVisible(el), timeout);
+  }
+
+  public async quit(): Promise<void> {
+    if (this.webDriver == null) {
+      throw new Error('WebDriver has is no longer valid. Was quit() already called?');
+    }
+    try {
+      const logTypes = [
+        logging.Type.BROWSER,
+        logging.Type.DRIVER,
+        logging.Type.PERFORMANCE,
+      ];
+      for (const logType of logTypes) {
+        if (this.artifactsPath != null) {
+          const browserPath = `${this.testName}.${logType}.log`;
+          if (!fs.existsSync(this.artifactsPath)) {
+            fs.mkdirSync(this.artifactsPath, {recursive: true});
+          }
+          const logPath = path.join(this.artifactsPath, browserPath);
+          const logger = fs.createWriteStream(logPath, {flags: 'a'});
+          const logEntries = await this.webDriver.manage().logs().get(logType);
+          const writeLine = (line: string) => logger.write(`${line}\n`);
+          for (const logEntry of logEntries) {
+            writeLine(JSON.stringify(logEntry));
+          }
+          logger.end();
+        }
+      }
+    } finally {
+      const driver = this.webDriver;
+      delete this.webDriver;
+      await driver.quit();
+    }
+  }
+}
+
+export interface WebAppDriver extends
+  Pick<WebAppDriverExtension, keyof WebAppDriverExtension>,
+  Pick<WebDriver, keyof WebDriver> {}
+
+export const createWebAppDriver = async (options: WebAppDriverOptions = {}): Promise<WebAppDriver> => {
+  const {artifactsPath, headless} = options;
+  const testName = detectTestName(options);
+  const windowSize = options.windowSize ?? {width: 1920, height: 1200};
+  const port = await findFreePort();
+  const chromedriverBuilder = new chrome.ServiceBuilder()
+    .setPort(port)
+    .enableVerboseLogging()
+    .addArguments(
+      '--append-log',
+      '--readable-timestamp',
+      '--disable-dev-shm-usage',
+      '--allowed-ips=',
+      '--whitelisted-ips=',
+    );
+
+  const chromeOptions = new chrome.Options();
+  chromeOptions.addArguments('no-sandbox');
+  chromeOptions.addArguments('disable-dev-shm-usage');
+  chromeOptions.addArguments('disable-web-security');
+  chromeOptions.addArguments('single-process');
+  if (headless) {
+    chromeOptions.addArguments('headless');
+  }
+
+  if (artifactsPath != null) {
+    const loggingPref = new logging.Preferences();
+    loggingPref.setLevel(logging.Type.BROWSER, logging.Level.ALL);
+    loggingPref.setLevel(logging.Type.DRIVER, logging.Level.ALL);
+    loggingPref.setLevel(logging.Type.PERFORMANCE, logging.Level.ALL);
+    chromeOptions.setLoggingPrefs(loggingPref);
+
+    const chromeLog = `${testName}.chrome.log`;
+    const driverLog = `${testName}.chromedriver.log`;
+    if (!fs.existsSync(artifactsPath)) {
+      fs.mkdirSync(artifactsPath, {recursive: true});
+    }
+    chromeOptions.setChromeLogFile(path.join(artifactsPath, chromeLog));
+    chromedriverBuilder.loggingTo(path.join(artifactsPath, driverLog));
+  }
+  chromeOptions.addArguments(`window-size=${windowSize.width},${windowSize.height}`);
+  chromeOptions.addArguments('window-position=0,0');
+
+  const firefoxOptions = new firefox.Options();
+  firefoxOptions.addArguments(`width=${windowSize.width}`);
+  firefoxOptions.addArguments(`height=${windowSize.height}`);
+
+  const driverBuilder = new Builder()
+    .forBrowser('chrome')
+    .setChromeOptions(chromeOptions)
+    .setFirefoxOptions(firefoxOptions)
+    .setChromeService(chromedriverBuilder);
+
+  const pachedBuilder = options.patchBuilder?.(driverBuilder, options) ?? driverBuilder;
+  const driver = await pachedBuilder.build();
+  return delegate(new WebAppDriverExtension(testName, driver, artifactsPath), driver);
 };

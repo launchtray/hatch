@@ -8,8 +8,7 @@ import Xvfb from 'xvfb';
 // @ts-ignore
 import {sync as commandExists} from 'command-exists';
 import {detectTestName} from './WebAppDriver';
-
-export const defaultWindowSize = {width: 1920, height: 1200};
+import {defaultWindowSize} from './constants';
 
 export interface WebScreenRecorderOptions {
   testName?: string,

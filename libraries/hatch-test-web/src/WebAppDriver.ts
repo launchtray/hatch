@@ -17,6 +17,7 @@ import path from 'path';
 import fs from 'fs';
 import {getCurrentSpecInfo} from '@launchtray/hatch-test';
 import {delegate} from '@launchtray/hatch-util';
+import {defaultWindowSize} from './constants';
 
 export interface WebAppDriverOptions {
   testName?: string,
@@ -118,7 +119,7 @@ export interface WebAppDriver extends
 export const createWebAppDriver = async (options: WebAppDriverOptions = {}): Promise<WebAppDriver> => {
   const {artifactsPath, headless} = options;
   const testName = detectTestName(options.testName);
-  const windowSize = options.windowSize ?? {width: 1920, height: 1200};
+  const windowSize = options.windowSize ?? defaultWindowSize;
   const port = await findFreePort();
   const chromedriverBuilder = new chrome.ServiceBuilder()
     .setPort(port)

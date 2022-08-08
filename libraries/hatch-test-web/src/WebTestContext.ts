@@ -1,9 +1,9 @@
 import {createWebAppDriver, detectTestName, WebAppDriver, WebAppDriverOptions} from './WebAppDriver';
-import WebScreenRecorder, {WebScreenRecorderOptions} from './WebScreenRecorder';
+import {WebScreenRecorder, WebScreenRecorderOptions} from './WebScreenRecorder';
 
 export type WebTestContextOptions = WebAppDriverOptions & WebScreenRecorderOptions;
 
-export default class WebTestContext {
+export class WebTestContext {
   private options: WebTestContextOptions;
   private webAppDriver?: WebAppDriver;
   private screenRecorder?: WebScreenRecorder;

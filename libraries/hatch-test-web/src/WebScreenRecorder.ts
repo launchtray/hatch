@@ -17,7 +17,7 @@ export interface WebScreenRecorderOptions {
   windowSize?: {width: number, height: number};
 }
 
-export default class WebScreenRecorder {
+export class WebScreenRecorder {
   public recording: boolean;
   private xvfb?: Xvfb;
   private recordingProcess?: ChildProcessWithoutNullStreams;

@@ -13,6 +13,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "xvfb": "^0.4.0",
+    "command-exists": "^1.2.9"
+  },
   "devDependencies": {
     "@launchtray/hatch-test": "^0.16.0-alpha.1",
     "@launchtray/hatch-util": "^0.16.0-alpha.1",

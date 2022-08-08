@@ -107,6 +107,7 @@ specifiers:
   babel-preset-razzle: 4.2.17
   bufferutil: ^4
   chalk: ^3
+  command-exists: ^1.2.9
   commander: ^4
   comment-json: ^3.0.3
   connected-react-router: 6.5.2
@@ -195,6 +196,7 @@ specifiers:
   winston: ^3
   winston-transport: ^4
   ws: ^7
+  xvfb: ^0.4.0
   yaml: 2.0.0-3
 
 dependencies:
@@ -304,6 +306,7 @@ dependencies:
   babel-preset-razzle: 4.2.17_supports-color@7.2.0
   bufferutil: 4.0.6
   chalk: 3.0.0
+  command-exists: 1.2.9
   commander: 4.1.1
   comment-json: 3.0.3
   connected-react-router: 6.5.2_c9e2bc7fc88f5f7b750f4777792aefff
@@ -392,6 +395,7 @@ dependencies:
   winston: 3.8.1
   winston-transport: 4.5.0
   ws: 7.5.9_d6955b83f926115bf12ffeabab6deaae
+  xvfb: 0.4.0
   yaml: 2.0.0-3
 
 packages:
@@ -7055,6 +7059,10 @@ packages:
 
   /comma-separated-tokens/1.0.8:
     resolution: {integrity: sha512-GHuDRO12Sypu2cV70d1dkA2EUmXHgntrzbpvOB+Qy+49ypNfGgFQIC2fhhXbnyrJRynDCAARsT7Ou0M6hirpfw==}
+    dev: false
+
+  /command-exists/1.2.9:
+    resolution: {integrity: sha512-LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==}
     dev: false
 
   /commander/2.20.3:
@@ -16507,6 +16515,15 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /sleep/6.1.0:
+    resolution: {integrity: sha512-Z1x4JjJxsru75Tqn8F4tnOFeEu3HjtITTsumYUiuz54sGKdISgLCek9AUlXlVVrkhltRFhNUsJDJE76SFHTDIQ==}
+    engines: {node: '>=0.8.0'}
+    requiresBuild: true
+    dependencies:
+      nan: 2.16.0
+    dev: false
+    optional: true
+
   /slice-ansi/4.0.0:
     resolution: {integrity: sha512-qMCMfhY040cVHT43K9BFygqYbUPFZKHOg7K73mtTWJRb8pyP3fzf4Ixd5SzdEJQ6MRUg/WBnOLxghZtKKurENQ==}
     engines: {node: '>=10'}
@@ -18759,6 +18776,12 @@ packages:
     engines: {node: '>=0.4'}
     dev: false
 
+  /xvfb/0.4.0:
+    resolution: {integrity: sha512-g55AbjcBL4Bztfn7kiUrR0ne8mMUsFODDJ+HFGf5OuHJqKKccpExX2Qgn7VF2eImw1eoh6+riXHser1J4agrFA==}
+    optionalDependencies:
+      sleep: 6.1.0
+    dev: false
+
   /y18n/4.0.3:
     resolution: {integrity: sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ==}
     dev: false
@@ -19662,7 +19685,7 @@ packages:
     dev: false
 
   file:projects/hatch-test-web.tgz_1056105d0985a446b8edb32b451b5c2c:
-    resolution: {integrity: sha512-ICqWOheUEweM6LXfj4NYTiL+0w350oybmWhOFf17mmLDH5XiaEV7odMkxouekpE97V5inqKd96aOR+eYNkRHwQ==, tarball: file:projects/hatch-test-web.tgz}
+    resolution: {integrity: sha512-nnBTIhTZQUrA8DmV/whKOrjWRJ6NRY5/ouTKTdyYK1brkJ+yyep5l0xXVZueYSqnt7ODYBNfdYvbyErAcFaJoA==, tarball: file:projects/hatch-test-web.tgz}
     id: file:projects/hatch-test-web.tgz
     name: '@rush-temp/hatch-test-web'
     version: 0.0.0
@@ -19671,6 +19694,7 @@ packages:
       '@types/selenium-webdriver': 4.1.2
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
+      command-exists: 1.2.9
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
@@ -19678,6 +19702,7 @@ packages:
       rimraf: 3.0.0
       selenium-webdriver: 4.3.1_d6955b83f926115bf12ffeabab6deaae
       typescript: 4.7.4
+      xvfb: 0.4.0
     transitivePeerDependencies:
       - bufferutil
       - jest

@@ -141,7 +141,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const logger = (process.env.NODE_ENV === 'production') ? NON_LOGGER : new ConsoleLogger();
+  const clientLoggingEnabled = process.env.NODE_ENV !== 'production' || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true';
+  const logger = clientLoggingEnabled ? new ConsoleLogger() : NON_LOGGER;
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {
     dsn: runtimeConfig.SENTRY_DSN as string,

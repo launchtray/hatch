@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-eslint-config",
-  "version": "0.16.0-alpha.1",
+  "version": "0.16.0-alpha.2",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -36,6 +36,6 @@
     "eslint-plugin-react-native": "^4"
   },
   "dependencies": {
-    "@launchtray/hatch-eslint-config": "^0.16.0-alpha.1"
+    "@launchtray/hatch-eslint-config": "^0.16.0-alpha.2"
   }
 }

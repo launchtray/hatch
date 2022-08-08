@@ -46,13 +46,13 @@ export type ElementLocator =
   | ElementLocatorByLocator
   | ElementLocatorByTestID;
 
-const detectTestName = (options: WebAppDriverOptions): string => {
+export const detectTestName = (testName?: string): string => {
   const specInfo = getCurrentSpecInfo();
   let defaultTestName = 'unknown';
   if (specInfo.suiteName != null && specInfo.specName != null) {
     defaultTestName = `${specInfo.suiteName}.${specInfo.specName}`;
   }
-  return options.testName ?? defaultTestName ?? 'unknown';
+  return testName ?? defaultTestName ?? 'unknown';
 };
 
 export class WebAppDriverExtension {
@@ -117,7 +117,7 @@ export interface WebAppDriver extends
 
 export const createWebAppDriver = async (options: WebAppDriverOptions = {}): Promise<WebAppDriver> => {
   const {artifactsPath, headless} = options;
-  const testName = detectTestName(options);
+  const testName = detectTestName(options.testName);
   const windowSize = options.windowSize ?? {width: 1920, height: 1200};
   const port = await findFreePort();
   const chromedriverBuilder = new chrome.ServiceBuilder()

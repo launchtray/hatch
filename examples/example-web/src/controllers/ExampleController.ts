@@ -39,7 +39,6 @@ export default class ExampleController implements ServerMiddleware {
   private readonly testVar: string;
   constructor(
     @inject('Logger') private readonly logger: Logger,
-    @inject('awsRegion') private readonly awsRegion: string,
   ) {
     this.testVar = 'A';
   }
@@ -53,7 +52,7 @@ export default class ExampleController implements ServerMiddleware {
   @route.get('/api/example')
   public exampleEndpoint(responder: CustomResponder) {
     this.logger.info('Example endpoint called');
-    responder.ok(`Example GET for region: ${this.awsRegion}`);
+    responder.ok(`Example GET for region: ${this.testVar}`);
   }
 
   @route.get('/api/example/date')

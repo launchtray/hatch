@@ -201,7 +201,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- React Component should be PascalCase
     initialProps: {reduxStore: store, RootApp: composition.appComponent},
     // eslint-disable-next-line no-undef -- global document object
-    rootTag: document.getElementById('root'),
+    rootTag: document.getElementById(composition.appRootId ?? 'root'),
   });
 };
 

@@ -139,7 +139,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
-      <div id="root">${html}</div>
+      <div id="${composition.appRootId ?? 'root'}">${html}</div>
     </body>
     </html>`
   );

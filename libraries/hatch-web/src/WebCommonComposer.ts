@@ -14,6 +14,7 @@ export interface WebCommonComposition {
   actions: ActionsObject;
   appComponent: ElementType;
   webAppManagers?: Array<Class<unknown>>;
+  appRootId?: string;
 }
 
 export type WebCommonComposer = () => Promise<WebCommonComposition>;

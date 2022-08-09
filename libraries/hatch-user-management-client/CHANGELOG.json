@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-user-management-client",
   "entries": [
     {
+      "version": "0.16.0",
+      "tag": "@launchtray/hatch-user-management-client_v0.16.0",
+      "date": "Tue, 09 Aug 2022 02:37:09 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Upgrade Razzle, TypeScript, and deprecated dependencies"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.15.7",
       "tag": "@launchtray/hatch-user-management-client_v0.15.7",
       "date": "Wed, 08 Sep 2021 15:36:03 GMT",

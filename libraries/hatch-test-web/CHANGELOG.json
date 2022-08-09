@@ -2,6 +2,21 @@
   "name": "@launchtray/hatch-test-web",
   "entries": [
     {
+      "version": "0.16.0",
+      "tag": "@launchtray/hatch-test-web_v0.16.0",
+      "date": "Tue, 09 Aug 2022 02:37:09 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Upgrade Razzle, TypeScript, and deprecated dependencies"
+          },
+          {
+            "comment": "Add screen recording utilities"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.15.7",
       "tag": "@launchtray/hatch-test-web_v0.15.7",
       "date": "Wed, 08 Sep 2021 15:36:03 GMT",

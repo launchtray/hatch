@@ -1,6 +1,14 @@
 # Change Log - @launchtray/hatch-razzle-config
 
-This log was last generated on Wed, 08 Sep 2021 15:36:03 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Aug 2022 02:37:09 GMT and should not be manually modified.
+
+## 0.16.0
+Tue, 09 Aug 2022 02:37:09 GMT
+
+### Updates
+
+- Upgrade Razzle, TypeScript, and deprecated dependencies
+- Remove tsconfig context in razzle config template
 
 ## 0.15.7
 Wed, 08 Sep 2021 15:36:03 GMT

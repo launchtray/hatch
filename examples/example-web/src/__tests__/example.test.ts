@@ -1,10 +1,10 @@
-import {WebAppDriver} from '@launchtray/hatch-test-web';
+import {createWebAppDriver, WebAppDriver} from '@launchtray/hatch-test-web';
 
 describe('webdriver', () => {
   let driver: WebAppDriver;
 
   beforeAll(async () => {
-    driver = await WebAppDriver.create();
+    driver = await createWebAppDriver();
     await driver.get('http://localhost:3000/');
   });
 

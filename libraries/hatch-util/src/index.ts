@@ -2,6 +2,7 @@ import {DependencyContainer} from '@launchtray/tsyringe-async';
 import {AnyJson, AnyJsonObject} from './AnyJson';
 import {ConsoleLogger} from './ConsoleLogger';
 import delay from './delay';
+import delegate from './delegate';
 import {ErrorReporter} from './ErrorReporter';
 import {
   Class,
@@ -25,6 +26,7 @@ export {
   AnyJson,
   AnyJsonObject,
   delay,
+  delegate,
   inject,
   injectAll,
   initializeInjection,

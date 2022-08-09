@@ -1,1 +1,1 @@
-export * from './SpecInfo';
+export * from './SpecInfoJestEnvironment';

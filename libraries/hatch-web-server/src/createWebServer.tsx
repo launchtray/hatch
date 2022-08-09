@@ -18,6 +18,7 @@ import {
   runtimeConfig,
 } from '@launchtray/hatch-web';
 import crypto from 'crypto';
+import {RequestHandler} from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {HelmetServerState, HelmetProvider} from 'react-helmet-async';
@@ -151,7 +152,7 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     addStaticRoutes(app, assetsPrefix);
-    app.get('/*', (req, res, next) => {
+    const webRequestHandler: RequestHandler = (req, res, next) => {
       const stateOnly = req.query.state !== undefined;
       const prettify = req.query.state === 'pretty';
       if (stateOnly) {
@@ -181,6 +182,11 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
           next?.(renderError);
         });
       });
-    });
+    };
+    if (composition.customizeWebRoutes != null) {
+      composition.customizeWebRoutes(app, webRequestHandler);
+    } else {
+      app.get('/*', webRequestHandler);
+    }
   });
 };

@@ -7,7 +7,7 @@ import {
   routerMiddleware,
   RouterState,
 } from 'connected-react-router';
-import {createBrowserHistory, History, Location as HistoryLocation} from 'history';
+import {createBrowserHistory, createHashHistory, History, Location as HistoryLocation} from 'history';
 import React, {ReactElement} from 'react';
 import {connect} from 'react-redux';
 import {StaticRouter} from 'react-router-dom';
@@ -116,18 +116,24 @@ const NavProvider = connect(
   (dispatch) => ({dispatch}),
 )(NavigationProviderComponent);
 
-export const createNavMiddleware = (locationForServerSideRendering?: string) => {
+export const createNavMiddleware = (
+  {locationForSsr, useHashRouter}: {locationForSsr?: string, useHashRouter?: boolean} = {},
+) => {
   // SSR strategy from https://github.com/supasate/connected-react-router/issues/39
-  if (locationForServerSideRendering !== undefined) {
+  if (locationForSsr !== undefined) {
     const staticRouter = new StaticRouter({
       basename: '',
       context: {},
-      location: locationForServerSideRendering,
+      location: locationForSsr,
     });
     const {props} = staticRouter.render() as ReactElement;
     browserHistory = props.history;
   } else if (browserHistory == null) {
-    browserHistory = createBrowserHistory();
+    if (useHashRouter ?? false) {
+      browserHistory = createHashHistory();
+    } else {
+      browserHistory = createBrowserHistory();
+    }
   }
   return {
     navMiddleware: routerMiddleware(browserHistory),

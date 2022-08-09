@@ -15,6 +15,7 @@ export interface WebCommonComposition {
   appComponent: ElementType;
   webAppManagers?: Array<Class<unknown>>;
   appRootId?: string;
+  useHashRouter?: boolean;
 }
 
 export type WebCommonComposer = () => Promise<WebCommonComposition>;

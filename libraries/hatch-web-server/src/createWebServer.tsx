@@ -49,7 +49,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   const clientContainer = ROOT_CONTAINER.createChildContainer();
   const {composition, logger, errorReporter, cookie, authHeader} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
-  const {navMiddleware, location} = createNavMiddleware(requestContext.requestURL);
+  const {navMiddleware, location} = createNavMiddleware({locationForSsr: requestContext.requestURL});
   const middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(errorReporter));
   const store = createStore(composition.createRootReducer(), middleware);
 

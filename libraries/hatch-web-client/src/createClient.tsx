@@ -160,7 +160,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
         }
       },
     });
-    const {navMiddleware} = createNavMiddleware();
+    const {navMiddleware} = createNavMiddleware({useHashRouter: composition.useHashRouter});
     let middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(sentry));
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete

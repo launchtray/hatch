@@ -169,7 +169,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       middleware = composeEnhancers(middleware) as any;
     }
     // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
-    store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);
+    store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__ ?? {}, middleware);
   } else {
     store.replaceReducer(composition.createRootReducer());
   }

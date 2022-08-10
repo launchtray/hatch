@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web",
+      "comment": "Changes to support client-only webapp",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web",
+  "email": "kiltyj@gmail.com"
+}

@@ -18,6 +18,7 @@ import {
   runtimeConfig,
 } from '@launchtray/hatch-web';
 import crypto from 'crypto';
+import {RequestHandler} from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {HelmetServerState, HelmetProvider} from 'react-helmet-async';
@@ -48,7 +49,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   const clientContainer = ROOT_CONTAINER.createChildContainer();
   const {composition, logger, errorReporter, cookie, authHeader} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
-  const {navMiddleware, location} = createNavMiddleware(requestContext.requestURL);
+  const {navMiddleware, location} = createNavMiddleware({locationForSsr: requestContext.requestURL});
   const middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(errorReporter));
   const store = createStore(composition.createRootReducer(), middleware);
 
@@ -138,7 +139,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
       ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
-      <div id="root">${html}</div>
+      <div id="${composition.appRootId ?? 'root'}">${html}</div>
     </body>
     </html>`
   );
@@ -151,7 +152,7 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     addStaticRoutes(app, assetsPrefix);
-    app.get('/*', (req, res, next) => {
+    const webRequestHandler: RequestHandler = (req, res, next) => {
       const stateOnly = req.query.state !== undefined;
       const prettify = req.query.state === 'pretty';
       if (stateOnly) {
@@ -181,6 +182,11 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
           next?.(renderError);
         });
       });
-    });
+    };
+    if (composition.customizeWebRoutes != null) {
+      composition.customizeWebRoutes(app, webRequestHandler);
+    } else {
+      app.get('/*', webRequestHandler);
+    }
   });
 };

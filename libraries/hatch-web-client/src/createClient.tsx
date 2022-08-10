@@ -23,6 +23,7 @@ import {
   createNavMiddleware,
   createSagaForWebAppManagers,
   NavProvider,
+  patchPreloadedStateForClientNav,
   registerWebAppManagers,
   resetDefinedActions,
   resolveWebAppManagers,
@@ -132,6 +133,7 @@ const sentryMonitor: SentryMonitor = {
   },
 };
 
+// eslint-disable-next-line complexity
 const createClientAsync = async (clientComposer: WebClientComposer) => {
   if (runningRootSagaTask != null) {
     runningRootSagaTask.cancel();
@@ -141,7 +143,9 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const clientLoggingEnabled = process.env.NODE_ENV !== 'production' || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true';
+  const clientLoggingEnabled = process.env.NODE_ENV !== 'production'
+    || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true'
+    || runtimeConfig.ENABLE_CLIENT_LOGGING === true;
   const logger = clientLoggingEnabled ? new ConsoleLogger() : NON_LOGGER;
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {
@@ -160,7 +164,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
         }
       },
     });
-    const {navMiddleware} = createNavMiddleware();
+    const {navMiddleware, location} = createNavMiddleware({useHashRouter: composition.useHashRouter});
     let middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(sentry));
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
@@ -169,7 +173,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       middleware = composeEnhancers(middleware) as any;
     }
     // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
-    store = createStore(composition.createRootReducer(), (window as any).__PRELOADED_STATE__, middleware);
+    const preloadedState: any = patchPreloadedStateForClientNav((window as any).__PRELOADED_STATE__ ?? {}, location);
+    store = createStore(composition.createRootReducer(), preloadedState, middleware);
   } else {
     store.replaceReducer(composition.createRootReducer());
   }
@@ -192,7 +197,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   }
   runningRootSagaTask = sagaMiddleware.run(rootSaga);
 
-  if (runtimeConfig.ENABLE_API_SPEC === 'true') {
+  if (runtimeConfig.ENABLE_API_SPEC === 'true' || runtimeConfig.ENABLE_API_SPEC === true) {
     AppRegistry.registerComponent('RNApp', () => RNApp);
   } else {
     AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);
@@ -201,7 +206,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- React Component should be PascalCase
     initialProps: {reduxStore: store, RootApp: composition.appComponent},
     // eslint-disable-next-line no-undef -- global document object
-    rootTag: document.getElementById('root'),
+    rootTag: document.getElementById(composition.appRootId ?? 'root'),
   });
 };
 

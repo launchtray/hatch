@@ -7,7 +7,7 @@ import {
   routerMiddleware,
   RouterState,
 } from 'connected-react-router';
-import {createBrowserHistory, History, Location as HistoryLocation} from 'history';
+import {createBrowserHistory, createHashHistory, History, Location as HistoryLocation} from 'history';
 import React, {ReactElement} from 'react';
 import {connect} from 'react-redux';
 import {StaticRouter} from 'react-router-dom';
@@ -27,6 +27,24 @@ export const convertToLocation = (historyLocation: HistoryLocation): Location =>
     query: historyLocation.search,
     fragment: historyLocation.hash,
   };
+};
+
+export const patchPreloadedStateForClientNav = (
+  preloadedState: {router: {location: HistoryLocation}},
+  location: Location,
+) => {
+  const locationFromServer = preloadedState.router?.location != null
+    ? convertToLocation(preloadedState.router.location) : undefined;
+  if (
+    (locationFromServer?.path == null && locationFromServer?.query == null)
+    || (location.path === locationFromServer?.path && location.query === locationFromServer?.query)
+  ) {
+    /* eslint-disable no-param-reassign */
+    preloadedState.router.location.hash = location.fragment;
+    preloadedState.router.location.search = location.query;
+    preloadedState.router.location.pathname = location.path;
+    /* eslint-enable no-param-reassign */
+  }
 };
 
 export const selectLocationFromLocationChangeAction = (action: AnyAction) => {
@@ -116,18 +134,24 @@ const NavProvider = connect(
   (dispatch) => ({dispatch}),
 )(NavigationProviderComponent);
 
-export const createNavMiddleware = (locationForServerSideRendering?: string) => {
+export const createNavMiddleware = (
+  {locationForSsr, useHashRouter}: {locationForSsr?: string, useHashRouter?: boolean} = {},
+) => {
   // SSR strategy from https://github.com/supasate/connected-react-router/issues/39
-  if (locationForServerSideRendering !== undefined) {
+  if (locationForSsr !== undefined) {
     const staticRouter = new StaticRouter({
       basename: '',
       context: {},
-      location: locationForServerSideRendering,
+      location: locationForSsr,
     });
     const {props} = staticRouter.render() as ReactElement;
     browserHistory = props.history;
   } else if (browserHistory == null) {
-    browserHistory = createBrowserHistory();
+    if (useHashRouter ?? false) {
+      browserHistory = createHashHistory();
+    } else {
+      browserHistory = createBrowserHistory();
+    }
   }
   return {
     navMiddleware: routerMiddleware(browserHistory),

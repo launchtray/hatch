@@ -2,7 +2,6 @@ import {
   CALL_HISTORY_METHOD,
   ConnectedRouter,
   connectRouter,
-  LocationChangeAction,
   LOCATION_CHANGE,
   push,
   routerMiddleware,

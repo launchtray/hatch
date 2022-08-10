@@ -148,11 +148,11 @@ export const createNavMiddleware = (
     const {props} = staticRouter.render() as ReactElement;
     browserHistory = props.history;
   } else if (browserHistory == null) {
-   if (useHashRouter ?? false) {
-     browserHistory = createHashHistory();
-   } else {
+    if (useHashRouter ?? false) {
+      browserHistory = createHashHistory();
+    } else {
       browserHistory = createBrowserHistory();
-   }
+    }
   }
   return {
     navMiddleware: routerMiddleware(browserHistory),

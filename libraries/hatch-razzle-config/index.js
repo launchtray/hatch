@@ -5,7 +5,26 @@ const path = require('path');
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-const patchWebpackConfig = (config, isServer, webpack) => {
+const patchWebpackOptions = (webpackOptions, options) => {
+  if (
+    options != null
+    && options.razzleOptions != null
+    && options.disableFilenameHashes
+  ) {
+    webpackOptions.fileLoaderOutputName = `${options.razzleOptions.mediaPrefix}/[name].[ext]`;
+    webpackOptions.urlLoaderOutputName = `${options.razzleOptions.mediaPrefix}/[name].[ext]`;
+    webpackOptions.cssOutputFilename = `${options.razzleOptions.cssPrefix}/[name].css`;
+    webpackOptions.cssOutputChunkFilename = `${options.razzleOptions.cssPrefix}/[name].chunk.css`;
+    webpackOptions.jsOutputFilename = `${options.razzleOptions.jsPrefix}/[name].js`;
+    webpackOptions.jsOutputChunkFilename = `${options.razzleOptions.jsPrefix}/[name].chunk.js`;
+  }
+  return webpackOptions;
+};
+
+const patchWebpackConfig = (config, options) => {
+  const isServer = options != null ? options.isServer : false;
+  const webpack = options && options.webpack;
+
   if (!isServer) {
     if (config.node == null) {
       config.node = {};
@@ -117,7 +136,7 @@ const patchWebpackConfig = (config, isServer, webpack) => {
   return config;
 };
 
-module.exports = {
+const createRazzleConfig = (hatchOptions) => ({
   plugins: [
     {
       name: 'typescript',
@@ -138,7 +157,17 @@ module.exports = {
       },
     },
   ],
-  patchWebpackConfig,
+  modifyWebpackOptions({
+    options: {
+      razzleOptions,
+      webpackOptions,
+    },
+  }) {
+    return patchWebpackOptions(webpackOptions, {
+      razzleOptions,
+      disableFilenameHashes: hatchOptions && hatchOptions.disableFilenameHashes,
+    });
+  },
   modifyWebpackConfig({
     env: {
       target, // the target 'node' or 'web'
@@ -152,6 +181,15 @@ module.exports = {
     },
     paths, // the modified paths that will be used by Razzle.
   }) {
-    return patchWebpackConfig(webpackConfig, target !== 'web', webpackObject);
+    return patchWebpackConfig(webpackConfig, {
+      isServer: target !== 'web',
+      webpack: webpackObject,
+    });
   },
+});
+
+module.exports = {
+  ...createRazzleConfig(),
+  patchWebpackOptions,
+  patchWebpackConfig,
 };

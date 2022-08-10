@@ -2,6 +2,7 @@ import {
   CALL_HISTORY_METHOD,
   ConnectedRouter,
   connectRouter,
+  LocationChangeAction,
   LOCATION_CHANGE,
   push,
   routerMiddleware,
@@ -27,6 +28,24 @@ export const convertToLocation = (historyLocation: HistoryLocation): Location =>
     query: historyLocation.search,
     fragment: historyLocation.hash,
   };
+};
+
+export const patchPreloadedStateForClientNav = (
+  preloadedState: {router: {location: HistoryLocation}},
+  location: Location,
+) => {
+  const locationFromServer = preloadedState.router?.location != null
+    ? convertToLocation(preloadedState.router.location) : undefined;
+  if (
+    (locationFromServer?.path == null && locationFromServer?.query == null)
+    || (location.path === locationFromServer?.path && location.query === locationFromServer?.query)
+  ) {
+    /* eslint-disable no-param-reassign */
+    preloadedState.router.location.hash = location.fragment;
+    preloadedState.router.location.search = location.query;
+    preloadedState.router.location.pathname = location.path;
+    /* eslint-enable no-param-reassign */
+  }
 };
 
 export const selectLocationFromLocationChangeAction = (action: AnyAction) => {
@@ -129,11 +148,11 @@ export const createNavMiddleware = (
     const {props} = staticRouter.render() as ReactElement;
     browserHistory = props.history;
   } else if (browserHistory == null) {
-    if (useHashRouter ?? false) {
-      browserHistory = createHashHistory();
-    } else {
+   if (useHashRouter ?? false) {
+     browserHistory = createHashHistory();
+   } else {
       browserHistory = createBrowserHistory();
-    }
+   }
   }
   return {
     navMiddleware: routerMiddleware(browserHistory),

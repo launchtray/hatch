@@ -5,7 +5,13 @@ import defineReducer from './defineReducer';
 import effects from './effects';
 import Image from './Image';
 import Link from './Link';
-import NavProvider, {createNavMiddleware, createNavReducers, Location, navActions} from './NavProvider';
+import NavProvider, {
+  createNavMiddleware,
+  createNavReducers,
+  Location,
+  navActions,
+  patchPreloadedStateForClientNav,
+} from './NavProvider';
 import {
   createSagaForWebAppManagers,
   onClientLoad,
@@ -26,6 +32,7 @@ export {
   onLocationChange,
   onClientLoad,
   navActions,
+  patchPreloadedStateForClientNav,
   createNavReducers,
   WebCommonComposition,
   createNavMiddleware,

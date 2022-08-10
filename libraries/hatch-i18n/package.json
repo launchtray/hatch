@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-i18n",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "luxon": "^1.25.0"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.16.0",
+    "@launchtray/hatch-eslint-config": "^0.17.0",
     "@types/luxon": "1.25.0",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",

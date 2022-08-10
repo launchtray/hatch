@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-client",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -14,9 +14,9 @@
     "access": "public"
   },
   "devDependencies": {
-    "@launchtray/hatch-util": "^0.16.0",
-    "@launchtray/hatch-web": "^0.16.0",
-    "@launchtray/hatch-web-eslint-config": "^0.16.0",
+    "@launchtray/hatch-util": "^0.17.0",
+    "@launchtray/hatch-web": "^0.17.0",
+    "@launchtray/hatch-web-eslint-config": "^0.17.0",
     "@launchtray/tsyringe-async": "4.3.2",
     "@redux-devtools/extension": "^3",
     "@redux-saga/core": "^1",
@@ -57,8 +57,8 @@
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.16.0",
-    "@launchtray/hatch-web": "^0.16.0",
+    "@launchtray/hatch-util": "^0.17.0",
+    "@launchtray/hatch-web": "^0.17.0",
     "@launchtray/tsyringe-async": "4.3.2",
     "@redux-devtools/extension": "^3",
     "@redux-saga/core": "^1",

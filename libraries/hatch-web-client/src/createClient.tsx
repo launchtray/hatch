@@ -141,7 +141,9 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const clientLoggingEnabled = process.env.NODE_ENV !== 'production' || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true';
+  const clientLoggingEnabled = process.env.NODE_ENV !== 'production'
+    || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true'
+    || runtimeConfig.ENABLE_CLIENT_LOGGING === true;
   const logger = clientLoggingEnabled ? new ConsoleLogger() : NON_LOGGER;
   const consoleBreadcrumbs = [new Integrations.Breadcrumbs({console: true})];
   const sentry = new SentryReporter(sentryMonitor, logger, {
@@ -192,7 +194,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   }
   runningRootSagaTask = sagaMiddleware.run(rootSaga);
 
-  if (runtimeConfig.ENABLE_API_SPEC === 'true') {
+  if (runtimeConfig.ENABLE_API_SPEC === 'true' || runtimeConfig.ENABLE_API_SPEC === true) {
     AppRegistry.registerComponent('RNApp', () => RNApp);
   } else {
     AppRegistry.registerComponent('RNApp', () => RNAppWithoutSwagger);

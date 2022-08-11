@@ -40,9 +40,15 @@ export const patchPreloadedStateForClientNav = (
     || (location.path === locationFromServer?.path && location.query === locationFromServer?.query)
   ) {
     /* eslint-disable no-param-reassign */
-    preloadedState.router.location.hash = location.fragment;
-    preloadedState.router.location.search = location.query;
-    preloadedState.router.location.pathname = location.path;
+    preloadedState.router = {
+      ...(preloadedState.router ?? {}),
+      location: {
+        ...(preloadedState.router?.location ?? {}),
+        hash: location.fragment,
+        search: location.query,
+        pathname: location.path,
+      },
+    };
     /* eslint-enable no-param-reassign */
   }
 };

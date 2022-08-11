@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-server-middleware
 
-This log was last generated on Wed, 10 Aug 2022 04:44:22 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Aug 2022 01:19:53 GMT and should not be manually modified.
+
+## 0.18.0
+Thu, 11 Aug 2022 01:19:53 GMT
+
+_Version update only_
 
 ## 0.17.0
 Wed, 10 Aug 2022 04:44:22 GMT

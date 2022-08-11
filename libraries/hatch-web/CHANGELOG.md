@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-web
 
-This log was last generated on Tue, 09 Aug 2022 02:37:09 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Aug 2022 04:44:22 GMT and should not be manually modified.
+
+## 0.17.0
+Wed, 10 Aug 2022 04:44:22 GMT
+
+### Updates
+
+- Changes to support client-only webapp
 
 ## 0.16.0
 Tue, 09 Aug 2022 02:37:09 GMT

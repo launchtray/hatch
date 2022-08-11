@@ -29,6 +29,24 @@ export const convertToLocation = (historyLocation: HistoryLocation): Location =>
   };
 };
 
+export const patchPreloadedStateForClientNav = (
+  preloadedState: {router: {location: HistoryLocation}},
+  location: Location,
+) => {
+  const locationFromServer = preloadedState.router?.location != null
+    ? convertToLocation(preloadedState.router.location) : undefined;
+  if (
+    (locationFromServer?.path == null && locationFromServer?.query == null)
+    || (location.path === locationFromServer?.path && location.query === locationFromServer?.query)
+  ) {
+    /* eslint-disable no-param-reassign */
+    preloadedState.router.location.hash = location.fragment;
+    preloadedState.router.location.search = location.query;
+    preloadedState.router.location.pathname = location.path;
+    /* eslint-enable no-param-reassign */
+  }
+};
+
 export const selectLocationFromLocationChangeAction = (action: AnyAction) => {
   return convertToLocation(action.payload.location);
 };

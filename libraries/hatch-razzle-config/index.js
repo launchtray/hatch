@@ -10,6 +10,8 @@ const patchWebpackOptions = (webpackOptions, options) => {
     options != null
     && options.razzleOptions != null
     && options.disableFilenameHashes
+    && !options.isServer
+    && !options.isDev
   ) {
     webpackOptions.fileLoaderOutputName = `${options.razzleOptions.mediaPrefix}/[name].[ext]`;
     webpackOptions.urlLoaderOutputName = `${options.razzleOptions.mediaPrefix}/[name].[ext]`;
@@ -158,12 +160,18 @@ const createRazzleConfig = (hatchOptions) => ({
     },
   ],
   modifyWebpackOptions({
+    env: {
+      target, // the target 'node' or 'web'
+      dev, // is this a development build? true or false
+    },
     options: {
       razzleOptions,
       webpackOptions,
     },
   }) {
     return patchWebpackOptions(webpackOptions, {
+      isServer: target !== 'web',
+      isDev: dev,
       razzleOptions,
       disableFilenameHashes: hatchOptions && hatchOptions.disableFilenameHashes,
     });
@@ -190,6 +198,7 @@ const createRazzleConfig = (hatchOptions) => ({
 
 module.exports = {
   ...createRazzleConfig(),
+  createRazzleConfig,
   patchWebpackOptions,
   patchWebpackConfig,
 };

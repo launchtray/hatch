@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-rpc-node",
+      "comment": "Update dependency versions",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-rpc-node",
+  "email": "kiltyj@gmail.com"
+}

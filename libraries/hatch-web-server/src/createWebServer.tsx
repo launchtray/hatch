@@ -41,11 +41,38 @@ interface ClientRenderRequestContext {
   errorReporter: ErrorReporter;
   cookie?: string;
   authHeader?: string;
+  disableSsr: boolean;
 }
 
 const {assets, assetsPrefix} = loadStaticAssetsMetadata();
 
-const renderClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
+const renderStaticClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
+  const {composition} = requestContext;
+  const faviconPath = `${assetsPrefix}/favicon.ico`;
+  const assetsScript = `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  return (`<!doctype html>
+    <html lang="">
+    <head>
+      <script>
+        window.__STATIC_ASSETS_BASE_URL__ = '${assetsPrefix}/';
+        window.__PRELOADED_STATE__ = {}
+        window.__RUNTIME_CONFIG__ = ${serialize(runtimeConfig)}
+      </script>
+      <link rel="shortcut icon" href="${faviconPath}">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      ${assets.client.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assetsScript}
+    </head>
+    <body>
+      <div id="${composition.appRootId ?? 'root'}"></div>
+    </body>
+    </html>`
+  );
+};
+
+const renderDynamicClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
   const clientContainer = ROOT_CONTAINER.createChildContainer();
   const {composition, logger, errorReporter, cookie, authHeader} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
@@ -66,6 +93,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
     clientContainer,
     cookie,
     authHeader,
+    true,
     true,
   );
 
@@ -145,12 +173,23 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
   );
 };
 
+const renderClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
+  if (requestContext.disableSsr) {
+    return await renderStaticClient(requestContext);
+  }
+  return renderDynamicClient(requestContext);
+};
+
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
   runtimeConfig.SENTRY_DSN = process.env.SENTRY_DSN;
   runtimeConfig.ENABLE_API_SPEC = process.env.ENABLE_API_SPEC;
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
+    const disableSsr = composition.disableSsr ?? process.env.DISABLE_SSR === 'true';
+    if (!disableSsr) {
+      runtimeConfig.SSR_ENABLED = true;
+    }
     addStaticRoutes(app, assetsPrefix);
     const webRequestHandler: RequestHandler = (req, res, next) => {
       const stateOnly = req.query.state !== undefined;
@@ -169,6 +208,7 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         errorReporter,
         cookie: req.headers.cookie,
         authHeader: req.headers.authorization,
+        disableSsr,
       };
       crypto.randomBytes(32, (err, buf) => {
         if (err != null) {

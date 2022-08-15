@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-eslint-config",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -18,7 +18,7 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-react-native": "^4"
   },
@@ -31,11 +31,11 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-react-native": "^4"
   },
   "dependencies": {
-    "@launchtray/hatch-eslint-config": "^0.17.0"
+    "@launchtray/hatch-eslint-config": "^0.18.0"
   }
 }

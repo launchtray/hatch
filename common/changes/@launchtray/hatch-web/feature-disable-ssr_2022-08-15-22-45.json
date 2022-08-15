@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@launchtray/hatch-web",
-      "comment": "Fix hash routing on initial load if no preloaded state is available",
+      "comment": "Update dependency versions, add flag for disabling SSR",
       "type": "none"
     }
   ],

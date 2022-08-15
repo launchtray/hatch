@@ -71,7 +71,7 @@ specifiers:
   '@types/fs-extra': ^8
   '@types/history': ^4.7.3
   '@types/http-errors': 1.8.1
-  '@types/jest': ^26.0.10
+  '@types/jest': ^27.5.2
   '@types/jsonwebtoken': ^8.5.0
   '@types/jwk-to-pem': ^2.0.0
   '@types/luxon': 1.25.0
@@ -86,7 +86,7 @@ specifiers:
   '@types/react-redux': ^7
   '@types/react-router': ^5
   '@types/react-router-dom': ^5
-  '@types/selenium-webdriver': ^4.0.5
+  '@types/selenium-webdriver': 4.1.1
   '@types/serialize-javascript': ^1.5.0
   '@types/sharp': ^0.26.0
   '@types/source-map': 0.5.2
@@ -122,7 +122,7 @@ specifiers:
   eslint-plugin-import: ^2
   eslint-plugin-jest: ^26
   eslint-plugin-jsx-a11y: ^6.4.1
-  eslint-plugin-react: ^7.22.0
+  eslint-plugin-react: ^7.28.0
   eslint-plugin-react-hooks: ^4.2.0
   eslint-plugin-react-native: ^4
   express: ^4
@@ -141,7 +141,7 @@ specifiers:
   inquirer: ^7
   invariant: ^2
   isarray: ^2.0.5
-  jest: ^26.4.2
+  jest: ^27.5.1
   jest-environment-node: ^27.5.1
   jsonwebtoken: ^8.5.1
   jwk-to-pem: ^2.0.3
@@ -174,7 +174,7 @@ specifiers:
   replace-in-file: ^5
   resolve: ^1.17.0
   rimraf: 3.0.0
-  selenium-webdriver: ^4.0.0-alpha.5
+  selenium-webdriver: ^4.3.1
   serialize-javascript: ^2.1.0
   sharp: ^0.26.1
   sockjs-client: ^1.4.0
@@ -186,7 +186,7 @@ specifiers:
   swagger-ui-react: 3.25.0
   tiny-warning: ^1.0.3
   tmp: ^0.2.1
-  ts-jest: ^26.3.0
+  ts-jest: ^27.1.5
   ts-node: ^9.1.1
   typescript: 4.7.4
   utf-8-validate: ^5
@@ -228,33 +228,33 @@ dependencies:
   '@redux-devtools/extension': 3.2.2_redux@4.2.0
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-web': file:projects/example-web.tgz_ts-node@9.1.1
-  '@rush-temp/hatch-cdk': file:projects/hatch-cdk.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-cli': file:projects/hatch-cli.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-client-sdk': file:projects/hatch-client-sdk.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-eslint-config': file:projects/hatch-eslint-config.tgz_6169eeec7eb63626f839cc9ea5c1175f
-  '@rush-temp/hatch-i18n': file:projects/hatch-i18n.tgz_6136b0cb34ff9394d82b8c66e50ae607
-  '@rush-temp/hatch-mock-server': file:projects/hatch-mock-server.tgz_24c42f77eb3caf0ef9fa82891ac5a5bd
+  '@rush-temp/hatch-cdk': file:projects/hatch-cdk.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-cli': file:projects/hatch-cli.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-client-sdk': file:projects/hatch-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-eslint-config': file:projects/hatch-eslint-config.tgz_e7d31b03c8e7ff5df7780e84fc65868e
+  '@rush-temp/hatch-i18n': file:projects/hatch-i18n.tgz_e04c523ac33ebe4cd0b31c7b1114146c
+  '@rush-temp/hatch-mock-server': file:projects/hatch-mock-server.tgz_d8196d955e89a8c34fd539734db97bd8
   '@rush-temp/hatch-razzle-config': file:projects/hatch-razzle-config.tgz_84dcd8abab79e8d9401c2598bd6feff8
-  '@rush-temp/hatch-rpc': file:projects/hatch-rpc.tgz_1510559afde85c4495f2889856f2bf5e
-  '@rush-temp/hatch-rpc-node': file:projects/hatch-rpc-node.tgz_1510559afde85c4495f2889856f2bf5e
-  '@rush-temp/hatch-server': file:projects/hatch-server.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-server-middleware': file:projects/hatch-server-middleware.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-server-pdf': file:projects/hatch-server-pdf.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-server-user-management': file:projects/hatch-server-user-management.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-template-client-sdk': file:projects/hatch-template-client-sdk.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-template-library': file:projects/hatch-template-library.tgz_1510559afde85c4495f2889856f2bf5e
+  '@rush-temp/hatch-rpc': file:projects/hatch-rpc.tgz_966a285e7657d0914f7113bf8da1d625
+  '@rush-temp/hatch-rpc-node': file:projects/hatch-rpc-node.tgz_966a285e7657d0914f7113bf8da1d625
+  '@rush-temp/hatch-server': file:projects/hatch-server.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-server-middleware': file:projects/hatch-server-middleware.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-server-pdf': file:projects/hatch-server-pdf.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-server-user-management': file:projects/hatch-server-user-management.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-template-client-sdk': file:projects/hatch-template-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-template-library': file:projects/hatch-template-library.tgz_966a285e7657d0914f7113bf8da1d625
   '@rush-temp/hatch-template-microservice': file:projects/hatch-template-microservice.tgz_ts-node@9.1.1
   '@rush-temp/hatch-template-webapp': file:projects/hatch-template-webapp.tgz_ts-node@9.1.1
-  '@rush-temp/hatch-test': file:projects/hatch-test.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-test-pdf': file:projects/hatch-test-pdf.tgz_1510559afde85c4495f2889856f2bf5e
-  '@rush-temp/hatch-test-web': file:projects/hatch-test-web.tgz_1056105d0985a446b8edb32b451b5c2c
-  '@rush-temp/hatch-user-management-client': file:projects/hatch-user-management-client.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-util': file:projects/hatch-util.tgz_1510559afde85c4495f2889856f2bf5e
-  '@rush-temp/hatch-web': file:projects/hatch-web.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-web-client': file:projects/hatch-web-client.tgz_jest@26.6.3+supports-color@7.2.0
-  '@rush-temp/hatch-web-eslint-config': file:projects/hatch-web-eslint-config.tgz_6169eeec7eb63626f839cc9ea5c1175f
-  '@rush-temp/hatch-web-injectables': file:projects/hatch-web-injectables.tgz_6136b0cb34ff9394d82b8c66e50ae607
-  '@rush-temp/hatch-web-server': file:projects/hatch-web-server.tgz_jest@26.6.3+supports-color@7.2.0
+  '@rush-temp/hatch-test': file:projects/hatch-test.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-test-pdf': file:projects/hatch-test-pdf.tgz_966a285e7657d0914f7113bf8da1d625
+  '@rush-temp/hatch-test-web': file:projects/hatch-test-web.tgz_bd0e465601a848f3a5327a354aec4ba1
+  '@rush-temp/hatch-user-management-client': file:projects/hatch-user-management-client.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-util': file:projects/hatch-util.tgz_966a285e7657d0914f7113bf8da1d625
+  '@rush-temp/hatch-web': file:projects/hatch-web.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-web-client': file:projects/hatch-web-client.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/hatch-web-eslint-config': file:projects/hatch-web-eslint-config.tgz_e7d31b03c8e7ff5df7780e84fc65868e
+  '@rush-temp/hatch-web-injectables': file:projects/hatch-web-injectables.tgz_e04c523ac33ebe4cd0b31c7b1114146c
+  '@rush-temp/hatch-web-server': file:projects/hatch-web-server.tgz_jest@27.5.1+supports-color@7.2.0
   '@sentry/browser': 5.30.0
   '@sentry/node': 5.30.0_supports-color@7.2.0
   '@sentry/types': 5.30.0
@@ -270,7 +270,7 @@ dependencies:
   '@types/fs-extra': 8.1.2
   '@types/history': 4.7.11
   '@types/http-errors': 1.8.1
-  '@types/jest': 26.0.24
+  '@types/jest': 27.5.2
   '@types/jsonwebtoken': 8.5.8
   '@types/jwk-to-pem': 2.0.1
   '@types/luxon': 1.25.0
@@ -285,7 +285,7 @@ dependencies:
   '@types/react-redux': 7.1.24
   '@types/react-router': 5.1.18
   '@types/react-router-dom': 5.3.3
-  '@types/selenium-webdriver': 4.1.2
+  '@types/selenium-webdriver': 4.1.1
   '@types/serialize-javascript': 1.5.0
   '@types/sharp': 0.26.1
   '@types/source-map': 0.5.2
@@ -319,7 +319,7 @@ dependencies:
   eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
   eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
   eslint-plugin-import: 2.26.0_eslint@8.21.0
-  eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+  eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
   eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
   eslint-plugin-react: 7.30.1_eslint@8.21.0
   eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -340,7 +340,7 @@ dependencies:
   inquirer: 7.3.3
   invariant: 2.2.4
   isarray: 2.0.5
-  jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+  jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
   jest-environment-node: 27.5.1
   jsonwebtoken: 8.5.1
   jwk-to-pem: 2.0.5
@@ -385,7 +385,7 @@ dependencies:
   swagger-ui-react: 3.25.0_react-dom@16.14.0+react@16.14.0
   tiny-warning: 1.0.3
   tmp: 0.2.1
-  ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+  ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
   ts-node: 9.1.1_typescript@4.7.4
   typescript: 4.7.4
   utf-8-validate: 5.0.9
@@ -2857,6 +2857,18 @@ packages:
       slash: 3.0.0
     dev: false
 
+  /@jest/console/27.5.1:
+    resolution: {integrity: sha512-kZ/tNpS3NXn0mlXXXPNuDZnb4c0oZ20r4K5eemM2k30ZC3G0T02nXUvyhf5YdbXWHPEJLc9qGLxEZ216MdL+Zg==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      chalk: 4.1.2
+      jest-message-util: 27.5.1
+      jest-util: 27.5.1
+      slash: 3.0.0
+    dev: false
+
   /@jest/core/26.6.3_1510559afde85c4495f2889856f2bf5e:
     resolution: {integrity: sha512-xvV1kKbhfUqFVuZ8Cyo+JPpipAHHAV3kcDBftiduK8EICXmTFddryy3P7NfZt8Pv37rA9nEJBKCCkglCPt/Xjw==}
     engines: {node: '>= 10.14.2'}
@@ -2886,6 +2898,51 @@ packages:
       jest-watcher: 26.6.2
       micromatch: 4.0.5
       p-each-series: 2.2.0
+      rimraf: 3.0.2
+      slash: 3.0.0
+      strip-ansi: 6.0.1
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - ts-node
+      - utf-8-validate
+    dev: false
+
+  /@jest/core/27.5.1_1510559afde85c4495f2889856f2bf5e:
+    resolution: {integrity: sha512-AK6/UTrvQD0Cd24NSqmIA6rKsu0tKIxfiCducZvqxYdmMisOYAsdItspT+fQDQYARPf8XgjAFZi0ogW2agH5nQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@jest/console': 27.5.1
+      '@jest/reporters': 27.5.1_supports-color@7.2.0
+      '@jest/test-result': 27.5.1
+      '@jest/transform': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      emittery: 0.8.1
+      exit: 0.1.2
+      graceful-fs: 4.2.10
+      jest-changed-files: 27.5.1
+      jest-config: 27.5.1_1510559afde85c4495f2889856f2bf5e
+      jest-haste-map: 27.5.1
+      jest-message-util: 27.5.1
+      jest-regex-util: 27.5.1
+      jest-resolve: 27.5.1
+      jest-resolve-dependencies: 27.5.1_supports-color@7.2.0
+      jest-runner: 27.5.1_bf228ea39d7f9929fef5cd14a9f43fe9
+      jest-runtime: 27.5.1_supports-color@7.2.0
+      jest-snapshot: 27.5.1_supports-color@7.2.0
+      jest-util: 27.5.1
+      jest-validate: 27.5.1
+      jest-watcher: 27.5.1
+      micromatch: 4.0.5
       rimraf: 3.0.2
       slash: 3.0.0
       strip-ansi: 6.0.1
@@ -2950,6 +3007,15 @@ packages:
       expect: 26.6.2
     dev: false
 
+  /@jest/globals/27.5.1:
+    resolution: {integrity: sha512-ZEJNB41OBQQgGzgyInAv0UUfDDj3upmHydjieSxFvTRuZElrx7tXg/uVQ5hYVEwiXs3+aMsAeEc9X7xiSKCm4Q==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/environment': 27.5.1
+      '@jest/types': 27.5.1
+      expect: 27.5.1
+    dev: false
+
   /@jest/reporters/26.6.2_supports-color@7.2.0:
     resolution: {integrity: sha512-h2bW53APG4HvkOnVMo8q3QXa6pcaNt1HkwVsOPMBV6LD/q9oSpxNSYZQYkAnjdMjrJ86UuYeLo+aEZClV6opnw==}
     engines: {node: '>= 10.14.2'}
@@ -2984,9 +3050,56 @@ packages:
       - supports-color
     dev: false
 
+  /@jest/reporters/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-cPXh9hWIlVJMQkVk84aIvXuBB4uQQmFqZiacloFuGiP3ah1sbCxCosidXFDfqG8+6fO1oR2dTJTlsOy4VFmUfw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@bcoe/v8-coverage': 0.2.3
+      '@jest/console': 27.5.1
+      '@jest/test-result': 27.5.1
+      '@jest/transform': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      chalk: 4.1.2
+      collect-v8-coverage: 1.0.1
+      exit: 0.1.2
+      glob: 7.2.3
+      graceful-fs: 4.2.10
+      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-instrument: 5.2.0_supports-color@7.2.0
+      istanbul-lib-report: 3.0.0
+      istanbul-lib-source-maps: 4.0.1_supports-color@7.2.0
+      istanbul-reports: 3.1.5
+      jest-haste-map: 27.5.1
+      jest-resolve: 27.5.1
+      jest-util: 27.5.1
+      jest-worker: 27.5.1
+      slash: 3.0.0
+      source-map: 0.6.1
+      string-length: 4.0.2
+      terminal-link: 2.1.1
+      v8-to-istanbul: 8.1.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@jest/source-map/26.6.2:
     resolution: {integrity: sha512-YwYcCwAnNmOVsZ8mr3GfnzdXDAl4LaenZP5z+G0c8bzC9/dugL8zRmxZzdoTl4IaS3CryS1uWnROLPFmb6lVvA==}
     engines: {node: '>= 10.14.2'}
+    dependencies:
+      callsites: 3.1.0
+      graceful-fs: 4.2.10
+      source-map: 0.6.1
+    dev: false
+
+  /@jest/source-map/27.5.1:
+    resolution: {integrity: sha512-y9NIHUYF3PJRlHk98NdC/N1gl88BL08aQQgu4k4ZopQkCw9t9cV8mtl3TV8b/YCB8XaVTFrmUTAJvjsntDireg==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       callsites: 3.1.0
       graceful-fs: 4.2.10
@@ -2999,6 +3112,16 @@ packages:
     dependencies:
       '@jest/console': 26.6.2
       '@jest/types': 26.6.2
+      '@types/istanbul-lib-coverage': 2.0.4
+      collect-v8-coverage: 1.0.1
+    dev: false
+
+  /@jest/test-result/27.5.1:
+    resolution: {integrity: sha512-EW35l2RYFUcUQxFJz5Cv5MTOxlJIQs4I7gxzi2zVU7PJhOwfYq1MdC5nhSmYjX1gmMmLPvB3sIaC+BkcHRBfag==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/console': 27.5.1
+      '@jest/types': 27.5.1
       '@types/istanbul-lib-coverage': 2.0.4
       collect-v8-coverage: 1.0.1
     dev: false
@@ -3020,6 +3143,18 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@jest/test-sequencer/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-LCheJF7WB2+9JuCS7VB/EmGIdQuhtqjRNI9A43idHv3E4KltCTsPsLxvdaubFHSYwY/fNjMWjl6vNRhDiN7vpQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/test-result': 27.5.1
+      graceful-fs: 4.2.10
+      jest-haste-map: 27.5.1
+      jest-runtime: 27.5.1_supports-color@7.2.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@jest/transform/26.6.2_supports-color@7.2.0:
     resolution: {integrity: sha512-E9JjhUgNzvuQ+vVAL21vlyfy12gP0GhazGgJC4h6qUt1jSdUXGWJ1wfu/X7Sd8etSgxV4ovT1pb9v5D6QW4XgA==}
     engines: {node: '>= 10.14.2'}
@@ -3034,6 +3169,29 @@ packages:
       jest-haste-map: 26.6.2
       jest-regex-util: 26.0.0
       jest-util: 26.6.2
+      micromatch: 4.0.5
+      pirates: 4.0.5
+      slash: 3.0.0
+      source-map: 0.6.1
+      write-file-atomic: 3.0.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@jest/transform/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-ipON6WtYgl/1329g5AIJVbUuEh0wZVbdpGwC99Jw4LwuoBNS95MVphU6zOeD9pDkon+LLbFL7lOQRapbB8SCHw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@babel/core': 7.18.10_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      babel-plugin-istanbul: 6.1.1_supports-color@7.2.0
+      chalk: 4.1.2
+      convert-source-map: 1.8.0
+      fast-json-stable-stringify: 2.1.0
+      graceful-fs: 4.2.10
+      jest-haste-map: 27.5.1
+      jest-regex-util: 27.5.1
+      jest-util: 27.5.1
       micromatch: 4.0.5
       pirates: 4.0.5
       slash: 3.0.0
@@ -4456,7 +4614,7 @@ packages:
   /@types/graceful-fs/4.1.5:
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
     dependencies:
-      '@types/node': 14.18.23
+      '@types/node': 16.11.47
     dev: false
 
   /@types/history/4.7.11:
@@ -4498,11 +4656,11 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: false
 
-  /@types/jest/26.0.24:
-    resolution: {integrity: sha512-E/X5Vib8BWqZNRlDxj9vYXhsDwPYbPINqKF9BsnSoon4RQ0D9moEuLD8txgyypFLH7J4+Lho9Nr/c8H0Fi+17w==}
+  /@types/jest/27.5.2:
+    resolution: {integrity: sha512-mpT8LJJ4CMeeahobofYWIjFo0xonRS/HfxnVEPMPFSQdGUt1uHCnoPT7Zhb+sjDU2wz0oKV0OLUR0WzrHNgfeA==}
     dependencies:
-      jest-diff: 26.6.2
-      pretty-format: 26.6.2
+      jest-matcher-utils: 27.5.1
+      pretty-format: 27.5.1
     dev: false
 
   /@types/json-schema/7.0.11:
@@ -4674,8 +4832,8 @@ packages:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
     dev: false
 
-  /@types/selenium-webdriver/4.1.2:
-    resolution: {integrity: sha512-NCn1vqHC2hDgZmOuiDa4xgyo3FBZuqB+wXg5t8YcwnjIi2ufGTowqcnbUAKGHxY7z/OFfv4MnaVfuJ7gJ/xBsw==}
+  /@types/selenium-webdriver/4.1.1:
+    resolution: {integrity: sha512-NxxZZek50ylIACiXebKQYHD3D4One3WXOasEXWazL6aTfYbZob7ClNKxUpg8I4/oWArX87oPWvj1cHKqfel3Hg==}
     dependencies:
       '@types/ws': 7.4.7
     dev: false
@@ -5753,6 +5911,25 @@ packages:
       - supports-color
     dev: false
 
+  /babel-jest/27.5.1_70b352bc760a42eb3a892076f5e19518:
+    resolution: {integrity: sha512-cdQ5dXjGRd0IBRATiQ4mZGlGlRE8kJpjPOixdNRdT+m3UcNqmYWN6rK6nvtXYfY3D76cb8s/O1Ss8ea24PIwcg==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    peerDependencies:
+      '@babel/core': ^7.8.0
+    dependencies:
+      '@babel/core': 7.18.10_supports-color@7.2.0
+      '@jest/transform': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      '@types/babel__core': 7.1.19
+      babel-plugin-istanbul: 6.1.1_supports-color@7.2.0
+      babel-preset-jest: 27.5.1_@babel+core@7.18.10
+      chalk: 4.1.2
+      graceful-fs: 4.2.10
+      slash: 3.0.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /babel-loader/8.2.5_eba90b01abfa5ae992af6f2de83aa983:
     resolution: {integrity: sha512-OSiFfH89LrEMiWd4pLNqGz4CwJDtbs2ZVc+iGu2HrkRfPxId9F2anQj38IxWpmRfsUY0aBZYi1EFcd3mhtRMLQ==}
     engines: {node: '>= 8.9'}
@@ -5809,6 +5986,16 @@ packages:
   /babel-plugin-jest-hoist/26.6.2:
     resolution: {integrity: sha512-PO9t0697lNTmcEHH69mdtYiOIkkOlj9fySqfO3K1eCcdISevLAE0xY59VLLUj0SoiPiTX/JU2CYFpILydUa5Lw==}
     engines: {node: '>= 10.14.2'}
+    dependencies:
+      '@babel/template': 7.18.10
+      '@babel/types': 7.18.10
+      '@types/babel__core': 7.1.19
+      '@types/babel__traverse': 7.17.1
+    dev: false
+
+  /babel-plugin-jest-hoist/27.5.1:
+    resolution: {integrity: sha512-50wCwD5EMNW4aRpOwtqzyZHIewTYNxLA4nhB+09d8BIssfNfzBRhkBIHiaPv1Si226TQSvp8gxAJm2iY2qs2hQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@babel/template': 7.18.10
       '@babel/types': 7.18.10
@@ -6035,6 +6222,17 @@ packages:
     dependencies:
       '@babel/core': 7.18.10_supports-color@7.2.0
       babel-plugin-jest-hoist: 26.6.2
+      babel-preset-current-node-syntax: 1.0.1_@babel+core@7.18.10
+    dev: false
+
+  /babel-preset-jest/27.5.1_@babel+core@7.18.10:
+    resolution: {integrity: sha512-Nptf2FzlPCWYuJg41HBqXVT8ym6bXOevuCTbhxlUpjwtysGaIWFvDEjp4y+G7fl13FgOdjs7P/DmErqH7da0Ag==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/core': 7.18.10_supports-color@7.2.0
+      babel-plugin-jest-hoist: 27.5.1
       babel-preset-current-node-syntax: 1.0.1_@babel+core@7.18.10
     dev: false
 
@@ -6802,6 +7000,10 @@ packages:
 
   /cjs-module-lexer/0.6.0:
     resolution: {integrity: sha512-uc2Vix1frTfnuzxxu1Hp4ktSvM3QaI4oXl4ZUqL1wjTu/BGki9TrCWoqLTg/drR1KwAEarXuRFCG2Svr1GxPFw==}
+    dev: false
+
+  /cjs-module-lexer/1.2.2:
+    resolution: {integrity: sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==}
     dev: false
 
   /class-utils/0.3.6:
@@ -7822,6 +8024,10 @@ packages:
       mimic-response: 3.1.0
     dev: false
 
+  /dedent/0.7.0:
+    resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
+    dev: false
+
   /deep-assign/3.0.0:
     resolution: {integrity: sha512-YX2i9XjJ7h5q/aQ/IM9PEwEnDqETAIYbggmdDB3HLTlSgo1CxPsj6pvhPG68rq6SVE0+p+6Ywsm5fTYNrYtBWw==}
     engines: {node: '>=0.10.0'}
@@ -8029,6 +8235,11 @@ packages:
   /diff-sequences/26.6.2:
     resolution: {integrity: sha512-Mv/TDa3nZ9sbc5soK+OoA74BsS3mL37yixCvUAQkiuA4Wz6YtwP/K47n2rv2ovzHZvoiQeA5FTQOschKkEwB0Q==}
     engines: {node: '>= 10.14.2'}
+    dev: false
+
+  /diff-sequences/27.5.1:
+    resolution: {integrity: sha512-k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dev: false
 
   /diff/4.0.2:
@@ -8285,6 +8496,11 @@ packages:
 
   /emittery/0.7.2:
     resolution: {integrity: sha512-A8OG5SR/ij3SsJdWDJdkkSYUjQdCUx6APQXem0SaEePBSRg4eymGYwBkKo1Y6DU+af/Jn2dBQqDBvjnr9Vi8nQ==}
+    engines: {node: '>=10'}
+    dev: false
+
+  /emittery/0.8.1:
+    resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}
     engines: {node: '>=10'}
     dev: false
 
@@ -8623,7 +8839,7 @@ packages:
       tsconfig-paths: 3.14.1
     dev: false
 
-  /eslint-plugin-jest/26.7.0_6832046f0dec04a50d36880d0932322c:
+  /eslint-plugin-jest/26.7.0_08a506a48f346920bcc1f9a895f7ba94:
     resolution: {integrity: sha512-/YNitdfG3o3cC6juZziAdkk6nfJt01jXVfj4AgaYVLs7bupHzRDL5K+eipdzhDXtQsiqaX1TzfwSuRlEgeln1A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -8639,7 +8855,7 @@ packages:
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/utils': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
       eslint: 8.21.0_supports-color@7.2.0
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -8969,6 +9185,21 @@ packages:
       strip-final-newline: 2.0.0
     dev: false
 
+  /execa/5.1.1:
+    resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
+    engines: {node: '>=10'}
+    dependencies:
+      cross-spawn: 7.0.3
+      get-stream: 6.0.1
+      human-signals: 2.1.0
+      is-stream: 2.0.1
+      merge-stream: 2.0.0
+      npm-run-path: 4.0.1
+      onetime: 5.1.2
+      signal-exit: 3.0.7
+      strip-final-newline: 2.0.0
+    dev: false
+
   /exit/0.1.2:
     resolution: {integrity: sha512-Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ==}
     engines: {node: '>= 0.8.0'}
@@ -9009,6 +9240,16 @@ packages:
       jest-matcher-utils: 26.6.2
       jest-message-util: 26.6.2
       jest-regex-util: 26.0.0
+    dev: false
+
+  /expect/27.5.1:
+    resolution: {integrity: sha512-E1q5hSUG2AmYQwQJ041nvgpkODHQvB+RKlB4IYdru6uJsyFTRyZAP463M+1lINorwbqAmUggi6+WwkD8lCS/Dw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      jest-get-type: 27.5.1
+      jest-matcher-utils: 27.5.1
+      jest-message-util: 27.5.1
     dev: false
 
   /express-winston/4.2.0_winston@3.8.1:
@@ -9792,6 +10033,11 @@ packages:
       pump: 3.0.0
     dev: false
 
+  /get-stream/6.0.1:
+    resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
+    engines: {node: '>=10'}
+    dev: false
+
   /get-symbol-description/1.0.0:
     resolution: {integrity: sha512-2EmdH1YvIQiZpltCNgkuiUnyukzxM/R6NDJX31Ke3BG1Nq5b0S2PhX59UKi9vZpPDQVdqn+1IcaAwnzTT5vCjw==}
     engines: {node: '>= 0.4'}
@@ -10544,6 +10790,11 @@ packages:
   /human-signals/1.1.1:
     resolution: {integrity: sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==}
     engines: {node: '>=8.12.0'}
+    dev: false
+
+  /human-signals/2.1.0:
+    resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
+    engines: {node: '>=10.17.0'}
     dev: false
 
   /hyphen/1.6.4:
@@ -11451,6 +11702,42 @@ packages:
       throat: 5.0.0
     dev: false
 
+  /jest-changed-files/27.5.1:
+    resolution: {integrity: sha512-buBLMiByfWGCoMsLLzGUUSpAmIAGnbR2KJoMN10ziLhOLvP4e0SlypHnAel8iqQXTrcbmfEY9sSqae5sgUsTvw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      execa: 5.1.1
+      throat: 6.0.1
+    dev: false
+
+  /jest-circus/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-D95R7x5UtlMA5iBYsOHFFbMD/GVA4R/Kdq15f7xYWUfWHBto9NYRsOvnSauTgdF+ogCpJ4tyKOXhUifxS65gdw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/environment': 27.5.1
+      '@jest/test-result': 27.5.1
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      chalk: 4.1.2
+      co: 4.6.0
+      dedent: 0.7.0
+      expect: 27.5.1
+      is-generator-fn: 2.1.0
+      jest-each: 27.5.1
+      jest-matcher-utils: 27.5.1
+      jest-message-util: 27.5.1
+      jest-runtime: 27.5.1_supports-color@7.2.0
+      jest-snapshot: 27.5.1_supports-color@7.2.0
+      jest-util: 27.5.1
+      pretty-format: 27.5.1
+      slash: 3.0.0
+      stack-utils: 2.0.5
+      throat: 6.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /jest-cli/26.6.3_1510559afde85c4495f2889856f2bf5e:
     resolution: {integrity: sha512-GF9noBSa9t08pSyl3CY4frMrqp+aQXFGFkf5hEPbh/pIUFYWMK6ZLTfbmadxJVcJrdRoChlWQsA2VkJcDFK8hg==}
     engines: {node: '>= 10.14.2'}
@@ -11469,6 +11756,36 @@ packages:
       jest-validate: 26.6.2
       prompts: 2.4.2
       yargs: 15.4.1
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - ts-node
+      - utf-8-validate
+    dev: false
+
+  /jest-cli/27.5.1_1510559afde85c4495f2889856f2bf5e:
+    resolution: {integrity: sha512-Hc6HOOwYq4/74/c62dEE3r5elx8wjYqxY0r0G/nFrLDPMFRu6RA/u8qINOIkvhxG7mMQ5EJsOGfRpI8L6eFUVw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    hasBin: true
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@jest/core': 27.5.1_1510559afde85c4495f2889856f2bf5e
+      '@jest/test-result': 27.5.1
+      '@jest/types': 27.5.1
+      chalk: 4.1.2
+      exit: 0.1.2
+      graceful-fs: 4.2.10
+      import-local: 3.1.0
+      jest-config: 27.5.1_1510559afde85c4495f2889856f2bf5e
+      jest-util: 27.5.1
+      jest-validate: 27.5.1
+      prompts: 2.4.2
+      yargs: 16.2.0
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -11512,6 +11829,47 @@ packages:
       - utf-8-validate
     dev: false
 
+  /jest-config/27.5.1_1510559afde85c4495f2889856f2bf5e:
+    resolution: {integrity: sha512-5sAsjm6tGdsVbW9ahcChPAFCk4IlkQUknH5AvKjuLTSlcO/wCZKyFdn7Rg0EkC+OGgWODEy2hDpWB1PgzH0JNA==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    peerDependencies:
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      ts-node:
+        optional: true
+    dependencies:
+      '@babel/core': 7.18.10_supports-color@7.2.0
+      '@jest/test-sequencer': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      babel-jest: 27.5.1_70b352bc760a42eb3a892076f5e19518
+      chalk: 4.1.2
+      ci-info: 3.3.2
+      deepmerge: 4.2.2
+      glob: 7.2.3
+      graceful-fs: 4.2.10
+      jest-circus: 27.5.1_supports-color@7.2.0
+      jest-environment-jsdom: 27.5.1_bf228ea39d7f9929fef5cd14a9f43fe9
+      jest-environment-node: 27.5.1
+      jest-get-type: 27.5.1
+      jest-jasmine2: 27.5.1_supports-color@7.2.0
+      jest-regex-util: 27.5.1
+      jest-resolve: 27.5.1
+      jest-runner: 27.5.1_bf228ea39d7f9929fef5cd14a9f43fe9
+      jest-util: 27.5.1
+      jest-validate: 27.5.1
+      micromatch: 4.0.5
+      parse-json: 5.2.0
+      pretty-format: 27.5.1
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+      ts-node: 9.1.1_typescript@4.7.4
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - utf-8-validate
+    dev: false
+
   /jest-diff/26.6.2:
     resolution: {integrity: sha512-6m+9Z3Gv9wN0WFVasqjCL/06+EFCMTqDEUl/b87HYK2rAPTyfz4ZIuSlPhY51PIQRWx5TaxeF1qmXKe9gfN3sA==}
     engines: {node: '>= 10.14.2'}
@@ -11522,9 +11880,26 @@ packages:
       pretty-format: 26.6.2
     dev: false
 
+  /jest-diff/27.5.1:
+    resolution: {integrity: sha512-m0NvkX55LDt9T4mctTEgnZk3fmEg3NRYutvMPWM/0iPnkFj2wIeF45O1718cMSOFO1vINkqmxqD8vE37uTEbqw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      chalk: 4.1.2
+      diff-sequences: 27.5.1
+      jest-get-type: 27.5.1
+      pretty-format: 27.5.1
+    dev: false
+
   /jest-docblock/26.0.0:
     resolution: {integrity: sha512-RDZ4Iz3QbtRWycd8bUEPxQsTlYazfYn/h5R65Fc6gOfwozFhoImx+affzky/FFBuqISPTqjXomoIGJVKBWoo0w==}
     engines: {node: '>= 10.14.2'}
+    dependencies:
+      detect-newline: 3.1.0
+    dev: false
+
+  /jest-docblock/27.5.1:
+    resolution: {integrity: sha512-rl7hlABeTsRYxKiUfpHrQrG4e2obOiTQWfMEH3PxPjOtdsfLQO4ReWSZaQ7DETm4xu07rl4q/h4zcKXyU0/OzQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       detect-newline: 3.1.0
     dev: false
@@ -11540,6 +11915,17 @@ packages:
       pretty-format: 26.6.2
     dev: false
 
+  /jest-each/27.5.1:
+    resolution: {integrity: sha512-1Ff6p+FbhT/bXQnEouYy00bkNSY7OUpfIcmdl8vZ31A1UUaurOLPA8a8BbJOF2RDUElwJhmeaV7LnagI+5UwNQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      chalk: 4.1.2
+      jest-get-type: 27.5.1
+      jest-util: 27.5.1
+      pretty-format: 27.5.1
+    dev: false
+
   /jest-environment-jsdom/26.6.2_bf228ea39d7f9929fef5cd14a9f43fe9:
     resolution: {integrity: sha512-jgPqCruTlt3Kwqg5/WVFyHIOJHsiAvhcp2qiR2QQstuG9yWox5+iHpU3ZrcBxW14T4fe5Z68jAfLRh7joCSP2Q==}
     engines: {node: '>= 10.14.2'}
@@ -11550,6 +11936,24 @@ packages:
       '@types/node': 14.18.23
       jest-mock: 26.6.2
       jest-util: 26.6.2
+      jsdom: 16.7.0_bf228ea39d7f9929fef5cd14a9f43fe9
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - utf-8-validate
+    dev: false
+
+  /jest-environment-jsdom/27.5.1_bf228ea39d7f9929fef5cd14a9f43fe9:
+    resolution: {integrity: sha512-TFBvkTC1Hnnnrka/fUb56atfDtJ9VMZ94JkjTbggl1PEpwrYtUBKMezB3inLmWqQsXYLcMwNoDQwoBTAvFfsfw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/environment': 27.5.1
+      '@jest/fake-timers': 27.5.1
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      jest-mock: 27.5.1
+      jest-util: 27.5.1
       jsdom: 16.7.0_bf228ea39d7f9929fef5cd14a9f43fe9
     transitivePeerDependencies:
       - bufferutil
@@ -11587,6 +11991,11 @@ packages:
     engines: {node: '>= 10.14.2'}
     dev: false
 
+  /jest-get-type/27.5.1:
+    resolution: {integrity: sha512-2KY95ksYSaK7DMBWQn6dQz3kqAf3BB64y2udeG+hv4KfSOb9qwcYQstTJc1KCbsix+wLZWZYN8t7nwX3GOBLRw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dev: false
+
   /jest-haste-map/26.6.2:
     resolution: {integrity: sha512-easWIJXIw71B2RdR8kgqpjQrbMRWQBgiBwXYEhtGUTaX+doCjBheluShdDMeR8IMfJiTqH4+zfhtg29apJf/8w==}
     engines: {node: '>= 10.14.2'}
@@ -11603,6 +12012,26 @@ packages:
       jest-worker: 26.6.2
       micromatch: 4.0.5
       sane: 4.1.0
+      walker: 1.0.8
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
+
+  /jest-haste-map/27.5.1:
+    resolution: {integrity: sha512-7GgkZ4Fw4NFbMSDSpZwXeBiIbx+t/46nJ2QitkOjvwPYyZmqttu2TDSimMHP1EkPOi4xUZAN1doE5Vd25H4Jng==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      '@types/graceful-fs': 4.1.5
+      '@types/node': 16.11.47
+      anymatch: 3.1.2
+      fb-watchman: 2.0.1
+      graceful-fs: 4.2.10
+      jest-regex-util: 27.5.1
+      jest-serializer: 27.5.1
+      jest-util: 27.5.1
+      jest-worker: 27.5.1
+      micromatch: 4.0.5
       walker: 1.0.8
     optionalDependencies:
       fsevents: 2.3.2
@@ -11638,12 +12067,45 @@ packages:
       - utf-8-validate
     dev: false
 
+  /jest-jasmine2/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-jtq7VVyG8SqAorDpApwiJJImd0V2wv1xzdheGHRGyuT7gZm6gG47QEskOlzsN1PG/6WNaCo5pmwMHDf3AkG2pQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/environment': 27.5.1
+      '@jest/source-map': 27.5.1
+      '@jest/test-result': 27.5.1
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      chalk: 4.1.2
+      co: 4.6.0
+      expect: 27.5.1
+      is-generator-fn: 2.1.0
+      jest-each: 27.5.1
+      jest-matcher-utils: 27.5.1
+      jest-message-util: 27.5.1
+      jest-runtime: 27.5.1_supports-color@7.2.0
+      jest-snapshot: 27.5.1_supports-color@7.2.0
+      jest-util: 27.5.1
+      pretty-format: 27.5.1
+      throat: 6.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /jest-leak-detector/26.6.2:
     resolution: {integrity: sha512-i4xlXpsVSMeKvg2cEKdfhh0H39qlJlP5Ex1yQxwF9ubahboQYMgTtz5oML35AVA3B4Eu+YsmwaiKVev9KCvLxg==}
     engines: {node: '>= 10.14.2'}
     dependencies:
       jest-get-type: 26.3.0
       pretty-format: 26.6.2
+    dev: false
+
+  /jest-leak-detector/27.5.1:
+    resolution: {integrity: sha512-POXfWAMvfU6WMUXftV4HolnJfnPOGEu10fscNCA76KBpRRhcMN2c8d3iT2pxQS3HLbA+5X4sOUPzYO2NUyIlHQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      jest-get-type: 27.5.1
+      pretty-format: 27.5.1
     dev: false
 
   /jest-matcher-utils/26.6.2:
@@ -11654,6 +12116,16 @@ packages:
       jest-diff: 26.6.2
       jest-get-type: 26.3.0
       pretty-format: 26.6.2
+    dev: false
+
+  /jest-matcher-utils/27.5.1:
+    resolution: {integrity: sha512-z2uTx/T6LBaCoNWNFWwChLBKYxTMcGBRjAt+2SbP929/Fflb9aa5LGma654Rz8z9HLxsrUaYzxE9T/EFIL/PAw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      chalk: 4.1.2
+      jest-diff: 27.5.1
+      jest-get-type: 27.5.1
+      pretty-format: 27.5.1
     dev: false
 
   /jest-message-util/26.6.2:
@@ -11714,9 +12186,26 @@ packages:
       jest-resolve: 26.6.2
     dev: false
 
+  /jest-pnp-resolver/1.2.2_jest-resolve@27.5.1:
+    resolution: {integrity: sha512-olV41bKSMm8BdnuMsewT4jqlZ8+3TCARAXjZGT9jcoSnrfUnRCqnMoF9XEeoWjbzObpqF9dRhHQj0Xb9QdF6/w==}
+    engines: {node: '>=6'}
+    peerDependencies:
+      jest-resolve: '*'
+    peerDependenciesMeta:
+      jest-resolve:
+        optional: true
+    dependencies:
+      jest-resolve: 27.5.1
+    dev: false
+
   /jest-regex-util/26.0.0:
     resolution: {integrity: sha512-Gv3ZIs/nA48/Zvjrl34bf+oD76JHiGDUxNOVgUjh3j890sblXryjY4rss71fPtD/njchl6PSE2hIhvyWa1eT0A==}
     engines: {node: '>= 10.14.2'}
+    dev: false
+
+  /jest-regex-util/27.5.1:
+    resolution: {integrity: sha512-4bfKq2zie+x16okqDXjXn9ql2B0dScQu+vcwe4TvFVhkVyuWLqpZrZtXxLLWoXYgn0E87I6r6GRYHF7wFZBUvg==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dev: false
 
   /jest-resolve-dependencies/26.6.3:
@@ -11726,6 +12215,17 @@ packages:
       '@jest/types': 26.6.2
       jest-regex-util: 26.0.0
       jest-snapshot: 26.6.2
+    dev: false
+
+  /jest-resolve-dependencies/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-QQOOdY4PE39iawDn5rzbIePNigfe5B9Z91GDD1ae/xNDlu9kaat8QQ5EKnNmVWPV54hUdxCVwwj6YMgR2O7IOg==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      jest-regex-util: 27.5.1
+      jest-snapshot: 27.5.1_supports-color@7.2.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /jest-resolve/26.6.2:
@@ -11739,6 +12239,22 @@ packages:
       jest-util: 26.6.2
       read-pkg-up: 7.0.1
       resolve: 1.22.1
+      slash: 3.0.0
+    dev: false
+
+  /jest-resolve/27.5.1:
+    resolution: {integrity: sha512-FFDy8/9E6CV83IMbDpcjOhumAQPDyETnU2KZ1O98DwTnz8AOBsW/Xv3GySr1mOZdItLR+zDZ7I/UdTFbgSOVCw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      chalk: 4.1.2
+      graceful-fs: 4.2.10
+      jest-haste-map: 27.5.1
+      jest-pnp-resolver: 1.2.2_jest-resolve@27.5.1
+      jest-util: 27.5.1
+      jest-validate: 27.5.1
+      resolve: 1.22.1
+      resolve.exports: 1.1.0
       slash: 3.0.0
     dev: false
 
@@ -11771,6 +12287,38 @@ packages:
       - canvas
       - supports-color
       - ts-node
+      - utf-8-validate
+    dev: false
+
+  /jest-runner/27.5.1_bf228ea39d7f9929fef5cd14a9f43fe9:
+    resolution: {integrity: sha512-g4NPsM4mFCOwFKXO4p/H/kWGdJp9V8kURY2lX8Me2drgXqG7rrZAx5kv+5H7wtt/cdFIjhqYx1HrlqWHaOvDaQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/console': 27.5.1
+      '@jest/environment': 27.5.1
+      '@jest/test-result': 27.5.1
+      '@jest/transform': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      chalk: 4.1.2
+      emittery: 0.8.1
+      graceful-fs: 4.2.10
+      jest-docblock: 27.5.1
+      jest-environment-jsdom: 27.5.1_bf228ea39d7f9929fef5cd14a9f43fe9
+      jest-environment-node: 27.5.1
+      jest-haste-map: 27.5.1
+      jest-leak-detector: 27.5.1
+      jest-message-util: 27.5.1
+      jest-resolve: 27.5.1
+      jest-runtime: 27.5.1_supports-color@7.2.0
+      jest-util: 27.5.1
+      jest-worker: 27.5.1
+      source-map-support: 0.5.21
+      throat: 6.0.1
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -11814,11 +12362,49 @@ packages:
       - utf-8-validate
     dev: false
 
+  /jest-runtime/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-o7gxw3Gf+H2IGt8fv0RiyE1+r83FJBRruoA+FXrlHw6xEyBsU8ugA6IPfTdVyA0w8HClpbK+DGJxH59UrNMx8A==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/environment': 27.5.1
+      '@jest/fake-timers': 27.5.1
+      '@jest/globals': 27.5.1
+      '@jest/source-map': 27.5.1
+      '@jest/test-result': 27.5.1
+      '@jest/transform': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      chalk: 4.1.2
+      cjs-module-lexer: 1.2.2
+      collect-v8-coverage: 1.0.1
+      execa: 5.1.1
+      glob: 7.2.3
+      graceful-fs: 4.2.10
+      jest-haste-map: 27.5.1
+      jest-message-util: 27.5.1
+      jest-mock: 27.5.1
+      jest-regex-util: 27.5.1
+      jest-resolve: 27.5.1
+      jest-snapshot: 27.5.1_supports-color@7.2.0
+      jest-util: 27.5.1
+      slash: 3.0.0
+      strip-bom: 4.0.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /jest-serializer/26.6.2:
     resolution: {integrity: sha512-S5wqyz0DXnNJPd/xfIzZ5Xnp1HrJWBczg8mMfMpN78OJ5eDxXyf+Ygld9wX1DnUWbIbhM1YDY95NjR4CBXkb2g==}
     engines: {node: '>= 10.14.2'}
     dependencies:
       '@types/node': 14.18.23
+      graceful-fs: 4.2.10
+    dev: false
+
+  /jest-serializer/27.5.1:
+    resolution: {integrity: sha512-jZCyo6iIxO1aqUxpuBlwTDMkzOAJS4a3eYz3YzgxxVQFwLeSA7Jfq5cbqCY+JLvTDrWirgusI/0KwxKMgrdf7w==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@types/node': 16.11.47
       graceful-fs: 4.2.10
     dev: false
 
@@ -11842,6 +12428,36 @@ packages:
       natural-compare: 1.4.0
       pretty-format: 26.6.2
       semver: 7.3.7
+    dev: false
+
+  /jest-snapshot/27.5.1_supports-color@7.2.0:
+    resolution: {integrity: sha512-yYykXI5a0I31xX67mgeLw1DZ0bJB+gpq5IpSuCAoyDi0+BhgU/RIrL+RTzDmkNTchvDFWKP8lp+w/42Z3us5sA==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@babel/core': 7.18.10_supports-color@7.2.0
+      '@babel/generator': 7.18.10
+      '@babel/plugin-syntax-typescript': 7.18.6_@babel+core@7.18.10
+      '@babel/traverse': 7.18.10_supports-color@7.2.0
+      '@babel/types': 7.18.10
+      '@jest/transform': 27.5.1_supports-color@7.2.0
+      '@jest/types': 27.5.1
+      '@types/babel__traverse': 7.17.1
+      '@types/prettier': 2.6.4
+      babel-preset-current-node-syntax: 1.0.1_@babel+core@7.18.10
+      chalk: 4.1.2
+      expect: 27.5.1
+      graceful-fs: 4.2.10
+      jest-diff: 27.5.1
+      jest-get-type: 27.5.1
+      jest-haste-map: 27.5.1
+      jest-matcher-utils: 27.5.1
+      jest-message-util: 27.5.1
+      jest-util: 27.5.1
+      natural-compare: 1.4.0
+      pretty-format: 27.5.1
+      semver: 7.3.7
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /jest-util/26.6.2:
@@ -11880,6 +12496,18 @@ packages:
       pretty-format: 26.6.2
     dev: false
 
+  /jest-validate/27.5.1:
+    resolution: {integrity: sha512-thkNli0LYTmOI1tDB3FI1S1RTp/Bqyd9pTarJwL87OIBFuqEb5Apv5EaApEudYg4g86e3CT6kM0RowkhtEnCBQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/types': 27.5.1
+      camelcase: 6.3.0
+      chalk: 4.1.2
+      jest-get-type: 27.5.1
+      leven: 3.1.0
+      pretty-format: 27.5.1
+    dev: false
+
   /jest-watcher/26.6.2:
     resolution: {integrity: sha512-WKJob0P/Em2csiVthsI68p6aGKTIcsfjH9Gsx1f0A3Italz43e3ho0geSAVsmj09RWOELP1AZ/DXyJgOgDKxXQ==}
     engines: {node: '>= 10.14.2'}
@@ -11890,6 +12518,19 @@ packages:
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       jest-util: 26.6.2
+      string-length: 4.0.2
+    dev: false
+
+  /jest-watcher/27.5.1:
+    resolution: {integrity: sha512-z676SuD6Z8o8qbmEGhoEUFOM1+jfEiL3DXHK/xgEiG2EyNYfFG60jluWcupY6dATjfEsKQuibReS1djInQnoVw==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    dependencies:
+      '@jest/test-result': 27.5.1
+      '@jest/types': 27.5.1
+      '@types/node': 16.11.47
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      jest-util: 27.5.1
       string-length: 4.0.2
     dev: false
 
@@ -11910,6 +12551,15 @@ packages:
       supports-color: 7.2.0
     dev: false
 
+  /jest-worker/27.5.1:
+    resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
+    engines: {node: '>= 10.13.0'}
+    dependencies:
+      '@types/node': 16.11.47
+      merge-stream: 2.0.0
+      supports-color: 8.1.1
+    dev: false
+
   /jest/26.6.3_1510559afde85c4495f2889856f2bf5e:
     resolution: {integrity: sha512-lGS5PXGAzR4RF7V5+XObhqz2KZIDUA1yD0DG6pBVmy10eh0ZIXQImRuzocsI/N2XZ1GrLFwTS27In2i2jlpq1Q==}
     engines: {node: '>= 10.14.2'}
@@ -11918,6 +12568,27 @@ packages:
       '@jest/core': 26.6.3_1510559afde85c4495f2889856f2bf5e
       import-local: 3.1.0
       jest-cli: 26.6.3_1510559afde85c4495f2889856f2bf5e
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - ts-node
+      - utf-8-validate
+    dev: false
+
+  /jest/27.5.1_1510559afde85c4495f2889856f2bf5e:
+    resolution: {integrity: sha512-Yn0mADZB89zTtjkPJEXwrac3LHudkQMR+Paqa8uxJHCBr9agxztUifWCyiYrjhMPBoUVBjyny0I7XH6ozDr7QQ==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    hasBin: true
+    peerDependencies:
+      node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      node-notifier:
+        optional: true
+    dependencies:
+      '@jest/core': 27.5.1_1510559afde85c4495f2889856f2bf5e
+      import-local: 3.1.0
+      jest-cli: 27.5.1_1510559afde85c4495f2889856f2bf5e
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -15949,6 +16620,11 @@ packages:
     deprecated: https://github.com/lydell/resolve-url#deprecated
     dev: false
 
+  /resolve.exports/1.1.0:
+    resolution: {integrity: sha512-J1l+Zxxp4XK3LUDZ9m60LRJF/mAe4z6a4xyabPHk7pvK5t35dACV32iIjJDFeWZFfZlO29w6SZ67knR0tHzJtQ==}
+    engines: {node: '>=10'}
+    dev: false
+
   /resolve/1.1.7:
     resolution: {integrity: sha512-9znBF0vBcaSN3W2j7wKvdERPwqTxSpCq+if5C0WoTCyV9n24rua28jeuQ2pL/HOf+yUe/Mef+H/5p60K0Id3bg==}
     dev: false
@@ -17159,6 +17835,13 @@ packages:
       has-flag: 4.0.0
     dev: false
 
+  /supports-color/8.1.1:
+    resolution: {integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==}
+    engines: {node: '>=10'}
+    dependencies:
+      has-flag: 4.0.0
+    dev: false
+
   /supports-hyperlinks/2.2.0:
     resolution: {integrity: sha512-6sXEzV5+I5j8Bmq9/vUphGRM/RJNT9SCURJLjwfOg51heRtguGWDzcaBlgAzKhQa0EVNpPEKzQuBwZ8S8WaCeQ==}
     engines: {node: '>=8'}
@@ -17503,6 +18186,10 @@ packages:
     resolution: {integrity: sha512-fcwX4mndzpLQKBS1DVYhGAcYaYt7vsHNIvQV+WXMvnow5cgjPphq5CaayLaGsjRdSCKZFNGt7/GYAuXaNOiYCA==}
     dev: false
 
+  /throat/6.0.1:
+    resolution: {integrity: sha512-8hmiGIJMDlwjg7dlJ4yKGLK8EsYqKgPWbG3b4wjJddKNwc7N7Dpn08Df4szr/sZdMVeOstrdYSsqzX6BYbcB+w==}
+    dev: false
+
   /throttle-debounce/2.3.0:
     resolution: {integrity: sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==}
     engines: {node: '>=8'}
@@ -17679,23 +18366,36 @@ packages:
     engines: {node: '>=6.10'}
     dev: false
 
-  /ts-jest/26.5.6_jest@26.6.3+typescript@4.7.4:
-    resolution: {integrity: sha512-rua+rCP8DxpA8b4DQD/6X2HQS8Zy/xzViVYfEs2OQu68tkCuKLV0Md8pmX55+W24uRIyAsf/BajRfxOs+R2MKA==}
-    engines: {node: '>= 10'}
+  /ts-jest/27.1.5_e807ed7f9a9f77c4be4445f84cb031f7:
+    resolution: {integrity: sha512-Xv6jBQPoBEvBq/5i2TeSG9tt/nqkbpcurrEG1b+2yfBrcJelOZF9Ml6dmyMh7bcW9JyFbRYpR5rxROSlBLTZHA==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
     peerDependencies:
-      jest: '>=26 <27'
+      '@babel/core': '>=7.0.0-beta.0 <8'
+      '@types/jest': ^27.0.0
+      babel-jest: '>=27.0.0 <28'
+      esbuild: '*'
+      jest: ^27.0.0
       typescript: '>=3.8 <5.0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@types/jest':
+        optional: true
+      babel-jest:
+        optional: true
+      esbuild:
+        optional: true
     dependencies:
+      '@babel/core': 7.18.10_supports-color@7.2.0
+      '@types/jest': 27.5.2
       bs-logger: 0.2.6
-      buffer-from: 1.1.2
       fast-json-stable-stringify: 2.1.0
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
-      jest-util: 26.6.2
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
+      jest-util: 27.5.1
       json5: 2.2.1
-      lodash: 4.17.21
+      lodash.memoize: 4.1.2
       make-error: 1.3.6
-      mkdirp: 1.0.4
       semver: 7.3.7
       typescript: 4.7.4
       yargs-parser: 20.2.9
@@ -18190,6 +18890,15 @@ packages:
   /v8-to-istanbul/7.1.2:
     resolution: {integrity: sha512-TxNb7YEUwkLXCQYeudi6lgQ/SZrzNO4kMdlqVxaZPUIUjCv6iSSypUQX70kNBSERpQ8fk48+d61FXk+tgqcWow==}
     engines: {node: '>=10.10.0'}
+    dependencies:
+      '@types/istanbul-lib-coverage': 2.0.4
+      convert-source-map: 1.8.0
+      source-map: 0.7.4
+    dev: false
+
+  /v8-to-istanbul/8.1.1:
+    resolution: {integrity: sha512-FGtKtv3xIpR6BYhvgH8MI/y78oT7d8Au3ww4QIxymrCtZEh5b8gCw2siywE+puhEmuWKDtmfrvF5UlB298ut3w==}
+    engines: {node: '>=10.12.0'}
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.4
       convert-source-map: 1.8.0
@@ -18927,7 +19636,7 @@ packages:
     dev: false
 
   file:projects/example-web.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-Jz+B3d4kvRL9834yJzrXAE4eR03p9uOsx43fjy9J8kFFrZEuIfI5UPwfU5ZaqwQE10D4o/2bcMtfUtesrarZuw==, tarball: file:projects/example-web.tgz}
+    resolution: {integrity: sha512-FIq1EVpwDVT9hLM8wt/pJbwzYzH9FIiVWuEZPyPSnUVp2161siHtovhzJmtaJriT6ospzwKnZ02BiCUPTsCIZw==, tarball: file:projects/example-web.tgz}
     id: file:projects/example-web.tgz
     name: '@rush-temp/example-web'
     version: 0.0.0
@@ -18942,7 +19651,7 @@ packages:
       '@sentry/types': 5.30.0
       '@types/express': 4.17.13
       '@types/express-serve-static-core': 4.17.30
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@types/react': 16.14.29
       '@types/react-dom': 16.9.16
@@ -18950,7 +19659,7 @@ packages:
       '@types/react-redux': 7.1.24
       '@types/react-router': 5.1.18
       '@types/react-router-dom': 5.3.3
-      '@types/selenium-webdriver': 4.1.2
+      '@types/selenium-webdriver': 4.1.1
       '@types/source-map': 0.5.2
       '@types/superagent': 4.1.15
       '@types/supertest': 2.0.12
@@ -18967,7 +19676,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -18979,7 +19688,7 @@ packages:
       immutable: 3.8.2
       invariant: 2.2.4
       isarray: 2.0.5
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       mini-css-extract-plugin: 0.9.0_webpack@4.46.0
       postcss: 8.2.4
       prop-types: 15.8.1
@@ -19005,7 +19714,7 @@ packages:
       supports-color: 7.2.0
       swagger-ui-react: 3.25.0_react-dom@16.14.0+react@16.14.0
       tiny-warning: 1.0.3
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
       utf-8-validate: 5.0.9
       webpack: 4.46.0
@@ -19015,8 +19724,11 @@ packages:
       ws: 7.5.9_d6955b83f926115bf12ffeabab6deaae
     transitivePeerDependencies:
       - '@types/webpack'
+      - babel-jest
       - canvas
       - encoding
+      - esbuild
+      - node-notifier
       - react-native
       - ts-node
       - type-fest
@@ -19027,8 +19739,8 @@ packages:
       - webpack-plugin-serve
     dev: false
 
-  file:projects/hatch-cdk.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-5+R0cokmiGfofhC1boWW4gycmzaQd6iI28gZJ2gTKwqU/atAJjE4B7bSkeTSP1kvgVaa6SZ9kmL7HQ8iUalViQ==, tarball: file:projects/hatch-cdk.tgz}
+  file:projects/hatch-cdk.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-zvmO4OaadfufV81Z9z7hNM3x2jeIxVmWXnHzAt0U43Cai/6LJkOGOppn/rTNL2roHn0/ntYZOX324cLxa9T3VQ==, tarball: file:projects/hatch-cdk.tgz}
     id: file:projects/hatch-cdk.tgz
     name: '@rush-temp/hatch-cdk'
     version: 0.0.0
@@ -19058,7 +19770,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       rimraf: 3.0.0
       source-map-support: 0.5.21
       ts-node: 9.1.1_typescript@4.7.4
@@ -19068,8 +19780,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-cli.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-ZlpVC8Q/o2/N4hG+waBXoDT19YNmRrrfrZHreie+8wUPS8FCNhV9UMlTHAS2mD21JYuiIXXdQHVmwY7ldRsNiA==, tarball: file:projects/hatch-cli.tgz}
+  file:projects/hatch-cli.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-MXIcI3Sn3GIAcRqe3P7oZLszxjHgf+2k8rLO2T7sGdNqDyW+U/i5O34lrpFQa3wHi1VyaJN3ymGUq5bwRFjgLQ==, tarball: file:projects/hatch-cli.tgz}
     id: file:projects/hatch-cli.tgz
     name: '@rush-temp/hatch-cli'
     version: 0.0.0
@@ -19091,7 +19803,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       fs-extra: 8.1.0
       inquirer: 7.3.3
       ora: 4.1.1
@@ -19106,8 +19818,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-client-sdk.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-XRE34Im3+dIKH0REe24fEoYVxSkqnygGwvxW3N4ONOVs1pqS0lpOYC7GIlKHJoVbk/p0heXmFxo11hZ/11qdgQ==, tarball: file:projects/hatch-client-sdk.tgz}
+  file:projects/hatch-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-CYmbM5FhQrGEp/QBaTXULPg8zY+UV3yH1DmZ6GGZ2uRIiLo+tkj5di27WHWF85RNCxFqnwkjUl4DypylDJI9Uw==, tarball: file:projects/hatch-client-sdk.tgz}
     id: file:projects/hatch-client-sdk.tgz
     name: '@rush-temp/hatch-client-sdk'
     version: 0.0.0
@@ -19121,7 +19833,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       fs-extra: 8.1.0
       rimraf: 3.0.0
       tmp: 0.2.1
@@ -19131,7 +19843,7 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-eslint-config.tgz_6169eeec7eb63626f839cc9ea5c1175f:
+  file:projects/hatch-eslint-config.tgz_e7d31b03c8e7ff5df7780e84fc65868e:
     resolution: {integrity: sha512-TOOjAc/MgnCR3NcXCZ0dgvC8WVpHVPAXDwrHo4lY4cNtjREXBTpUnyH+77u3cQpsUXJTnrU+5ZUEkyi6PSqqOw==, tarball: file:projects/hatch-eslint-config.tgz}
     id: file:projects/hatch-eslint-config.tgz
     name: '@rush-temp/hatch-eslint-config'
@@ -19142,15 +19854,15 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
     transitivePeerDependencies:
       - jest
       - supports-color
       - typescript
     dev: false
 
-  file:projects/hatch-i18n.tgz_6136b0cb34ff9394d82b8c66e50ae607:
-    resolution: {integrity: sha512-Edj5cQ4iRk4+2Z3lzEmBRcPaC7h3PxvvAhw4Rv0Ai3Hp9tF1RPiRrsSyBxeChkmyLT1JKmO1dbj5I4PA0qMmtA==, tarball: file:projects/hatch-i18n.tgz}
+  file:projects/hatch-i18n.tgz_e04c523ac33ebe4cd0b31c7b1114146c:
+    resolution: {integrity: sha512-TMy1E4/YqMbfZ9flkEIEbFapcbvBL1LvpXAmBMpZ8x2c5nVCkDJHh19haOLV3R0Y2sZpt9HjReY5uVBzZLo7tA==, tarball: file:projects/hatch-i18n.tgz}
     id: file:projects/hatch-i18n.tgz
     name: '@rush-temp/hatch-i18n'
     version: 0.0.0
@@ -19162,7 +19874,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       i18next: 19.9.2
       i18next-react-postprocessor: 3.1.0_i18next@19.9.2+react@16.14.0
       luxon: 1.28.0
@@ -19174,13 +19886,13 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-mock-server.tgz_24c42f77eb3caf0ef9fa82891ac5a5bd:
-    resolution: {integrity: sha512-2mBJgxMhJLUMW+m8n3JGcDqRrzjUYS53l7xhfBE9Zr865LTT5Blt66jQ5T5GhsqvvhTypph1RLOM9RusY1x3Sw==, tarball: file:projects/hatch-mock-server.tgz}
+  file:projects/hatch-mock-server.tgz_d8196d955e89a8c34fd539734db97bd8:
+    resolution: {integrity: sha512-UlNEb8uxLbhlt+6PSadnybWkV3/xQPLe3knkHHvGVNM5lbuE0XdQP2ON3jYLOfBZEUIOdp8o79ORI9jo0q19DA==, tarball: file:projects/hatch-mock-server.tgz}
     id: file:projects/hatch-mock-server.tgz
     name: '@rush-temp/hatch-mock-server'
     version: 0.0.0
     dependencies:
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@types/tmp': 0.2.3
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
@@ -19189,20 +19901,24 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       grunt: 1.5.3
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       mockserver-client: 5.13.2
       mockserver-node: 5.13.2_debug@4.3.4
       rimraf: 3.0.0
       tmp: 0.2.1
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
     transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
       - bufferutil
       - canvas
       - debug
       - encoding
+      - esbuild
+      - node-notifier
       - supports-color
       - ts-node
       - utf-8-validate
@@ -19234,13 +19950,13 @@ packages:
       - webpack-command
     dev: false
 
-  file:projects/hatch-rpc-node.tgz_1510559afde85c4495f2889856f2bf5e:
-    resolution: {integrity: sha512-J7pcHPDe+ShktKvpt6JzzQYNuBA0uwJ1A2elD3YLZS4aOL9gzrp1IZB4BauVH0zfHrXM5RtpqZsauIikZkdFDw==, tarball: file:projects/hatch-rpc-node.tgz}
+  file:projects/hatch-rpc-node.tgz_966a285e7657d0914f7113bf8da1d625:
+    resolution: {integrity: sha512-kRI6pudBwg1JBIkB65CpoiBJ433Mx/CRNN8Or4ytpaGofuxEaBDy01UY+gIv/wj7POaC6nsYu5iOOwe8GdLa1g==, tarball: file:projects/hatch-rpc-node.tgz}
     id: file:projects/hatch-rpc-node.tgz
     name: '@rush-temp/hatch-rpc-node'
     version: 0.0.0
     dependencies:
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@types/uuid': 8.3.4
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
@@ -19248,48 +19964,56 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       rimraf: 3.0.0
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
       uuid: 8.3.2
     transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
       - bufferutil
       - canvas
+      - esbuild
+      - node-notifier
       - supports-color
       - ts-node
       - utf-8-validate
     dev: false
 
-  file:projects/hatch-rpc.tgz_1510559afde85c4495f2889856f2bf5e:
-    resolution: {integrity: sha512-/3u3/txNqTSDDEcqwGvW5LuG9kKBE1RvtbSulmKi49XgvTnlVZav+X5xI5ipwdIKiNJbOx0xw+hRXYNP4cZHXQ==, tarball: file:projects/hatch-rpc.tgz}
+  file:projects/hatch-rpc.tgz_966a285e7657d0914f7113bf8da1d625:
+    resolution: {integrity: sha512-WOBwzqJ4sEFkpcJEIl5H3VyPA8hHIcxKOFdkvTABmzoOS3Id4VRqrqElzEeyByuxGA+CoKSQ8qyIOTHsljmKDw==, tarball: file:projects/hatch-rpc.tgz}
     id: file:projects/hatch-rpc.tgz
     name: '@rush-temp/hatch-rpc'
     version: 0.0.0
     dependencies:
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       rimraf: 3.0.0
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
     transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
       - bufferutil
       - canvas
+      - esbuild
+      - node-notifier
       - supports-color
       - ts-node
       - utf-8-validate
     dev: false
 
-  file:projects/hatch-server-middleware.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-qERvVYCcBHvWiSczaODpUtOIFmc6SQfARo1ZkFG4T2XwRUb1yQkJhOY3WzmUQ2pCF9D5/25q7qhwHUAYlUWV6w==, tarball: file:projects/hatch-server-middleware.tgz}
+  file:projects/hatch-server-middleware.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-rUm1d45CkTw3qOAfoO9i01075Jh38Ww6EtUrA4ovc/uYp+SEyjafJ3AYi4qoU3b8sIrTLa1/TEpXZeFIXb5Zqw==, tarball: file:projects/hatch-server-middleware.tgz}
     id: file:projects/hatch-server-middleware.tgz
     name: '@rush-temp/hatch-server-middleware'
     version: 0.0.0
@@ -19309,7 +20033,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       express: 4.18.1
       express-winston: 4.2.0_winston@3.8.1
       http-errors: 1.8.0
@@ -19324,8 +20048,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-server-pdf.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-+k5G2GSo7dp/cTYTqA0QeG03zloUp8+YnKXMa4z5e9pByH5yWdk/iWUQXsNq9IOt6r3oDOeT32yeteteXJBrFw==, tarball: file:projects/hatch-server-pdf.tgz}
+  file:projects/hatch-server-pdf.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-IrszY5/wHjdSx9KJ4ufhh8puoYV+0Rbh0zfnKHqVwxkP1954txa53cMMT7+AXcb72iwhGbYaozZwf02AVSAo2A==, tarball: file:projects/hatch-server-pdf.tgz}
     id: file:projects/hatch-server-pdf.tgz
     name: '@rush-temp/hatch-server-pdf'
     version: 0.0.0
@@ -19339,7 +20063,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -19353,8 +20077,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-server-user-management.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-ws3ojUE6Zt/6ILodJgVJQ2B9hzH2XxP6k2GTljsNdmu7wtTyvDF6wBocWC68vkP8kGESTaCZS7GyMNWwnHt65Q==, tarball: file:projects/hatch-server-user-management.tgz}
+  file:projects/hatch-server-user-management.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-HN3F7LBEz1MkrehK89o7hcuMYTkxHp9n/c9IMe2gJEAuaGr02u4FKJ72JTSHlwEatuaH9ELLBGCrzDS6sbqF7g==, tarball: file:projects/hatch-server-user-management.tgz}
     id: file:projects/hatch-server-user-management.tgz
     name: '@rush-temp/hatch-server-user-management'
     version: 0.0.0
@@ -19372,7 +20096,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       http-status-codes: 2.1.4
       jsonwebtoken: 8.5.1
       jwk-to-pem: 2.0.5
@@ -19384,8 +20108,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-server.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-EeDqZHfrBBvhd/4hd7MFP0PjI4Nh3s0awpQRvPVf6wCMDU/Aze3sXRJGFbFuWH7kWizncFJVoND8H8GqBYtIpg==, tarball: file:projects/hatch-server.tgz}
+  file:projects/hatch-server.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-5hk6O76s24bQcLT1V7JwPGt3nK2V2ZjpLIt2s8lDrCEfPjZSX9+ezOvLZF8n9kvvf1cDhr6gZ+7wphQ6mgzGJQ==, tarball: file:projects/hatch-server.tgz}
     id: file:projects/hatch-server.tgz
     name: '@rush-temp/hatch-server'
     version: 0.0.0
@@ -19405,7 +20129,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       express: 4.18.1
       http-status-codes: 2.1.4
       rimraf: 3.0.0
@@ -19420,8 +20144,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-template-client-sdk.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-/2TMQX/cXOg4Atu29NMH54lsE6w9h+XwcIDWlvo3iSwhzK5CNxZdJcirpEOTP+MZ89BbMDxQhHImTFYBpaItuQ==, tarball: file:projects/hatch-template-client-sdk.tgz}
+  file:projects/hatch-template-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-NBwXNDeVmCZTwTobgwQpo2yeZvYpzA5RGS5NAZN/kc2iVXdYIFw+PT3LbiBG4ijcc0fB7fDkYldosnSCOYbDQQ==, tarball: file:projects/hatch-template-client-sdk.tgz}
     id: file:projects/hatch-template-client-sdk.tgz
     name: '@rush-temp/hatch-template-client-sdk'
     version: 0.0.0
@@ -19433,7 +20157,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       rimraf: 3.0.0
       typescript: 4.7.4
     transitivePeerDependencies:
@@ -19442,34 +20166,38 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-template-library.tgz_1510559afde85c4495f2889856f2bf5e:
-    resolution: {integrity: sha512-rw/YUDy5cPXonlU73AFIGiITeWGAzmQ5rR3shwF9r/OHbj0N1fG/fDZ1dLjNTA2OwWiSp4iCWGCqcq22pyvH3Q==, tarball: file:projects/hatch-template-library.tgz}
+  file:projects/hatch-template-library.tgz_966a285e7657d0914f7113bf8da1d625:
+    resolution: {integrity: sha512-tgV9MuxP1wJ/r0bA8G4VJ44AVLMHcu3+G+bPvnpYivefrY2Rz2oOiKmTh+plR2YY+X4d82ESnU7L8iraoH4C/A==, tarball: file:projects/hatch-template-library.tgz}
     id: file:projects/hatch-template-library.tgz
     name: '@rush-temp/hatch-template-library'
     version: 0.0.0
     dependencies:
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       rimraf: 3.0.0
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
     transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
       - bufferutil
       - canvas
+      - esbuild
+      - node-notifier
       - supports-color
       - ts-node
       - utf-8-validate
     dev: false
 
   file:projects/hatch-template-microservice.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-c+8978sDRhrjdq2D7vfXM1/5S73ZfaREPTaz/r8+RLbEnpbv3hSdErI9QXSBhXPsdsxrP3fIwf0fd7VdKzVwnQ==, tarball: file:projects/hatch-template-microservice.tgz}
+    resolution: {integrity: sha512-D5GN0an2EE7b10h25Tqk65mFXevr4s/tCLTEWxjaDY+6JrnQblt6nGrYxzNYvViw1t0dg44kzNcd2TtQeDO8aQ==, tarball: file:projects/hatch-template-microservice.tgz}
     id: file:projects/hatch-template-microservice.tgz
     name: '@rush-temp/hatch-template-microservice'
     version: 0.0.0
@@ -19481,7 +20209,7 @@ packages:
       '@sentry/types': 5.30.0
       '@types/express': 4.17.13
       '@types/express-serve-static-core': 4.17.30
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@types/source-map': 0.5.2
       '@types/superagent': 4.1.15
@@ -19497,12 +20225,12 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       express: 4.18.1
       html-webpack-plugin: 4.5.2_webpack@4.46.0
       invariant: 2.2.4
       isarray: 2.0.5
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       mini-css-extract-plugin: 0.9.0_webpack@4.46.0
       postcss: 8.2.4
       razzle: 4.2.17_f9cda48ca7446892f3710218c99ab264
@@ -19516,7 +20244,7 @@ packages:
       supertest: 4.0.2
       supports-color: 7.2.0
       swagger-ui: 3.25.0
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
       utf-8-validate: 5.0.9
       webpack: 4.46.0
@@ -19526,8 +20254,11 @@ packages:
       ws: 7.5.9_d6955b83f926115bf12ffeabab6deaae
     transitivePeerDependencies:
       - '@types/webpack'
+      - babel-jest
       - canvas
       - encoding
+      - esbuild
+      - node-notifier
       - ts-node
       - type-fest
       - vue-template-compiler
@@ -19538,7 +20269,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-webapp.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-GBVi19igKbdIp0E3AJ1+GkWA3MGIEhdR05lk6rLGd39ePWVFOksbLwg2f0Rv6KQKUDfrb2ple+KvXYaE3Umwdw==, tarball: file:projects/hatch-template-webapp.tgz}
+    resolution: {integrity: sha512-WTWewzKwYtBMcfEpMyyy75xiwggLsocFDxtvO2vBlY9D6vToJfzwe0PO9+8ibi67BxY64wvDlo7oa+ObKqfhcg==, tarball: file:projects/hatch-template-webapp.tgz}
     id: file:projects/hatch-template-webapp.tgz
     name: '@rush-temp/hatch-template-webapp'
     version: 0.0.0
@@ -19558,7 +20289,7 @@ packages:
       '@storybook/react': 5.3.21_d174dd4a6b693c9add441efb7e26c192
       '@types/express': 4.17.13
       '@types/express-serve-static-core': 4.17.30
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@types/react': 16.14.29
       '@types/react-dom': 16.9.16
@@ -19566,7 +20297,7 @@ packages:
       '@types/react-redux': 7.1.24
       '@types/react-router': 5.1.18
       '@types/react-router-dom': 5.3.3
-      '@types/selenium-webdriver': 4.1.2
+      '@types/selenium-webdriver': 4.1.1
       '@types/source-map': 0.5.2
       '@types/superagent': 4.1.15
       '@types/supertest': 2.0.12
@@ -19584,7 +20315,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -19596,7 +20327,7 @@ packages:
       immutable: 3.8.2
       invariant: 2.2.4
       isarray: 2.0.5
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       mini-css-extract-plugin: 0.9.0_webpack@4.46.0
       postcss: 8.2.4
       prop-types: 15.8.1
@@ -19623,7 +20354,7 @@ packages:
       supports-color: 7.2.0
       swagger-ui-react: 3.25.0_react-dom@16.14.0+react@16.14.0
       tiny-warning: 1.0.3
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
       utf-8-validate: 5.0.9
       webpack: 4.46.0
@@ -19633,8 +20364,11 @@ packages:
       ws: 7.5.9_d6955b83f926115bf12ffeabab6deaae
     transitivePeerDependencies:
       - '@types/webpack'
+      - babel-jest
       - canvas
       - encoding
+      - esbuild
+      - node-notifier
       - react-native
       - ts-node
       - type-fest
@@ -19645,13 +20379,13 @@ packages:
       - webpack-plugin-serve
     dev: false
 
-  file:projects/hatch-test-pdf.tgz_1510559afde85c4495f2889856f2bf5e:
-    resolution: {integrity: sha512-6hhHlV14pkHdgkqCfvwVmqVUIOztdOpzqjubsOc6I45jzDMZNfT58eQu4gJFN7ltn40Yis1E1T6DgBV7pQkqng==, tarball: file:projects/hatch-test-pdf.tgz}
+  file:projects/hatch-test-pdf.tgz_966a285e7657d0914f7113bf8da1d625:
+    resolution: {integrity: sha512-t5mtVaTacTho65d+gPI7Uvi700dgMEXk/l3m6V9MMDRchfahrRNHK53mdnNU2JgqiTjqEAfVNI08HM+THmDGWg==, tarball: file:projects/hatch-test-pdf.tgz}
     id: file:projects/hatch-test-pdf.tgz
     name: '@rush-temp/hatch-test-pdf'
     version: 0.0.0
     dependencies:
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@types/node-fetch': 2.6.2
       '@types/pdf-image': 2.0.1
@@ -19664,8 +20398,8 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       node-fetch: 2.6.7
       pdf-image: 2.0.0
       pixelmatch: 5.3.0
@@ -19673,32 +20407,36 @@ packages:
       rimraf: 3.0.0
       sharp: 0.26.3
       tmp: 0.2.1
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
     transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
       - bufferutil
       - canvas
       - encoding
+      - esbuild
+      - node-notifier
       - supports-color
       - ts-node
       - utf-8-validate
     dev: false
 
-  file:projects/hatch-test-web.tgz_1056105d0985a446b8edb32b451b5c2c:
-    resolution: {integrity: sha512-nnBTIhTZQUrA8DmV/whKOrjWRJ6NRY5/ouTKTdyYK1brkJ+yyep5l0xXVZueYSqnt7ODYBNfdYvbyErAcFaJoA==, tarball: file:projects/hatch-test-web.tgz}
+  file:projects/hatch-test-web.tgz_bd0e465601a848f3a5327a354aec4ba1:
+    resolution: {integrity: sha512-DPB5E1gDDNjL/EFn2m5zNiIOU9X4IoAKoppW9xGpo0VXWYa+iCDarFPXXsJlXNM1ZXEIZcDm2xNBBS5YmUYZBw==, tarball: file:projects/hatch-test-web.tgz}
     id: file:projects/hatch-test-web.tgz
     name: '@rush-temp/hatch-test-web'
     version: 0.0.0
     dependencies:
       '@types/node': 16.11.47
-      '@types/selenium-webdriver': 4.1.2
+      '@types/selenium-webdriver': 4.1.1
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
       command-exists: 1.2.9
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       rimraf: 3.0.0
       selenium-webdriver: 4.3.1_d6955b83f926115bf12ffeabab6deaae
       typescript: 4.7.4
@@ -19710,8 +20448,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  file:projects/hatch-test.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-HefDr9FNc/SWOHvWUtU37uWd9QtCeBhtosrGy87ErZyVdJ4yRYP2Rs5g91VU4jzhZCdgElJ7yHAAuk6PoSuoSA==, tarball: file:projects/hatch-test.tgz}
+  file:projects/hatch-test.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-8TE38fRlQBiZmnu46iZO0sm98mog4DHo6un0N9+WaJ2DaBeJw965MR1eP0sX9fakPIUGwIXBkGaGT2BqNi9Z0A==, tarball: file:projects/hatch-test.tgz}
     id: file:projects/hatch-test.tgz
     name: '@rush-temp/hatch-test'
     version: 0.0.0
@@ -19721,7 +20459,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       jest-environment-node: 27.5.1
       rimraf: 3.0.0
       typescript: 4.7.4
@@ -19730,8 +20468,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-user-management-client.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-U0Ig5Q3A6lnisQZAlxHr3yiPrPphBWaR7qcbaO9tl68z4uWQKbciJEgr2CTW7qVgQQYicaaU1bI8lBj9fUhPRA==, tarball: file:projects/hatch-user-management-client.tgz}
+  file:projects/hatch-user-management-client.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-53n56Cr55Nq7XRpaw6fbOO4rPUosyiBmPL6ICsvB9FPXHIH3rq0F/c/S0OeLt7zL0POApnP6RSoptzLKmPRadQ==, tarball: file:projects/hatch-user-management-client.tgz}
     id: file:projects/hatch-user-management-client.tgz
     name: '@rush-temp/hatch-user-management-client'
     version: 0.0.0
@@ -19744,7 +20482,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       rimraf: 3.0.0
       typescript: 4.7.4
     transitivePeerDependencies:
@@ -19753,37 +20491,41 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-util.tgz_1510559afde85c4495f2889856f2bf5e:
-    resolution: {integrity: sha512-nfdG6GUTP+jHhQvsayv+mUfcjNdvD1kGlPYDL7tuG0QRtEjD7EoQ6ywIApAHXMFpM/c0JNuTWKxUQja4brwknQ==, tarball: file:projects/hatch-util.tgz}
+  file:projects/hatch-util.tgz_966a285e7657d0914f7113bf8da1d625:
+    resolution: {integrity: sha512-ZvH4GVHzNap6C3tr//peo80Ea+pRp3uRfkZfaY47RXWM+IbXDMgtvLJhs8W/rq7V/ffLnQlZyuUfA0yQ+Dmv8g==, tarball: file:projects/hatch-util.tgz}
     id: file:projects/hatch-util.tgz
     name: '@rush-temp/hatch-util'
     version: 0.0.0
     dependencies:
       '@launchtray/tsyringe-async': 4.3.2
       '@sentry/types': 5.30.0
-      '@types/jest': 26.0.24
+      '@types/jest': 27.5.2
       '@types/node': 16.11.47
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
-      jest: 26.6.3_1510559afde85c4495f2889856f2bf5e
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
       reflect-metadata: 0.1.13
       rimraf: 3.0.0
-      ts-jest: 26.5.6_jest@26.6.3+typescript@4.7.4
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
       typescript: 4.7.4
     transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
       - bufferutil
       - canvas
+      - esbuild
+      - node-notifier
       - supports-color
       - ts-node
       - utf-8-validate
     dev: false
 
-  file:projects/hatch-web-client.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-yJUUbQqE3vW5GEckyj+AlwERanKrT8Zu5nrTGzOQtK3raw8CgfI62HzDucqydbDanGE1dQ1qeif1RvdPHc/EeQ==, tarball: file:projects/hatch-web-client.tgz}
+  file:projects/hatch-web-client.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-olAuM78/OuVizlzrPZurSOz6ZPQkOfyjeIAfH9QLkZ0D1RTpkxhNbpTGgWCzsbOf3RzqVVv7toHrhSO9vFJLzg==, tarball: file:projects/hatch-web-client.tgz}
     id: file:projects/hatch-web-client.tgz
     name: '@rush-temp/hatch-web-client'
     version: 0.0.0
@@ -19808,7 +20550,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -19833,8 +20575,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-web-eslint-config.tgz_6169eeec7eb63626f839cc9ea5c1175f:
-    resolution: {integrity: sha512-eiVzkyyGctR1KQJNHHwVZZkeobnhGiTfgNB8WAYdopEHB7u72KmvGHxiPQAbpJIEXRZiMrTf1YYnAD6xhkO6jg==, tarball: file:projects/hatch-web-eslint-config.tgz}
+  file:projects/hatch-web-eslint-config.tgz_e7d31b03c8e7ff5df7780e84fc65868e:
+    resolution: {integrity: sha512-8JB6tOdUIRW58qQQKNIJspbCMHwPHjLoR3K/8GWf50JCw7yD39sokNxXj8aTuD9ohSvDxqc5yy4vX6leTTZ8/w==, tarball: file:projects/hatch-web-eslint-config.tgz}
     id: file:projects/hatch-web-eslint-config.tgz
     name: '@rush-temp/hatch-web-eslint-config'
     version: 0.0.0
@@ -19845,7 +20587,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -19856,8 +20598,8 @@ packages:
       - typescript
     dev: false
 
-  file:projects/hatch-web-injectables.tgz_6136b0cb34ff9394d82b8c66e50ae607:
-    resolution: {integrity: sha512-15k7gf1UjfJRDW+qHTVfs1NOwD9ID8iQ5T0tu+AyKwmxm42GwpOr6tfUaXCGAJxX4yqC33JYDN+sYjsQhXHOsg==, tarball: file:projects/hatch-web-injectables.tgz}
+  file:projects/hatch-web-injectables.tgz_e04c523ac33ebe4cd0b31c7b1114146c:
+    resolution: {integrity: sha512-ZAM/2iClnWXYQVd1cLYO9QVHHJLOn5vOqoDdHNJHOoj8pfUuqeYSumJraSUIqDgd+3Lj+tkxP931ygOCRB0Emg==, tarball: file:projects/hatch-web-injectables.tgz}
     id: file:projects/hatch-web-injectables.tgz
     name: '@rush-temp/hatch-web-injectables'
     version: 0.0.0
@@ -19871,7 +20613,7 @@ packages:
       eslint: 8.21.0_supports-color@7.2.0
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       react-router: 5.3.3_react@16.14.0
       react-router-dom: 5.3.3_react@16.14.0
       redux: 4.2.0
@@ -19883,8 +20625,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-web-server.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-mQ/O/DAtpx/Nn1dsHup+fFzCg/ZhE4eE5ug9DXn4aJC4ZiL+BePOwQH/txFyrqjsNdoGL8o7IlJMOQmOAzIDrg==, tarball: file:projects/hatch-web-server.tgz}
+  file:projects/hatch-web-server.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-CaZNiY1YSQDgNOb1dlHIknTKDDMRRBEYx3Btg3T/XCmD1ZyskU3dQ8mFpgvJn6ZK8awl3TfJNF1n0acN8hq9hw==, tarball: file:projects/hatch-web-server.tgz}
     id: file:projects/hatch-web-server.tgz
     name: '@rush-temp/hatch-web-server'
     version: 0.0.0
@@ -19908,7 +20650,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0
@@ -19933,8 +20675,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/hatch-web.tgz_jest@26.6.3+supports-color@7.2.0:
-    resolution: {integrity: sha512-X4Isw/Z0i/m3dJ4BJSqkhe5s6sgDHV9F6qQT+8viZ2oWcungPPw/sLNdzI56AI5bF3eloRHZnrUsRkiXwbJwHA==, tarball: file:projects/hatch-web.tgz}
+  file:projects/hatch-web.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-XRvHhYtGSyXvZz2VP71ivaL95dDmrfhhoV+NM4OLeF/plQmTGiyHGJ1giU1H/B+wWwGOM+kJysIZsw3y2k6QxQ==, tarball: file:projects/hatch-web.tgz}
     id: file:projects/hatch-web.tgz
     name: '@rush-temp/hatch-web'
     version: 0.0.0
@@ -19957,7 +20699,7 @@ packages:
       eslint-config-airbnb: 19.0.4_761baa20a22304156289d500f140a557
       eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
       eslint-plugin-import: 2.26.0_eslint@8.21.0
-      eslint-plugin-jest: 26.7.0_6832046f0dec04a50d36880d0932322c
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       eslint-plugin-jsx-a11y: 6.6.1_eslint@8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
       eslint-plugin-react-hooks: 4.6.0_eslint@8.21.0

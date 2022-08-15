@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-rpc-node",
   "entries": [
     {
+      "version": "0.19.0",
+      "tag": "@launchtray/hatch-rpc-node_v0.19.0",
+      "date": "Mon, 15 Aug 2022 23:26:10 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update dependency versions"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.18.0",
       "tag": "@launchtray/hatch-rpc-node_v0.18.0",
       "date": "Thu, 11 Aug 2022 01:19:53 GMT",

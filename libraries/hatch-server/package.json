@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -18,8 +18,8 @@
     "serialize-javascript": "^2.1.0"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.18.0",
-    "@launchtray/hatch-util": "^0.18.0",
+    "@launchtray/hatch-eslint-config": "^0.19.0",
+    "@launchtray/hatch-util": "^0.19.0",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/node": "^5",
     "@sentry/types": "^5",
@@ -45,7 +45,7 @@
     "ws": "^7"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.18.0",
+    "@launchtray/hatch-util": "^0.19.0",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/node": "^5",
     "@sentry/types": "^5",

@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-test-pdf",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.18.0",
+    "@launchtray/hatch-eslint-config": "^0.19.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16",
     "@types/node-fetch": "^2.5.7",

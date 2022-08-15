@@ -14,6 +14,5 @@ export default async (): Promise<WebCommonComposition> => {
     webAppManagers: [
       ExampleManager,
     ],
-    disableSsr: true,
   };
 };

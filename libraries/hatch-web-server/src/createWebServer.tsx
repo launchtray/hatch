@@ -41,6 +41,7 @@ interface ClientRenderRequestContext {
   errorReporter: ErrorReporter;
   cookie?: string;
   authHeader?: string;
+  disableSsr: boolean;
 }
 
 const {assets, assetsPrefix} = loadStaticAssetsMetadata();
@@ -173,8 +174,7 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
 };
 
 const renderClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
-  const disableSsr = requestContext.composition.disableSsr ?? false;
-  if (disableSsr) {
+  if (requestContext.disableSsr) {
     return await renderStaticClient(requestContext);
   }
   return renderDynamicClient(requestContext);
@@ -186,9 +186,9 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
   runtimeConfig.ENABLE_API_SPEC = process.env.ENABLE_API_SPEC;
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
-    const disableSsr = composition.disableSsr ?? false;
+    const disableSsr = composition.disableSsr ?? process.env.DISABLE_SSR === 'true';
     if (disableSsr) {
-      runtimeConfig.SSR_DISABLED = true;
+      runtimeConfig.DISABLE_SSR = true;
     }
     addStaticRoutes(app, assetsPrefix);
     const webRequestHandler: RequestHandler = (req, res, next) => {
@@ -208,6 +208,7 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         errorReporter,
         cookie: req.headers.cookie,
         authHeader: req.headers.authorization,
+        disableSsr,
       };
       crypto.randomBytes(32, (err, buf) => {
         if (err != null) {

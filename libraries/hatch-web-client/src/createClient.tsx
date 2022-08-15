@@ -143,6 +143,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
+  const ssrEnabled = runtimeConfig.SSR_DISABLED !== 'true'
+    && runtimeConfig.SSR_DISABLED !== true;
   const clientLoggingEnabled = process.env.NODE_ENV !== 'production'
     || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true'
     || runtimeConfig.ENABLE_CLIENT_LOGGING === true;
@@ -187,7 +189,17 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
 
   const webAppManagerInstances = await resolveWebAppManagers(container);
   // eslint-disable-next-line no-undef -- global document object
-  const rootSaga = await createSagaForWebAppManagers(logger, webAppManagerInstances, store, container, document.cookie);
+  const {cookie} = document;
+  const rootSaga = await createSagaForWebAppManagers(
+    logger,
+    webAppManagerInstances,
+    store,
+    container,
+    cookie,
+    undefined,
+    false,
+    ssrEnabled,
+  );
 
   if (rootSaga != null) {
     onSagaError = (error) => {

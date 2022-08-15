@@ -16,6 +16,7 @@ export interface WebCommonComposition {
   webAppManagers?: Array<Class<unknown>>;
   appRootId?: string;
   useHashRouter?: boolean;
+  disableSsr?: boolean;
 }
 
 export type WebCommonComposer = () => Promise<WebCommonComposition>;

@@ -187,8 +187,8 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     const disableSsr = composition.disableSsr ?? process.env.DISABLE_SSR === 'true';
-    if (disableSsr) {
-      runtimeConfig.DISABLE_SSR = true;
+    if (!disableSsr) {
+      runtimeConfig.SSR_ENABLED = true;
     }
     addStaticRoutes(app, assetsPrefix);
     const webRequestHandler: RequestHandler = (req, res, next) => {

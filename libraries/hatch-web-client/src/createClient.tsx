@@ -143,8 +143,8 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   const container = ROOT_CONTAINER;
   const composition: WebClientComposition = await clientComposer();
 
-  const ssrEnabled = runtimeConfig.DISABLE_SSR !== 'true'
-    && runtimeConfig.DISABLE_SSR !== true;
+  const ssrEnabled = runtimeConfig.SSR_ENABLED === 'true'
+    || runtimeConfig.SSR_ENABLED === true;
   const clientLoggingEnabled = process.env.NODE_ENV !== 'production'
     || runtimeConfig.ENABLE_CLIENT_LOGGING === 'true'
     || runtimeConfig.ENABLE_CLIENT_LOGGING === true;

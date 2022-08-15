@@ -22,7 +22,7 @@
     "@launchtray/hatch-eslint-config": "^0.18.0",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/types": "^5",
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^27.5.2",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
@@ -30,9 +30,9 @@
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
-    "jest": "^26.4.2",
+    "jest": "^27.5.1",
     "rimraf": "3.0.0",
-    "ts-jest": "^26.3.0",
+    "ts-jest": "^27.1.5",
     "typescript": "4.7.4"
   },
   "peerDependencies": {

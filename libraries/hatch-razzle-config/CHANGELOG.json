@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-razzle-config",
   "entries": [
     {
+      "version": "0.18.0",
+      "tag": "@launchtray/hatch-razzle-config_v0.18.0",
+      "date": "Thu, 11 Aug 2022 01:19:53 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add option to remove contenthash from assets"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.17.0",
       "tag": "@launchtray/hatch-razzle-config_v0.17.0",
       "date": "Wed, 10 Aug 2022 04:44:22 GMT",

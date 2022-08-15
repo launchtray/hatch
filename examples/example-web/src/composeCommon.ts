@@ -14,6 +14,6 @@ export default async (): Promise<WebCommonComposition> => {
     webAppManagers: [
       ExampleManager,
     ],
-    useHashRouter: true,
+    disableSsr: true,
   };
 };

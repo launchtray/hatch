@@ -476,6 +476,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-api",
+      "projectFolder": "libraries/hatch-api",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-server-pdf",
       "projectFolder": "libraries/hatch-server-pdf",
       "versionPolicyName": "hatchVersionPolicy"
@@ -533,6 +538,11 @@
     {
       "packageName": "@launchtray/hatch-template-client-sdk",
       "projectFolder": "tools/hatch-cli/src/templates/client-sdk/template",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/hatch-template-api",
+      "projectFolder": "tools/hatch-cli/src/templates/api/template",
       "shouldPublish": false
     }
   ]

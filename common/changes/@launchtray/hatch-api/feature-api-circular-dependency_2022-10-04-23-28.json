@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-api",
+      "comment": "Add template for generating OpenAPI specs using Spot",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-api",
+  "email": "kiltyj@gmail.com"
+}

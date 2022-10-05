@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-api",
-  "version": "0.20.0-alpha.1",
+  "version": "0.20.0-alpha.2",
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",
@@ -19,7 +19,7 @@
     "fs-extra": "^8"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.1",
+    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.2",
     "@types/fs-extra": "^8",
     "@types/node": "^16",
     "@types/tmp": "^0.2.0",

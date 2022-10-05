@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-test",
-  "version": "0.20.0-alpha.1",
+  "version": "0.20.0-alpha.2",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "jest-environment-node": "^27.5.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.1",
+    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.2",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",

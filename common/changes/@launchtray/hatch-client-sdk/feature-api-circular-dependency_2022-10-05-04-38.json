@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-client-sdk",
+      "comment": "",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-client-sdk"
+}

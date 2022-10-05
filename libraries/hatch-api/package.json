@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@airtasker/spot": "^1.9.0",
-    "fs-extra": "^8"
+    "fs-extra": "^8",
+    "yaml": "2.0.0-3"
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "^0.20.0-alpha.2",

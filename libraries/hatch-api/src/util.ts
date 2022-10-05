@@ -1,10 +1,10 @@
 import {Spot} from '@airtasker/spot';
 import path from 'path';
 import fs from 'fs-extra';
+import {OpenApiV3} from '@airtasker/spot/build/lib/src/generators/openapi3/openapi3-specification';
+import YAML from 'yaml';
 
-export const createApiBySpotFile = async (inputSpotApi: string) => {
-  const contract = Spot.parseContract(inputSpotApi);
-  const openApi = Spot.OpenApi3.generateOpenAPI3(contract);
+const createApiFromOpenApi3Spec = async (openApi: OpenApiV3) => {
   const typesFile = path.resolve(
     './node_modules/@airtasker/spot/build/lib/src/generators/openapi3/openapi3-specification.d.ts',
   );
@@ -29,4 +29,15 @@ export const createApiBySpotFile = async (inputSpotApi: string) => {
     const typesSpecPromise = fs.close(fd);
     await Promise.all([typesSpecPromise, apiSpecPromise]);
   }
+};
+
+export const createApiByJsonFile = async (inputJsonFile: string) => {
+  const openApi = YAML.parseDocument(await fs.readFile(inputJsonFile, 'utf8')).toJS();
+  await createApiFromOpenApi3Spec(openApi);
+};
+
+export const createApiBySpotFile = async (inputSpotApi: string) => {
+  const contract = Spot.parseContract(inputSpotApi);
+  const openApi = Spot.OpenApi3.generateOpenAPI3(contract);
+  await createApiFromOpenApi3Spec(openApi);
 };

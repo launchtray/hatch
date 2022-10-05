@@ -1,0 +1,5 @@
+openapi: 3.0.2
+info:
+  title: HATCH_CLI_TEMPLATE_VAR_projectShortName
+  version: 0.0.0
+paths: {}

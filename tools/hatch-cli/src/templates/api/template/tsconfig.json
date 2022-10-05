@@ -29,8 +29,11 @@
     "rootDir": "src",
     "outDir": "dist"
   },
+  "files": [
+    "src/index.ts"
+  ],
   "exclude": [
-    "**/src/api.ts",
+    "**/src/*.ts",
     "**/node_modules",
     "**/build",
     "**/dist",

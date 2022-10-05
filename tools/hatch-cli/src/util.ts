@@ -466,7 +466,10 @@ const patchApiPackage = (apiOptions: ApiOptions, tempFilePath: string) => {
     const apiPackage = packageParsed;
     const {specType} = apiOptions;
     if (specType != null && specType !== 'spot') {
-      apiPackage.scripts.build = `rimraf dist && tsc && --spec src/api.${apiOptions.specType}`;
+      apiPackage.scripts.build = apiPackage.scripts.build.replace(
+        '--spot src/api.ts',
+        `--spec src/api.${apiOptions.specType}`,
+      );
       fs.removeSync(path.resolve(tempFilePath, 'src', 'api.ts'));
       if (specType === 'json') {
         fs.removeSync(path.resolve(tempFilePath, 'src', 'api.yaml'));
@@ -474,7 +477,6 @@ const patchApiPackage = (apiOptions: ApiOptions, tempFilePath: string) => {
         fs.removeSync(path.resolve(tempFilePath, 'src', 'api.json'));
       }
     } else {
-      apiPackage.scripts.build = 'rimraf dist && tsc && hatch-api --spot src/api.ts';
       fs.removeSync(path.resolve(tempFilePath, 'src', 'api.yaml'));
       fs.removeSync(path.resolve(tempFilePath, 'src', 'api.json'));
     }

@@ -14,7 +14,7 @@
    * path segment in the "$schema" field for all your Rush config files.  This will ensure
    * correct error-underlining and tab-completion for editors such as VS Code.
    */
-  "rushVersion": "5.47.0",
+  "rushVersion": "5.75.0",
   /**
    * The next field selects which package manager should be installed and determines its version.
    * Rush installs its own local copy of the package manager to ensure that your build process
@@ -262,9 +262,9 @@
     // "url": "https://github.com/microsoft/rush-example",
     /**
      * The default branch name. This tells "rush change" which remote branch to compare against.
-     * The default value is "master"
+     * The default value is "main". HATCH TODO: migrate rest of repo/infrastructure to "main"
      */
-    // "defaultBranch": "master",
+    "defaultBranch": "master"
     /**
      * The default remote. This tells "rush change" which remote to compare against if the remote URL is
      * not set or if a remote matching the provided remote URL is not found.
@@ -476,6 +476,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-api",
+      "projectFolder": "libraries/hatch-api",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-server-pdf",
       "projectFolder": "libraries/hatch-server-pdf",
       "versionPolicyName": "hatchVersionPolicy"
@@ -533,6 +538,11 @@
     {
       "packageName": "@launchtray/hatch-template-client-sdk",
       "projectFolder": "tools/hatch-cli/src/templates/client-sdk/template",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/hatch-template-api",
+      "projectFolder": "tools/hatch-cli/src/templates/api/template",
       "shouldPublish": false
     }
   ]

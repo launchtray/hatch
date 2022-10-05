@@ -30,6 +30,10 @@ interface ClientSDKOptions {
   spec?: string;
 }
 
+interface ApiOptions {
+  specType?: 'json' | 'yaml' | 'spot';
+}
+
 interface CopyDirOptions {
   srcPath: string;
   dstPath: string;
@@ -37,6 +41,7 @@ interface CopyDirOptions {
   templateType?: TemplateType;
   projectFolder?: ProjectFolder;
   clientSDKOptions?: ClientSDKOptions;
+  apiOptions?: ApiOptions;
 }
 
 export const withSpinner = async (message: string, task: () => Promise<void>): Promise<void> => {
@@ -59,43 +64,46 @@ const logError = (message: string) => {
   console.error(chalk.red(message));
 };
 
-export const createClientSDK = async (
-  parentDirectory: string,
-  projectName: string,
-  clientSDKOptions: ClientSDKOptions,
-  projectFolder?: ProjectFolder,
-) => {
-  if (projectName == null) {
-    throw new Error('Client SDK name must be specified');
-  }
-  const clientPath = `${process.cwd()}/${projectName}`;
-  const {dstPath, inMonorepo} = await createFromTemplate({
-    srcPath: templateDir(parentDirectory),
-    dstPath: clientPath,
-    name: projectName,
-    templateType: 'project',
-    projectFolder,
-    clientSDKOptions,
-  });
-  log(chalk.green(`Created '${dstPath}'`));
-  if (inMonorepo) {
-    log('Now might be a good time run to `rush update`');
+const determinePackageName = (
+  {overriddenName, apiPackageName, desiredSuffix}: {
+    overriddenName?: string,
+    apiPackageName?: string,
+    desiredSuffix: string
+  },
+): string => {
+  let projectName: string;
+  if (apiPackageName != null && overriddenName == null) {
+    // First remove 'api' suffix, so we don't have redundant service-api-sdk
+    projectName = apiPackageName.replace(/([-./])api$/, `$1${desiredSuffix}`);
+    if (!projectName.endsWith(desiredSuffix)) {
+      projectName = `${projectName}-${desiredSuffix}`;
+    }
   } else {
-    log('Now might be a good time to cd into the project and install dependencies (e.g. via npm, yarn)');
+    projectName = overriddenName as string;
   }
+  return projectName;
 };
 
 export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
-  return (clientOptions: ClientSDKOptions) => {
-    if (clientOptions.dependency == null && clientOptions.spec == null) {
+  return (clientSDKOptions: ClientSDKOptions) => {
+    if (clientSDKOptions.dependency == null && clientSDKOptions.spec == null) {
       throw new Error('Dependency or input spec must be specified');
     }
-    if (clientOptions.spec != null && clientOptions.name == null) {
+    if (clientSDKOptions.spec != null && clientSDKOptions.name == null) {
       throw new Error('Name must be specified when generating a client SDK from an input spec');
     }
-    const projectName = (clientOptions.dependency != null && clientOptions.name == null)
-      ? `${clientOptions.dependency}-sdk` : clientOptions.name as string;
-    return createClientSDK(parentDirectory, projectName, clientOptions, projectFolder);
+    const projectName = determinePackageName({
+      overriddenName: clientSDKOptions.name,
+      apiPackageName: clientSDKOptions.dependency,
+      desiredSuffix: 'sdk',
+    });
+    return createProject(parentDirectory, projectName, projectFolder, {clientSDKOptions});
+  };
+};
+
+export const apiCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
+  return (projectName: string, apiOptions: ApiOptions) => {
+    return createProject(parentDirectory, projectName, projectFolder, {apiOptions});
   };
 };
 
@@ -119,9 +127,14 @@ export const monorepoCreator = (parentDirectory: string) => {
   };
 };
 
-export const createProject = async (parentDirectory: string, projectName: string, projectFolder?: ProjectFolder) => {
+export const createProject = async (
+  parentDirectory: string,
+  projectName: string,
+  projectFolder?: ProjectFolder,
+  options?: Record<string, unknown>,
+) => {
   if (projectName == null) {
-    throw new Error('Project name must be specified');
+    throw new Error('Package name must be specified');
   }
   const projectPath = `${process.cwd()}/${projectName}`;
   const {dstPath, inMonorepo} = await createFromTemplate({
@@ -130,6 +143,7 @@ export const createProject = async (parentDirectory: string, projectName: string
     name: projectName,
     templateType: 'project',
     projectFolder,
+    ...options,
   });
   log(chalk.green(`Created '${dstPath}'`));
   if (inMonorepo) {
@@ -422,45 +436,78 @@ const updateCustomCommands = (monorepoPath: string) => {
   fs.writeFileSync(commandLinePath, commandLineRawUpdated);
 };
 
+const patchPackageJson = (
+  tempFilePath: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  packageModifier: (packageParsed: any) => any | void,
+) => {
+  const packagePath = path.resolve(tempFilePath, 'package.json');
+  const packageString = fs.readFileSync(packagePath).toString();
+  const packageParsed = parse(packageString);
+  const returnedPackage = packageModifier(packageParsed) ?? packageParsed;
+  const packageUpdated = stringify(returnedPackage, null, 2);
+  fs.writeFileSync(packagePath, packageUpdated);
+};
+
 const generateClientSDK = (
   clientSDKOptions: ClientSDKOptions,
   tempFilePath: string,
   rushConfigParsed?: {projects?: RushConfigurationProject[]},
   monorepoRootDir?: string,
 ) => {
-  let dependencyVersion = clientSDKOptions.ver;
-  if (clientSDKOptions.dependency != null && dependencyVersion == null) {
-    const dependencyProject = rushConfigParsed?.projects?.find((project: RushConfigurationProject) => {
-      return project.packageName === clientSDKOptions.dependency;
-    });
-    const dependencyProjectFolder = dependencyProject?.projectFolder;
-    if (dependencyProjectFolder != null && monorepoRootDir != null) {
-      const dependencyPackagePath = path.resolve(monorepoRootDir, dependencyProjectFolder, 'package.json');
-      const dependencyPackage = fs.readFileSync(dependencyPackagePath).toString();
-      const dependencyPackageParsed = parse(dependencyPackage);
-      dependencyVersion = dependencyPackageParsed?.version;
+  patchPackageJson(tempFilePath, (packageParsed) => {
+    const clientSDKPackageParsed = packageParsed;
+    let dependencyVersion = clientSDKOptions.ver;
+    if (clientSDKOptions.dependency != null && dependencyVersion == null) {
+      const dependencyProject = rushConfigParsed?.projects?.find((project: RushConfigurationProject) => {
+        return project.packageName === clientSDKOptions.dependency;
+      });
+      const dependencyProjectFolder = dependencyProject?.projectFolder;
+      if (dependencyProjectFolder != null && monorepoRootDir != null) {
+        const dependencyPackagePath = path.resolve(monorepoRootDir, dependencyProjectFolder, 'package.json');
+        const dependencyPackage = fs.readFileSync(dependencyPackagePath).toString();
+        const dependencyPackageParsed = parse(dependencyPackage);
+        dependencyVersion = dependencyPackageParsed?.version;
+      }
     }
-  }
-  if (dependencyVersion == null) {
-    dependencyVersion = 'latest';
-  }
-  const clientSDKPackagePath = path.resolve(tempFilePath, 'package.json');
-  const clientSDKPackage = fs.readFileSync(clientSDKPackagePath).toString();
-  const clientSDKPackageParsed = parse(clientSDKPackage);
-  if (clientSDKOptions.dependency != null) {
-    clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
-    clientSDKPackageParsed.scripts.build = `hatch-client-sdk --dependency ${clientSDKOptions.dependency
-    } && rimraf dist && tsc`;
-  } else if (clientSDKOptions.spec != null) {
-    clientSDKPackageParsed.scripts.build = `hatch-client-sdk --spec ${clientSDKOptions.spec
-    } && rimraf dist && tsc`;
-  }
-  const clientSDKPackageUpdated = stringify(clientSDKPackageParsed, null, 2);
-  fs.writeFileSync(clientSDKPackagePath, clientSDKPackageUpdated);
+    if (dependencyVersion == null) {
+      dependencyVersion = 'latest';
+    }
+    if (clientSDKOptions.dependency != null) {
+      clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
+      clientSDKPackageParsed.scripts.build = `hatch-client-sdk --dependency ${clientSDKOptions.dependency
+      } && rimraf dist && tsc`;
+    } else if (clientSDKOptions.spec != null) {
+      clientSDKPackageParsed.scripts.build = `hatch-client-sdk --spec ${clientSDKOptions.spec
+      } && rimraf dist && tsc`;
+    }
+  });
+};
+
+const patchApiPackage = (apiOptions: ApiOptions, tempFilePath: string) => {
+  patchPackageJson(tempFilePath, (packageParsed) => {
+    const apiPackage = packageParsed;
+    const {specType} = apiOptions;
+    if (specType != null && specType !== 'spot') {
+      apiPackage.scripts.build = apiPackage.scripts.build.replace(
+        '--spot src/api.ts',
+        `--spec src/api.${apiOptions.specType}`,
+      );
+      fs.removeSync(path.resolve(tempFilePath, 'src', 'api.ts'));
+      if (specType === 'json') {
+        fs.removeSync(path.resolve(tempFilePath, 'src', 'api.yaml'));
+      } else {
+        fs.removeSync(path.resolve(tempFilePath, 'src', 'api.json'));
+      }
+    } else {
+      fs.removeSync(path.resolve(tempFilePath, 'src', 'api.yaml'));
+      fs.removeSync(path.resolve(tempFilePath, 'src', 'api.json'));
+    }
+  });
 };
 
 export const createFromTemplate = async (
-  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions}: CopyDirOptions,
+  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions, apiOptions}: CopyDirOptions,
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
   let adjustedDstPath = dstPath;
   let inMonorepo = false;
@@ -668,6 +715,9 @@ export const createFromTemplate = async (
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
         } else if (projectFolder != null && clientSDKOptions != null) {
           generateClientSDK(clientSDKOptions, tempFilePath);
+        }
+        if (apiOptions != null) {
+          patchApiPackage(apiOptions, tempFilePath);
         }
       } else {
         await replace({

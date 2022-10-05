@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-mock-server",
+      "comment": "",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-mock-server"
+}

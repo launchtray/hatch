@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-rpc",
+      "comment": "",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-rpc"
+}

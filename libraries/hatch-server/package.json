@@ -18,8 +18,8 @@
     "serialize-javascript": "^2.1.0"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.4",
-    "@launchtray/hatch-util": "^0.20.0-alpha.4",
+    "@launchtray/hatch-eslint-config": "0.20.0-alpha.4",
+    "@launchtray/hatch-util": "0.20.0-alpha.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/node": "^5",
     "@sentry/types": "^5",
@@ -45,7 +45,7 @@
     "ws": "^7"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.20.0-alpha.4",
+    "@launchtray/hatch-util": "0.20.0-alpha.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "@sentry/node": "^5",
     "@sentry/types": "^5",

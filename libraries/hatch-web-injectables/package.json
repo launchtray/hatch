@@ -15,9 +15,9 @@
     "access": "public"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.4",
-    "@launchtray/hatch-util": "^0.20.0-alpha.4",
-    "@launchtray/hatch-web": "^0.20.0-alpha.4",
+    "@launchtray/hatch-eslint-config": "0.20.0-alpha.4",
+    "@launchtray/hatch-util": "0.20.0-alpha.4",
+    "@launchtray/hatch-web": "0.20.0-alpha.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "@types/react-dom": "^16",
     "@types/react-router": "^5",
@@ -35,8 +35,8 @@
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "^0.20.0-alpha.4",
-    "@launchtray/hatch-web": "^0.20.0-alpha.4",
+    "@launchtray/hatch-util": "0.20.0-alpha.4",
+    "@launchtray/hatch-web": "0.20.0-alpha.4",
     "@launchtray/tsyringe-async": "4.3.2",
     "react-router": "^5",
     "react-router-dom": "^5",

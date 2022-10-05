@@ -36,6 +36,6 @@
     "eslint-plugin-react-native": "^4"
   },
   "dependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.4"
+    "@launchtray/hatch-eslint-config": "0.20.0-alpha.4"
   }
 }

@@ -19,7 +19,7 @@
     "luxon": "^1.25.0"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.4",
+    "@launchtray/hatch-eslint-config": "0.20.0-alpha.4",
     "@types/luxon": "1.25.0",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",

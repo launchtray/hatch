@@ -23,7 +23,7 @@
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.4",
+    "@launchtray/hatch-eslint-config": "0.20.0-alpha.4",
     "@types/jest": "^27.5.2",
     "@types/node": "^16",
     "@types/tmp": "^0.2.0",

@@ -64,6 +64,26 @@ const logError = (message: string) => {
   console.error(chalk.red(message));
 };
 
+const determinePackageName = (
+  {overriddenName, apiPackageName, desiredSuffix}: {
+    overriddenName?: string,
+    apiPackageName?: string,
+    desiredSuffix: string
+  },
+): string => {
+  let projectName: string;
+  if (apiPackageName != null && overriddenName == null) {
+    // First remove 'api' suffix, so we don't have redundant service-api-sdk
+    projectName = apiPackageName.replace(/([-./])api$/, `$1${desiredSuffix}`);
+    if (!projectName.endsWith(desiredSuffix)) {
+      projectName = `${projectName}-${desiredSuffix}`;
+    }
+  } else {
+    projectName = overriddenName as string;
+  }
+  return projectName;
+};
+
 export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
   return (clientSDKOptions: ClientSDKOptions) => {
     if (clientSDKOptions.dependency == null && clientSDKOptions.spec == null) {
@@ -72,14 +92,11 @@ export const clientSDKCreator = (parentDirectory: string, projectFolder?: Projec
     if (clientSDKOptions.spec != null && clientSDKOptions.name == null) {
       throw new Error('Name must be specified when generating a client SDK from an input spec');
     }
-    let projectName: string;
-    if (clientSDKOptions.dependency != null && clientSDKOptions.name == null) {
-      // First remove 'api' suffix, so we don't have redundant service-api-sdk
-      const baseName = clientSDKOptions.dependency.replace(/([-./])api$/, '$1');
-      projectName = `${baseName}-sdk`;
-    } else {
-      projectName = clientSDKOptions.name as string;
-    }
+    const projectName = determinePackageName({
+      overriddenName: clientSDKOptions.name,
+      apiPackageName: clientSDKOptions.dependency,
+      desiredSuffix: 'sdk',
+    });
     return createProject(parentDirectory, projectName, projectFolder, {clientSDKOptions});
   };
 };

@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-web-client",
   "entries": [
     {
+      "version": "0.20.0",
+      "tag": "@launchtray/hatch-web-client_v0.20.0",
+      "date": "Wed, 05 Oct 2022 18:10:20 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.19.0",
       "tag": "@launchtray/hatch-web-client_v0.19.0",
       "date": "Mon, 15 Aug 2022 23:26:10 GMT",

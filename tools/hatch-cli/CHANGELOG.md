@@ -1,6 +1,13 @@
 # Change Log - @launchtray/hatch-cli
 
-This log was last generated on Mon, 15 Aug 2022 23:26:10 GMT and should not be manually modified.
+This log was last generated on Wed, 05 Oct 2022 18:10:20 GMT and should not be manually modified.
+
+## 0.20.0
+Wed, 05 Oct 2022 18:10:20 GMT
+
+### Updates
+
+- Add template for generating OpenAPI specs using Spot
 
 ## 0.19.0
 Mon, 15 Aug 2022 23:26:10 GMT

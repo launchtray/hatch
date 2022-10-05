@@ -16,9 +16,9 @@
   "devDependencies": {
     "@airtasker/spot": "^1.9.0",
     "@types/node": "^16",
-    "@launchtray/hatch-api": "^0.20.0-alpha.2",
+    "@launchtray/hatch-api": "^0.20.0-alpha.3",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.2",
+    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.3",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

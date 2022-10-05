@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-cli",
-  "version": "0.20.0-alpha.2",
+  "version": "0.20.0-alpha.3",
   "description": "",
   "bin": {
     "hatch": "./dist/index.js"
@@ -17,7 +17,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "^0.20.0-alpha.2",
+    "@launchtray/hatch-util": "^0.20.0-alpha.3",
     "@launchtray/tsyringe-async": "4.3.2",
     "@microsoft/rush": "^5.29.1",
     "@microsoft/rush-lib": "^5.29.1",
@@ -35,7 +35,7 @@
     "yaml": "2.0.0-3"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.2",
+    "@launchtray/hatch-eslint-config": "^0.20.0-alpha.3",
     "@launchtray/hatch-template-webapp": "0.1.0",
     "@types/fs-extra": "^8",
     "@types/node": "^16",

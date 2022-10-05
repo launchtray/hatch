@@ -72,8 +72,14 @@ export const clientSDKCreator = (parentDirectory: string, projectFolder?: Projec
     if (clientSDKOptions.spec != null && clientSDKOptions.name == null) {
       throw new Error('Name must be specified when generating a client SDK from an input spec');
     }
-    const projectName = (clientSDKOptions.dependency != null && clientSDKOptions.name == null)
-      ? `${clientSDKOptions.dependency}-sdk` : clientSDKOptions.name as string;
+    let projectName: string;
+    if (clientSDKOptions.dependency != null && clientSDKOptions.name == null) {
+      // First remove 'api' suffix, so we don't have redundant service-api-sdk
+      const baseName = clientSDKOptions.dependency.replace(/([-./])api$/, '$1');
+      projectName = `${baseName}-sdk`;
+    } else {
+      projectName = clientSDKOptions.name as string;
+    }
     return createProject(parentDirectory, projectName, projectFolder, {clientSDKOptions});
   };
 };

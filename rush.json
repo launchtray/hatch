@@ -471,8 +471,8 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
-      "packageName": "@launchtray/hatch-client-sdk",
-      "projectFolder": "libraries/hatch-client-sdk",
+      "packageName": "@launchtray/hatch-sdk-generator",
+      "projectFolder": "libraries/hatch-sdk-generator",
       "versionPolicyName": "hatchVersionPolicy"
     },
     {

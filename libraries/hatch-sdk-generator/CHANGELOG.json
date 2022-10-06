@@ -1,5 +1,5 @@
 {
-  "name": "@launchtray/hatch-client-sdk",
+  "name": "@launchtray/hatch-sdk-generator",
   "entries": [
     {
       "version": "0.20.0",

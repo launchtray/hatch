@@ -2,9 +2,11 @@ import {spawnSync} from 'child_process';
 import path from 'path';
 import fs from 'fs-extra';
 
-export const createClientSDKByInputSpec = async (inputSpec: string) => {
+export type SdkType = 'client' | 'server';
+
+export const createSdkByInputSpec = async (inputSpec: string, type: SdkType) => {
   const generatorExec = path.resolve(__dirname, '..', 'node_modules', '.bin', 'openapi-generator');
-  const templatePath = path.resolve(__dirname, '..', 'lib', 'typescript-fetch');
+  const templatePath = path.resolve(__dirname, '..', 'lib', `${type}-sdk`);
   const outputPath = './src/autogen';
   if (fs.existsSync(outputPath)) {
     await fs.remove(outputPath);
@@ -34,11 +36,33 @@ export const createClientSDKByInputSpec = async (inputSpec: string) => {
   if (!fs.existsSync(openApiVersionFile)) {
     // eslint-disable-next-line no-console -- intentional stdout
     console.log(generatorCmd.stdout);
-    throw new Error(`Error generating client sdk: ${generatorCmd.stderr}`);
+    throw new Error(`Error generating ${type} sdk: ${generatorCmd.stderr}`);
   }
 };
 
-export const createClientSDKByDependency = async (dependencyName: string) => {
+export const createSdkByDependency = async (dependencyName: string, type: SdkType) => {
   const inputSpec = path.resolve(process.cwd(), 'node_modules', dependencyName, 'dist', 'api.json');
-  await createClientSDKByInputSpec(inputSpec);
+  await createSdkByInputSpec(inputSpec, type);
+};
+
+export const runCli = (type: SdkType) => {
+  const usage = `Usage: hatch-${type}-sdk [ --spec input-spec | --dependency dependency-name ]`;
+  const argv = process.argv.slice(2);
+  const typeArg = argv[0];
+  if (argv.length < 2) {
+    throw new Error(`Invalid arguments:\n${usage}`);
+  } else if (typeArg === '--spec') {
+    // location of the OpenAPI spec, as URL or file
+    const inputSpec = argv[1];
+    createSdkByInputSpec(inputSpec, type).catch((err) => {
+      throw new Error(err);
+    });
+  } else if (typeArg === '--dependency') {
+    const dependencyName = argv[1];
+    createSdkByDependency(dependencyName, type).catch((err) => {
+      throw new Error(err);
+    });
+  } else {
+    throw new Error(`Invalid type argument:\n${usage}`);
+  }
 };

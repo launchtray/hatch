@@ -1,4 +1,4 @@
-# Change Log - @launchtray/hatch-client-sdk
+# Change Log - @launchtray/hatch-sdk-generator
 
 This log was last generated on Wed, 05 Oct 2022 18:10:20 GMT and should not be manually modified.
 

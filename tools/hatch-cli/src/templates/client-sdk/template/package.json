@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@types/node": "^16",
-    "@launchtray/hatch-client-sdk": "0.20.0",
+    "@launchtray/hatch-sdk-generator": "0.20.0",
     "eslint": "^8",
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@typescript-eslint/parser": "^5",

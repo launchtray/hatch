@@ -12,7 +12,8 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc && hatch-api --spot src/api.ts && ls dist/api.json"
+    "build": "rimraf dist && tsc && hatch-api --spot src/api.ts && ls dist/api.json",
+    "build:watch": "tsc && hatch-api --spot src/api.ts"
   },
   "devDependencies": {
     "@airtasker/spot": "^1.9.0",

@@ -67,7 +67,7 @@ export default class {{classname}}Controller implements Delegator<{{classname}}C
 
   constructor(
     @inject('Logger') private readonly logger: Logger,
-    @inject(UsersApiController.delegateToken) public readonly delegate: {{classname}}ControllerDelegate,
+    @inject({{classname}}Controller.delegateToken) public readonly delegate: {{classname}}ControllerDelegate,
   ) {
   }
   {{#operations}}

@@ -381,7 +381,10 @@ export function middlewareFor<D>(
     if (delegateType == null) {
       throw new Error(`Missing delegate parameter for call to middlewareFor for ${target.name}`);
     }
-    ROOT_CONTAINER.registerSingleton(delegateToken, delegateType);
+    // Use of factory ensures singleton annotation is obeyed, e.g. if single delegate serves multiple controllers
+    ROOT_CONTAINER.register(delegateToken, {
+      useFactory: (container) => container.resolve(delegateType),
+    });
   }
 
   const originalRegister = target.prototype.register;

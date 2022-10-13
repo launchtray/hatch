@@ -1,0 +1,37 @@
+/* eslint-disable no-redeclare,import/export,@typescript-eslint/no-empty-interface,@typescript-eslint/no-unused-vars */
+{{#models}}
+{{#model}}
+import {
+  {{classFilename}},
+} from './{{{classFilename}}}';
+{{/model}}
+{{/models}}
+
+{{#models}}
+{{#model}}
+export * from './{{{classFilename}}}';
+{{/model}}
+{{/models}}
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+{{#operation}}
+
+export interface {{operationIdCamelCase}}Request {
+{{#bodyParam}}
+{{#dataType}}
+  body: {{dataType}};
+{{/dataType}}
+{{/bodyParam}}
+}
+
+export interface {{operationIdCamelCase}}Response {
+{{#returnType}}
+  body: {{returnType}};
+{{/returnType}}
+  httpCode?: number;
+}
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}

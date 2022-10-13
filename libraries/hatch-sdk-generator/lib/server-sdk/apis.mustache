@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-interface */
 {{>licenseInfo}}
+/* eslint-disable @typescript-eslint/no-empty-interface -- allow empty request/responses */
+
 import {
   controller,
   Delegator,
@@ -11,74 +12,43 @@ import {
   resolveParams,
 } from '@launchtray/tsyringe-async';
 import {
-  AlternateAction,
-  ControllerDelegateResponse,
+  ApiDelegateResponse,
   handleAlternateActions,
-  route_GET,
-  route_POST,
-  route_PUT,
-  route_PATCH,
-  route_DELETE,
-  route_HEAD,
+  route,
 } from '../runtime';
 {{#imports.0}}
-import {
-  {{#imports}}
-  {{className}},
-  {{className}}FromJSON,
-  {{className}}ToJSON,
-  {{/imports}}
-} from '../models';
+import * as models from '../models';
 {{/imports.0}}
-{{#operations}}
-{{#operation}}
 
-export interface {{operationIdCamelCase}}Request {
-  {{#bodyParam}}
-  {{#dataType}}
-  body: {{dataType}};
-  {{/dataType}}
-  {{/bodyParam}}
-}
-
-export interface {{operationIdCamelCase}}Response {
-{{#returnType}}
-  body: {{returnType}};
-{{/returnType}}
-  httpCode?: number;
-}
-{{/operation}}
-{{/operations}}
-
-export interface {{classname}}ControllerDelegate {
+export interface {{classname}}Delegate {
   {{#operations}}
   {{#operation}}
   handle{{operationIdCamelCase}}(
-    request: {{operationIdCamelCase}}Request,
+    request: models.{{operationIdCamelCase}}Request,
     ...optionalInjections: unknown[]
-  ): ControllerDelegateResponse<{{operationIdCamelCase}}Response{{^returnType}} | void{{/returnType}}>;
+  ): ApiDelegateResponse<models.{{operationIdCamelCase}}Response{{^returnType}} | void{{/returnType}}>;
   {{/operation}}
   {{/operations}}
 }
 
 @controller({injectContainerOnly: true})
-export default class {{classname}}Controller implements Delegator<{{classname}}ControllerDelegate> {
-  static delegateToken = Symbol('{{classname}}ControllerDelegate');
+export class {{classname}}Controller implements Delegator<{{classname}}Delegate> {
+  static delegateToken = Symbol('{{classname}}Delegate');
 
   constructor(
     @inject('Logger') private readonly logger: Logger,
-    @inject({{classname}}Controller.delegateToken) public readonly delegate: {{classname}}ControllerDelegate,
+    @inject({{classname}}Controller.delegateToken) public readonly delegate: {{classname}}Delegate,
   ) {
   }
   {{#operations}}
   {{#operation}}
 
-  @route_{{httpMethod}}('{{path}}'.replace(/{([^}]*)}/g, ':$1'))
+  @route.{{httpMethod}}('{{path}}'.replace(/{([^}]*)}/g, ':$1'))
   async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
     const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
-    const request: {{operationIdCamelCase}}Request = {
+    const request: models.{{operationIdCamelCase}}Request = {
       {{#bodyParam}}
-      body: {{dataType}}FromJSON(basicRouteParams.req.body),
+      body: models.{{dataType}}FromJSON(basicRouteParams.req.body),
       {{/bodyParam}}
     };
     const target = this.delegate.constructor.prototype;
@@ -87,14 +57,14 @@ export default class {{classname}}Controller implements Delegator<{{classname}}C
       target,
       'handle{{operationIdCamelCase}}',
       request,
-    ) as [{{operationIdCamelCase}}Request, ...unknown[]];
+    ) as [models.{{operationIdCamelCase}}Request, ...unknown[]];
     try {
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
       if (handleAlternateActions(delegateResponse, basicRouteParams)) {
         return;
       }
       {{#returnType}}
-      const responseJson = {{returnType}}ToJSON(delegateResponse.body);
+      const responseJson = models.{{returnType}}ToJSON(delegateResponse.body);
       basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
       {{/returnType}}
       {{^returnType}}
@@ -133,7 +103,7 @@ export class {{classname}} extends runtime.BaseAPI {
    * {{&summary}}
    {{/summary}}
    */
-  async {{nickname}}Raw({{#allParams.0}}requestParameters: {{#prefixParameterInterfaces}}{{classname}}{{/prefixParameterInterfaces}}{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<runtime.ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}>> {
+  async {{nickname}}Raw({{#allParams.0}}requestParameters: {{#prefixParameterInterfaces}}{{classname}}{{/prefixParameterInterfaces}}models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<runtime.ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}>> {
     {{#allParams}}
     {{#required}}
     if (requestParameters.{{paramName}} === null || requestParameters.{{paramName}} === undefined) {
@@ -379,7 +349,7 @@ export class {{classname}} extends runtime.BaseAPI {
   }
   {{/useSingleRequestParameter}}
   {{#useSingleRequestParameter}}
-  async {{nickname}}({{#allParams.0}}requestParameters: {{#prefixParameterInterfaces}}{{classname}}{{/prefixParameterInterfaces}}{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
+  async {{nickname}}({{#allParams.0}}requestParameters: {{#prefixParameterInterfaces}}{{classname}}{{/prefixParameterInterfaces}}models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
     {{#returnType}}
     const response = await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}});
     return await response.value();

@@ -2,7 +2,7 @@
 /* eslint-disable */
 {{>licenseInfo}}
 import {
-  route,
+  route as hatch_route,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
@@ -71,11 +71,13 @@ export const handleAlternateActions = (
   return false;
 };
 
-export const route_GET = route.get;
-export const route_POST = route.post;
-export const route_PUT = route.put;
-export const route_PATCH = route.patch;
-export const route_DELETE = route.delete;
-export const route_HEAD = route.head;
+export const route = {
+  GET: hatch_route.get,
+  POST: hatch_route.post,
+  PUT: hatch_route.put,
+  PATCH: hatch_route.patch,
+  DELETE: hatch_route.delete,
+  HEAD: hatch_route.head,
+};
 
-export type ControllerDelegateResponse<T> = Promise<T | AlternateAction> | T | AlternateAction;
+export type ApiDelegateResponse<T> = Promise<T | AlternateAction> | T | AlternateAction;

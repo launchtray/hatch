@@ -1,0 +1,39 @@
+import {middlewareFor} from '@launchtray/hatch-server';
+import {Class} from '@launchtray/hatch-util';
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+import {
+  {{classFilename}}Controller,
+  {{classFilename}}Delegate,
+} from './{{classFilename}}';
+{{/operations}}
+{{/apis}}
+
+const getApiMiddleware = ({
+{{#apis}}
+  delegateFor{{classFilename}},
+{{/apis}}
+} : {
+{{#apis}}
+  delegateFor{{classFilename}}: Class<{{classFilename}}Delegate>,
+{{/apis}}
+}) => {
+  return [
+{{#apis}}
+    middlewareFor({{classFilename}}Controller, delegateFor{{classFilename}}),
+{{/apis}}
+  ];
+};
+
+export {
+  getApiMiddleware,
+{{#apis}}
+{{#operations}}
+  {{classFilename}}Controller,
+  {{classFilename}}Delegate,
+{{/operations}}
+{{/apis}}
+}
+
+{{/apiInfo}}

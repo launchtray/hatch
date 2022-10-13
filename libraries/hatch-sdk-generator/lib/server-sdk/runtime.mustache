@@ -24,7 +24,7 @@ const PREVENT_CONTROLLER_RESPONSE_CODE = Symbol('preventControllerResponse');
 const ALT_ACTION_CODE_KEY: unique symbol = Symbol('altActionCodeKey');
 
 export class AlternateAction {
-  public readonly [ALT_ACTION_CODE_KEY];
+  public readonly [ALT_ACTION_CODE_KEY]: number | symbol;
 
   constructor(
     code: number | symbol,
@@ -34,13 +34,13 @@ export class AlternateAction {
   }
 }
 
-export const preventsControllerResponse = (err: unknown) => {
+export const preventsControllerResponse = (err: AlternateAction) => {
   return err[ALT_ACTION_CODE_KEY] === PREVENT_CONTROLLER_RESPONSE_CODE;
 };
 
 export const PREVENT_CONTROLLER_RESPONSE = new AlternateAction(PREVENT_CONTROLLER_RESPONSE_CODE);
 
-export const getHttpError = (err: unknown): number | undefined => {
+export const getHttpError = (err: AlternateAction): number | undefined => {
   const errorCode = err[ALT_ACTION_CODE_KEY];
   if (typeof errorCode === 'number') {
     return errorCode;
@@ -49,22 +49,22 @@ export const getHttpError = (err: unknown): number | undefined => {
 };
 
 const isAlternateAction = (response: unknown): response is AlternateAction => {
-  return (response[ALT_ACTION_CODE_KEY] != null);
+  return ((response as AlternateAction)[ALT_ACTION_CODE_KEY] != null);
 };
 
 export const handleAlternateActions = (
-  delegateResponse: AlternateAction | unknown,
+  delegateResponse: unknown,
   basicRouteParams: BasicRouteParams
 ): delegateResponse is AlternateAction => {
-  if (preventsControllerResponse(delegateResponse)) {
-    return true;
-  }
-  const httpError = getHttpError(delegateResponse);
-  if (httpError != null) {
-    basicRouteParams.res.status(httpError).send((delegateResponse as {body?: any}).body ?? '');
-    return true;
-  }
   if (isAlternateAction(delegateResponse)) {
+    if (preventsControllerResponse(delegateResponse)) {
+      return true;
+    }
+    const httpError = getHttpError(delegateResponse);
+    if (httpError != null) {
+      basicRouteParams.res.status(httpError).send((delegateResponse as {body?: any}).body ?? '');
+      return true;
+    }
     basicRouteParams.res.status(500).send('Unknown alternate action');
     return true;
   }

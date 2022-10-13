@@ -3,6 +3,7 @@ import createServer, {CreateServerOptions} from './createServer';
 import route, {
   assignRootContainerToController,
   controller,
+  Delegator,
   CUSTOM_INFO_ROUTE,
   CUSTOM_LIVENESS_ROUTE,
   CUSTOM_READINESS_ROUTE,
@@ -39,6 +40,7 @@ export {
   APIMetadataParameters,
   route,
   controller,
+  Delegator,
   createServer,
   ServerMiddleware,
   ServerMiddlewareClass,

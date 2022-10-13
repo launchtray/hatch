@@ -1,9 +1,8 @@
-/* tslint:disable */
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-interface */
 {{>licenseInfo}}
 import {
   controller,
-  route,
+  Delegator,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
@@ -34,7 +33,7 @@ import {
 {{#operations}}
 {{#operation}}
 
-interface {{operationIdCamelCase}}RequestContext {
+export interface {{operationIdCamelCase}}Request {
   {{#bodyParam}}
   {{#dataType}}
   body: {{dataType}};
@@ -42,7 +41,7 @@ interface {{operationIdCamelCase}}RequestContext {
   {{/bodyParam}}
 }
 
-interface {{operationIdCamelCase}}ResponseContext {
+export interface {{operationIdCamelCase}}Response {
 {{#returnType}}
   body: {{returnType}};
 {{/returnType}}
@@ -55,38 +54,42 @@ export interface {{classname}}ControllerDelegate {
   {{#operations}}
   {{#operation}}
   handle{{operationIdCamelCase}}(
-    request: {{operationIdCamelCase}}RequestContext,
-    ...optionalInjections
-  ): ControllerDelegateResponse<{{operationIdCamelCase}}ResponseContext{{^returnType}} | void{{/returnType}}>;
+    request: {{operationIdCamelCase}}Request,
+    ...optionalInjections: unknown[]
+  ): ControllerDelegateResponse<{{operationIdCamelCase}}Response{{^returnType}} | void{{/returnType}}>;
   {{/operation}}
   {{/operations}}
 }
 
-@controller({autoInject: false})
-export default class {{classname}}Controller {
+@controller({injectContainerOnly: true})
+export default class {{classname}}Controller implements Delegator<{{classname}}ControllerDelegate> {
+  static delegateToken = Symbol('{{classname}}ControllerDelegate');
+
   constructor(
     @inject('Logger') private readonly logger: Logger,
-    private readonly delegate: {{classname}}ControllerDelegate,
+    @inject(UsersApiController.delegateToken) public readonly delegate: {{classname}}ControllerDelegate,
   ) {
   }
   {{#operations}}
   {{#operation}}
 
-  @route_{{httpMethod}}('{{path}}'.replace(/{([^}]*)}/g,':$1'))
+  @route_{{httpMethod}}('{{path}}'.replace(/{([^}]*)}/g, ':$1'))
   async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
     const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
-    const requestContext: {{operationIdCamelCase}}RequestContext = {
+    const request: {{operationIdCamelCase}}Request = {
       {{#bodyParam}}
       body: {{dataType}}FromJSON(basicRouteParams.req.body),
       {{/bodyParam}}
     };
     const target = this.delegate.constructor.prototype;
-    const args = await resolveParams(requestContainer, target, '{{dataType}}');
+    const args = await resolveParams(
+      requestContainer,
+      target,
+      'handle{{operationIdCamelCase}}',
+      request,
+    ) as [{{operationIdCamelCase}}Request, ...unknown[]];
     try {
-      const delegateResponse: {{#returnType}}{{operationIdCamelCase}}ResponseContext | {{/returnType}}AlternateAction | undefined = await this.delegate.handle{{operationIdCamelCase}}.apply(
-        this.delegate,
-        [requestContext, ...args],
-      );
+      const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
       if (handleAlternateActions(delegateResponse, basicRouteParams)) {
         return;
       }

@@ -7,6 +7,7 @@ import {
   DependencyContainer,
   injectable,
   resolveParams,
+  ROOT_CONTAINER,
 } from '@launchtray/hatch-util';
 import express, {Application, NextFunction, Request, RequestHandler, Response, Router} from 'express';
 import WebSocket from 'ws';
@@ -109,6 +110,7 @@ const requestContainerKey = Symbol('requestContainer');
 const livenessChecksKey = Symbol('livenessChecksKey');
 const readinessChecksKey = Symbol('readinessChecksKey');
 const appInfoKey = Symbol('appInfoKey');
+const injectContainerOnlyKey = Symbol('injectContainerOnlyKey');
 
 const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
@@ -125,7 +127,12 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
       container.registerInstance('NextFunction', next);
       container.registerInstance('cookie', req.headers.cookie ?? '');
       container.registerInstance('authHeader', req.headers.authorization ?? '');
-      const args = await resolveParams(container, target, propertyKey);
+      const args = [];
+      if (target[injectContainerOnlyKey] as boolean) {
+        args.push(container);
+      } else {
+        args.push(await resolveParams(container, target, propertyKey));
+      }
       await originalMethod.apply(ctlr, args);
     };
 
@@ -352,9 +359,29 @@ type ControllerBoundRouteDefiner = (
     apiMetadataConsumer: APIMetadataConsumer
 ) => void;
 
-export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewareClass => {
+export interface Delegator<D> {
+  delegate?: D;
+}
+
+export type DelegatingControllerClass<D> = Class<Delegator<D>> & {delegateToken?: string | symbol};
+
+export function middlewareFor<T extends Class<any>>(target: T): ServerMiddlewareClass;
+// eslint-disable-next-line no-redeclare
+export function middlewareFor<D>(target: DelegatingControllerClass<D>, delegateType: Class<D>): ServerMiddlewareClass;
+// eslint-disable-next-line no-redeclare
+export function middlewareFor<D>(
+  target: DelegatingControllerClass<D>,
+  delegateType?: Class<D>,
+): ServerMiddlewareClass {
   if (!hasControllerRoutes(target)) {
     throw new Error(`Cannot register ${target.name} as middleware, as it has no @routes defined.`);
+  }
+  const {delegateToken} = target as DelegatingControllerClass<D>;
+  if (delegateToken != null) {
+    if (delegateType == null) {
+      throw new Error(`Missing delegate parameter for call to middlewareFor for ${target.name}`);
+    }
+    ROOT_CONTAINER.registerSingleton(delegateToken, delegateType);
   }
 
   const originalRegister = target.prototype.register;
@@ -444,8 +471,8 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
       apiMetadataRegistrar(apiMetadataConsumer);
     });
   };
-  return target;
-};
+  return target as unknown as ServerMiddlewareClass;
+}
 
 export type HTTPMethod =
   | 'all'
@@ -486,7 +513,18 @@ export interface NonStandardRouteDefiners {
 
 export type RouteDefiners = StandardRouteDefiners & NonStandardRouteDefiners;
 
-export const controller: <T>() => (target: Class<T>) => void = injectable;
+export interface ControllerProps {
+  injectContainerOnly?: boolean;
+}
+
+type ClassDecorator<T> = (target: Class<T>) => void;
+
+export const controller = <T>(controllerProps?: ControllerProps): ClassDecorator<T> => {
+  return (target) => {
+    target.prototype[injectContainerOnlyKey] = controllerProps?.injectContainerOnly ?? false;
+    return injectable()(target);
+  };
+};
 
 export const convertExpressPathToOpenAPIPath = (
   path: PathParams,

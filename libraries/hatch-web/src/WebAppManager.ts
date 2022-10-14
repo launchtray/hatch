@@ -1,6 +1,6 @@
 import {Class, DependencyContainer, injectable, Logger, resolveParams} from '@launchtray/hatch-util';
 import {match, matchPath, RouteProps} from 'react-router';
-import {AnyAction, Store} from 'redux';
+import {AnyAction} from 'redux';
 import {Saga} from 'redux-saga';
 import {call} from 'redux-saga/effects';
 import effects, {Effect} from './effects';
@@ -100,16 +100,11 @@ const hasWebAppManagerMethods = (target: unknown): boolean => {
   return (asWebAppManager[clientLoadersKey] != null) || (asWebAppManager[locationChangeLoadersKey] != null);
 };
 
-export const createSagaForWebAppManagers = async (
-  logger: Logger,
-  webAppManagers: WebAppManager[],
-  store: Store,
-  rootContainer: DependencyContainer,
-  cookie?: string,
-  authHeader?: string,
-  isServer = false,
-  ssrEnabled = true,
-): Promise<Saga> => {
+export const createSagaForWebAppManagers = async (dependencyContainer: DependencyContainer): Promise<Saga> => {
+  const logger = await dependencyContainer.resolve<Logger>('Logger');
+  const isServer = await dependencyContainer.resolve<boolean>('isServer');
+  const ssrEnabled = await dependencyContainer.resolve<boolean>('ssrEnabled');
+  const webAppManagers = await resolveWebAppManagers(dependencyContainer);
   const sagas: Effect[] = [];
   logger.debug(`Total web app manager count: ${webAppManagers.length}`);
   webAppManagers.forEach((manager) => {
@@ -121,10 +116,7 @@ export const createSagaForWebAppManagers = async (
   });
   if (!isServer) {
     const handleClientLoadSagas: Effect[] = [];
-    const container = rootContainer.createChildContainer();
-    container.registerInstance('Store', store);
-    container.registerInstance('cookie', cookie ?? '');
-    container.registerInstance('authHeader', authHeader ?? '');
+    const container = dependencyContainer.createChildContainer();
     for (const manager of webAppManagers) {
       const target = manager.constructor.prototype;
       await forEachClientLoader(target, async (propertyKey) => {
@@ -157,14 +149,11 @@ export const createSagaForWebAppManagers = async (
         if (shouldRunOnClient) {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
-            const container = rootContainer.createChildContainer();
+            const container = dependencyContainer.createChildContainer();
 
             container.registerInstance('pathMatch', pathMatch);
             container.registerInstance('Location', location);
             container.registerInstance('isServer', isServer);
-            container.registerInstance('Store', store);
-            container.registerInstance('cookie', cookie ?? '');
-            container.registerInstance('authHeader', authHeader ?? '');
 
             const args = await resolveParams(container, target, propertyKey);
             handleLocationChangeSagas.push(call([manager, manager[propertyKey]], ...args));

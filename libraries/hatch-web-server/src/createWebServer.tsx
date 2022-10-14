@@ -13,10 +13,11 @@ import {
   NavProvider,
   registerWebAppManagers,
   resetDefinedActions,
-  resolveWebAppManagers,
   WebCommonComposition,
   runtimeConfig,
 } from '@launchtray/hatch-web';
+import {registerPerRequestInjections} from '@launchtray/hatch-server';
+import {DependencyContainer} from '@launchtray/tsyringe-async';
 import crypto from 'crypto';
 import {RequestHandler} from 'express';
 import React from 'react';
@@ -39,9 +40,8 @@ interface ClientRenderRequestContext {
   prettify: boolean;
   logger: Logger;
   errorReporter: ErrorReporter;
-  cookie?: string;
-  authHeader?: string;
   disableSsr: boolean;
+  container: DependencyContainer;
 }
 
 const {assets, assetsPrefix} = loadStaticAssetsMetadata();
@@ -73,29 +73,23 @@ const renderStaticClient = async (requestContext: ClientRenderRequestContext): P
 };
 
 const renderDynamicClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
-  const clientContainer = ROOT_CONTAINER.createChildContainer();
-  const {composition, logger, errorReporter, cookie, authHeader} = requestContext;
+  const {composition, logger, errorReporter} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
   const {navMiddleware, location} = createNavMiddleware({locationForSsr: requestContext.requestURL});
   const middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(errorReporter));
   const store = createStore(composition.createRootReducer(), middleware);
 
+  const requestContainer = requestContext.container;
   const webAppManagers = composition.webAppManagers ?? [];
   registerWebAppManagers(
-    clientContainer,
+    requestContainer,
     ...webAppManagers,
   );
-  const webAppManagerInstances = await resolveWebAppManagers(clientContainer);
-  const rootSaga = await createSagaForWebAppManagers(
-    logger,
-    webAppManagerInstances,
-    store,
-    clientContainer,
-    cookie,
-    authHeader,
-    true,
-    true,
-  );
+
+  requestContainer.registerInstance('Store', store);
+  requestContainer.register('isServer', {useValue: true});
+  requestContainer.register('ssrEnabled', {useValue: true});
+  const rootSaga = await createSagaForWebAppManagers(requestContainer);
 
   const rootSagaTask = sagaMiddleware.run(rootSaga);
   store.dispatch(navActions.serverLocationLoaded({location}));
@@ -192,6 +186,8 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
     }
     addStaticRoutes(app, assetsPrefix);
     const webRequestHandler: RequestHandler = (req, res, next) => {
+      const requestContainer = ROOT_CONTAINER.createChildContainer();
+      registerPerRequestInjections(requestContainer, req, res, next);
       const stateOnly = req.query.state !== undefined;
       const prettify = req.query.state === 'pretty';
       if (stateOnly) {
@@ -206,9 +202,8 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         prettify,
         logger,
         errorReporter,
-        cookie: req.headers.cookie,
-        authHeader: req.headers.authorization,
         disableSsr,
+        container: requestContainer,
       };
       crypto.randomBytes(32, (err, buf) => {
         if (err != null) {

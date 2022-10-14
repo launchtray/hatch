@@ -15,6 +15,8 @@ import route, {
   middlewareFor,
   readinessCheck,
   ReadinessState,
+  registerPerRequestAuthInjections,
+  registerPerRequestInjections,
   requestMatchesRouteList,
   Route,
 } from './server-routing';
@@ -50,6 +52,8 @@ export {
   assignRootContainerToController,
   hasControllerRoutes,
   HTTPMethod,
+  registerPerRequestAuthInjections,
+  registerPerRequestInjections,
   registerServerMiddleware,
   resolveServerMiddleware,
   ServerComposer,

@@ -112,6 +112,29 @@ const readinessChecksKey = Symbol('readinessChecksKey');
 const appInfoKey = Symbol('appInfoKey');
 const injectContainerOnlyKey = Symbol('injectContainerOnlyKey');
 
+export const registerPerRequestAuthInjections = (
+  container: DependencyContainer,
+  {cookie, authHeader}: {cookie?: string, authHeader?: string},
+) => {
+  container.registerInstance('cookie', cookie ?? '');
+  container.registerInstance('authHeader', authHeader ?? '');
+};
+
+export const registerPerRequestInjections = (
+  container: DependencyContainer,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  container.registerInstance('Request', req);
+  container.registerInstance('Response', res);
+  container.registerInstance('NextFunction', next);
+  registerPerRequestAuthInjections(container, {
+    cookie: req.headers.cookie,
+    authHeader: req.headers.authorization,
+  });
+};
+
 const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
@@ -122,11 +145,7 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
         container = rootContainer.createChildContainer();
         req[requestContainerKey] = container;
       }
-      container.registerInstance('Request', req);
-      container.registerInstance('Response', res);
-      container.registerInstance('NextFunction', next);
-      container.registerInstance('cookie', req.headers.cookie ?? '');
-      container.registerInstance('authHeader', req.headers.authorization ?? '');
+      registerPerRequestInjections(container, req, res, next);
       const args = [];
       if (target[injectContainerOnlyKey] as boolean) {
         args.push(container);

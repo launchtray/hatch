@@ -12,8 +12,7 @@ import {
   resolveParams,
 } from '@launchtray/tsyringe-async';
 import {
-  ApiDelegateResponse,
-  handleAlternateActions,
+  handleApiAlternateActions,
   route,
 } from '../runtime';
 {{#imports.0}}
@@ -26,7 +25,7 @@ export interface {{classname}}Delegate {
   handle{{operationIdCamelCase}}(
     request: models.{{operationIdCamelCase}}Request,
     ...optionalInjections: unknown[]
-  ): ApiDelegateResponse<models.{{operationIdCamelCase}}Response{{^returnType}} | void{{/returnType}}>;
+  ): models.ApiDelegateResponse<models.{{operationIdCamelCase}}Response{{^returnType}} | void{{/returnType}}>;
   {{/operation}}
   {{/operations}}
 }
@@ -60,7 +59,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
     ) as [models.{{operationIdCamelCase}}Request, ...unknown[]];
     try {
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
-      if (handleAlternateActions(delegateResponse, basicRouteParams)) {
+      if (handleApiAlternateActions(delegateResponse, basicRouteParams)) {
         return;
       }
       {{#returnType}}

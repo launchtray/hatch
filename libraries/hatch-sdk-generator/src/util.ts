@@ -1,42 +1,52 @@
 import {spawnSync} from 'child_process';
 import path from 'path';
 import fs from 'fs-extra';
+import tmp from 'tmp';
 
 export type SdkType = 'client' | 'server';
 
 export const createSdkByInputSpec = async (inputSpec: string, type: SdkType) => {
   const generatorExec = path.resolve(__dirname, '..', 'node_modules', '.bin', 'openapi-generator');
-  const templatePath = path.resolve(__dirname, '..', 'lib', `${type}-sdk`);
-  const outputPath = './src/autogen';
-  if (fs.existsSync(outputPath)) {
-    await fs.remove(outputPath);
-  }
-  const args = [
-    'generate',
-    '--input-spec',
-    inputSpec,
-    '--output',
-    outputPath,
-    '--generator-name',
-    'typescript-fetch',
-    '--template-dir',
-    templatePath,
-    '--additional-properties=supportsES6=true,typescriptThreePlus=true',
-    '--skip-validate-spec',
-    '--type-mappings object=any',
-  ];
-  const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
-  if (generatorCmd.error != null) {
-    // eslint-disable-next-line no-console -- intentional stdout
-    console.log(generatorCmd.stdout);
-    throw new Error(generatorCmd.error.message);
-  }
-  // if successful, the last file generated is the openapi-generation/VERSION file
-  const openApiVersionFile = path.resolve(outputPath, '.openapi-generator', 'VERSION');
-  if (!fs.existsSync(openApiVersionFile)) {
-    // eslint-disable-next-line no-console -- intentional stdout
-    console.log(generatorCmd.stdout);
-    throw new Error(`Error generating ${type} sdk: ${generatorCmd.stderr}`);
+  const templateDirResult = tmp.dirSync({unsafeCleanup: true, prefix: `${type}-sdk-generator`});
+  try {
+    const templateSourcePath = path.resolve(__dirname, '..', 'lib', `${type}-sdk`);
+    const templateCommonSourcePath = path.resolve(__dirname, '..', 'lib', 'common');
+    const templateDestPath = path.resolve(templateDirResult.name, `${type}-sdk`);
+    fs.copySync(templateSourcePath, templateDestPath);
+    fs.copySync(templateCommonSourcePath, templateDestPath);
+    const outputPath = './src/autogen';
+    if (fs.existsSync(outputPath)) {
+      await fs.remove(outputPath);
+    }
+    const args = [
+      'generate',
+      '--input-spec',
+      inputSpec,
+      '--output',
+      outputPath,
+      '--generator-name',
+      'typescript-fetch',
+      '--template-dir',
+      templateDestPath,
+      '--additional-properties=supportsES6=true,typescriptThreePlus=true',
+      '--skip-validate-spec',
+      '--type-mappings object=any',
+    ];
+    const generatorCmd = spawnSync(generatorExec, args, {encoding: 'utf8'});
+    if (generatorCmd.error != null) {
+      // eslint-disable-next-line no-console -- intentional stdout
+      console.log(generatorCmd.stdout);
+      throw new Error(generatorCmd.error.message);
+    }
+    // if successful, the last file generated is the openapi-generation/VERSION file
+    const openApiVersionFile = path.resolve(outputPath, '.openapi-generator', 'VERSION');
+    if (!fs.existsSync(openApiVersionFile)) {
+      // eslint-disable-next-line no-console -- intentional stdout
+      console.log(generatorCmd.stdout);
+      throw new Error(`Error generating ${type} sdk: ${generatorCmd.stderr}`);
+    }
+  } finally {
+    templateDirResult.removeCallback();
   }
 };
 

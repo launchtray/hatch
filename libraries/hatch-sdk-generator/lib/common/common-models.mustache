@@ -1,0 +1,71 @@
+/* eslint-disable no-redeclare,import/export,@typescript-eslint/no-empty-interface,@typescript-eslint/no-unused-vars */
+{{#models}}
+{{#model}}
+import {
+  {{classFilename}},
+} from './{{{classFilename}}}';
+{{/model}}
+{{/models}}
+
+{{#models}}
+{{#model}}
+export * from './{{{classFilename}}}';
+{{/model}}
+{{/models}}
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+{{#operation}}
+
+export interface {{operationIdCamelCase}}Request {
+{{#bodyParam}}
+{{#dataType}}
+  body: {{dataType}};
+{{/dataType}}
+{{/bodyParam}}
+}
+
+export interface {{operationIdCamelCase}}Response {
+{{#returnType}}
+  body: {{returnType}};
+{{/returnType}}
+  httpCode?: number;
+}
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
+
+const PREVENT_CONTROLLER_RESPONSE_CODE = Symbol.for('@launchtray/hatch-sdk-generator#preventControllerResponse');
+const ALT_ACTION_CODE_KEY: unique symbol = Symbol.for('@launchtray/hatch-sdk-generator#altActionCodeKey');
+
+export class ApiAlternateAction {
+  public readonly [ALT_ACTION_CODE_KEY]: number | symbol;
+
+  constructor(
+    code: number | symbol,
+    public readonly body?: unknown
+  ) {
+    this[ALT_ACTION_CODE_KEY] = code;
+  }
+}
+
+export const preventsControllerResponse = (err: ApiAlternateAction) => {
+  return err[ALT_ACTION_CODE_KEY] === PREVENT_CONTROLLER_RESPONSE_CODE;
+};
+
+export const PREVENT_CONTROLLER_RESPONSE = new ApiAlternateAction(PREVENT_CONTROLLER_RESPONSE_CODE);
+
+export const getHttpError = (err: ApiAlternateAction): number | undefined => {
+  const errorCode = err[ALT_ACTION_CODE_KEY];
+  if (typeof errorCode === 'number') {
+    return errorCode;
+  }
+  return undefined;
+};
+
+export const isApiAlternateAction = (response: unknown): response is ApiAlternateAction => {
+  return ((response as ApiAlternateAction)[ALT_ACTION_CODE_KEY] != null);
+};
+
+export type ApiDelegateResponse<T> = Promise<T | ApiAlternateAction> | T | ApiAlternateAction;

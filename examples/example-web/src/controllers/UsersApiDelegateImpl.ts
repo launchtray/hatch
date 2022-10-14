@@ -1,6 +1,6 @@
 import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import {
-  AlternateAction,
+  ApiAlternateAction,
   CreateUserOperationRequest,
   GetUserRequest,
   MakeAdminRequest,
@@ -21,7 +21,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate {
     @inject('Logger') logger: Logger,
   ) {
     logger.debug(`handleCreateUserOperation: ${JSON.stringify(request)}`);
-    return new AlternateAction(500, 'Whaaaa?');
+    return new ApiAlternateAction(500, 'Whaaaa?');
   }
 
   handleGetUser(

@@ -6,6 +6,14 @@ import {
 } from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
+import {
+  ApiAlternateAction,
+  preventsControllerResponse,
+  PREVENT_CONTROLLER_RESPONSE,
+  getHttpError,
+  isApiAlternateAction,
+} from './models';
+
 export type AnyType = any;
 
 export function exists(json: any, key: string) {
@@ -20,43 +28,11 @@ export function mapValues(data: any, fn: (item: any) => any) {
   );
 }
 
-const PREVENT_CONTROLLER_RESPONSE_CODE = Symbol('preventControllerResponse');
-const ALT_ACTION_CODE_KEY: unique symbol = Symbol('altActionCodeKey');
-
-export class AlternateAction {
-  public readonly [ALT_ACTION_CODE_KEY]: number | symbol;
-
-  constructor(
-    code: number | symbol,
-    public readonly body?: unknown
-  ) {
-    this[ALT_ACTION_CODE_KEY] = code;
-  }
-}
-
-export const preventsControllerResponse = (err: AlternateAction) => {
-  return err[ALT_ACTION_CODE_KEY] === PREVENT_CONTROLLER_RESPONSE_CODE;
-};
-
-export const PREVENT_CONTROLLER_RESPONSE = new AlternateAction(PREVENT_CONTROLLER_RESPONSE_CODE);
-
-export const getHttpError = (err: AlternateAction): number | undefined => {
-  const errorCode = err[ALT_ACTION_CODE_KEY];
-  if (typeof errorCode === 'number') {
-    return errorCode;
-  }
-  return undefined;
-};
-
-const isAlternateAction = (response: unknown): response is AlternateAction => {
-  return ((response as AlternateAction)[ALT_ACTION_CODE_KEY] != null);
-};
-
-export const handleAlternateActions = (
+export const handleApiAlternateActions = (
   delegateResponse: unknown,
   basicRouteParams: BasicRouteParams
-): delegateResponse is AlternateAction => {
-  if (isAlternateAction(delegateResponse)) {
+): delegateResponse is ApiAlternateAction => {
+  if (isApiAlternateAction(delegateResponse)) {
     if (preventsControllerResponse(delegateResponse)) {
       return true;
     }
@@ -79,5 +55,3 @@ export const route = {
   DELETE: hatch_route.delete,
   HEAD: hatch_route.head,
 };
-
-export type ApiDelegateResponse<T> = Promise<T | AlternateAction> | T | AlternateAction;

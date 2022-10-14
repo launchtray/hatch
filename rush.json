@@ -541,8 +541,23 @@
       "shouldPublish": false
     },
     {
+      "packageName": "@launchtray/hatch-template-server-sdk",
+      "projectFolder": "tools/hatch-cli/src/templates/server-sdk/template",
+      "shouldPublish": false
+    },
+    {
       "packageName": "@launchtray/hatch-template-api",
       "projectFolder": "tools/hatch-cli/src/templates/api/template",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/example-api",
+      "projectFolder": "examples/example-api",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/example-server-sdk",
+      "projectFolder": "examples/example-server-sdk",
       "shouldPublish": false
     }
   ]

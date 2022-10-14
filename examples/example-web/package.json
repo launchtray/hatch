@@ -7,7 +7,8 @@
     "access": "restricted"
   },
   "scripts": {
-    "start": "razzle start",
+    "start": "rush build:watch --to-except @launchtray/example-web & rushx start:no-watch",
+    "start:no-watch": "razzle start",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf build && razzle build --noninteractive",
@@ -15,6 +16,7 @@
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
+    "@launchtray/example-server-sdk": "0.1.0",
     "@launchtray/hatch-server": "0.20.0",
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/hatch-web": "0.20.0",

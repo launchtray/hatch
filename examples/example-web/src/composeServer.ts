@@ -1,3 +1,6 @@
+import {
+  getApiMiddleware,
+} from '@launchtray/example-server-sdk';
 import {middlewareFor} from '@launchtray/hatch-server';
 import {
   JSONBodyParser,
@@ -9,13 +12,13 @@ import {
   AUTH_WHITELIST_KEY,
   AWSCognitoClient,
   LocalUserManager,
-  UserManagementController,
 } from '@launchtray/hatch-server-user-management';
 import {ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {runtimeConfig} from '@launchtray/hatch-web';
 import {WebServerComposition} from '@launchtray/hatch-web-server';
 import composeCommon from './composeCommon';
 import ExampleController from './controllers/ExampleController';
+import UsersApiDelegateImpl from './controllers/UsersApiDelegateImpl';
 
 export default async (): Promise<WebServerComposition> => {
   runtimeConfig.TEST_VAR = 'Hello!';
@@ -37,7 +40,10 @@ export default async (): Promise<WebServerComposition> => {
     serverMiddleware: [
       JSONBodyParser,
       RequestLogger,
-      middlewareFor(UserManagementController), // this should go before all controllers that require authentication
+      ...getApiMiddleware({
+        delegateForTestersApi: UsersApiDelegateImpl,
+        delegateForUsersApi: UsersApiDelegateImpl,
+      }),
       middlewareFor(ExampleController),
       RouteNotFound, // Catch-all 404 for unimplemented APIs
     ],

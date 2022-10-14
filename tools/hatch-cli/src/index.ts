@@ -9,7 +9,7 @@ const optionsForTemplate = (name: string) => ({
 
 const commandForTemplate = (name: string, description: string): [string, string, commander.CommandOptions] => [
   `${name} <name>`,
-  `creates a ${description}`,
+  `creates a${(description.match('^[aieouAIEOU].*') != null ? 'n ' : ' ') + description}`,
   optionsForTemplate(name),
 ];
 
@@ -26,7 +26,8 @@ commander
   .command(...commandForTemplate('story', 'storybook story'))
   .command(...commandForTemplate('library', 'library project'))
   .command(...commandForTemplate('monorepo', 'monorepo project'))
-  .command(...commandForTemplate('client-sdk', 'client-sdk project'))
+  .command(...commandForTemplate('client-sdk', 'server-sdk project'))
+  .command(...commandForTemplate('server-sdk', 'client-sdk project'))
   .command(...commandForTemplate('api', 'api project'));
 
 runCommander();

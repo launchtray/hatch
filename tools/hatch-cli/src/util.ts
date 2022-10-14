@@ -23,11 +23,12 @@ type ProjectFolder =
   | 'libraries'
   | 'tools';
 
-interface ClientSDKOptions {
+interface SdkOptions {
   name?: string;
   dependency?: string;
   ver?: string;
   spec?: string;
+  isServer: boolean,
 }
 
 interface ApiOptions {
@@ -40,7 +41,7 @@ interface CopyDirOptions {
   name: string;
   templateType?: TemplateType;
   projectFolder?: ProjectFolder;
-  clientSDKOptions?: ClientSDKOptions;
+  sdkOptions?: SdkOptions;
   apiOptions?: ApiOptions;
 }
 
@@ -65,16 +66,18 @@ const logError = (message: string) => {
 };
 
 const determinePackageName = (
-  {overriddenName, apiPackageName, desiredSuffix}: {
+  {overriddenName, apiPackageName, desiredSuffix, isServer}: {
     overriddenName?: string,
     apiPackageName?: string,
     desiredSuffix: string
+    isServer: boolean,
   },
 ): string => {
   let projectName: string;
   if (apiPackageName != null && overriddenName == null) {
     // First remove 'api' suffix, so we don't have redundant service-api-sdk
-    projectName = apiPackageName.replace(/([-./])api$/, `$1${desiredSuffix}`);
+    projectName = apiPackageName
+      .replace(/([-./])api$/, `$1${isServer ? 'server' : 'client'}$1${desiredSuffix}`);
     if (!projectName.endsWith(desiredSuffix)) {
       projectName = `${projectName}-${desiredSuffix}`;
     }
@@ -84,21 +87,34 @@ const determinePackageName = (
   return projectName;
 };
 
-export const clientSDKCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
-  return (clientSDKOptions: ClientSDKOptions) => {
-    if (clientSDKOptions.dependency == null && clientSDKOptions.spec == null) {
-      throw new Error('Dependency or input spec must be specified');
-    }
-    if (clientSDKOptions.spec != null && clientSDKOptions.name == null) {
-      throw new Error('Name must be specified when generating a client SDK from an input spec');
-    }
-    const projectName = determinePackageName({
-      overriddenName: clientSDKOptions.name,
-      apiPackageName: clientSDKOptions.dependency,
-      desiredSuffix: 'sdk',
-    });
-    return createProject(parentDirectory, projectName, projectFolder, {clientSDKOptions});
+const createSdk = (parentDirectory: string, projectFolder: ProjectFolder | undefined, sdkOptions: SdkOptions) => {
+  if (sdkOptions.dependency == null && sdkOptions.spec == null) {
+    throw new Error('Dependency or input spec must be specified');
+  }
+  if (sdkOptions.spec != null && sdkOptions.name == null) {
+    throw new Error('Name must be specified when generating an SDK from an input spec');
+  }
+  const projectName = determinePackageName({
+    overriddenName: sdkOptions.name,
+    apiPackageName: sdkOptions.dependency,
+    desiredSuffix: 'sdk',
+    isServer: sdkOptions.isServer,
+  });
+  return createProject(parentDirectory, projectName, projectFolder, {sdkOptions});
+};
+
+const sdkCreator = (parentDirectory: string, projectFolder: ProjectFolder | undefined, isServer: boolean) => {
+  return (sdkOptions: SdkOptions) => {
+    return createSdk(parentDirectory, projectFolder, {...sdkOptions, isServer});
   };
+};
+
+export const clientSdkCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
+  return sdkCreator(parentDirectory, projectFolder, false);
+};
+
+export const serverSdkCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
+  return sdkCreator(parentDirectory, projectFolder, true);
 };
 
 export const apiCreator = (parentDirectory: string, projectFolder?: ProjectFolder) => {
@@ -449,18 +465,18 @@ const patchPackageJson = (
   fs.writeFileSync(packagePath, packageUpdated);
 };
 
-const generateClientSDK = (
-  clientSDKOptions: ClientSDKOptions,
+const generateSdk = (
+  sdkOptions: SdkOptions,
   tempFilePath: string,
   rushConfigParsed?: {projects?: RushConfigurationProject[]},
   monorepoRootDir?: string,
 ) => {
   patchPackageJson(tempFilePath, (packageParsed) => {
-    const clientSDKPackageParsed = packageParsed;
-    let dependencyVersion = clientSDKOptions.ver;
-    if (clientSDKOptions.dependency != null && dependencyVersion == null) {
+    const sdkPackageParsed = packageParsed;
+    let dependencyVersion = sdkOptions.ver;
+    if (sdkOptions.dependency != null && dependencyVersion == null) {
       const dependencyProject = rushConfigParsed?.projects?.find((project: RushConfigurationProject) => {
-        return project.packageName === clientSDKOptions.dependency;
+        return project.packageName === sdkOptions.dependency;
       });
       const dependencyProjectFolder = dependencyProject?.projectFolder;
       if (dependencyProjectFolder != null && monorepoRootDir != null) {
@@ -473,13 +489,14 @@ const generateClientSDK = (
     if (dependencyVersion == null) {
       dependencyVersion = 'latest';
     }
-    if (clientSDKOptions.dependency != null) {
-      clientSDKPackageParsed.devDependencies[clientSDKOptions.dependency] = dependencyVersion;
-      clientSDKPackageParsed.scripts.build = `hatch-client-sdk --dependency ${clientSDKOptions.dependency
-      } && rimraf dist && tsc`;
-    } else if (clientSDKOptions.spec != null) {
-      clientSDKPackageParsed.scripts.build = `hatch-client-sdk --spec ${clientSDKOptions.spec
-      } && rimraf dist && tsc`;
+    const cliName = sdkOptions.isServer ? 'hatch-server-sdk' : 'hatch-client-sdk';
+    if (sdkOptions.dependency != null) {
+      sdkPackageParsed.devDependencies[sdkOptions.dependency] = dependencyVersion;
+      sdkPackageParsed.scripts.build = `${cliName} --dependency ${sdkOptions.dependency} && rimraf dist && tsc`;
+      sdkPackageParsed.scripts['build:watch'] = `${cliName} --dependency ${sdkOptions.dependency} && tsc`;
+    } else if (sdkOptions.spec != null) {
+      sdkPackageParsed.scripts.build = `${cliName} --spec ${sdkOptions.spec} && rimraf dist && tsc`;
+      sdkPackageParsed.scripts['build:watch'] = `${cliName} --spec ${sdkOptions.spec} && tsc`;
     }
   });
 };
@@ -490,6 +507,10 @@ const patchApiPackage = (apiOptions: ApiOptions, tempFilePath: string) => {
     const {specType} = apiOptions;
     if (specType != null && specType !== 'spot') {
       apiPackage.scripts.build = apiPackage.scripts.build.replace(
+        '--spot src/api.ts',
+        `--spec src/api.${apiOptions.specType}`,
+      );
+      apiPackage.scripts['build:watch'] = apiPackage.scripts['build:watch'].replace(
         '--spot src/api.ts',
         `--spec src/api.${apiOptions.specType}`,
       );
@@ -507,7 +528,7 @@ const patchApiPackage = (apiOptions: ApiOptions, tempFilePath: string) => {
 };
 
 export const createFromTemplate = async (
-  {srcPath, dstPath, name, templateType, projectFolder, clientSDKOptions, apiOptions}: CopyDirOptions,
+  {srcPath, dstPath, name, templateType, projectFolder, sdkOptions, apiOptions}: CopyDirOptions,
 ): Promise<{dstPath: string, inMonorepo: boolean}> => {
   let adjustedDstPath = dstPath;
   let inMonorepo = false;
@@ -694,8 +715,8 @@ export const createFromTemplate = async (
         if (rushConfigPath != null && monorepoRootDir != null && projectFolder != null) {
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
-          if (clientSDKOptions != null) {
-            generateClientSDK(clientSDKOptions, tempFilePath, rushConfigParsed, monorepoRootDir);
+          if (sdkOptions != null) {
+            generateSdk(sdkOptions, tempFilePath, rushConfigParsed, monorepoRootDir);
           }
           const projectRelativePath = path.join(projectFolder, toShortName(name));
           const project: Record<string, string> & {shouldPublish?: boolean} = {
@@ -713,8 +734,8 @@ export const createFromTemplate = async (
           const rushConfigRawUpdated = stringify(rushConfigParsed, null, 2);
           fs.writeFileSync(rushConfigPath, rushConfigRawUpdated);
           await updateDockerComposition(templateName, monorepoRootDir, toShortName(name));
-        } else if (projectFolder != null && clientSDKOptions != null) {
-          generateClientSDK(clientSDKOptions, tempFilePath);
+        } else if (projectFolder != null && sdkOptions != null) {
+          generateSdk(sdkOptions, tempFilePath);
         }
         if (apiOptions != null) {
           patchApiPackage(apiOptions, tempFilePath);

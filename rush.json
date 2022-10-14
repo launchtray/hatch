@@ -559,6 +559,11 @@
       "packageName": "@launchtray/example-server-sdk",
       "projectFolder": "examples/example-server-sdk",
       "shouldPublish": false
+    },
+    {
+      "packageName": "@launchtray/example-client-sdk",
+      "projectFolder": "examples/example-client-sdk",
+      "shouldPublish": false
     }
   ]
 }

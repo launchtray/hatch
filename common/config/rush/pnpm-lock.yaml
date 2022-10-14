@@ -29,6 +29,7 @@ specifiers:
   '@redux-devtools/extension': ^3
   '@redux-saga/core': ^1
   '@rush-temp/example-api': file:./projects/example-api.tgz
+  '@rush-temp/example-client-sdk': file:./projects/example-client-sdk.tgz
   '@rush-temp/example-server-sdk': file:./projects/example-server-sdk.tgz
   '@rush-temp/example-web': file:./projects/example-web.tgz
   '@rush-temp/hatch-api': file:./projects/hatch-api.tgz
@@ -232,6 +233,7 @@ dependencies:
   '@redux-devtools/extension': 3.2.2_redux@4.2.0
   '@redux-saga/core': 1.1.3
   '@rush-temp/example-api': file:projects/example-api.tgz_jest@27.5.1+supports-color@7.2.0
+  '@rush-temp/example-client-sdk': file:projects/example-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0
   '@rush-temp/example-server-sdk': file:projects/example-server-sdk.tgz_jest@27.5.1+supports-color@7.2.0
   '@rush-temp/example-web': file:projects/example-web.tgz_ts-node@9.1.1
   '@rush-temp/hatch-api': file:projects/hatch-api.tgz_jest@27.5.1+supports-color@7.2.0
@@ -19962,6 +19964,28 @@ packages:
       - supports-color
     dev: false
 
+  file:projects/example-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
+    resolution: {integrity: sha512-nND3uh8yIommQ1gfYnKLKekj46dAN4YWWt16XLgU/Vv+s1LteoyhO05IaxZlT6HpQK0mENzak1rM8AHa1zhBaQ==, tarball: file:projects/example-client-sdk.tgz}
+    id: file:projects/example-client-sdk.tgz
+    name: '@rush-temp/example-client-sdk'
+    version: 0.0.0
+    dependencies:
+      '@types/node': 16.11.47
+      '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
+      '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
+      cross-fetch: 3.1.5
+      eslint: 8.21.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
+      eslint-plugin-import: 2.26.0_eslint@8.21.0
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      rimraf: 3.0.0
+      typescript: 4.7.4
+    transitivePeerDependencies:
+      - encoding
+      - jest
+      - supports-color
+    dev: false
+
   file:projects/example-server-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
     resolution: {integrity: sha512-1rqnWsAnmsm9bPwLWjMRzN2UMLdCTSRQXpDtkiVFpahldx/V5KxwKG3xdT8+4NaGFap+cLpVD8GwVTqun0bybA==, tarball: file:projects/example-server-sdk.tgz}
     id: file:projects/example-server-sdk.tgz
@@ -19984,7 +20008,7 @@ packages:
     dev: false
 
   file:projects/example-web.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-loslyWD0uZVlDkKuM1FB/07rnfyMdojcMBKhOkDJH9gkbiizlFh3ukKl+/Gwvxx+8tOOLCczODloH5ObzL76ZA==, tarball: file:projects/example-web.tgz}
+    resolution: {integrity: sha512-34QdX0TZ9SCBkwseLYVyweSRq5+uVQW5hlDqbLT5tzQQl8rwmh+p+ZWhJ5rk77sf2G6ue+iT9/sTVdpYSZbIrA==, tarball: file:projects/example-web.tgz}
     id: file:projects/example-web.tgz
     name: '@rush-temp/example-web'
     version: 0.0.0

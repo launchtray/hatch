@@ -1,0 +1,15 @@
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+import * as exportsFor{{classFilename}} from './{{classFilename}}';
+{{/operations}}
+{{/apis}}
+
+export default {
+{{#apis}}
+{{#operations}}
+  ...exportsFor{{classFilename}},
+{{/operations}}
+{{/apis}}
+};
+{{/apiInfo}}

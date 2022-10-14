@@ -112,7 +112,8 @@ const readinessChecksKey = Symbol('readinessChecksKey');
 const appInfoKey = Symbol('appInfoKey');
 const injectContainerOnlyKey = Symbol('injectContainerOnlyKey');
 
-export const registerPerRequestAuthInjections = (
+// Keep consistent with version in createClient.tsx, or consolidate to common library
+const registerPerRequestAuthDependencies = (
   container: DependencyContainer,
   {cookie, authHeader}: {cookie?: string, authHeader?: string},
 ) => {
@@ -120,7 +121,7 @@ export const registerPerRequestAuthInjections = (
   container.registerInstance('authHeader', authHeader ?? '');
 };
 
-export const registerPerRequestInjections = (
+export const registerPerRequestDependencies = (
   container: DependencyContainer,
   req: Request,
   res: Response,
@@ -129,7 +130,7 @@ export const registerPerRequestInjections = (
   container.registerInstance('Request', req);
   container.registerInstance('Response', res);
   container.registerInstance('NextFunction', next);
-  registerPerRequestAuthInjections(container, {
+  registerPerRequestAuthDependencies(container, {
     cookie: req.headers.cookie,
     authHeader: req.headers.authorization,
   });
@@ -145,7 +146,7 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
         container = rootContainer.createChildContainer();
         req[requestContainerKey] = container;
       }
-      registerPerRequestInjections(container, req, res, next);
+      registerPerRequestDependencies(container, req, res, next);
       const args = [];
       if (target[injectContainerOnlyKey] as boolean) {
         args.push(container);

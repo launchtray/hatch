@@ -134,7 +134,8 @@ const sentryMonitor: SentryMonitor = {
   },
 };
 
-export const registerPerRequestAuthInjections = (
+// Keep consistent with version in createClient.tsx, or consolidate to common library
+export const registerPerRequestAuthDependencies = (
   container: DependencyContainer,
   {cookie, authHeader}: {cookie?: string, authHeader?: string},
 ) => {
@@ -201,7 +202,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
   container.registerInstance('Store', store);
   container.register('isServer', {useValue: false});
   container.register('ssrEnabled', {useValue: ssrEnabled});
-  registerPerRequestAuthInjections(container, {cookie});
+  registerPerRequestAuthDependencies(container, {cookie});
   const rootSaga = await createSagaForWebAppManagers(container);
 
   if (rootSaga != null) {

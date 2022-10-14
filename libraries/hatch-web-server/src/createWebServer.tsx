@@ -16,7 +16,7 @@ import {
   WebCommonComposition,
   runtimeConfig,
 } from '@launchtray/hatch-web';
-import {registerPerRequestInjections} from '@launchtray/hatch-server';
+import {registerPerRequestDependencies} from '@launchtray/hatch-server';
 import {DependencyContainer} from '@launchtray/tsyringe-async';
 import crypto from 'crypto';
 import {RequestHandler} from 'express';
@@ -187,7 +187,7 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
     addStaticRoutes(app, assetsPrefix);
     const webRequestHandler: RequestHandler = (req, res, next) => {
       const requestContainer = ROOT_CONTAINER.createChildContainer();
-      registerPerRequestInjections(requestContainer, req, res, next);
+      registerPerRequestDependencies(requestContainer, req, res, next);
       const stateOnly = req.query.state !== undefined;
       const prettify = req.query.state === 'pretty';
       if (stateOnly) {

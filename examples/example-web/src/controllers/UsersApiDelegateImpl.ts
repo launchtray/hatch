@@ -1,8 +1,9 @@
 import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import {
   ApiAlternateAction,
-  CreateUserOperationRequest,
+  CreateUserRequest,
   GetUserRequest,
+  GetUserResponse,
   MakeAdminRequest,
   PREVENT_CONTROLLER_RESPONSE,
   UsersApiDelegate,
@@ -15,9 +16,17 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate {
     logger.info('Constructing UsersApiControllerDelegateImpl');
   }
 
+  handleCreateTester(
+    request: CreateUserRequest,
+    @inject('Logger') logger: Logger,
+  ) {
+    logger.debug(`handleCreateTester: ${JSON.stringify(request)}`);
+    return new ApiAlternateAction(404, 'No testers found');
+  }
+
   // Demonstrates how an error response can be sent
-  handleCreateUserOperation(
-    request: CreateUserOperationRequest,
+  handleCreateUser(
+    request: CreateUserRequest,
     @inject('Logger') logger: Logger,
   ) {
     logger.debug(`handleCreateUserOperation: ${JSON.stringify(request)}`);
@@ -27,13 +36,16 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate {
   handleGetUser(
     request: GetUserRequest,
     @inject('Logger') logger: Logger,
-  ) {
+  ): GetUserResponse {
     logger.debug(`handleGetUser: ${JSON.stringify(request)}`);
     return {
       body: {
         firstName: 'Kilty',
         lastName: 'McGowan',
-        id: 'TODO: replace this when path params are implemented',
+        id: request.pathParams.id,
+      },
+      headers: {
+        xExampleResponse: request.queryParams.search,
       },
     };
   }

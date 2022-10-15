@@ -1,76 +1,127 @@
 // Implement this per https://github.com/airtasker/spot/wiki/Spot-Syntax
-import {api, endpoint, request, response, body, pathParams, String} from '@airtasker/spot';
-@api({ name: "example-api" })
-class API {}
+import * as spot from '@airtasker/spot';
 
-@endpoint({
-  method: 'POST',
-  path: '/api/users',
-  tags: ['Users', 'Testers']
-})
-class CreateUser {
-  @request
-  request(@body body: CreateUserRequest) {}
-
-  @response({ status: 201 })
-  response(@body body: CreateUserResponse) {}
-}
-
-@endpoint({
-  method: 'POST',
-  path: '/api/make-admin',
-  tags: ['Users']
-})
-class MakeAdmin {
-  @request
-  request(@body body: User) {}
-
-  @response({ status: 201 })
-  response() {}
-}
-
-/** Retrieve a user by their unique identifier */
-@endpoint({
-  method: "GET",
-  path: "/api/users/:id",
-  tags: ["Users"]
-})
-class GetUser {
-  @request
-  request(
-    @pathParams
-      pathParams: {
-      /** Unique user identifier */
-      id: String;
-    }
-  ) {}
-
-  @response({ status: 200 })
-  successResponse(@body body: UserResponse) {}
-
-  @response({ status: 404 })
-  notfoundResponse(@body body: ApiErrorResponse) {}
-}
-
-interface CreateUserRequest {
+interface CreateUserRequestPayload {
   firstName: string;
   lastName: string;
 }
 
-interface CreateUserResponse {
+interface CreateUserResponsePayload {
   firstName: string;
   lastName: string;
   role: string;
 }
 
 interface User {
-  firstName: String;
-  lastName: String;
-  id: String;
+  firstName: string;
+  lastName: string;
+  id: string;
 }
 
 type UserResponse = User;
 
-interface ApiErrorResponse {
-  message: String;
+@spot.api({name: 'example-api'})
+class Api {}
+
+@spot.endpoint({
+  method: 'POST',
+  path: '/api/testers',
+  tags: ['Testers'],
+})
+class CreateTester {
+  @spot.request
+  request(
+    @spot.headers headers: {
+      Authorization: string;
+      'x-example-request'?: string;
+    },
+    @spot.body body: CreateUserRequestPayload,
+  ) {}
+
+  @spot.response({status: 201})
+  response(
+    @spot.headers h: {
+      'x-example-response'?: string;
+    },
+    @spot.body body: CreateUserResponsePayload,
+  ) {}
+}
+
+@spot.endpoint({
+  method: 'POST',
+  path: '/api/users',
+  tags: ['Users'],
+})
+class CreateUser {
+  @spot.request
+  request(
+    @spot.headers headers: {
+      Authorization: string;
+      'x-example-request'?: string;
+    },
+    @spot.body body: CreateUserRequestPayload,
+  ) {}
+
+  @spot.response({status: 201})
+  response(
+    @spot.headers headers: {
+      'x-example-response'?: string;
+    },
+    @spot.body body: CreateUserResponsePayload,
+  ) {}
+}
+
+@spot.endpoint({
+  method: 'POST',
+  path: '/api/make-admin/:id',
+  tags: ['Users'],
+})
+class MakeAdmin {
+  @spot.request
+  request(
+    @spot.pathParams pathParams: {
+      id: string;
+    },
+    @spot.headers headers: {
+      Authorization: string;
+      'x-example-request'?: string;
+    },
+    @spot.body body: User,
+  ) {}
+
+  @spot.response({status: 201})
+  response(
+    @spot.headers headers: {
+      'x-example-response'?: string;
+    },
+  ) {}
+}
+
+@spot.endpoint({
+  method: 'GET',
+  path: '/api/users/:id',
+  tags: ['Users'],
+})
+class GetUser {
+  @spot.request
+  request(
+    @spot.headers headers: {
+      Authorization: string;
+      'x-example-request'?: string;
+    },
+    @spot.queryParams queryParams: {
+      search: string;
+    },
+    @spot.pathParams pathParams: {
+      id: string;
+    },
+  ) {}
+
+  @spot.response({status: 200})
+  response(
+    @spot.headers headers: {
+      'x-example-response'?: string;
+    },
+    @spot.body body: UserResponse,
+  ) {}
 }

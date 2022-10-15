@@ -15,8 +15,10 @@
     "build": "rimraf dist && tsc && hatch-api --spot src/api.ts && ls dist/api.json",
     "build:watch": "tsc && hatch-api --spot src/api.ts"
   },
+  "dependencies": {
+    "@airtasker/spot": "^1.9.0"
+  },
   "devDependencies": {
-    "@airtasker/spot": "^1.9.0",
     "@types/node": "^16",
     "@launchtray/hatch-api": "0.20.0",
     "eslint": "^8",

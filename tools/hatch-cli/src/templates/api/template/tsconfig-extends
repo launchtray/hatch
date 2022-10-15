@@ -4,11 +4,5 @@
     "declaration": true,
     "rootDir": "src",
     "outDir": "dist"
-  },
-  "files": [
-    "src/index.ts"
-  ],
-  "exclude": [
-    "**/src/*.ts"
-  ]
+  }
 }

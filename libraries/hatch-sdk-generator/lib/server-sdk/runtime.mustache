@@ -1,16 +1,16 @@
 /* tslint:disable */
 /* eslint-disable */
 {{>licenseInfo}}
-import {
-  route as hatch_route,
-} from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
 import {
   ApiAlternateAction,
+  ApiError,
   preventsControllerResponse,
   PREVENT_CONTROLLER_RESPONSE,
   getHttpError,
+  isApiError,
+  getAlternateAction,
   isApiAlternateAction,
 } from './models';
 
@@ -28,6 +28,48 @@ export function mapValues(data: any, fn: (item: any) => any) {
   );
 }
 
+export const handleApiError = (err: unknown, basicRouteParams: BasicRouteParams): boolean => {
+  if (isApiError(err)) {
+    try {
+      const altAction = getAlternateAction(err);
+      if (handleApiAlternateActions(altAction, basicRouteParams)) {
+        return true;
+      }
+    } catch (err: unknown) {
+      return false;
+    }
+  }
+  return false;
+}
+
+export const throwInvalidParamError = (paramName: string): never => {
+  throw new ApiError(new ApiAlternateAction(400), `Bad request: missing/invalid ${paramName}`);
+};
+
+export const requireNonNull = <T>(value: T | null | undefined, name: string): T => {
+  if (value != null) {
+    return value;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireString = (value: unknown | null | undefined, name: string): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalString = (value: unknown | null | undefined, name: string): string | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  return throwInvalidParamError(name);
+};
+
 export const handleApiAlternateActions = (
   delegateResponse: unknown,
   basicRouteParams: BasicRouteParams
@@ -37,6 +79,9 @@ export const handleApiAlternateActions = (
       return true;
     }
     const httpError = getHttpError(delegateResponse);
+    if (delegateResponse.headers != null) {
+      basicRouteParams.res.set(delegateResponse.headers);
+    }
     if (httpError != null) {
       basicRouteParams.res.status(httpError).send((delegateResponse as {body?: any}).body ?? '');
       return true;
@@ -45,13 +90,4 @@ export const handleApiAlternateActions = (
     return true;
   }
   return false;
-};
-
-export const route = {
-  GET: hatch_route.get,
-  POST: hatch_route.post,
-  PUT: hatch_route.put,
-  PATCH: hatch_route.patch,
-  DELETE: hatch_route.delete,
-  HEAD: hatch_route.head,
 };

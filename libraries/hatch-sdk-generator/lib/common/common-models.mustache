@@ -18,14 +18,42 @@ export * from './{{{classFilename}}}';
 {{#operation}}
 
 export interface {{operationIdCamelCase}}Request {
+{{#headerParams.0}}
+  headers: {
+  {{#headerParams}}
+    {{> param-type-definition}}
+  {{/headerParams}}
+  };
+{{/headerParams.0}}
 {{#bodyParam}}
 {{#dataType}}
   body: {{dataType}};
 {{/dataType}}
 {{/bodyParam}}
+{{#pathParams.0}}
+  pathParams: {
+  {{#pathParams}}
+    {{> param-type-definition}}
+  {{/pathParams}}
+  };
+{{/pathParams.0}}
+{{#queryParams.0}}
+  queryParams: {
+  {{#queryParams}}
+    {{> param-type-definition}}
+  {{/queryParams}}
+  };
+{{/queryParams.0}}
 }
 
 export interface {{operationIdCamelCase}}Response {
+{{#responseHeaders.0}}
+  headers: {
+  {{#responseHeaders}}
+    {{> param-type-definition}}
+  {{/responseHeaders}}
+  };
+{{/responseHeaders.0}}
 {{#returnType}}
   body: {{returnType}};
 {{/returnType}}
@@ -38,15 +66,25 @@ export interface {{operationIdCamelCase}}Response {
 
 const PREVENT_CONTROLLER_RESPONSE_CODE = Symbol.for('@launchtray/hatch-sdk-generator#preventControllerResponse');
 const ALT_ACTION_CODE_KEY: unique symbol = Symbol.for('@launchtray/hatch-sdk-generator#altActionCodeKey');
+const ALT_ACTION_KEY: unique symbol = Symbol.for('@launchtray/hatch-sdk-generator#altActionKey');
 
 export class ApiAlternateAction {
   public readonly [ALT_ACTION_CODE_KEY]: number | symbol;
 
   constructor(
     code: number | symbol,
-    public readonly body?: unknown
+    public readonly body?: unknown,
+    public readonly headers?: Record<string, unknown>,
   ) {
     this[ALT_ACTION_CODE_KEY] = code;
+  }
+}
+
+export class ApiError extends Error {
+  public readonly [ALT_ACTION_KEY]: ApiAlternateAction;
+  constructor(alternateAction: ApiAlternateAction, message?: string) {
+    super(message);
+    this[ALT_ACTION_KEY] = alternateAction;
   }
 }
 
@@ -64,8 +102,16 @@ export const getHttpError = (err: ApiAlternateAction): number | undefined => {
   return undefined;
 };
 
+export const getAlternateAction = (err: ApiError): ApiAlternateAction => {
+  return err[ALT_ACTION_KEY];
+};
+
 export const isApiAlternateAction = (response: unknown): response is ApiAlternateAction => {
   return ((response as ApiAlternateAction)[ALT_ACTION_CODE_KEY] != null);
+};
+
+export const isApiError = (error: unknown): error is ApiError => {
+  return ((error as ApiError)[ALT_ACTION_KEY] != null);
 };
 
 export type ApiDelegateResponse<T> = Promise<T | ApiAlternateAction> | T | ApiAlternateAction;

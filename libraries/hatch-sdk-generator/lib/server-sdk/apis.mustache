@@ -1,9 +1,9 @@
 {{>licenseInfo}}
-/* eslint-disable @typescript-eslint/no-empty-interface -- allow empty request/responses */
-
+/* eslint-disable @typescript-eslint/no-empty-interface,dot-notation */
 import {
   controller,
   Delegator,
+  route,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
@@ -13,7 +13,9 @@ import {
 } from '@launchtray/tsyringe-async';
 import {
   handleApiAlternateActions,
-  route,
+  handleApiError,
+  requireString,
+  requireOptionalString,
 } from '../runtime';
 {{#imports.0}}
 import * as models from '../models';
@@ -25,7 +27,7 @@ export interface {{classname}}Delegate {
   handle{{operationIdCamelCase}}(
     request: models.{{operationIdCamelCase}}Request,
     ...optionalInjections: unknown[]
-  ): models.ApiDelegateResponse<models.{{operationIdCamelCase}}Response{{^returnType}} | void{{/returnType}}>;
+  ): models.ApiDelegateResponse<models.{{operationIdCamelCase}}Response{{^returnType}}{{^responseHeaders.0}} | void{{/responseHeaders.0}}{{/returnType}}>;
   {{/operation}}
   {{/operations}}
 }
@@ -42,26 +44,68 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
   {{#operations}}
   {{#operation}}
 
-  @route.{{httpMethod}}('{{path}}'.replace(/{([^}]*)}/g, ':$1'))
+  @route.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}('{{path}}'{{#pathParams.0}}.replace(/{([^}]*)}/g, ':$1'){{/pathParams.0}})
   async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
     const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
-    const request: models.{{operationIdCamelCase}}Request = {
-      {{#bodyParam}}
-      body: models.{{dataType}}FromJSON(basicRouteParams.req.body),
-      {{/bodyParam}}
-    };
-    const target = this.delegate.constructor.prototype;
-    const args = await resolveParams(
-      requestContainer,
-      target,
-      'handle{{operationIdCamelCase}}',
-      request,
-    ) as [models.{{operationIdCamelCase}}Request, ...unknown[]];
     try {
+      const request: models.{{operationIdCamelCase}}Request = {
+        {{#headerParams.0}}
+        headers: {
+        {{#headerParams}}
+          {{paramName}}: require{{^required}}Optional{{/required}}String(
+            basicRouteParams.req.header('{{baseName}}'),
+            'header: "{{baseName}}"',
+          ),
+        {{/headerParams}}
+        },
+        {{/headerParams.0}}
+        {{#bodyParam}}
+        body: models.{{dataType}}FromJSON(basicRouteParams.req.body),
+        {{/bodyParam}}
+        {{#pathParams.0}}
+        pathParams: {
+        {{#pathParams}}
+          {{paramName}}: require{{^required}}Optional{{/required}}String(
+            basicRouteParams.req.params.{{baseName}},
+            'path param: "{{baseName}}"',
+          ),
+        {{/pathParams}}
+        },
+        {{/pathParams.0}}
+        {{#queryParams.0}}
+          queryParams: {
+          {{#queryParams}}
+            {{paramName}}: require{{^required}}Optional{{/required}}String(
+            basicRouteParams.req.query.{{baseName}},
+            'query param: "{{baseName}}"',
+            ),
+          {{/queryParams}}
+          },
+        {{/queryParams.0}}
+      };
+      const target = this.delegate.constructor.prototype;
+      const args = await resolveParams(
+        requestContainer,
+        target,
+        'handle{{operationIdCamelCase}}',
+        request,
+      ) as [models.{{operationIdCamelCase}}Request, ...unknown[]];
+
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
       if (handleApiAlternateActions(delegateResponse, basicRouteParams)) {
         return;
       }
+
+      {{#responseHeaders.0}}
+      const responseHeaders = {};
+      {{#responseHeaders}}
+      if (delegateResponse.headers.{{name}} != null) {
+        responseHeaders['{{baseName}}'] = delegateResponse.headers.{{name}};
+      }
+      {{/responseHeaders}}
+      basicRouteParams.res.set(responseHeaders);
+      {{/responseHeaders.0}}
+
       {{#returnType}}
       const responseJson = models.{{returnType}}ToJSON(delegateResponse.body);
       basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
@@ -70,6 +114,10 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       basicRouteParams.res.sendStatus(200);
       {{/returnType}}
     } catch (err: unknown) {
+      this.logger.info(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
+      if (handleApiError(err, basicRouteParams)) {
+        return;
+      }
       basicRouteParams.res.status(500).send((err as {message?: string}).message ?? '');
     }
   }

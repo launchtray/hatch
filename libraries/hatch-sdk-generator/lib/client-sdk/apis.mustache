@@ -3,28 +3,20 @@
 {{>licenseInfo}}
 import * as runtime from '../runtime';
 import {AnyType} from '../runtime';
-{{#imports.0}}
 import {
+    {{#operations}}
+    {{#operation}}
+    {{operationIdCamelCase}}Request,
+    {{operationIdCamelCase}}Response,
+    {{/operation}}
+    {{/operations}}
     {{#imports}}
     {{className}},
     {{className}}FromJSON,
     {{className}}ToJSON,
     {{/imports}}
 } from '../models';
-{{/imports.0}}
 
-{{#operations}}
-{{#operation}}
-{{#allParams.0}}
-export interface {{operationIdCamelCase}}Request {
-{{#allParams}}
-    {{paramName}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{#isNullable}} | null{{/isNullable}}{{/isEnum}};
-{{/allParams}}
-}
-
-{{/allParams.0}}
-{{/operation}}
-{{/operations}}
 {{#operations}}
 /**
  * {{#lambda.indented_star_1}}{{{unescapedDescription}}}{{/lambda.indented_star_1}}
@@ -43,8 +35,8 @@ export class {{classname}} extends runtime.BaseAPI {
     async {{nickname}}Raw({{#allParams.0}}requestParameters: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<runtime.ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}>> {
         {{#allParams}}
         {{#required}}
-        if (requestParameters.{{paramName}} === null || requestParameters.{{paramName}} === undefined) {
-            throw new runtime.RequiredError('{{paramName}}','Required parameter requestParameters.{{paramName}} was null or undefined when calling {{nickname}}.');
+        if (requestParameters.{{> param-path }} == null) {
+            throw new runtime.RequiredError('{{> param-path }}','Required parameter requestParameters.{{> param-path }} was null or undefined when calling {{nickname}}.');
         }
 
         {{/required}}
@@ -217,7 +209,7 @@ export class {{classname}} extends runtime.BaseAPI {
             {{/isContainer}}
             {{^isContainer}}
             {{^isPrimitiveType}}
-            body: {{dataType}}ToJSON(requestParameters.{{paramName}}),
+            body: {{dataType}}ToJSON(requestParameters.body),
             {{/isPrimitiveType}}
             {{#isPrimitiveType}}
             body: requestParameters.{{paramName}} as any,

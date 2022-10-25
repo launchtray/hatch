@@ -64,10 +64,56 @@ export const requireOptionalString = (value: unknown | null | undefined, name: s
   if (value == null) {
     return undefined;
   }
-  if (typeof value === 'string') {
-    return value;
+  return requireString(value, name);
+};
+
+export const requireNumber = (value: unknown | null | undefined, name: string): number => {
+  if (value == null) {
+    return throwInvalidParamError(name);
+  }
+  const asNumber = Number(value);
+  if (!isNaN(asNumber)) {
+    return asNumber;
   }
   return throwInvalidParamError(name);
+};
+
+export const requireOptionalNumber = (value: unknown | null | undefined, name: string): number | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireNumber(value, name);
+};
+
+export const requireBoolean = (value: unknown | null | undefined, name: string): boolean => {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    const lowerCaseValue = value.toLowerCase();
+    if (lowerCaseValue === 'true' || lowerCaseValue === 'yes' || lowerCaseValue === '1') {
+      return true;
+    }
+    if (lowerCaseValue === 'false' || lowerCaseValue === 'no' || lowerCaseValue === '0') {
+      return false;
+    }
+  }
+  if (typeof value === 'number') {
+    if (value === 1) {
+      return true;
+    }
+    if (value === 0) {
+      return false;
+    }
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalBoolean = (value: unknown | null | undefined, name: string): boolean | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireBoolean(value, name);
 };
 
 export const handleApiAlternateActions = (

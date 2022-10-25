@@ -11,15 +11,8 @@ import {
   DependencyContainer,
   resolveParams,
 } from '@launchtray/tsyringe-async';
-import {
-  handleApiAlternateActions,
-  handleApiError,
-  requireString,
-  requireOptionalString,
-} from '../runtime';
-{{#imports.0}}
 import * as models from '../models';
-{{/imports.0}}
+import * as runtime from '../runtime';
 
 export interface {{classname}}Delegate {
   {{#operations}}
@@ -27,7 +20,7 @@ export interface {{classname}}Delegate {
   handle{{operationIdCamelCase}}(
     request: models.{{operationIdCamelCase}}Request,
     ...optionalInjections: unknown[]
-  ): models.ApiDelegateResponse<models.{{operationIdCamelCase}}Response{{^returnType}}{{^responseHeaders.0}} | void{{/responseHeaders.0}}{{/returnType}}>;
+  ): models.ApiDelegateResponse<models.{{> response-type}}>;
   {{/operation}}
   {{/operations}}
 }
@@ -52,7 +45,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {{#headerParams.0}}
         headers: {
         {{#headerParams}}
-          {{paramName}}: require{{^required}}Optional{{/required}}String(
+          {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.header('{{baseName}}'),
             'header: "{{baseName}}"',
           ),
@@ -60,12 +53,24 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         },
         {{/headerParams.0}}
         {{#bodyParam}}
-        body: models.{{dataType}}FromJSON(basicRouteParams.req.body),
+        {{#isListContainer}}
+        {{#items}}
+        {{#isPrimitiveType}}
+        body: basicRouteParams.req.body{{#isNumeric}}.map(Number){{/isNumeric}},
+        {{/isPrimitiveType}}
+        {{^isPrimitiveType}}
+        body: basicRouteParams.req.body.map(models.{{{baseType}}}FromJSON),
+        {{/isPrimitiveType}}
+        {{/items}}
+        {{/isListContainer}}
+        {{^isListContainer}}
+        body: models.{{{dataType}}}FromJSON(basicRouteParams.req.body),
+        {{/isListContainer}}
         {{/bodyParam}}
         {{#pathParams.0}}
         pathParams: {
         {{#pathParams}}
-          {{paramName}}: require{{^required}}Optional{{/required}}String(
+          {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.params.{{baseName}},
             'path param: "{{baseName}}"',
           ),
@@ -73,14 +78,14 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         },
         {{/pathParams.0}}
         {{#queryParams.0}}
-          queryParams: {
-          {{#queryParams}}
-            {{paramName}}: require{{^required}}Optional{{/required}}String(
+        queryParams: {
+        {{#queryParams}}
+          {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.query.{{baseName}},
             'query param: "{{baseName}}"',
-            ),
-          {{/queryParams}}
-          },
+          ),
+        {{/queryParams}}
+        },
         {{/queryParams.0}}
       };
       const target = this.delegate.constructor.prototype;
@@ -92,7 +97,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       ) as [models.{{operationIdCamelCase}}Request, ...unknown[]];
 
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
-      if (handleApiAlternateActions(delegateResponse, basicRouteParams)) {
+      if (runtime.handleApiAlternateActions(delegateResponse, basicRouteParams)) {
         return;
       }
 
@@ -105,17 +110,39 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{/responseHeaders}}
       basicRouteParams.res.set(responseHeaders);
       {{/responseHeaders.0}}
-
       {{#returnType}}
-      const responseJson = models.{{returnType}}ToJSON(delegateResponse.body);
+      const delegateResponseBody = await delegateResponse.body;
+      {{#isResponseFile}}
+      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(delegateResponseBody);
+      {{/isResponseFile}}
+      {{^isResponseFile}}
+      {{#returnTypeIsPrimitive}}
+      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(delegateResponseBody);
+      {{/returnTypeIsPrimitive}}
+      {{^returnTypeIsPrimitive}}
+      {{#isListContainer}}
+      const responseJson = delegateResponseBody.map(models.{{returnBaseType}}ToJSON);
       basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
+      {{/isListContainer}}
+      {{^isListContainer}}
+      {{#isMapContainer}}
+      const responseJson = runtime.mapValues(delegateResponseBody, models.{{returnBaseType}}ToJSON);
+      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
+      {{/isMapContainer}}
+      {{^isMapContainer}}
+      const responseJson = models.{{returnBaseType}}ToJSON(delegateResponseBody);
+      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
+      {{/isMapContainer}}
+      {{/isListContainer}}
+      {{/returnTypeIsPrimitive}}
+      {{/isResponseFile}}
       {{/returnType}}
       {{^returnType}}
       basicRouteParams.res.sendStatus(200);
       {{/returnType}}
     } catch (err: unknown) {
       this.logger.info(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
-      if (handleApiError(err, basicRouteParams)) {
+      if (runtime.handleApiError(err, basicRouteParams)) {
         return;
       }
       basicRouteParams.res.status(500).send((err as {message?: string}).message ?? '');

@@ -1,19 +1,50 @@
 import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import {
   ApiAlternateAction,
+  ApiDelegateResponse,
   CreateUserRequest,
+  GetLatestMetricsRequest,
+  GetLatestMetricsResponse,
+  GetMetricsCountRequest,
+  GetMetricsCountResponse,
+  GetReportPdfRequest,
+  GetReportPdfResponse,
   GetUserRequest,
   GetUserResponse,
   MakeAdminRequest,
+  MetricsApiDelegate,
   PREVENT_CONTROLLER_RESPONSE,
+  ReportApiDelegate,
+  SaveMetricsRequest,
+  SaveMetricsResponse,
   UsersApiDelegate,
 } from '@launchtray/example-server-sdk';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
 @containerSingleton()
-export default class UsersApiDelegateImpl implements UsersApiDelegate {
-  constructor(@inject('Logger') logger: Logger) {
+export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsApiDelegate, ReportApiDelegate {
+  constructor(@inject('Logger') private logger: Logger) {
     logger.info('Constructing UsersApiControllerDelegateImpl');
+  }
+
+  handleGetReportPdf(request: GetReportPdfRequest): ApiDelegateResponse<GetReportPdfResponse> {
+    this.logger.debug(`handleGetReportPdf: ${JSON.stringify(request)}`);
+    throw new Error('Method not implemented.');
+  }
+
+  handleGetLatestMetrics(request: GetLatestMetricsRequest): ApiDelegateResponse<GetLatestMetricsResponse> {
+    this.logger.debug(`handleGetLatestMetrics: ${JSON.stringify(request)}`);
+    throw new Error('Method not implemented.');
+  }
+
+  handleGetMetricsCount(request: GetMetricsCountRequest): ApiDelegateResponse<GetMetricsCountResponse> {
+    this.logger.debug(`handleGetMetricsCount: ${JSON.stringify(request)}`);
+    throw new Error('Method not implemented.');
+  }
+
+  handleSaveMetrics(request: SaveMetricsRequest): ApiDelegateResponse<SaveMetricsResponse> {
+    this.logger.debug(`handleSaveMetrics: ${JSON.stringify(request)}`);
+    throw new Error('Method not implemented.');
   }
 
   handleCreateTester(

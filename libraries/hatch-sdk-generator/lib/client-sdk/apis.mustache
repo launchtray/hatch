@@ -2,19 +2,18 @@
 /* eslint-disable */
 {{>licenseInfo}}
 import * as runtime from '../runtime';
-import {AnyType} from '../runtime';
 import {
-    {{#operations}}
-    {{#operation}}
-    {{operationIdCamelCase}}Request,
-    {{operationIdCamelCase}}Response,
-    {{/operation}}
-    {{/operations}}
-    {{#imports}}
-    {{className}},
-    {{className}}FromJSON,
-    {{className}}ToJSON,
-    {{/imports}}
+  {{#operations}}
+  {{#operation}}
+  {{operationIdCamelCase}}Request,
+  {{operationIdCamelCase}}Response,
+  {{/operation}}
+  {{/operations}}
+  {{#imports}}
+  {{className}},
+  {{className}}FromJSON,
+  {{className}}ToJSON,
+  {{/imports}}
 } from '../models';
 
 {{#operations}}
@@ -23,260 +22,291 @@ import {
  */
 export class {{classname}} extends runtime.BaseAPI {
 
-    {{#operation}}
-    /**
-     {{#notes}}
-     * {{&notes}}
-     {{/notes}}
-     {{#summary}}
-     * {{&summary}}
-     {{/summary}}
-     */
-    async {{nickname}}Raw({{#allParams.0}}requestParameters: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<runtime.ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}>> {
-        {{#allParams}}
-        {{#required}}
-        if (requestParameters.{{> param-path }} == null) {
-            throw new runtime.RequiredError('{{> param-path }}','Required parameter requestParameters.{{> param-path }} was null or undefined when calling {{nickname}}.');
-        }
-
-        {{/required}}
-        {{/allParams}}
-        const queryParameters: any = {};
-
-        {{#queryParams}}
-        {{#isListContainer}}
-        if (requestParameters.{{paramName}}) {
-            {{#isCollectionFormatMulti}}
-            queryParameters['{{baseName}}'] = requestParameters.{{paramName}};
-            {{/isCollectionFormatMulti}}
-            {{^isCollectionFormatMulti}}
-            queryParameters['{{baseName}}'] = requestParameters.{{paramName}}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
-            {{/isCollectionFormatMulti}}
-        }
-
-        {{/isListContainer}}
-        {{^isListContainer}}
-        if (requestParameters.{{paramName}} !== undefined) {
-            {{#isDateTime}}
-            queryParameters['{{baseName}}'] = (requestParameters.{{paramName}} as any).toISOString();
-            {{/isDateTime}}
-            {{^isDateTime}}
-            {{#isDate}}
-            queryParameters['{{baseName}}'] = (requestParameters.{{paramName}} as any).toISOString().substr(0,10);
-            {{/isDate}}
-            {{^isDate}}
-            queryParameters['{{baseName}}'] = requestParameters.{{paramName}};
-            {{/isDate}}
-            {{/isDateTime}}
-        }
-
-        {{/isListContainer}}
-        {{/queryParams}}
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        {{#bodyParam}}
-        {{^consumes}}
-        headerParameters['Content-Type'] = 'application/json';
-
-        {{/consumes}}
-        {{#consumes.0}}
-        headerParameters['Content-Type'] = '{{{mediaType}}}';
-
-        {{/consumes.0}}
-        {{/bodyParam}}
-        {{#headerParams}}
-        {{#isListContainer}}
-        if (requestParameters.{{paramName}}) {
-            headerParameters['{{baseName}}'] = requestParameters.{{paramName}}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
-        }
-
-        {{/isListContainer}}
-        {{^isListContainer}}
-        {{^required}}
-        const {{paramName}}DefaultValue = {{{defaultValue}}};
-        if (requestParameters.{{paramName}} !== undefined && requestParameters.{{paramName}} !== null) {
-            headerParameters['{{baseName}}'] = String(requestParameters.{{paramName}});
-        } else if ({{paramName}}DefaultValue !== undefined && {{paramName}}DefaultValue !== null) {
-            headerParameters['{{baseName}}'] = String({{{defaultValue}}});
-        }
-        {{/required}}
-        {{#required}}
-        if (requestParameters.{{paramName}} !== undefined && requestParameters.{{paramName}} !== null) {
-            headerParameters['{{baseName}}'] = String(requestParameters.{{paramName}});
-        }
-        {{/required}}
-
-        {{/isListContainer}}
-        {{/headerParams}}
-        {{#authMethods}}
-        {{#isBasic}}
-        {{#isBasicBasic}}
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        {{/isBasicBasic}}
-        {{#isBasicBearer}}
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = typeof token === 'function' ? token("{{name}}", [{{#scopes}}"{{{scope}}}"{{^-last}}, {{/-last}}{{/scopes}}]) : token;
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        {{/isBasicBearer}}
-        {{/isBasic}}
-        {{#isApiKey}}
-        {{#isKeyInHeader}}
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["{{keyParamName}}"] = this.configuration.apiKey("{{keyParamName}}"); // {{name}} authentication
-        }
-
-        {{/isKeyInHeader}}
-        {{#isKeyInQuery}}
-        if (this.configuration && this.configuration.apiKey) {
-            queryParameters["{{keyParamName}}"] = this.configuration.apiKey("{{keyParamName}}"); // {{name}} authentication
-        }
-
-        {{/isKeyInQuery}}
-        {{/isApiKey}}
-        {{#isOAuth}}
-        if (this.configuration && this.configuration.accessToken) {
-            // oauth required
-            if (typeof this.configuration.accessToken === 'function') {
-                headerParameters["Authorization"] = this.configuration.accessToken("{{name}}", [{{#scopes}}"{{{scope}}}"{{^-last}}, {{/-last}}{{/scopes}}]);
-            } else {
-                headerParameters["Authorization"] = this.configuration.accessToken;
-            }
-        }
-
-        {{/isOAuth}}
-        {{/authMethods}}
-        {{#hasFormParams}}
-        const consumes: runtime.Consume[] = [
-            {{#consumes}}
-            { contentType: '{{{mediaType}}}' },
-            {{/consumes}}
-        ];
-        // @ts-ignore: canConsumeForm may be unused
-        const canConsumeForm = runtime.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): any };
-        let useForm = false;
-        {{#formParams}}
-        {{#isFile}}
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        {{/isFile}}
-        {{/formParams}}
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new URLSearchParams();
-        }
-
-        {{#formParams}}
-        {{#isListContainer}}
-        if (requestParameters.{{paramName}}) {
-            {{#isCollectionFormatMulti}}
-            requestParameters.{{paramName}}.forEach((element) => {
-                formParams.append('{{baseName}}', element as any);
-            })
-            {{/isCollectionFormatMulti}}
-            {{^isCollectionFormatMulti}}
-            formParams.append('{{baseName}}', requestParameters.{{paramName}}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]));
-            {{/isCollectionFormatMulti}}
-        }
-
-        {{/isListContainer}}
-        {{^isListContainer}}
-        if (requestParameters.{{paramName}} !== undefined) {
-            formParams.append('{{baseName}}', requestParameters.{{paramName}} as any);
-        }
-
-        {{/isListContainer}}
-        {{/formParams}}
-        {{/hasFormParams}}
-        const response = await this.request({
-            path: `{{{path}}}`{{#pathParams}}.replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(requestParameters.{{paramName}}))){{/pathParams}},
-            method: '{{httpMethod}}',
-            headers: headerParameters,
-            query: queryParameters,
-            {{#hasBodyParam}}
-            {{#bodyParam}}
-            {{#isContainer}}
-            body: requestParameters.{{paramName}}{{#isListContainer}}{{#items}}{{^isPrimitiveType}}.map({{datatype}}ToJSON){{/isPrimitiveType}}{{/items}}{{/isListContainer}},
-            {{/isContainer}}
-            {{^isContainer}}
-            {{^isPrimitiveType}}
-            body: {{dataType}}ToJSON(requestParameters.body),
-            {{/isPrimitiveType}}
-            {{#isPrimitiveType}}
-            body: requestParameters.{{paramName}} as any,
-            {{/isPrimitiveType}}
-            {{/isContainer}}
-            {{/bodyParam}}
-            {{/hasBodyParam}}
-            {{#hasFormParams}}
-            body: formParams,
-            {{/hasFormParams}}
-        });
-
-        {{#returnType}}
-        {{#isResponseFile}}
-        return new runtime.BlobApiResponse(response);
-        {{/isResponseFile}}
-        {{^isResponseFile}}
-        {{#returnTypeIsPrimitive}}
-        {{#isMapContainer}}
-        return new runtime.JSONApiResponse<any>(response);
-        {{/isMapContainer}}
-        {{#isListContainer}}
-        return new runtime.JSONApiResponse<any>(response);
-        {{/isListContainer}}
-        {{#returnSimpleType}}
-        return new runtime.TextApiResponse(response) as any;
-        {{/returnSimpleType}}
-        {{/returnTypeIsPrimitive}}
-        {{^returnTypeIsPrimitive}}
-        {{#isListContainer}}
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map({{returnBaseType}}FromJSON));
-        {{/isListContainer}}
-        {{^isListContainer}}
-        {{#isMapContainer}}
-        return new runtime.JSONApiResponse(response, (jsonValue) => runtime.mapValues(jsonValue, {{returnBaseType}}FromJSON));
-        {{/isMapContainer}}
-        {{^isMapContainer}}
-        return new runtime.JSONApiResponse(response, (jsonValue) => {{returnBaseType}}FromJSON(jsonValue));
-        {{/isMapContainer}}
-        {{/isListContainer}}
-        {{/returnTypeIsPrimitive}}
-        {{/isResponseFile}}
-        {{/returnType}}
-        {{^returnType}}
-        return new runtime.VoidApiResponse(response);
-        {{/returnType}}
+  {{#operation}}
+  /**
+   {{#notes}}
+   * {{&notes}}
+   {{/notes}}
+   {{#summary}}
+   * {{&summary}}
+   {{/summary}}
+   */
+  async {{nickname}}({{#allParams.0}}requestParameters: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{> response-type}} & {raw: Response}> {
+    {{#allParams}}
+    {{#required}}
+    if (requestParameters.{{> param-path }} == null) {
+      throw new runtime.RequiredError('{{> param-path }}','Required parameter requestParameters.{{> param-path }} was null or undefined when calling {{nickname}}.');
     }
 
-    /**
-     {{#notes}}
-     * {{&notes}}
-     {{/notes}}
-     {{#summary}}
-     * {{&summary}}
-     {{/summary}}
-     */
-    async {{nickname}}({{#allParams.0}}requestParameters: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
-        {{#returnType}}
-        const response = await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}});
-        return await response.value();
-        {{/returnType}}
-        {{^returnType}}
-        await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}});
-        {{/returnType}}
+    {{/required}}
+    {{/allParams}}
+    const queryParameters: any = {};
+
+    {{#queryParams}}
+    {{#isListContainer}}
+    if (requestParameters.{{> param-path }}) {
+      {{#isCollectionFormatMulti}}
+      queryParameters['{{baseName}}'] = requestParameters.{{> param-path }};
+      {{/isCollectionFormatMulti}}
+      {{^isCollectionFormatMulti}}
+      queryParameters['{{baseName}}'] = requestParameters.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
+      {{/isCollectionFormatMulti}}
     }
 
-    {{/operation}}
+    {{/isListContainer}}
+    {{^isListContainer}}
+    if (requestParameters.{{> param-path }} !== undefined) {
+      {{#isDateTime}}
+      queryParameters['{{baseName}}'] = (requestParameters.{{> param-path }} as any).toISOString();
+      {{/isDateTime}}
+      {{^isDateTime}}
+      {{#isDate}}
+      queryParameters['{{baseName}}'] = (requestParameters.{{> param-path }} as any).toISOString().substr(0,10);
+      {{/isDate}}
+      {{^isDate}}
+      queryParameters['{{baseName}}'] = requestParameters.{{> param-path }};
+      {{/isDate}}
+      {{/isDateTime}}
+    }
+
+    {{/isListContainer}}
+    {{/queryParams}}
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    {{#bodyParam}}
+    {{^consumes}}
+    headerParameters['Content-Type'] = 'application/json';
+
+    {{/consumes}}
+    {{#consumes.0}}
+    headerParameters['Content-Type'] = '{{{mediaType}}}';
+
+    {{/consumes.0}}
+    {{/bodyParam}}
+    {{#headerParams}}
+    {{#isListContainer}}
+    if (requestParameters.{{> param-path }}) {
+      headerParameters['{{baseName}}'] = requestParameters.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
+    }
+
+    {{/isListContainer}}
+    {{^isListContainer}}
+    {{^required}}
+    const {{paramName}}DefaultValue = {{{defaultValue}}};
+    if (requestParameters.{{> param-path }} != null) {
+      headerParameters['{{baseName}}'] = String(requestParameters.{{> param-path }});
+    } else if ({{paramName}}DefaultValue != null) {
+      headerParameters['{{baseName}}'] = String({{{defaultValue}}});
+    }
+    {{/required}}
+    {{#required}}
+    if (requestParameters.{{> param-path }} != null) {
+      headerParameters['{{baseName}}'] = String(requestParameters.{{> param-path }});
+    }
+    {{/required}}
+
+    {{/isListContainer}}
+    {{/headerParams}}
+    {{#authMethods}}
+    {{#isBasic}}
+    {{#isBasicBasic}}
+    if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+      headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+    }
+    {{/isBasicBasic}}
+    {{#isBasicBearer}}
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = typeof token === 'function' ? token("{{name}}", [{{#scopes}}"{{{scope}}}"{{^-last}}, {{/-last}}{{/scopes}}]) : token;
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    {{/isBasicBearer}}
+    {{/isBasic}}
+    {{#isApiKey}}
+    {{#isKeyInHeader}}
+    if (this.configuration && this.configuration.apiKey) {
+      headerParameters["{{keyParamName}}"] = this.configuration.apiKey("{{keyParamName}}"); // {{name}} authentication
+    }
+
+    {{/isKeyInHeader}}
+    {{#isKeyInQuery}}
+    if (this.configuration && this.configuration.apiKey) {
+      queryParameters["{{keyParamName}}"] = this.configuration.apiKey("{{keyParamName}}"); // {{name}} authentication
+    }
+
+    {{/isKeyInQuery}}
+    {{/isApiKey}}
+    {{#isOAuth}}
+    if (this.configuration && this.configuration.accessToken) {
+      // oauth required
+      if (typeof this.configuration.accessToken === 'function') {
+        headerParameters["Authorization"] = this.configuration.accessToken("{{name}}", [{{#scopes}}"{{{scope}}}"{{^-last}}, {{/-last}}{{/scopes}}]);
+      } else {
+        headerParameters["Authorization"] = this.configuration.accessToken;
+      }
+    }
+
+    {{/isOAuth}}
+    {{/authMethods}}
+    {{#hasFormParams}}
+    const consumes: runtime.Consume[] = [
+      {{#consumes}}
+      { contentType: '{{{mediaType}}}' },
+      {{/consumes}}
+    ];
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes);
+
+    let formParams: { append(param: string, value: any): any };
+    let useForm = false;
+    {{#formParams}}
+    {{#isFile}}
+    // use FormData to transmit files using content-type "multipart/form-data"
+    useForm = canConsumeForm;
+    {{/isFile}}
+    {{/formParams}}
+    if (useForm) {
+      formParams = new FormData();
+    } else {
+      formParams = new URLSearchParams();
+    }
+
+    {{#formParams}}
+    {{#isListContainer}}
+    if (requestParameters.{{> param-path }}) {
+      {{#isCollectionFormatMulti}}
+      requestParameters.{{> param-path }}.forEach((element) => {
+        formParams.append('{{baseName}}', element as any);
+      })
+      {{/isCollectionFormatMulti}}
+      {{^isCollectionFormatMulti}}
+      formParams.append('{{baseName}}', requestParameters.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]));
+      {{/isCollectionFormatMulti}}
+    }
+
+    {{/isListContainer}}
+    {{^isListContainer}}
+    if (requestParameters.{{> param-path }} !== undefined) {
+      formParams.append('{{baseName}}', requestParameters.{{> param-path }} as any);
+    }
+
+    {{/isListContainer}}
+    {{/formParams}}
+    {{/hasFormParams}}
+    const response = await this.request({
+      path: `{{{path}}}`{{#pathParams}}.replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(requestParameters.{{> param-path }}))){{/pathParams}},
+      method: '{{httpMethod}}',
+      headers: headerParameters,
+      query: queryParameters,
+      {{#hasBodyParam}}
+      {{#bodyParam}}
+      {{#isContainer}}
+      body: requestParameters.{{> param-path }}{{#isListContainer}}{{#items}}{{^isPrimitiveType}}.map({{datatype}}ToJSON){{/isPrimitiveType}}{{/items}}{{/isListContainer}},
+      {{/isContainer}}
+      {{^isContainer}}
+      {{^isPrimitiveType}}
+      body: {{{dataType}}}ToJSON(requestParameters.{{> param-path }}),
+      {{/isPrimitiveType}}
+      {{#isPrimitiveType}}
+      body: requestParameters.{{> param-path }} as any,
+      {{/isPrimitiveType}}
+      {{/isContainer}}
+      {{/bodyParam}}
+      {{/hasBodyParam}}
+      {{#hasFormParams}}
+      body: formParams,
+      {{/hasFormParams}}
+    });
+
+    const responseHeaders = {/*TODO*/};
+
+    {{#returnType}}
+    {{#isResponseFile}}
+    return {
+      raw: response,
+      body: response.blob(),
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/isResponseFile}}
+    {{^isResponseFile}}
+    {{#returnTypeIsPrimitive}}
+    {{#isMapContainer}}
+    return {
+      raw: response,
+      body: response.json(),
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/isMapContainer}}
+    {{#isListContainer}}
+    return {
+      raw: response,
+      body: response.json(),
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/isListContainer}}
+    {{#returnSimpleType}}
+    return {
+      raw: response,
+      body: response.text() as any,
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/returnSimpleType}}
+    {{/returnTypeIsPrimitive}}
+    {{^returnTypeIsPrimitive}}
+    {{#isListContainer}}
+    return {
+      raw: response,
+      body: response.json().then((jsonValue) => jsonValue.map({{returnBaseType}}FromJSON)),
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/isListContainer}}
+    {{^isListContainer}}
+    {{#isMapContainer}}
+    return {
+      raw: response,
+      body: response.json().then((jsonValue) => runtime.mapValues(jsonValue, {{returnBaseType}}FromJSON)),
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/isMapContainer}}
+    {{^isMapContainer}}
+    return {
+      raw: response,
+      body: response.json().then((jsonValue) => {{returnBaseType}}FromJSON(jsonValue)),
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/isMapContainer}}
+    {{/isListContainer}}
+    {{/returnTypeIsPrimitive}}
+    {{/isResponseFile}}
+    {{/returnType}}
+    {{^returnType}}
+    return {
+      raw: response,
+      {{#responseHeaders.0}}
+      headers: responseHeaders,
+      {{/responseHeaders.0}}
+    };
+    {{/returnType}}
+  }
+
+  {{/operation}}
 }
 {{/operations}}
 {{#hasEnums}}
@@ -286,14 +316,14 @@ export class {{classname}} extends runtime.BaseAPI {
 {{#allParams}}
 {{#isEnum}}
 /**
-    * @export
-    * @enum {string}
-    */
+  * @export
+  * @enum {string}
+  */
 export enum {{operationIdCamelCase}}{{enumName}} {
 {{#allowableValues}}
-    {{#enumVars}}
-    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
-    {{/enumVars}}
+  {{#enumVars}}
+  {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+  {{/enumVars}}
 {{/allowableValues}}
 }
 {{/isEnum}}

@@ -27,7 +27,7 @@ export interface {{operationIdCamelCase}}Request {
 {{/headerParams.0}}
 {{#bodyParam}}
 {{#dataType}}
-  body: {{dataType}};
+  body: {{{dataType}}};
 {{/dataType}}
 {{/bodyParam}}
 {{#pathParams.0}}
@@ -55,7 +55,7 @@ export interface {{operationIdCamelCase}}Response {
   };
 {{/responseHeaders.0}}
 {{#returnType}}
-  body: {{returnType}};
+  body: {{returnType}} | Promise<{{returnType}}>;
 {{/returnType}}
   httpCode?: number;
 }

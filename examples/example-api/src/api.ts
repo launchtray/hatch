@@ -18,6 +18,11 @@ interface User {
   id: string;
 }
 
+interface Metric {
+  timestamp: spot.Int64;
+  txId: string;
+}
+
 type UserResponse = User;
 
 @spot.api({name: 'example-api'})
@@ -123,5 +128,26 @@ class GetUser {
       'x-example-response'?: string;
     },
     @spot.body body: UserResponse,
+  ) {}
+}
+
+@spot.endpoint({
+  method: 'POST',
+  path: '/api/metrics/metrics-count',
+  tags: ['Metrics'],
+})
+class GetLatestMetrics {
+  @spot.request
+  request(
+    @spot.queryParams queryParams: {
+      userId: string,
+      tId: string,
+    },
+    @spot.body metricTypes: string[],
+  ) {}
+
+  @spot.response({status: 200})
+  response(
+    @spot.body body: spot.Int64,
   ) {}
 }

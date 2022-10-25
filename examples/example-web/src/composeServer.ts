@@ -43,6 +43,8 @@ export default async (): Promise<WebServerComposition> => {
       ...getApiMiddleware({
         delegateForTestersApi: UsersApiDelegateImpl,
         delegateForUsersApi: UsersApiDelegateImpl,
+        delegateForMetricsApi: UsersApiDelegateImpl,
+        delegateForReportApi: UsersApiDelegateImpl,
       }),
       middlewareFor(ExampleController),
       RouteNotFound, // Catch-all 404 for unimplemented APIs

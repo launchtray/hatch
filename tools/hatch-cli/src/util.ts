@@ -507,14 +507,15 @@ const patchApiPackage = (apiOptions: ApiOptions, tempFilePath: string) => {
     const {specType} = apiOptions;
     if (specType != null && specType !== 'spot') {
       apiPackage.scripts.build = apiPackage.scripts.build.replace(
-        '--spot src/api.ts',
+        '--spot src/api.ts --spec src/api-extension.yaml',
         `--spec src/api.${apiOptions.specType}`,
       );
       apiPackage.scripts['build:watch'] = apiPackage.scripts['build:watch'].replace(
-        '--spot src/api.ts',
+        '--spot src/api.ts --spec src/api-extension.yaml',
         `--spec src/api.${apiOptions.specType}`,
       );
       fs.removeSync(path.resolve(tempFilePath, 'src', 'api.ts'));
+      fs.removeSync(path.resolve(tempFilePath, 'src', 'api-extension.yaml'));
       if (specType === 'json') {
         fs.removeSync(path.resolve(tempFilePath, 'src', 'api.yaml'));
       } else {

@@ -3,19 +3,31 @@ import path from 'path';
 import fs from 'fs-extra';
 import {OpenApiV3} from '@airtasker/spot/build/lib/src/generators/openapi3/openapi3-specification';
 import YAML from 'yaml';
+import {merge, isErrorResult} from 'openapi-merge';
 
-const createApiFromOpenApi3Spec = async (openApi: OpenApiV3) => {
+export const createApiFromOpenApi3Specs = async (apis: OpenApiV3[]) => {
   const typesFile = path.resolve(
     './node_modules/@airtasker/spot/build/lib/src/generators/openapi3/openapi3-specification.d.ts',
   );
   const licenseFile = path.resolve(
     './node_modules/@airtasker/spot/LICENSE',
   );
+
+  const mergeResult = merge(
+    apis.map((api) => ({
+      oas: api,
+    })),
+  );
+
+  if (isErrorResult(mergeResult)) {
+    throw new Error(`Failed to merge OpenAPI specs: ${mergeResult.message} (${mergeResult.type})`);
+  }
+
   const outputDir = path.resolve('.', 'dist');
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, {recursive: true});
   }
-  const apiSpecPromise = fs.writeFile(path.resolve(outputDir, 'api.json'), JSON.stringify(openApi, null, 2));
+  const apiSpecPromise = fs.writeFile(path.resolve(outputDir, 'api.json'), JSON.stringify(mergeResult.output, null, 2));
   const typesFileOut = path.resolve(outputDir, 'api-spec.d.ts');
   const licenseDataPromise = fs.readFile(licenseFile);
   const typesDataPromise = fs.readFile(typesFile);
@@ -31,13 +43,11 @@ const createApiFromOpenApi3Spec = async (openApi: OpenApiV3) => {
   }
 };
 
-export const createApiByJsonFile = async (inputJsonFile: string) => {
-  const openApi = YAML.parseDocument(await fs.readFile(inputJsonFile, 'utf8')).toJS();
-  await createApiFromOpenApi3Spec(openApi);
+export const createApiByYamlOrJsonFile = (inputJsonFile: string) => {
+  return YAML.parseDocument(fs.readFileSync(inputJsonFile, 'utf8')).toJS();
 };
 
-export const createApiBySpotFile = async (inputSpotApi: string) => {
+export const createApiBySpotFile = (inputSpotApi: string) => {
   const contract = Spot.parseContract(inputSpotApi);
-  const openApi = Spot.OpenApi3.generateOpenAPI3(contract);
-  await createApiFromOpenApi3Spec(openApi);
+  return Spot.OpenApi3.generateOpenAPI3(contract);
 };

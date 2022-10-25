@@ -23,6 +23,11 @@ interface Metric {
   txId: string;
 }
 
+interface MetricSeries {
+  type: string;
+  data: Metric[];
+}
+
 type UserResponse = User;
 
 @spot.api({name: 'example-api'})
@@ -133,15 +138,16 @@ class GetUser {
 
 @spot.endpoint({
   method: 'POST',
-  path: '/api/metrics/metrics-count',
+  path: '/api/metrics/count',
   tags: ['Metrics'],
 })
-class GetLatestMetrics {
+class GetMetricsCount {
   @spot.request
   request(
     @spot.queryParams queryParams: {
       userId: string,
       tId: string,
+      includeDeprecated?: boolean,
     },
     @spot.body metricTypes: string[],
   ) {}
@@ -149,5 +155,26 @@ class GetLatestMetrics {
   @spot.response({status: 200})
   response(
     @spot.body body: spot.Int64,
+  ) {}
+}
+
+@spot.endpoint({
+  method: 'POST',
+  path: '/api/metrics/metrics',
+  tags: ['Metrics'],
+})
+class SaveMetrics {
+  @spot.request
+  request(
+    @spot.queryParams queryParams: {
+      userId: string,
+      tId: string,
+    },
+    @spot.body body: MetricSeries[],
+  ) {}
+
+  @spot.response({status: 200})
+  response(
+    @spot.body body: string,
   ) {}
 }

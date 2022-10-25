@@ -155,6 +155,7 @@ specifiers:
   mockserver-client: ^5.11.1
   mockserver-node: ^5.11.1
   node-fetch: ^2.6.1
+  openapi-merge: ^1.3.2
   ora: ^4
   pdf-image: ^2.0.0
   pixelmatch: ^5.2.1
@@ -359,6 +360,7 @@ dependencies:
   mockserver-client: 5.13.2
   mockserver-node: 5.13.2_debug@4.3.4
   node-fetch: 2.6.7
+  openapi-merge: 1.3.2
   ora: 4.1.1
   pdf-image: 2.0.0
   pixelmatch: 5.3.0
@@ -5959,6 +5961,13 @@ packages:
   /at-least-node/1.0.0:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
+    dev: false
+
+  /atlassian-openapi/1.0.17:
+    resolution: {integrity: sha512-8aW0Xgl9mVdL9dCABSZAvCayMPyh6uVu86UzOat8Kc1qDMUtXn2OxcwDsJfm/qCtBSeZ+GE/PkFxx3ZRIp3hFg==}
+    dependencies:
+      jsonpointer: 5.0.1
+      urijs: 1.19.11
     dev: false
 
   /atob/2.1.2:
@@ -12997,6 +13006,11 @@ packages:
     engines: {node: '>=10.0'}
     dev: false
 
+  /jsonpointer/5.0.1:
+    resolution: {integrity: sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /jsonschema/1.4.1:
     resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
     dev: false
@@ -14498,6 +14512,14 @@ packages:
     dependencies:
       is-docker: 2.2.1
       is-wsl: 2.2.0
+    dev: false
+
+  /openapi-merge/1.3.2:
+    resolution: {integrity: sha512-qRWBwPMiKIUrAcKW6lstMPKpFEWy32dBbP1UjHH9jlWgw++2BCqOVbsjO5Wa4H1Ll3c4cn+lyi4TinUy8iswzw==}
+    dependencies:
+      atlassian-openapi: 1.0.17
+      lodash: 4.17.21
+      ts-is-present: 1.2.2
     dev: false
 
   /opn/5.5.0:
@@ -18660,6 +18682,10 @@ packages:
     engines: {node: '>=6.10'}
     dev: false
 
+  /ts-is-present/1.2.2:
+    resolution: {integrity: sha512-cA5MPLWGWYXvnlJb4TamUUx858HVHBsxxdy8l7jxODOLDyGYnQOllob2A2jyDghGa5iJHs2gzFNHvwGJ0ZfR8g==}
+    dev: false
+
   /ts-jest/27.1.5_e807ed7f9a9f77c4be4445f84cb031f7:
     resolution: {integrity: sha512-Xv6jBQPoBEvBq/5i2TeSG9tt/nqkbpcurrEG1b+2yfBrcJelOZF9Ml6dmyMh7bcW9JyFbRYpR5rxROSlBLTZHA==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -19027,6 +19053,10 @@ packages:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.1.1
+    dev: false
+
+  /urijs/1.19.11:
+    resolution: {integrity: sha512-HXgFDgDommxn5/bIv0cnQZsPhHDA90NPHD6+c/v21U5+Sx5hoP8+dP9IZXBU1gIfvdRfhG8cel9QNPeionfcCQ==}
     dev: false
 
   /urix/0.1.0:
@@ -20008,7 +20038,7 @@ packages:
     dev: false
 
   file:projects/example-web.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-34QdX0TZ9SCBkwseLYVyweSRq5+uVQW5hlDqbLT5tzQQl8rwmh+p+ZWhJ5rk77sf2G6ue+iT9/sTVdpYSZbIrA==, tarball: file:projects/example-web.tgz}
+    resolution: {integrity: sha512-aXlirEXt2ZZqpyMLNzIzmB08WKP3AQZR18oy+FuZ4lfU0BOK46dJhamdHQ3Jfn+yZo+LMmsCc3DBGr7ealFL5A==, tarball: file:projects/example-web.tgz}
     id: file:projects/example-web.tgz
     name: '@rush-temp/example-web'
     version: 0.0.0
@@ -20112,7 +20142,7 @@ packages:
     dev: false
 
   file:projects/hatch-api.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-bMCwG3vubNs0pzT86VivgDC9SBc3aIn3LYa4elmhdN1qvj+ttf9pnZlRTJJ5V467fAyU8zbeAlVN3MEduCuDUg==, tarball: file:projects/hatch-api.tgz}
+    resolution: {integrity: sha512-Zb3kANrutstSP6tDKofcGdMH8h5IlKzyZYzThkxTvOqpbUEaVZSmF5Cp1LA2zctowSNlPk9eu6AEyAZ77zWfKQ==, tarball: file:projects/hatch-api.tgz}
     id: file:projects/hatch-api.tgz
     name: '@rush-temp/hatch-api'
     version: 0.0.0
@@ -20128,6 +20158,7 @@ packages:
       eslint-plugin-import: 2.26.0_eslint@8.21.0
       eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
       fs-extra: 8.1.0
+      openapi-merge: 1.3.2
       rimraf: 3.0.0
       typescript: 4.7.4
       yaml: 2.0.0-3

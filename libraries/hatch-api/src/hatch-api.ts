@@ -1,5 +1,6 @@
 import process from 'process';
-import {OpenApiV3} from '@airtasker/spot/build/lib/src/generators/openapi3/openapi3-specification';
+import {Swagger} from 'atlassian-openapi';
+import SwaggerV3 = Swagger.SwaggerV3;
 import {
   createApiBySpotFile,
   createApiByYamlOrJsonFile,
@@ -12,7 +13,7 @@ if (argv.length === 0 || argv.length % 2 !== 0) {
   throw new Error(`Invalid arguments:\n${usage}`);
 }
 
-const specs: OpenApiV3[] = [];
+const specs: SwaggerV3[] = [];
 for (let argPosition = 0; argPosition < argv.length; argPosition += 2) {
   const typeArg = argv[argPosition];
   const inputSpec = argv[argPosition + 1];

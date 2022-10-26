@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/node": "^16",
     "@launchtray/hatch-api": "0.20.0",
+    "atlassian-openapi": "^1.0.17",
     "eslint": "^8",
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@typescript-eslint/parser": "^5",

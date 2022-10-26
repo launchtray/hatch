@@ -13,6 +13,7 @@ import express, {Application, NextFunction, Request, RequestHandler, Response, R
 import WebSocket from 'ws';
 import * as HttpStatus from 'http-status-codes';
 import {
+  ASSOCIATED_API_SPEC_KEY,
   APIMetadataConsumer,
   APIMetadataParameters,
   Server,
@@ -174,7 +175,9 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
     target[routeDefinersKey].push(ctlrRouteDefiner);
     if (registerMetadata != null) {
       const metadataRegistrar: APIMetadataRegistrar = (apiMetadataConsumer) => {
-        registerMetadata(apiMetadataConsumer, target, propertyKey, descriptor);
+        if (target.constructor[ASSOCIATED_API_SPEC_KEY] == null) {
+          registerMetadata(apiMetadataConsumer, target, propertyKey, descriptor);
+        }
       };
       target[registerMetadataKey].push(metadataRegistrar);
     }

@@ -10,6 +10,7 @@
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
+    "build:watch": "tsc",
     "test": "jest --passWithNoTests"
   },
   "publishConfig": {

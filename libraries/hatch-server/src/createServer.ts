@@ -14,6 +14,7 @@ import {addBreadcrumb, Breadcrumb, captureException, init, setExtra, setTag} fro
 import {Options} from '@sentry/types';
 import express, {Application} from 'express';
 import http from 'http';
+import * as OpenApiMerge from 'openapi-merge';
 import serialize, {SerializeJSOptions} from 'serialize-javascript';
 import util from 'util';
 import {createLogger, format, transports} from 'winston';
@@ -357,11 +358,28 @@ const createServerAsync = async <T extends ServerComposition>(
   const apiSpecBuilder = new OpenAPISpecBuilder(appName, appVersion);
   const apiMetadataConsumer = apiSpecBuilder.addAPIMetadata.bind(apiSpecBuilder);
 
-  await registerServerMiddleware(rootContainer, serverMiddlewareClasses, apiMetadataConsumer);
-  const apiSpec = apiSpecBuilder.build();
+  const logger = await createServerLogger(appName);
+  const associatedApiSpecs = await registerServerMiddleware(
+    rootContainer,
+    serverMiddlewareClasses,
+    apiMetadataConsumer,
+  );
+  const manualControllerApiSpec = apiSpecBuilder.build();
+  const apiSpecs = [
+    ...associatedApiSpecs,
+    manualControllerApiSpec,
+  ];
+  const mergeResult = OpenApiMerge.merge(apiSpecs.map((api) => ({oas: api})));
+  let apiSpec: OpenAPISpec;
+  if (OpenApiMerge.isErrorResult(mergeResult)) {
+    logger.warn(`Failed to merge OpenAPI specs: ${mergeResult.message} (${mergeResult.type})`);
+    apiSpec = manualControllerApiSpec;
+  } else {
+    apiSpec = mergeResult.output;
+  }
+
   await handlePrintApiSpecMode(apiSpec);
 
-  const logger = await createServerLogger(appName);
   const {port, hostname} = getPortAndHostname(logger);
   const errorReporter = new SentryReporter(sentryMonitor, logger, {dsn: process.env.SENTRY_DSN});
   rootContainer.registerInstance('ErrorReporter', errorReporter);

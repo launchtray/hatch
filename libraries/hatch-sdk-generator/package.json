@@ -6,7 +6,8 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
   },
   "bin": {
     "hatch-client-sdk": "./bin/hatch-client-sdk",
@@ -17,6 +18,8 @@
   },
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1",
+    "@launchtray/hatch-api": "0.20.0",
+    "atlassian-openapi": "^1.0.17",
     "fs-extra": "^8",
     "tmp": "^0.2.1"
   },

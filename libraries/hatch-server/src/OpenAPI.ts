@@ -121,7 +121,7 @@ export interface OpenAPISpec {
     [key: string]: OpenAPIPath;
   };
   components: {
-    securitySchemes: {
+    securitySchemes?: {
       [bearerAuth]: {
         type: 'http',
         scheme: 'bearer'
@@ -141,18 +141,25 @@ export class OpenAPISpecBuilder {
         version: appVersion,
       },
       paths: {},
-      components: {
-        securitySchemes: {
-          [bearerAuth]: {
-            type: 'http',
-            scheme: 'bearer',
-          },
-        },
-      },
+      components: {},
     };
   }
 
   addAPIMetadata(apiMetadata: APIMetadata) {
+    if (this.spec.components.securitySchemes == null) {
+      const security = apiMetadata.security ?? [];
+      for (const securityItem of security) {
+        if (securityItem[bearerAuth] != null) {
+          this.spec.components.securitySchemes = {
+            [bearerAuth]: {
+              type: 'http',
+              scheme: 'bearer',
+            },
+          };
+          break;
+        }
+      }
+    }
     this.spec.paths[apiMetadata.path] = {
       ...this.spec.paths[apiMetadata.path],
       [apiMetadata.method]: {

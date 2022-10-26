@@ -7,6 +7,7 @@ import {
   OpenAPIRequestBody,
   OpenAPIResponses,
   OpenAPIOperationSecurity,
+  OpenAPISpec,
 } from './OpenAPI';
 import {LivenessState, ReadinessState} from './server-routing';
 
@@ -54,15 +55,31 @@ export interface ServerMiddlewareClass extends Class<ServerMiddleware> {
 
 const serverMiddlewareKey = Symbol('serverMiddleware');
 
+export const ASSOCIATED_API_SPEC_KEY = Symbol('associatedApiSpecKey');
+export const ASSOCIATED_API_SPEC_ID_KEY = Symbol('associatedApiSpecIdentifierKey');
+
 export const registerServerMiddleware = async (
   container: DependencyContainer,
   middlewareList: ServerMiddlewareClass[],
   apiMetadataConsumer: APIMetadataConsumer,
-) => {
+): Promise<OpenAPISpec[]> => {
+  const apiSpecMap: {[key: symbol]: OpenAPISpec} = {};
+  const apiSpecs: OpenAPISpec[] = [];
   for (const middleware of middlewareList) {
+    const associatedApiSpec = middleware[ASSOCIATED_API_SPEC_KEY];
+    if (associatedApiSpec != null) {
+      const key = associatedApiSpec[ASSOCIATED_API_SPEC_ID_KEY];
+      if (apiSpecMap[key] == null) {
+        apiSpecMap[key] = associatedApiSpec;
+        apiSpecs.push(associatedApiSpec);
+      }
+    }
     container.registerSingleton(serverMiddlewareKey, middleware);
-    await middleware.registerAPIMetadata?.(apiMetadataConsumer);
+    if (associatedApiSpec != null) {
+      await middleware.registerAPIMetadata?.(apiMetadataConsumer);
+    }
   }
+  return apiSpecs;
 };
 
 export const resolveServerMiddleware = async (

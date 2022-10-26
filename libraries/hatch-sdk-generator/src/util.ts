@@ -2,6 +2,7 @@ import {spawnSync} from 'child_process';
 import path from 'path';
 import fs from 'fs-extra';
 import tmp from 'tmp';
+import {createApiFromOpenApi3Specs} from '@launchtray/hatch-api';
 
 export type SdkType = 'client' | 'server';
 
@@ -44,6 +45,9 @@ export const createSdkByInputSpec = async (inputSpec: string, type: SdkType) => 
       // eslint-disable-next-line no-console -- intentional stdout
       console.log(generatorCmd.stdout);
       throw new Error(`Error generating ${type} sdk: ${generatorCmd.stderr}`);
+    }
+    if (type === 'server') {
+      await createApiFromOpenApi3Specs([JSON.parse(fs.readFileSync(inputSpec, 'utf8'))]);
     }
   } finally {
     templateDirResult.removeCallback();

@@ -12,7 +12,7 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "hatch-server-sdk --dependency @launchtray/example-api && rimraf dist && tsc",
+    "build": "rimraf dist && hatch-server-sdk --dependency @launchtray/example-api && tsc",
     "build:watch": "hatch-server-sdk --dependency @launchtray/example-api && tsc"
   },
   "peerDependencies": {
@@ -31,6 +31,7 @@
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
+    "atlassian-openapi": "^1.0.17",
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",

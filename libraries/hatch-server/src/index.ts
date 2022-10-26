@@ -29,6 +29,8 @@ import {
 } from './ServerComposer';
 import {
   APIMetadataParameters,
+  ASSOCIATED_API_SPEC_KEY,
+  ASSOCIATED_API_SPEC_ID_KEY,
   registerServerMiddleware,
   resolveServerMiddleware,
   Server,
@@ -39,6 +41,8 @@ import {
 export {
   addStaticRoutes,
   APIMetadataParameters,
+  ASSOCIATED_API_SPEC_KEY,
+  ASSOCIATED_API_SPEC_ID_KEY,
   route,
   controller,
   Delegator,

@@ -42,7 +42,6 @@ class CreateTester {
   @spot.request
   request(
     @spot.headers headers: {
-      Authorization: string;
       'x-example-request'?: string;
     },
     @spot.body body: CreateUserRequestPayload,
@@ -66,7 +65,6 @@ class CreateUser {
   @spot.request
   request(
     @spot.headers headers: {
-      Authorization: string;
       'x-example-request'?: string;
     },
     @spot.body body: CreateUserRequestPayload,
@@ -93,7 +91,6 @@ class MakeAdmin {
       id: string;
     },
     @spot.headers headers: {
-      Authorization: string;
       'x-example-request'?: string;
     },
     @spot.body body: User,
@@ -116,7 +113,6 @@ class GetUser {
   @spot.request
   request(
     @spot.headers headers: {
-      Authorization: string;
       'x-example-request'?: string;
     },
     @spot.queryParams queryParams: {
@@ -160,7 +156,7 @@ class GetMetricsCount {
 
 @spot.endpoint({
   method: 'POST',
-  path: '/api/metrics/metrics',
+  path: '/api/metrics/add',
   tags: ['Metrics'],
 })
 class SaveMetrics {

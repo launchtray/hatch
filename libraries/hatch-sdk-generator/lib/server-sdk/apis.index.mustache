@@ -1,5 +1,20 @@
-import {middlewareFor} from '@launchtray/hatch-server';
+import {
+  ASSOCIATED_API_SPEC_KEY,
+  ASSOCIATED_API_SPEC_ID_KEY,
+  middlewareFor,
+} from '@launchtray/hatch-server';
+
 import {Class} from '@launchtray/hatch-util';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {Swagger} from '../../api-spec';
+import SwaggerV3 = Swagger.SwaggerV3;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import api from '../../api.json';
+
+api[ASSOCIATED_API_SPEC_ID_KEY] = Symbol('uniqueApiIdentifier'); // Guaranteed unique per module
+
 {{#apiInfo}}
 {{#apis}}
 {{#operations}}
@@ -9,6 +24,16 @@ import {
 } from './{{classFilename}}';
 {{/operations}}
 {{/apis}}
+
+{{#apis}}
+{{#operations}}
+{{classFilename}}Controller[ASSOCIATED_API_SPEC_KEY] = api;
+{{/operations}}
+{{/apis}}
+
+const getApiSpec = (): SwaggerV3 => {
+  return api;
+};
 
 const getApiMiddleware = ({
 {{#apis}}
@@ -28,12 +53,13 @@ const getApiMiddleware = ({
 
 export {
   getApiMiddleware,
+  getApiSpec,
 {{#apis}}
 {{#operations}}
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 {{/operations}}
 {{/apis}}
-}
+};
 
 {{/apiInfo}}

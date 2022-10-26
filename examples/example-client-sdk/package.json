@@ -12,7 +12,7 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "hatch-client-sdk --dependency @launchtray/example-api && rimraf dist && tsc",
+    "build": "rimraf dist && hatch-client-sdk --dependency @launchtray/example-api && tsc",
     "build:watch": "hatch-client-sdk --dependency @launchtray/example-api && tsc"
   },
   "dependencies": {

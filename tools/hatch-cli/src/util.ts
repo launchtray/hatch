@@ -492,10 +492,10 @@ const generateSdk = (
     const cliName = sdkOptions.isServer ? 'hatch-server-sdk' : 'hatch-client-sdk';
     if (sdkOptions.dependency != null) {
       sdkPackageParsed.devDependencies[sdkOptions.dependency] = dependencyVersion;
-      sdkPackageParsed.scripts.build = `${cliName} --dependency ${sdkOptions.dependency} && rimraf dist && tsc`;
+      sdkPackageParsed.scripts.build = `rimraf dist && ${cliName} --dependency ${sdkOptions.dependency} && tsc`;
       sdkPackageParsed.scripts['build:watch'] = `${cliName} --dependency ${sdkOptions.dependency} && tsc`;
     } else if (sdkOptions.spec != null) {
-      sdkPackageParsed.scripts.build = `${cliName} --spec ${sdkOptions.spec} && rimraf dist && tsc`;
+      sdkPackageParsed.scripts.build = `rimraf dist && ${cliName} --spec ${sdkOptions.spec} && tsc`;
       sdkPackageParsed.scripts['build:watch'] = `${cliName} --spec ${sdkOptions.spec} && tsc`;
     }
   });

@@ -18,6 +18,9 @@
   "dependencies": {
     "cross-fetch": "^3.0.4"
   },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "0.20.0"
+  },
   "devDependencies": {
     "@types/node": "^16",
     "@launchtray/hatch-sdk-generator": "0.20.0",

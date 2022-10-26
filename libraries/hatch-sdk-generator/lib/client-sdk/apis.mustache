@@ -1,37 +1,32 @@
 /* tslint:disable */
 /* eslint-disable */
 {{>licenseInfo}}
+import {injectAll, injectable} from '@launchtray/hatch-util';
 import * as runtime from '../runtime';
-import {
-  {{#operations}}
-  {{#operation}}
-  {{operationIdCamelCase}}Request,
-  {{operationIdCamelCase}}Response,
-  {{/operation}}
-  {{/operations}}
-  {{#imports}}
-  {{className}},
-  {{className}}FromJSON,
-  {{className}}ToJSON,
-  {{/imports}}
-} from '../models';
+import * as models from '../models';
 
 {{#operations}}
-/**
- * {{#lambda.indented_star_1}}{{{unescapedDescription}}}{{/lambda.indented_star_1}}
- */
-export class {{classname}} extends runtime.BaseAPI {
+@injectable()
+export class Remote{{classname}} implements models.{{classname}} {
+  static configurationToken = Symbol('Remote{{classname}}Configuration');
+  private readonly configuration: runtime.Configuration;
+  private readonly configurableFetchApi: runtime.ConfigurableFetchApi;
 
+  constructor(
+    @injectAll(Remote{{classname}}.configurationToken) configurationParams: runtime.ConfigurationParameters[],
+  ) {
+    if (configurationParams.length > 1) {
+      throw new Error('{{classname}}.configurationToken should only be registered once');
+    } else if (configurationParams.length == 1) {
+      this.configuration = new runtime.Configuration(configurationParams[0]);
+    } else {
+      this.configuration = new runtime.Configuration();
+    }
+    this.configurableFetchApi = new runtime.ConfigurableFetchApi(this.configuration);
+  }
   {{#operation}}
-  /**
-   {{#notes}}
-   * {{&notes}}
-   {{/notes}}
-   {{#summary}}
-   * {{&summary}}
-   {{/summary}}
-   */
-  async {{nickname}}({{#allParams.0}}requestParameters: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{> response-type}} & {raw: Response}> {
+
+  async {{nickname}}({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<models.{{> response-type}} & {raw: Response}> {
     {{#allParams}}
     {{#required}}
     if (requestParameters.{{> param-path }} == null) {
@@ -196,7 +191,7 @@ export class {{classname}} extends runtime.BaseAPI {
     {{/isListContainer}}
     {{/formParams}}
     {{/hasFormParams}}
-    const response = await this.request({
+    const response = await this.configurableFetchApi.request({
       path: `{{{path}}}`{{#pathParams}}.replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(requestParameters.{{> param-path }}))){{/pathParams}},
       method: '{{httpMethod}}',
       headers: headerParameters,
@@ -204,11 +199,11 @@ export class {{classname}} extends runtime.BaseAPI {
       {{#hasBodyParam}}
       {{#bodyParam}}
       {{#isContainer}}
-      body: requestParameters.{{> param-path }}{{#isListContainer}}{{#items}}{{^isPrimitiveType}}.map({{datatype}}ToJSON){{/isPrimitiveType}}{{/items}}{{/isListContainer}},
+      body: requestParameters.{{> param-path }}{{#isListContainer}}{{#items}}{{^isPrimitiveType}}.map(models.{{datatype}}ToJSON){{/isPrimitiveType}}{{/items}}{{/isListContainer}},
       {{/isContainer}}
       {{^isContainer}}
       {{^isPrimitiveType}}
-      body: {{{dataType}}}ToJSON(requestParameters.{{> param-path }}),
+      body: models.{{{dataType}}}ToJSON(requestParameters.{{> param-path }}),
       {{/isPrimitiveType}}
       {{#isPrimitiveType}}
       body: requestParameters.{{> param-path }} as any,
@@ -267,7 +262,7 @@ export class {{classname}} extends runtime.BaseAPI {
     {{#isListContainer}}
     return {
       raw: response,
-      body: response.json().then((jsonValue) => jsonValue.map({{returnBaseType}}FromJSON)),
+      body: response.json().then((jsonValue) => jsonValue.map(models.{{returnBaseType}}FromJSON)),
       {{#responseHeaders.0}}
       headers: responseHeaders,
       {{/responseHeaders.0}}
@@ -277,7 +272,7 @@ export class {{classname}} extends runtime.BaseAPI {
     {{#isMapContainer}}
     return {
       raw: response,
-      body: response.json().then((jsonValue) => runtime.mapValues(jsonValue, {{returnBaseType}}FromJSON)),
+      body: response.json().then((jsonValue) => runtime.mapValues(jsonValue, models.{{returnBaseType}}FromJSON)),
       {{#responseHeaders.0}}
       headers: responseHeaders,
       {{/responseHeaders.0}}
@@ -286,7 +281,7 @@ export class {{classname}} extends runtime.BaseAPI {
     {{^isMapContainer}}
     return {
       raw: response,
-      body: response.json().then((jsonValue) => {{returnBaseType}}FromJSON(jsonValue)),
+      body: response.json().then((jsonValue) => models.{{returnBaseType}}FromJSON(jsonValue)),
       {{#responseHeaders.0}}
       headers: responseHeaders,
       {{/responseHeaders.0}}
@@ -305,7 +300,6 @@ export class {{classname}} extends runtime.BaseAPI {
     };
     {{/returnType}}
   }
-
   {{/operation}}
 }
 {{/operations}}

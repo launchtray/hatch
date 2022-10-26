@@ -10,10 +10,7 @@ const isBlob = (value: any) => typeof Blob !== 'undefined' && value instanceof B
 
 export type AnyType = any;
 
-/**
- * This is the base class for all generated API classes.
- */
-export class BaseAPI {
+export class ConfigurableFetchApi {
 
   private middleware: Middleware[];
 
@@ -21,23 +18,7 @@ export class BaseAPI {
     this.middleware = configuration.middleware;
   }
 
-  withMiddleware<T extends BaseAPI>(this: T, ...middlewares: Middleware[]) {
-    const next = this.clone<T>();
-    next.middleware = next.middleware.concat(...middlewares);
-    return next;
-  }
-
-  withPreMiddleware<T extends BaseAPI>(this: T, ...preMiddlewares: Array<Middleware['pre']>) {
-    const middlewares = preMiddlewares.map((pre) => ({ pre }));
-    return this.withMiddleware<T>(...middlewares);
-  }
-
-  withPostMiddleware<T extends BaseAPI>(this: T, ...postMiddlewares: Array<Middleware['post']>) {
-    const middlewares = postMiddlewares.map((post) => ({ post }));
-    return this.withMiddleware<T>(...middlewares);
-  }
-
-  protected async request(context: RequestOpts): Promise<Response> {
+  public async request(context: RequestOpts): Promise<Response> {
     const { url, init } = this.createFetchParams(context);
     const response = await this.fetchApi(url, init);
     if (response.status >= 200 && response.status < 300) {
@@ -90,17 +71,6 @@ export class BaseAPI {
       }
     }
     return response;
-  }
-
-  /**
-   * Create a shallow clone of `this` by constructing a new instance
-   * and then shallow cloning data members.
-   */
-  private clone<T extends BaseAPI>(this: T): T {
-    const constructor = this.constructor as any;
-    const next = new constructor(this.configuration);
-    next.middleware = this.middleware.slice();
-    return next;
   }
 };
 
@@ -265,45 +235,4 @@ export interface ResponseContext {
 export interface Middleware {
   pre?(context: RequestContext): Promise<FetchParams | void>;
   post?(context: ResponseContext): Promise<Response | void>;
-}
-
-export interface ApiResponse<T> {
-  raw: Response;
-  value(): Promise<T>;
-}
-
-export interface ResponseTransformer<T> {
-  (json: any): T;
-}
-
-export class JSONApiResponse<T> {
-  constructor(public raw: Response, private transformer: ResponseTransformer<T> = (jsonValue: any) => jsonValue) {}
-
-  async value(): Promise<T> {
-    return this.transformer(await this.raw.json());
-  }
-}
-
-export class VoidApiResponse {
-  constructor(public raw: Response) {}
-
-  async value(): Promise<void> {
-    return undefined;
-  }
-}
-
-export class BlobApiResponse {
-  constructor(public raw: Response) {}
-
-  async value(): Promise<Blob> {
-    return await this.raw.blob();
-  };
-}
-
-export class TextApiResponse {
-  constructor(public raw: Response) {}
-
-  async value(): Promise<string> {
-    return await this.raw.text();
-  };
 }

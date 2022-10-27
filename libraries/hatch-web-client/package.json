@@ -18,7 +18,7 @@
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/hatch-web": "0.20.0",
     "@launchtray/hatch-web-eslint-config": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@redux-devtools/extension": "^3",
     "@redux-saga/core": "^1",
     "@sentry/browser": "^5",
@@ -60,7 +60,7 @@
   "peerDependencies": {
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/hatch-web": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@redux-devtools/extension": "^3",
     "@redux-saga/core": "^1",
     "@sentry/browser": "^5",

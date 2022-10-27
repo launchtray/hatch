@@ -18,7 +18,7 @@
     "@launchtray/hatch-server": "0.20.0",
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/hatch-server-middleware": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "express": "^4",
     "invariant": "^2",
     "winston": "^3",

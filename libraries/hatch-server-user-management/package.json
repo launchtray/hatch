@@ -27,7 +27,7 @@
     "@launchtray/hatch-server-middleware": "0.20.0",
     "@launchtray/hatch-user-management-client": "0.20.0",
     "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2"
+    "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "0.20.0",
@@ -35,7 +35,7 @@
     "@launchtray/hatch-server-middleware": "0.20.0",
     "@launchtray/hatch-user-management-client": "0.20.0",
     "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@types/cookie": "0.4.1",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/jwk-to-pem": "^2.0.0",

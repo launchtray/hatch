@@ -19,7 +19,7 @@
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/hatch-web": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@types/react-dom": "^16",
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",
@@ -38,7 +38,7 @@
   "peerDependencies": {
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/hatch-web": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "react-router": "^5",
     "react-router-dom": "^5",
     "redux": "^4"

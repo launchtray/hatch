@@ -27,7 +27,7 @@
     "@launchtray/hatch-server-middleware": "0.20.0",
     "@launchtray/hatch-server-user-management": "0.20.0",
     "@launchtray/hatch-user-management-client": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@redux-saga/core": "^1",
     "express": "^4",
     "immutable": "^3.8.2",

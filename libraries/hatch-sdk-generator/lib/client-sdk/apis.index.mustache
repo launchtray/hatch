@@ -1,15 +1,35 @@
+import {DependencyContainer} from '@launchtray/tsyringe-async';
 {{#apiInfo}}
 {{#apis}}
 {{#operations}}
-import * as exportsFor{{classFilename}} from './{{classFilename}}';
+import {
+  Remote{{classFilename}},
+} from './{{classFilename}}';
 {{/operations}}
 {{/apis}}
 
-export default {
-{{#apis}}
-{{#operations}}
-  ...exportsFor{{classFilename}},
-{{/operations}}
-{{/apis}}
+import {
+  {{#apis}}
+  {{#operations}}
+  {{classFilename}}InjectionToken,
+  {{/operations}}
+  {{/apis}}
+} from '../models';
+
+const registerRemoteApis = (container: DependencyContainer, getToken?: (apiName: string) => string | symbol) => {
+  {{#apis}}
+  {{#operations}}
+  container.registerSingleton(getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken, Remote{{classFilename}});
+  {{/operations}}
+  {{/apis}}
+};
+
+export {
+  registerRemoteApis,
+  {{#apis}}
+  {{#operations}}
+  Remote{{classFilename}},
+  {{/operations}}
+  {{/apis}}
 };
 {{/apiInfo}}

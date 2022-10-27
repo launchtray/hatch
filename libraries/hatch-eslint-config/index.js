@@ -11,12 +11,16 @@ module.exports = {
   ],
   env: {
     'jest/globals': true,
+    'es2021': true,
   },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'airbnb-base',
   ],
+  globals: {
+    'WeakRef': false,
+  },
   parserOptions: {
     project: resolveApp('./tsconfig.json'),
     tsconfigRootDir: resolveApp('.'),

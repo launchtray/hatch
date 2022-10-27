@@ -3,6 +3,11 @@
 {{>licenseInfo}}
 import {injectAll, injectable} from '@launchtray/hatch-util';
 import * as runtime from '../runtime';
+import {
+  {{#imports}}
+  {{className}},
+  {{/imports}}
+} from '../models';
 import * as models from '../models';
 
 {{#operations}}
@@ -26,15 +31,7 @@ export class Remote{{classname}} implements models.{{classname}} {
   }
   {{#operation}}
 
-  async {{nickname}}({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<models.{{> response-type}} & {raw: Response}> {
-    {{#allParams}}
-    {{#required}}
-    if (requestParameters.{{> param-path }} == null) {
-      throw new runtime.RequiredError('{{> param-path }}','Required parameter requestParameters.{{> param-path }} was null or undefined when calling {{nickname}}.');
-    }
-
-    {{/required}}
-    {{/allParams}}
+  async {{nickname}}Raw({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<models.{{> response-type}} & {raw: Response}> {
     const queryParameters: any = {};
 
     {{#queryParams}}
@@ -216,7 +213,16 @@ export class Remote{{classname}} implements models.{{classname}} {
       {{/hasFormParams}}
     });
 
-    const responseHeaders = {/*TODO*/};
+    {{#responseHeaders.0}}
+    const responseHeaders = {
+      {{#responseHeaders}}
+      {{name}}: runtime.{{> require-param }}(
+        response.headers.get('{{baseName}}'),
+        'header: "{{baseName}}"',
+      ),
+      {{/responseHeaders}}
+    };
+    {{/responseHeaders.0}}
 
     {{#returnType}}
     {{#isResponseFile}}
@@ -300,6 +306,12 @@ export class Remote{{classname}} implements models.{{classname}} {
     };
     {{/returnType}}
   }
+  {{#returnType}}
+
+  async {{nickname}}({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{returnType}}> {
+    return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}})).body;
+  }
+  {{/returnType}}
   {{/operation}}
 }
 {{/operations}}

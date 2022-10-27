@@ -131,6 +131,10 @@ export const registerPerRequestDependencies = (
   container.registerInstance('Request', req);
   container.registerInstance('Response', res);
   container.registerInstance('NextFunction', next);
+
+  // Use WeakRef to avoid creating a strong circular reference to itself
+  container.registerInstance('weakContainer', new WeakRef(container));
+
   registerPerRequestAuthDependencies(container, {
     cookie: req.headers.cookie,
     authHeader: req.headers.authorization,

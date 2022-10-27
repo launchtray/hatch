@@ -6,28 +6,75 @@ import {
   route,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
-import {inject, Logger} from '@launchtray/hatch-util';
+import {inject, injectable, Logger} from '@launchtray/hatch-util';
 import {
   DependencyContainer,
   resolveParams,
 } from '@launchtray/tsyringe-async';
 import * as models from '../models';
+import {
+{{#imports}}
+  {{className}},
+{{/imports}}
+} from '../models';
 import * as runtime from '../runtime';
 
 export interface {{classname}}Delegate {
   {{#operations}}
   {{#operation}}
   handle{{operationIdCamelCase}}(
-    request: models.{{operationIdCamelCase}}Request,
+    request: models.{{operationIdCamelCase}}Request & {isLocal: boolean},
     ...optionalInjections: unknown[]
   ): models.ApiDelegateResponse<models.{{> response-type}}>;
   {{/operation}}
   {{/operations}}
 }
 
+{{> api-interface}}
+
+const apiDelegateToken = Symbol('{{classname}}Delegate');
+
+{{#operations}}
+@injectable()
+export class Local{{classname}} implements {{classname}} {
+  static delegateToken = apiDelegateToken;
+
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+    @inject(Local{{classname}}.delegateToken) public readonly delegate: {{classname}}Delegate,
+    @inject('weakContainer') public readonly weakContainer: WeakRef<DependencyContainer>,
+  ) {
+  }
+  {{#operation}}
+
+  async {{nickname}}Raw({{#allParams.0}}request: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<models.{{> response-type}}> {
+    const target = this.delegate.constructor.prototype;
+    const clientRequestContainer = this.weakContainer.deref();
+    if (clientRequestContainer == null) {
+      throw new Error('Weak reference to client request container no longer exists');
+    }
+    const args = await resolveParams(
+      clientRequestContainer,
+      target,
+      'handle{{operationIdCamelCase}}',
+      {...request, isLocal: true},
+    ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean}, ...unknown[]];
+    const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
+    return runtime.getLocalApiReturnValue(delegateResponse);
+  }
+  {{#returnType}}
+
+  async {{nickname}}({{#allParams.0}}request: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{returnType}}> {
+    return (await this.{{nickname}}Raw({{#allParams.0}}request{{/allParams.0}})).body;
+  }
+  {{/returnType}}
+  {{/operation}}
+}
+{{/operations}}
+
 @controller({injectContainerOnly: true})
 export class {{classname}}Controller implements Delegator<{{classname}}Delegate> {
-  static delegateToken = Symbol('{{classname}}Delegate');
+  static delegateToken = apiDelegateToken;
 
   constructor(
     @inject('Logger') private readonly logger: Logger,
@@ -93,11 +140,11 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         requestContainer,
         target,
         'handle{{operationIdCamelCase}}',
-        request,
-      ) as [models.{{operationIdCamelCase}}Request, ...unknown[]];
+        {...request, isLocal: false},
+      ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean}, ...unknown[]];
 
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
-      if (runtime.handleApiAlternateActions(delegateResponse, basicRouteParams)) {
+      if (runtime.alternateActionResponseSent(delegateResponse, basicRouteParams)) {
         return;
       }
 
@@ -113,25 +160,25 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{#returnType}}
       const delegateResponseBody = await delegateResponse.body;
       {{#isResponseFile}}
-      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(delegateResponseBody);
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(delegateResponseBody);
       {{/isResponseFile}}
       {{^isResponseFile}}
       {{#returnTypeIsPrimitive}}
-      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(delegateResponseBody);
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(delegateResponseBody);
       {{/returnTypeIsPrimitive}}
       {{^returnTypeIsPrimitive}}
       {{#isListContainer}}
       const responseJson = delegateResponseBody.map(models.{{returnBaseType}}ToJSON);
-      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
       {{/isListContainer}}
       {{^isListContainer}}
       {{#isMapContainer}}
       const responseJson = runtime.mapValues(delegateResponseBody, models.{{returnBaseType}}ToJSON);
-      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
       {{/isMapContainer}}
       {{^isMapContainer}}
       const responseJson = models.{{returnBaseType}}ToJSON(delegateResponseBody);
-      basicRouteParams.res.status(delegateResponse?.httpCode ?? 200).send(responseJson);
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
       {{/isMapContainer}}
       {{/isListContainer}}
       {{/returnTypeIsPrimitive}}
@@ -142,7 +189,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{/returnType}}
     } catch (err: unknown) {
       this.logger.info(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
-      if (runtime.handleApiError(err, basicRouteParams)) {
+      if (runtime.apiErrorResponseSent(err, basicRouteParams)) {
         return;
       }
       basicRouteParams.res.status(500).send((err as {message?: string}).message ?? '');

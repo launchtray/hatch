@@ -1,5 +1,5 @@
 import {
-  delay,
+  delay, initializer,
   inject,
   injectable,
   Logger,
@@ -12,6 +12,14 @@ import {
   webAppManager,
 } from '@launchtray/hatch-web';
 import {LocationChangeContext} from '@launchtray/hatch-web-injectables';
+import {
+  MetricsApi,
+  MetricsApiInjectionToken, ReportApi, ReportApiInjectionToken,
+  TestersApi,
+  TestersApiInjectionToken,
+  UsersApi,
+  UsersApiInjectionToken,
+} from '@launchtray/example-client-sdk';
 
 @injectable()
 export class ExampleDependencyForManager {
@@ -30,9 +38,32 @@ export class ExampleDependencyForManager {
 // tslint:disable-next-line:max-classes-per-file
 @webAppManager()
 export default class ExampleManager {
-  constructor(private dependency: ExampleDependencyForManager, @inject('Logger') private logger: Logger) {
+  constructor(
+    private dependency: ExampleDependencyForManager,
+    @inject(UsersApiInjectionToken) private userApi: UsersApi,
+    @inject(TestersApiInjectionToken) private testersApi: TestersApi,
+    @inject(MetricsApiInjectionToken) private metricsApi: MetricsApi,
+    @inject(ReportApiInjectionToken) private reportApi: ReportApi,
+    @inject('Logger') private logger: Logger,
+  ) {
     logger.debug('Constructing ExampleManager');
     this.dependency = dependency;
+  }
+
+  @initializer()
+  private async initialize() {
+    const response = await this.userApi.getUser({
+      headers: {
+        xExampleRequest: 'myHeader',
+      },
+      pathParams: {
+        id: 'myId',
+      },
+      queryParams: {
+        search: 'mySearch',
+      },
+    });
+    this.logger.info(`getUser response: ${JSON.stringify(response)}`);
   }
 
   @onLocationChange()

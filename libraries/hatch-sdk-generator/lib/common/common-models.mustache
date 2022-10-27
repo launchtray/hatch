@@ -58,29 +58,11 @@ export interface {{operationIdCamelCase}}Response {
 {{#returnType}}
   body: {{returnType}} | Promise<{{returnType}}>;
 {{/returnType}}
-  httpCode?: number;
+  statusCode?: number;
 }
 {{/operation}}
 {{/operations}}
 
-{{#operations}}
-/**
- *{{#lambda.indented_star_1}}{{#unescapedDescription}} {{{unescapedDescription}}}{{/unescapedDescription}}{{/lambda.indented_star_1}}
- */
-export interface {{classname}} {
-{{#operation}}
-  /**
-   {{#notes}}
-   * {{&notes}}
-   {{/notes}}
-   {{#summary}}
-   * {{&summary}}
-   {{/summary}}
-   */
-  {{nickname}}({{#allParams.0}}requestParameters: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{> response-type}}>;
-{{/operation}}
-}
-{{/operations}}
 {{#hasEnums}}
 
 {{#operations}}
@@ -132,10 +114,10 @@ export const preventsControllerResponse = (err: ApiAlternateAction) => {
 
 export const PREVENT_CONTROLLER_RESPONSE = new ApiAlternateAction(PREVENT_CONTROLLER_RESPONSE_CODE);
 
-export const getHttpError = (err: ApiAlternateAction): number | undefined => {
-  const errorCode = err[ALT_ACTION_CODE_KEY];
-  if (typeof errorCode === 'number') {
-    return errorCode;
+export const getStatusCode = (err: ApiAlternateAction): number | undefined => {
+  const statusCode = err[ALT_ACTION_CODE_KEY];
+  if (typeof statusCode === 'number') {
+    return statusCode;
   }
   return undefined;
 };

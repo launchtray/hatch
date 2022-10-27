@@ -1,1 +1,1 @@
-{{#paramName}}{{paramName}}{{/paramName}}{{^paramName}}{{name}}{{/paramName}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{#isNullable}} | null{{/isNullable}}{{/isEnum}};
+{{#paramName}}{{paramName}}{{/paramName}}{{^paramName}}{{name}}{{/paramName}}{{^required}}?{{/required}}: {{> param-type}};

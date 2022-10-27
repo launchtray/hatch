@@ -4,7 +4,7 @@ import {
   ServerMiddleware,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams, HTTPResponder, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
-import {AUTH_BLACKLIST_KEY, AUTH_WHITELIST_KEY, UserContext} from '@launchtray/hatch-server-user-management';
+import {AUTH_WHITELIST_KEY} from '@launchtray/hatch-server-user-management';
 import {containerSingleton, delay, initializer, inject, Logger} from '@launchtray/hatch-util';
 import WebSocket from 'ws';
 
@@ -44,6 +44,8 @@ export default class ExampleController implements ServerMiddleware {
     this.testVar = 'A';
   }
 
+  // User Management is not enabled for this example app, but this shows how routes could be registered with
+  // an injection token, so that (e.g.) another auth controller could query for all whitelisted routes
   @route.all('/api/example*', {tokens: [AUTH_WHITELIST_KEY]})
   public catchallEndpoint(responder: CustomResponder) {
     this.logger.info('Catch-all endpoint called');
@@ -76,17 +78,6 @@ export default class ExampleController implements ServerMiddleware {
       params: responder.params.req.params,
       cookie: responder.params.cookie,
     })}`);
-  }
-
-  @route.get('/api/example/blacklisted', {tokens: [AUTH_BLACKLIST_KEY]})
-  public exampleBlacklistedEndpoint(responder: CustomResponder) {
-    this.logger.info('Blacklisted endpoint called');
-    responder.ok('Example blacklisted GET');
-  }
-
-  @route.get('/api/whoami')
-  public whoAmI(responder: CustomResponder, userContext: UserContext) {
-    responder.ok(userContext.username);
   }
 
   @route.custom((app, _, handler) => {

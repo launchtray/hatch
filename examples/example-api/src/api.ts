@@ -50,7 +50,7 @@ class CreateTester {
   @spot.response({status: 201})
   response(
     @spot.headers h: {
-      'x-example-response'?: string;
+      'x-example-response': string;
     },
     @spot.body body: CreateUserResponsePayload,
   ) {}

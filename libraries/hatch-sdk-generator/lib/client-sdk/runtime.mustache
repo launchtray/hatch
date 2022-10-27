@@ -4,7 +4,10 @@
 
 import fetch from 'cross-fetch';
 
-export const BASE_PATH = "{{{basePath}}}".replace(/\/+$/, "");
+import {
+  ApiAlternateAction,
+  ApiError,
+} from './models';
 
 const isBlob = (value: any) => typeof Blob !== 'undefined' && value instanceof Blob;
 
@@ -24,7 +27,11 @@ export class ConfigurableFetchApi {
     if (response.status >= 200 && response.status < 300) {
       return response;
     }
-    throw response;
+    const headers: Record<string, unknown> = {};
+    response.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+    throw new ApiError(new ApiAlternateAction(response.status, response.body, headers));
   }
 
   private createFetchParams(context: RequestOpts) {
@@ -74,13 +81,6 @@ export class ConfigurableFetchApi {
   }
 };
 
-export class RequiredError extends Error {
-  name: "RequiredError" = "RequiredError";
-  constructor(public field: string, msg?: string) {
-    super(msg);
-  }
-}
-
 export const COLLECTION_FORMATS = {
   csv: ",",
   ssv: " ",
@@ -107,7 +107,7 @@ export class Configuration {
   constructor(private configuration: ConfigurationParameters = {}) {}
 
   get basePath(): string {
-    return this.configuration.basePath != null ? this.configuration.basePath : BASE_PATH;
+    return this.configuration.basePath != null ? this.configuration.basePath : '';
   }
 
   get fetchApi(): FetchAPI {
@@ -236,3 +236,9 @@ export interface Middleware {
   pre?(context: RequestContext): Promise<FetchParams | void>;
   post?(context: ResponseContext): Promise<Response | void>;
 }
+
+export const throwInvalidParamError = (paramName: string): never => {
+  throw new ApiError(new ApiAlternateAction(500), `Bad response from server: missing/invalid ${paramName}`);
+};
+
+{{> common-runtime}}

@@ -5,10 +5,11 @@ import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
 import {
   ApiAlternateAction,
+  ApiDelegateResponse,
   ApiError,
   preventsControllerResponse,
   PREVENT_CONTROLLER_RESPONSE,
-  getHttpError,
+  getStatusCode,
   isApiError,
   getAlternateAction,
   isApiAlternateAction,
@@ -28,11 +29,11 @@ export function mapValues(data: any, fn: (item: any) => any) {
   );
 }
 
-export const handleApiError = (err: unknown, basicRouteParams: BasicRouteParams): boolean => {
+export const apiErrorResponseSent = (err: unknown, basicRouteParams: BasicRouteParams): boolean => {
   if (isApiError(err)) {
     try {
       const altAction = getAlternateAction(err);
-      if (handleApiAlternateActions(altAction, basicRouteParams)) {
+      if (alternateActionResponseSent(altAction, basicRouteParams)) {
         return true;
       }
     } catch (err: unknown) {
@@ -46,77 +47,9 @@ export const throwInvalidParamError = (paramName: string): never => {
   throw new ApiError(new ApiAlternateAction(400), `Bad request: missing/invalid ${paramName}`);
 };
 
-export const requireNonNull = <T>(value: T | null | undefined, name: string): T => {
-  if (value != null) {
-    return value;
-  }
-  return throwInvalidParamError(name);
-};
+{{> common-runtime}}
 
-export const requireString = (value: unknown | null | undefined, name: string): string => {
-  if (typeof value === 'string') {
-    return value;
-  }
-  return throwInvalidParamError(name);
-};
-
-export const requireOptionalString = (value: unknown | null | undefined, name: string): string | undefined => {
-  if (value == null) {
-    return undefined;
-  }
-  return requireString(value, name);
-};
-
-export const requireNumber = (value: unknown | null | undefined, name: string): number => {
-  if (value == null) {
-    return throwInvalidParamError(name);
-  }
-  const asNumber = Number(value);
-  if (!isNaN(asNumber)) {
-    return asNumber;
-  }
-  return throwInvalidParamError(name);
-};
-
-export const requireOptionalNumber = (value: unknown | null | undefined, name: string): number | undefined => {
-  if (value == null) {
-    return undefined;
-  }
-  return requireNumber(value, name);
-};
-
-export const requireBoolean = (value: unknown | null | undefined, name: string): boolean => {
-  if (typeof value === 'boolean') {
-    return value;
-  }
-  if (typeof value === 'string') {
-    const lowerCaseValue = value.toLowerCase();
-    if (lowerCaseValue === 'true' || lowerCaseValue === 'yes' || lowerCaseValue === '1') {
-      return true;
-    }
-    if (lowerCaseValue === 'false' || lowerCaseValue === 'no' || lowerCaseValue === '0') {
-      return false;
-    }
-  }
-  if (typeof value === 'number') {
-    if (value === 1) {
-      return true;
-    }
-    if (value === 0) {
-      return false;
-    }
-  }
-  return throwInvalidParamError(name);
-};
-
-export const requireOptionalBoolean = (value: unknown | null | undefined, name: string): boolean | undefined => {
-  if (value == null) {
-    return undefined;
-  }
-  return requireBoolean(value, name);
-};
-
-export const handleApiAlternateActions = (
+export const alternateActionResponseSent = (
   delegateResponse: unknown,
   basicRouteParams: BasicRouteParams
 ): delegateResponse is ApiAlternateAction => {
@@ -124,16 +57,32 @@ export const handleApiAlternateActions = (
     if (preventsControllerResponse(delegateResponse)) {
       return true;
     }
-    const httpError = getHttpError(delegateResponse);
+    const statusCode = getStatusCode(delegateResponse);
     if (delegateResponse.headers != null) {
       basicRouteParams.res.set(delegateResponse.headers);
     }
-    if (httpError != null) {
-      basicRouteParams.res.status(httpError).send((delegateResponse as {body?: any}).body ?? '');
+    if (statusCode != null) {
+      basicRouteParams.res.status(statusCode).send((delegateResponse as {body?: any}).body ?? '');
       return true;
     }
     basicRouteParams.res.status(500).send('Unknown alternate action');
     return true;
   }
   return false;
+};
+
+export const getLocalApiReturnValue = <T>(
+  delegateResponse: T | ApiAlternateAction,
+): T => {
+  if (isApiAlternateAction(delegateResponse)) {
+    if (preventsControllerResponse(delegateResponse)) {
+      throw new ApiError(
+        new ApiAlternateAction(500),
+        'Use of PREVENT_CONTROLLER_RESPONSE for local server-side API calls is not supported. ' +
+          'Refactor ApiDelegate to avoid this path for local calls (e.g. via branching on request.isLocal)'
+      );
+    }
+    throw new ApiError(delegateResponse);
+  }
+  return delegateResponse;
 };

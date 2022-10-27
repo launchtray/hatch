@@ -4,6 +4,8 @@ import {
   middlewareFor,
 } from '@launchtray/hatch-server';
 
+import {DependencyContainer} from '@launchtray/tsyringe-async';
+
 import {Class} from '@launchtray/hatch-util';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -19,6 +21,7 @@ api[ASSOCIATED_API_SPEC_ID_KEY] = Symbol('uniqueApiIdentifier'); // Guaranteed u
 {{#apis}}
 {{#operations}}
 import {
+  Local{{classFilename}},
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 } from './{{classFilename}}';
@@ -30,10 +33,6 @@ import {
 {{classFilename}}Controller[ASSOCIATED_API_SPEC_KEY] = api;
 {{/operations}}
 {{/apis}}
-
-const getApiSpec = (): SwaggerV3 => {
-  return api;
-};
 
 const getApiMiddleware = ({
 {{#apis}}
@@ -51,11 +50,27 @@ const getApiMiddleware = ({
   ];
 };
 
-export {
-  getApiMiddleware,
-  getApiSpec,
+// Note: intentional use of Symbol.for (vs. Symbol(...)) below to ensure client and server SDKs use same symbol
 {{#apis}}
 {{#operations}}
+{{> api-injection-token}}
+{{/operations}}
+{{/apis}}
+
+const registerLocalApis = (container: DependencyContainer, getToken?: (apiName: string) => string | symbol) => {
+  {{#apis}}
+  {{#operations}}
+  container.registerSingleton(getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken, Local{{classFilename}});
+  {{/operations}}
+  {{/apis}}
+};
+
+export {
+  getApiMiddleware,
+  registerLocalApis,
+{{#apis}}
+{{#operations}}
+  Local{{classFilename}},
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 {{/operations}}

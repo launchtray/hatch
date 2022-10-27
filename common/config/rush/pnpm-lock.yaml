@@ -19998,11 +19998,12 @@ packages:
     dev: false
 
   file:projects/example-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-nND3uh8yIommQ1gfYnKLKekj46dAN4YWWt16XLgU/Vv+s1LteoyhO05IaxZlT6HpQK0mENzak1rM8AHa1zhBaQ==, tarball: file:projects/example-client-sdk.tgz}
+    resolution: {integrity: sha512-49uHoRE+u9lLXMmrJ401eZ7uKjzM3Mo681kCK6Vtfncw4GWTgvZt+lFBwuldRWI+MNKzJctVcX/tbRXLxmKa5A==, tarball: file:projects/example-client-sdk.tgz}
     id: file:projects/example-client-sdk.tgz
     name: '@rush-temp/example-client-sdk'
     version: 0.0.0
     dependencies:
+      '@launchtray/tsyringe-async': 4.3.2
       '@types/node': 16.11.47
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
@@ -20602,11 +20603,12 @@ packages:
     dev: false
 
   file:projects/hatch-template-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-Cidegpy+gmmo8P3qkaz8R9GWH/2JrnHlgt8ymFzBHY1/GvH85a5C/eD7cd30QLpbnSxttHyxN0QI5WWY0j8idg==, tarball: file:projects/hatch-template-client-sdk.tgz}
+    resolution: {integrity: sha512-4t9Gw9+/WqNdQfwZ+Cl/W9/okG0+XhdnWstGAwo/TlCSBKojsebiDL6Oz/DDAdtBL5WO3bPpyMclbMj/+ST6Bw==, tarball: file:projects/hatch-template-client-sdk.tgz}
     id: file:projects/hatch-template-client-sdk.tgz
     name: '@rush-temp/hatch-template-client-sdk'
     version: 0.0.0
     dependencies:
+      '@launchtray/tsyringe-async': 4.3.2
       '@types/node': 16.11.47
       '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
       '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c

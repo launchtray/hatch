@@ -19,10 +19,13 @@
     "cross-fetch": "^3.0.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.20.0"
+    "@launchtray/hatch-util": "0.20.0",
+    "@launchtray/tsyringe-async": "4.3.2"
   },
   "devDependencies": {
     "@types/node": "^16",
+    "@launchtray/hatch-util": "0.20.0",
+    "@launchtray/tsyringe-async": "4.3.2",
     "@launchtray/hatch-sdk-generator": "0.20.0",
     "eslint": "^8",
     "@launchtray/hatch-eslint-config": "0.20.0",

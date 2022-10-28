@@ -31,9 +31,19 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     logger.info('Constructing UsersApiControllerDelegateImpl');
   }
 
-  handleGetReportPdf(request: GetReportPdfRequest): ApiDelegateResponse<GetReportPdfResponse> {
+  handleGetReportPdf(request: GetReportPdfRequest): GetReportPdfResponse {
     this.logger.debug(`handleGetReportPdf: ${JSON.stringify(request)}`);
-    throw new Error('Method not implemented.');
+    const obj = {hello: 'world'};
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {
+      type: 'application/json',
+    });
+    return {
+      headers: {
+        xTimestamp: request.queryParams.timestamp?.getTime(),
+        xStartDate: request.queryParams.startDate.getTime(),
+      },
+      body: blob,
+    };
   }
 
   handleGetLatestMetrics(request: GetLatestMetricsRequest): GetLatestMetricsResponse {

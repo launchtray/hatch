@@ -53,7 +53,7 @@ export class Remote{{classname}} implements models.{{classname}} {
       {{/isDateTime}}
       {{^isDateTime}}
       {{#isDate}}
-      queryParameters['{{baseName}}'] = (requestParameters.{{> param-path }} as any).toISOString().substr(0,10);
+      queryParameters['{{baseName}}'] = (requestParameters.{{> param-path }} as any).toISOString().substring(0,10);
       {{/isDate}}
       {{^isDate}}
       queryParameters['{{baseName}}'] = requestParameters.{{> param-path }};

@@ -19,6 +19,21 @@ export const requireOptionalString = (value: unknown | null | undefined, name: s
   return requireString(value, name);
 };
 
+export const requireDate = (value: unknown | null | undefined, name: string): Date => {
+  const date = new Date(requireString(value, name));
+  if (Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date.getTime())) {
+    return date;
+  }
+  return throwInvalidParamError(name);
+}
+
+export const requireOptionalDate = (value: unknown | null | undefined, name: string): Date | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireDate(value, name);
+};
+
 export const requireEnum = <E, V>(value: unknown | null | undefined, enumValues: V[], name: string): E => {
   if (enumValues.includes(value as V)) {
     return value as E;

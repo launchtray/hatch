@@ -65,6 +65,20 @@
         "responses": {
           "200": {
             "description": "The pdf report",
+            "headers": {
+              "x-timestamp": {
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              },
+              "x-start-date": {
+                "required": true,
+                "schema": {
+                  "type": "number"
+                }
+              }
+            },
             "content": {
               "application/pdf": {
                 "schema": {
@@ -101,6 +115,26 @@
             "description": "Optional query parameter to generate a report for a given user ID",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": false,
+            "description": "Optional query parameter to generate a report for a given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "description": "Query parameter to generate a report for a given start date",
+            "schema": {
+              "type": "string",
+              "format": "date"
             }
           },
           {

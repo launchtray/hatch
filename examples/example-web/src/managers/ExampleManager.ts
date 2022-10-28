@@ -13,8 +13,12 @@ import {
 } from '@launchtray/hatch-web';
 import {LocationChangeContext} from '@launchtray/hatch-web-injectables';
 import {
+  getAlternateAction,
+  isApiError,
   MetricsApi,
-  MetricsApiInjectionToken, ReportApi, ReportApiInjectionToken,
+  MetricsApiInjectionToken,
+  ReportApi,
+  ReportApiInjectionToken,
   TestersApi,
   TestersApiInjectionToken,
   UsersApi,
@@ -34,6 +38,23 @@ export class ExampleDependencyForManager {
   }
 }
 
+const convertStreamToString = async (readableStream: ReadableStream): Promise<string> => {
+  const reader = readableStream.getReader();
+  let toReturn = '';
+  try {
+    let readResult: { done: boolean, value?: Uint8Array } = await reader.read();
+    while (!readResult.done) {
+      if (readResult.value != null) {
+        toReturn += Buffer.from(readResult.value).toString();
+      }
+      readResult = await reader.read();
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return toReturn;
+};
+
 // Note: example only
 // tslint:disable-next-line:max-classes-per-file
 @webAppManager()
@@ -50,30 +71,26 @@ export default class ExampleManager {
     this.dependency = dependency;
   }
 
+  // Example of API-dependent code that works both client and server-side
   @initializer()
   private async initialize() {
-    const response = await this.reportApi.getReportPdf({
-      headers: {},
-      queryParams: {
-        startDate: new Date(),
-      },
-    });
-
-    const reader = response.getReader();
-    let body = '';
     try {
-      let readResult: {done: boolean, value?: Uint8Array} = await reader.read();
-      while (!readResult.done) {
-        if (readResult.value != null) {
-          body += Buffer.from(readResult.value).toString();
-        }
-        readResult = await reader.read();
+      const response = await this.reportApi.getReportPdf({
+        headers: {},
+        queryParams: {
+          // Uncomment to trigger error case: // timestamp: new Date(),
+          startDate: new Date(),
+        },
+      });
+      const body = await convertStreamToString(response);
+      this.logger.info(`getReportPdf response received: ${body}`);
+    } catch (err: unknown) {
+      if (isApiError(err)) {
+        const altAction = getAlternateAction(err);
+        const body = await convertStreamToString(altAction.body as ReadableStream);
+        this.logger.error(`getReportPdf error: ${body}`);
       }
-    } finally {
-      reader.releaseLock();
     }
-
-    this.logger.info(`getReportPdf response received: ${body}`);
   }
 
   @onLocationChange()

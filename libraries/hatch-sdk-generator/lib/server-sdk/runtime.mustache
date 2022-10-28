@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 {{>licenseInfo}}
+import stream from 'stream';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
 import {
@@ -15,7 +16,7 @@ import {
   isApiAlternateAction,
 } from './models';
 
-export type AnyType = any;
+const isStream = (value: unknown) => value != null && (value as {pipeTo?: unknown}).pipeTo != null;
 
 export function exists(json: any, key: string) {
   const value = json[key];
@@ -62,7 +63,18 @@ export const alternateActionResponseSent = (
       basicRouteParams.res.set(delegateResponse.headers);
     }
     if (statusCode != null) {
-      basicRouteParams.res.status(statusCode).send((delegateResponse as {body?: any}).body ?? '');
+      basicRouteParams.res.status(statusCode);
+      const {body} = delegateResponse as {body?: any};
+      if (body == null) {
+        basicRouteParams.res.end();
+      } else if (isStream(body)) {
+        // https://stackoverflow.com/questions/73308289
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        stream.Readable.fromWeb(body).pipe(basicRouteParams.res);
+      } else {
+        basicRouteParams.res.send(body);
+      }
       return true;
     }
     basicRouteParams.res.status(500).send('Unknown alternate action');

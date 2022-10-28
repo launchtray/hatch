@@ -32,7 +32,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     logger.info('Constructing UsersApiControllerDelegateImpl');
   }
 
-  handleGetReportPdf(request: GetReportPdfRequest): GetReportPdfResponse {
+  handleGetReportPdf(request: GetReportPdfRequest): GetReportPdfResponse | ApiAlternateAction {
     this.logger.debug(`handleGetReportPdf: ${JSON.stringify(request)}`);
     const readable = new Readable();
     // eslint-disable-next-line no-underscore-dangle
@@ -44,9 +44,11 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
       readable.push('456');
       readable.push(null);
     }, 100); // Introduce artificial delay to test out streaming
+    if (request.queryParams.timestamp != null) {
+      return new ApiAlternateAction(300, Readable.toWeb(readable));
+    }
     return {
       headers: {
-        xTimestamp: request.queryParams.timestamp?.getTime(),
         xStartDate: request.queryParams.startDate.getTime(),
       },
       body: Readable.toWeb(readable),

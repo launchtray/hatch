@@ -52,14 +52,13 @@ export default class ExampleManager {
 
   @initializer()
   private async initialize() {
-    const response = await this.metricsApi.getMetricsCount({
-      body: ['EventA', 'EventB'],
+    const response = await this.reportApi.getReportPdf({
+      headers: {},
       queryParams: {
-        userId: '123',
-        tId: 'abc',
+        startDate: new Date(),
       },
     });
-    this.logger.info(`getMetricsCount response: ${JSON.stringify(response.map((n) => (`Num: ${n}`)))}`);
+    this.logger.info(`getReportPdf response: ${JSON.stringify(response)}`);
   }
 
   @onLocationChange()

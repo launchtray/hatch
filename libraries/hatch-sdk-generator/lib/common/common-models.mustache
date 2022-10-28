@@ -8,6 +8,8 @@ import {
 {{/model}}
 {{/models}}
 
+type Blob = Uint8Array;
+
 {{#models}}
 {{#model}}
 export * from './{{{classFilename}}}';

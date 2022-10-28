@@ -33,16 +33,12 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
 
   handleGetReportPdf(request: GetReportPdfRequest): GetReportPdfResponse {
     this.logger.debug(`handleGetReportPdf: ${JSON.stringify(request)}`);
-    const obj = {hello: 'world'};
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {
-      type: 'application/json',
-    });
     return {
       headers: {
         xTimestamp: request.queryParams.timestamp?.getTime(),
         xStartDate: request.queryParams.startDate.getTime(),
       },
-      body: blob,
+      body: Uint8Array.of(65, 66, 67),
     };
   }
 

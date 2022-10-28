@@ -19,6 +19,8 @@ import {
 } from '../models';
 import * as runtime from '../runtime';
 
+type Blob = Uint8Array;
+
 export interface {{classname}}Delegate {
   {{#operations}}
   {{#operation}}
@@ -169,7 +171,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{#returnType}}
       const delegateResponseBody = await delegateResponse.body;
       {{#isResponseFile}}
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(delegateResponseBody);
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(new Buffer(delegateResponseBody));
       {{/isResponseFile}}
       {{^isResponseFile}}
       {{#returnTypeIsPrimitive}}

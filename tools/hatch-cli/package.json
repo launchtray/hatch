@@ -38,7 +38,7 @@
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@types/fs-extra": "^8",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/tmp": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",

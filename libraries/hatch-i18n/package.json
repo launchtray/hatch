@@ -22,7 +22,7 @@
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@types/luxon": "1.25.0",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",

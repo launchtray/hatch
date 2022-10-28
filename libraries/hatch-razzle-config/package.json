@@ -15,7 +15,7 @@
     "eslint": "^8",
     "razzle-dev-utils": "4.2.17",
     "mini-css-extract-plugin": "0.9.0",
-    "postcss": "8.2.4",
+    "postcss": "8.2.12",
     "razzle-plugin-typescript": "4.2.17",
     "sockjs-client": "^1.4.0",
     "webpack": "4.46.0",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "razzle-dev-utils": "4.2.17",
     "mini-css-extract-plugin": "0.9.0",
-    "postcss": "8.2.4",
+    "postcss": "8.2.12",
     "razzle-plugin-typescript": "4.2.17",
     "sockjs-client": "^1.4.0",
     "webpack": "4.46.0",

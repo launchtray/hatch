@@ -25,7 +25,7 @@
     "@launchtray/tsyringe-async": "4.3.3",
     "@redux-saga/core": "^1",
     "@types/history": "^4.7.3",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/react": "^16",
     "@types/react-dom": "^16",
     "@types/react-native": "^0",

@@ -15,7 +15,6 @@
     "build:watch": "tsc"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
     "pdf-image": "^2.0.0",
     "pixelmatch": "^5.2.1",
     "pngjs": "^4.0.1",
@@ -25,8 +24,7 @@
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16",
-    "@types/node-fetch": "^2.5.7",
+    "@types/node": "^18",
     "@types/pdf-image": "^2.0.0",
     "@types/pixelmatch": "^5.2.2",
     "@types/pngjs": "^3.4.2",

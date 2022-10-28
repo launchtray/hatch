@@ -17,7 +17,6 @@
   "dependencies": {
     "aws-sdk": "^2.684.0",
     "cookie": "0.4.1",
-    "cross-fetch": "^3.0.4",
     "http-status-codes": "2.1.4",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.3"
@@ -39,7 +38,7 @@
     "@types/cookie": "0.4.1",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/jwk-to-pem": "^2.0.0",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",

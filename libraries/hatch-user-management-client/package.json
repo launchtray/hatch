@@ -14,9 +14,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "cross-fetch": "^3.0.4"
-  },
   "peerDependencies": {
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/tsyringe-async": "4.3.3"
@@ -25,7 +22,7 @@
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/tsyringe-async": "4.3.3",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",

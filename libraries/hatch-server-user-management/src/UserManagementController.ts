@@ -1,7 +1,6 @@
 import {controller, requestMatchesRouteList, route} from '@launchtray/hatch-server';
 import {BasicRouteParams, isCsrfSafe, isMethodSideEffectSafe} from '@launchtray/hatch-server-middleware';
 import {inject, Logger} from '@launchtray/hatch-util';
-import 'cross-fetch/polyfill';
 import {
   UserManager,
   UserManagementErrorCodes,

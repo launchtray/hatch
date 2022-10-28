@@ -1,3 +1,4 @@
+import {Readable} from 'stream';
 import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import {
   ApiAlternateAction,
@@ -33,12 +34,22 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
 
   handleGetReportPdf(request: GetReportPdfRequest): GetReportPdfResponse {
     this.logger.debug(`handleGetReportPdf: ${JSON.stringify(request)}`);
+    const readable = new Readable();
+    // eslint-disable-next-line no-underscore-dangle
+    readable._read = () => {
+      // Do nothing, rely on pushes below
+    };
+    readable.push('Testing123');
+    setTimeout(() => {
+      readable.push('456');
+      readable.push(null);
+    }, 100); // Introduce artificial delay to test out streaming
     return {
       headers: {
         xTimestamp: request.queryParams.timestamp?.getTime(),
         xStartDate: request.queryParams.startDate.getTime(),
       },
-      body: Uint8Array.of(65, 66, 67),
+      body: Readable.toWeb(readable),
     };
   }
 

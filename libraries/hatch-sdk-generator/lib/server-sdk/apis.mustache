@@ -1,5 +1,6 @@
 {{>licenseInfo}}
 /* eslint-disable @typescript-eslint/no-empty-interface,dot-notation */
+import stream from 'stream';
 import {
   controller,
   Delegator,
@@ -19,7 +20,7 @@ import {
 } from '../models';
 import * as runtime from '../runtime';
 
-type Blob = Uint8Array;
+type Blob = ReadableStream;
 
 export interface {{classname}}Delegate {
   {{#operations}}
@@ -171,7 +172,11 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{#returnType}}
       const delegateResponseBody = await delegateResponse.body;
       {{#isResponseFile}}
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(new Buffer(delegateResponseBody));
+      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200);
+      // https://stackoverflow.com/questions/73308289
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      stream.Readable.fromWeb(delegateResponseBody).pipe(basicRouteParams.res);
       {{/isResponseFile}}
       {{^isResponseFile}}
       {{#returnTypeIsPrimitive}}

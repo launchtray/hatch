@@ -58,7 +58,22 @@ export default class ExampleManager {
         startDate: new Date(),
       },
     });
-    this.logger.info(`getReportPdf response: ${JSON.stringify(response)}`);
+
+    const reader = response.getReader();
+    let body = '';
+    try {
+      let readResult: {done: boolean, value?: Uint8Array} = await reader.read();
+      while (!readResult.done) {
+        if (readResult.value != null) {
+          body += Buffer.from(readResult.value).toString();
+        }
+        readResult = await reader.read();
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    this.logger.info(`getReportPdf response received: ${body}`);
   }
 
   @onLocationChange()

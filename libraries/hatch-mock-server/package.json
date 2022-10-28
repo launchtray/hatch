@@ -26,11 +26,10 @@
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "0.20.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/tmp": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "cross-fetch": "^3.0.4",
     "eslint": "^8",
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",

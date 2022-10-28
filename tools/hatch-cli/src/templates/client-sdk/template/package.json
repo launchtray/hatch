@@ -15,15 +15,12 @@
     "build": "rimraf dist && tsc",
     "build:watch": "tsc"
   },
-  "dependencies": {
-    "cross-fetch": "^3.0.4"
-  },
   "peerDependencies": {
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@launchtray/hatch-util": "0.20.0",
     "@launchtray/tsyringe-async": "4.3.3",
     "@launchtray/hatch-sdk-generator": "0.20.0",

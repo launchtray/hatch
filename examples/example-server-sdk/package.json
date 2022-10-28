@@ -22,7 +22,7 @@
     "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@launchtray/hatch-server": "0.20.0",
     "@launchtray/hatch-server-middleware": "0.20.0",
     "@launchtray/hatch-sdk-generator": "0.20.0",

@@ -18,12 +18,15 @@ module.exports = {
   }
 };
 
-function overridePackageVersion(packageJson, context, packageName, desiredVersion) {
+function overridePackageVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
   const existingVersion = packageJson.dependencies[packageName];
   if (existingVersion != null) {
-    const parent = packageJson.name;
-    context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
-    packageJson.dependencies[packageName] = desiredVersion;
+    const selector = existingVersionSelector == null ? () => true : existingVersionSelector;
+    if (selector(existingVersion)) {
+      const parent = packageJson.name;
+      context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
+      packageJson.dependencies[packageName] = desiredVersion;
+    }
   }
 }
 /**
@@ -36,5 +39,8 @@ function overridePackageVersion(packageJson, context, packageName, desiredVersio
  */
 function readPackage(packageJson, context) {
   overridePackageVersion(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
+  overridePackageVersion(packageJson, context, 'postcss', '8.2.12', (existingVersion) => {
+    return existingVersion.startsWith('8.2') || existingVersion.startsWith('^8.2') || existingVersion.startsWith('~8.2');
+  });
   return packageJson;
 }

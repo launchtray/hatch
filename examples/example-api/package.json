@@ -19,7 +19,7 @@
     "@airtasker/spot": "^1.9.0"
   },
   "devDependencies": {
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@launchtray/hatch-api": "0.20.0",
     "atlassian-openapi": "^1.0.17",
     "eslint": "^8",

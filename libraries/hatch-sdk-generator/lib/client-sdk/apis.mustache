@@ -10,7 +10,7 @@ import {
 } from '../models';
 import * as models from '../models';
 
-type Blob = Uint8Array;
+type Blob = ReadableStream;
 
 {{#operations}}
 @injectable()
@@ -230,7 +230,7 @@ export class Remote{{classname}} implements models.{{classname}} {
     {{#isResponseFile}}
     return {
       raw: response,
-      body: response.blob().then((blob) => blob.arrayBuffer().then((ab) => new Uint8Array(ab))),
+      body: runtime.requireNonNull(response.body, 'body'),
       {{#responseHeaders.0}}
       headers: responseHeaders,
       {{/responseHeaders.0}}

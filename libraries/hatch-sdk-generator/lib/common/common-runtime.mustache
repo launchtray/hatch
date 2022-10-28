@@ -19,6 +19,24 @@ export const requireOptionalString = (value: unknown | null | undefined, name: s
   return requireString(value, name);
 };
 
+export const requireEnum = <E, V>(value: unknown | null | undefined, enumValues: V[], name: string): E => {
+  if (enumValues.includes(value as V)) {
+    return value as E;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalEnum = <E, V>(
+  value: unknown | null | undefined,
+  enumValues: V[],
+  name: string
+): E | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireEnum<E, V>(value, enumValues, name);
+};
+
 export const requireNumber = (value: unknown | null | undefined, name: string): number => {
   if (value == null) {
     return throwInvalidParamError(name);

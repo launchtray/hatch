@@ -401,7 +401,7 @@ const createServerAsync = async <T extends ServerComposition>(
     await serverMiddleware.registerAfterRoutes?.(runningServerApp, runningServer);
   }
 
-  if (process.env.ENABLE_API_SPEC === 'true') {
+  if (process.env.ENABLE_API_SPEC === 'true' || process.env.NODE_ENV === 'development') {
     runningServerApp.get('/api.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       const options: SerializeJSOptions = {unsafe: true, isJSON: true};

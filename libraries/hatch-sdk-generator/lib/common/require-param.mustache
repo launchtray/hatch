@@ -1,1 +1,1 @@
-require{{^required}}Optional{{/required}}{{#lambda.pascalcase}}{{#baseType}}{{baseType}}{{/baseType}}{{^baseType}}{{dataType}}{{/baseType}}{{/lambda.pascalcase}}
+require{{^required}}Optional{{/required}}{{#isEnum}}Enum<models.{{operationIdCamelCase}}{{{datatypeWithEnum}}}, {{{dataType}}}>{{/isEnum}}{{^isEnum}}{{#lambda.pascalcase}}{{#baseType}}{{baseType}}{{/baseType}}{{^baseType}}{{dataType}}{{/baseType}}{{/lambda.pascalcase}}{{/isEnum}}

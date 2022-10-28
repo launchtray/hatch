@@ -38,7 +38,7 @@ const renderClient = async (): Promise<string> => {
 
 export default (options: CreateServerOptions<ServerComposition>) => {
   createServer(options, (server, app) => {
-    if (process.env.ENABLE_API_SPEC === 'true') {
+    if (process.env.ENABLE_API_SPEC === 'true' || process.env.NODE_ENV === 'development') {
       addStaticRoutes(app, assetsPrefix);
       app.get('/api', (req, res, next) => {
         crypto.randomBytes(32, (err, buf) => {

@@ -56,19 +56,18 @@ export interface {{operationIdCamelCase}}Response {
   };
 {{/responseHeaders.0}}
 {{#returnType}}
-  body: {{returnType}} | Promise<{{returnType}}>;
+  body: {{{returnType}}} | Promise<{{{returnType}}}>;
 {{/returnType}}
   statusCode?: number;
 }
 {{/operation}}
 {{/operations}}
-
 {{#hasEnums}}
-
 {{#operations}}
 {{#operation}}
 {{#allParams}}
 {{#isEnum}}
+
 export enum {{operationIdCamelCase}}{{enumName}} {
 {{#allowableValues}}
   {{#enumVars}}

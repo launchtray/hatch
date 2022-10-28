@@ -64,7 +64,7 @@ export class Local{{classname}} implements {{classname}} {
   }
   {{#returnType}}
 
-  async {{nickname}}({{#allParams.0}}request: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{returnType}}> {
+  async {{nickname}}({{#allParams.0}}request: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{{returnType}}}> {
     return (await this.{{nickname}}Raw({{#allParams.0}}request{{/allParams.0}})).body;
   }
   {{/returnType}}
@@ -94,6 +94,9 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {{#headerParams}}
           {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.header('{{baseName}}'),
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
             'header: "{{baseName}}"',
           ),
         {{/headerParams}}
@@ -119,6 +122,9 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {{#pathParams}}
           {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.params.{{baseName}},
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
             'path param: "{{baseName}}"',
           ),
         {{/pathParams}}
@@ -129,6 +135,9 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {{#queryParams}}
           {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.query.{{baseName}},
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
             'query param: "{{baseName}}"',
           ),
         {{/queryParams}}

@@ -9,7 +9,7 @@ interface CreateUserRequestPayload {
 interface CreateUserResponsePayload {
   firstName: string;
   lastName: string;
-  role: string;
+  role: 'admin' | 'member';
 }
 
 interface User {
@@ -66,6 +66,8 @@ class CreateUser {
   request(
     @spot.headers headers: {
       'x-example-request'?: string;
+      'x-role': 'admin' | 'member';
+      'x-group'?: 'blue' | 'green';
     },
     @spot.body body: CreateUserRequestPayload,
   ) {}
@@ -150,7 +152,7 @@ class GetMetricsCount {
 
   @spot.response({status: 200})
   response(
-    @spot.body body: spot.Int64,
+    @spot.body body: spot.Int64[],
   ) {}
 }
 

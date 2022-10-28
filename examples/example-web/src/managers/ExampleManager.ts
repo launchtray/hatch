@@ -52,18 +52,14 @@ export default class ExampleManager {
 
   @initializer()
   private async initialize() {
-    const response = await this.userApi.getUser({
-      headers: {
-        xExampleRequest: 'myHeader',
-      },
-      pathParams: {
-        id: 'myId',
-      },
+    const response = await this.metricsApi.getMetricsCount({
+      body: ['EventA', 'EventB'],
       queryParams: {
-        search: 'mySearch',
+        userId: '123',
+        tId: 'abc',
       },
     });
-    this.logger.info(`getUser response: ${JSON.stringify(response)}`);
+    this.logger.info(`getMetricsCount response: ${JSON.stringify(response.map((n) => (`Num: ${n}`)))}`);
   }
 
   @onLocationChange()

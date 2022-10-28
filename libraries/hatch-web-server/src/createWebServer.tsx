@@ -177,7 +177,7 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
   runtimeConfig.SENTRY_DSN = process.env.SENTRY_DSN;
-  runtimeConfig.ENABLE_API_SPEC = process.env.ENABLE_API_SPEC;
+  runtimeConfig.ENABLE_API_SPEC = process.env.NODE_ENV === 'development' ? 'true' : process.env.ENABLE_API_SPEC;
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     const disableSsr = composition.disableSsr ?? process.env.DISABLE_SSR === 'true';

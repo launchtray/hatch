@@ -3,6 +3,8 @@ import {
   ApiAlternateAction,
   ApiDelegateResponse,
   CreateUserRequest,
+  CreateUserResponse,
+  CreateUserResponsePayloadRoleEnum,
   GetLatestMetricsRequest,
   GetLatestMetricsResponse,
   GetMetricsCountRequest,
@@ -12,6 +14,7 @@ import {
   GetUserRequest,
   GetUserResponse,
   MakeAdminRequest,
+  Metric,
   MetricsApiDelegate,
   PREVENT_CONTROLLER_RESPONSE,
   ReportApiDelegate,
@@ -20,6 +23,7 @@ import {
   UsersApiDelegate,
 } from '@launchtray/example-server-sdk';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
+import {CreateTesterRequest} from '@launchtray/example-client-sdk';
 
 @containerSingleton()
 export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsApiDelegate, ReportApiDelegate {
@@ -32,14 +36,22 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     throw new Error('Method not implemented.');
   }
 
-  handleGetLatestMetrics(request: GetLatestMetricsRequest): ApiDelegateResponse<GetLatestMetricsResponse> {
+  handleGetLatestMetrics(request: GetLatestMetricsRequest): GetLatestMetricsResponse {
     this.logger.debug(`handleGetLatestMetrics: ${JSON.stringify(request)}`);
-    throw new Error('Method not implemented.');
+    const body: {[key: string]: Metric} = {};
+    for (const metricType of request.body) {
+      body[metricType] = {timestamp: 0, txId: 'abc'};
+    }
+    return {
+      body,
+    };
   }
 
-  handleGetMetricsCount(request: GetMetricsCountRequest): ApiDelegateResponse<GetMetricsCountResponse> {
+  handleGetMetricsCount(request: GetMetricsCountRequest): GetMetricsCountResponse {
     this.logger.debug(`handleGetMetricsCount: ${JSON.stringify(request)}`);
-    throw new Error('Method not implemented.');
+    return {
+      body: [1, 2, 3],
+    };
   }
 
   handleSaveMetrics(request: SaveMetricsRequest): ApiDelegateResponse<SaveMetricsResponse> {
@@ -48,7 +60,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   handleCreateTester(
-    request: CreateUserRequest,
+    request: CreateTesterRequest,
     @inject('Logger') logger: Logger,
   ) {
     logger.debug(`handleCreateTester: ${JSON.stringify(request)}`);
@@ -59,9 +71,17 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   handleCreateUser(
     request: CreateUserRequest,
     @inject('Logger') logger: Logger,
-  ) {
+  ): CreateUserResponse {
     logger.debug(`handleCreateUserOperation: ${JSON.stringify(request)}`);
-    return new ApiAlternateAction(500, 'Whaaaa?');
+    return {
+      headers: {
+
+      },
+      body: {
+        ...request.body,
+        role: CreateUserResponsePayloadRoleEnum.Admin,
+      },
+    };
   }
 
   handleGetUser(

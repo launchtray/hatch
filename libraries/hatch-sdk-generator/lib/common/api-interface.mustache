@@ -20,7 +20,7 @@ interface {{classname}} {
     {{/summary}}
     * Helper method for the common case that only the HTTP body is needed from the response
     */
-    {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{returnType}}>
+    {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{{returnType}}}>
   {{/returnType}}
 {{/operation}}
 }

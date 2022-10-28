@@ -20,6 +20,7 @@ import {
 } from '../models';
 import * as runtime from '../runtime';
 
+// Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
 
 export interface {{classname}}Delegate {

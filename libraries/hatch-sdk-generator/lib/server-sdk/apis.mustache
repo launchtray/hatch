@@ -173,6 +173,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{#returnType}}
       const delegateResponseBody = await delegateResponse.body;
       {{#isResponseFile}}
+      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/octet-stream');
       basicRouteParams.res.status(delegateResponse?.statusCode ?? 200);
       // https://stackoverflow.com/questions/73308289
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -181,9 +182,19 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{/isResponseFile}}
       {{^isResponseFile}}
       {{#returnTypeIsPrimitive}}
+      {{#isMapContainer}}
+      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+      {{/isMapContainer}}
+      {{#isListContainer}}
+      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+      {{/isListContainer}}
+      {{#returnSimpleType}}
+      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'text/plain');
+      {{/returnSimpleType}}
       basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(delegateResponseBody);
       {{/returnTypeIsPrimitive}}
       {{^returnTypeIsPrimitive}}
+      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
       {{#isListContainer}}
       const responseJson = delegateResponseBody.map(models.{{returnBaseType}}ToJSON);
       basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
@@ -209,6 +220,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       if (runtime.apiErrorResponseSent(err, basicRouteParams)) {
         return;
       }
+      basicRouteParams.res.set('Content-Type', 'text/plain');
       basicRouteParams.res.status(500).send((err as {message?: string}).message ?? '');
     }
   }

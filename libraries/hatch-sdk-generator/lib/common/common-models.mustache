@@ -53,9 +53,15 @@ export interface {{operationIdCamelCase}}Request {
 export interface {{operationIdCamelCase}}Response {
 {{#responseHeaders.0}}
   headers: {
+    contentType?: string;
   {{#responseHeaders}}
     {{> param-type-definition}}
   {{/responseHeaders}}
+  };
+{{/responseHeaders.0}}
+{{^responseHeaders.0}}
+  headers?: {
+    contentType?: string;
   };
 {{/responseHeaders.0}}
 {{#returnType}}

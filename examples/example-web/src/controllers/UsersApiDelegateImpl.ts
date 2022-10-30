@@ -39,14 +39,15 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     readable._read = () => {
       // Do nothing, rely on pushes below
     };
-    readable.push('Testing123');
     setTimeout(() => {
-      readable.push('456');
+      readable.push('123');
       readable.push(null);
     }, 100); // Introduce artificial delay to test out streaming
     if (request.queryParams.timestamp != null) {
-      return new ApiAlternateAction(300, Readable.toWeb(readable));
+      readable.push('TestingXYZ');
+      return new ApiAlternateAction(300, Readable.toWeb(readable), {'Content-Type': 'text-plain'});
     }
+    readable.push('TestingABC');
     return {
       headers: {
         xStartDate: request.queryParams.startDate.getTime(),

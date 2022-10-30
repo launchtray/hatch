@@ -63,20 +63,28 @@ export const alternateActionResponseSent = (
       basicRouteParams.res.set(delegateResponse.headers);
     }
     if (statusCode != null) {
+      const contentTypeHeader: string | undefined = delegateResponse.headers?.['Content-Type'] as string | undefined;
       basicRouteParams.res.status(statusCode);
       const {body} = delegateResponse as {body?: any};
       if (body == null) {
         basicRouteParams.res.end();
       } else if (isStream(body)) {
+        basicRouteParams.res.set('Content-Type', contentTypeHeader ?? 'application/octet-stream');
         // https://stackoverflow.com/questions/73308289
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         stream.Readable.fromWeb(body).pipe(basicRouteParams.res);
       } else {
+        if (typeof body === 'string') {
+          basicRouteParams.res.set('Content-Type', contentTypeHeader ?? 'text/plain');
+        } else {
+          basicRouteParams.res.set('Content-Type', contentTypeHeader ?? 'application/json');
+        }
         basicRouteParams.res.send(body);
       }
       return true;
     }
+    basicRouteParams.res.set('Content-Type', 'text/plain');
     basicRouteParams.res.status(500).send('Unknown alternate action');
     return true;
   }

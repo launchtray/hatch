@@ -67,7 +67,7 @@ export default class ExampleManager {
     @inject(ReportApiInjectionToken) private reportApi: ReportApi,
     @inject('Logger') private logger: Logger,
   ) {
-    logger.debug('Constructing ExampleManager');
+    logger.debug('Constructing ExampleManager 2');
     this.dependency = dependency;
   }
 
@@ -75,6 +75,14 @@ export default class ExampleManager {
   @initializer()
   private async initialize() {
     try {
+      const errorResp = await this.userApi.getUser({
+        headers: {},
+        pathParams: {
+          id: 'abc',
+        },
+        queryParams: {},
+      });
+      this.logger.info('getUser response received', errorResp);
       const response = await this.reportApi.getReportPdf({
         headers: {},
         queryParams: {

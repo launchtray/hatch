@@ -1,4 +1,5 @@
 import {
+  appInfoProvider,
   controller,
   route,
   ServerMiddleware,
@@ -170,6 +171,11 @@ export default class ExampleController implements ServerMiddleware {
         }
       });
     });
+  }
+
+  @appInfoProvider()
+  test123() {
+    return {hello: 'world'};
   }
 
   public async register(): Promise<void> {

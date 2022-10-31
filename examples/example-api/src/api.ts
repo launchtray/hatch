@@ -118,7 +118,7 @@ class GetUser {
       'x-example-request'?: string;
     },
     @spot.queryParams queryParams: {
-      search: string;
+      search?: string;
     },
     @spot.pathParams pathParams: {
       id: string;

@@ -23,13 +23,52 @@ import {
   SaveMetricsResponse,
   UsersApiDelegate,
 } from '@launchtray/example-server-sdk';
-import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
+import {BasicRouteParams, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
 import {CreateTesterRequest} from '@launchtray/example-client-sdk';
+import {appInfoProvider, route} from '@launchtray/hatch-server';
+import WebSocket from 'ws';
 
 @containerSingleton()
 export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsApiDelegate, ReportApiDelegate {
   constructor(@inject('Logger') private logger: Logger) {
     logger.info('Constructing UsersApiControllerDelegateImpl');
+  }
+
+  @route.get('*')
+  wildcard(params: BasicRouteParams) {
+    this.logger.info(`ONE: ${params.req.url}`);
+    params.next();
+  }
+
+  @route.get('*')
+  wildcard2(params: BasicRouteParams) {
+    this.logger.info(`TWO: ${params.req.url}`);
+    params.next();
+  }
+
+  @route.get('*')
+  wildcard3(params: BasicRouteParams) {
+    this.logger.info(`THREE: ${params.req.url}`);
+    params.next();
+  }
+
+  @appInfoProvider()
+  testing123() {
+    return {hi: 'there'};
+  }
+
+  @route.websocket('/api/user-ws/:id')
+  public async handleWebsocket(params: WebSocketRouteParams) {
+    this.logger.debug(`handleUserWebsocket: ${params.req.url}`);
+    const ws = params.webSocket;
+    ws.on('message', (msg: string) => {
+      this.logger.debug(`received message: ${msg}`);
+      params.webSocketServer.clients.forEach((client: WebSocket) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(`${params.req.params.id}: ${msg}`);
+        }
+      });
+    });
   }
 
   handleGetReportPdf(request: GetReportPdfRequest & {isFromSsr: boolean}): GetReportPdfResponse | ApiAlternateAction {

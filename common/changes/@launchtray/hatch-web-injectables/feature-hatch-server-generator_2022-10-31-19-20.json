@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-web-injectables",
+      "comment": "API-first design via hatch-api and hatch-sdk-generator to generate client and server SDKs based on OpenAPI specifications",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-web-injectables"
+}

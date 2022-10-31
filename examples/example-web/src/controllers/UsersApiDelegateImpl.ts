@@ -57,7 +57,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   @route.get('/api/users/error')
-  wildcard4() {
+  errorExample() {
     return new ApiAlternateAction(500, 'Test error');
   }
 
@@ -135,7 +135,6 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     return new ApiAlternateAction(404, 'No testers found');
   }
 
-  // Demonstrates how an error response can be sent
   handleCreateUser(
     request: CreateUserRequest,
     @inject('Logger') logger: Logger,

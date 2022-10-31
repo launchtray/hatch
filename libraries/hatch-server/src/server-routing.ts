@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign --
  * This code is very dynamic by nature, so I'm making some lint exceptions for now to make things easier while APIs are
- * still in flux. This may get cleaned up with a future "API-first" redesign. Do as I say, not as I do.
+ * still in flux.
  */
 import {
   Class,
   DependencyContainer,
   injectable,
-  isApiAlternateAction,
-  isApiError,
   resolveParams,
   ROOT_CONTAINER,
 } from '@launchtray/hatch-util';
@@ -402,6 +400,7 @@ export interface Delegator<D> {
   delegate?: D;
 }
 
+// eslint-disable-next-line complexity
 const registerHealthChecks = (
   target: any,
   delegateType: any,

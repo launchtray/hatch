@@ -46,6 +46,7 @@ module.exports = {
     'dot-storybook',
     '.storybook',
     'cdk.out',
+    '**/autogen/**',
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs

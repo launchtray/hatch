@@ -3,6 +3,7 @@ import {
   createServer,
   CreateServerOptions,
   loadStaticAssetsMetadata,
+  registerPerRequestDependencies,
 } from '@launchtray/hatch-server';
 import {ErrorReporter, Logger, ROOT_CONTAINER} from '@launchtray/hatch-util';
 import {
@@ -16,7 +17,6 @@ import {
   WebCommonComposition,
   runtimeConfig,
 } from '@launchtray/hatch-web';
-import {registerPerRequestDependencies} from '@launchtray/hatch-server';
 import {DependencyContainer} from '@launchtray/tsyringe-async';
 import crypto from 'crypto';
 import {RequestHandler} from 'express';
@@ -73,7 +73,7 @@ const renderStaticClient = async (requestContext: ClientRenderRequestContext): P
 };
 
 const renderDynamicClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
-  const {composition, logger, errorReporter} = requestContext;
+  const {composition, errorReporter} = requestContext;
   const sagaMiddleware = createSagaMiddleware();
   const {navMiddleware, location} = createNavMiddleware({locationForSsr: requestContext.requestURL});
   const middleware = applyMiddleware(sagaMiddleware, navMiddleware, createErrorReporterMiddleware(errorReporter));

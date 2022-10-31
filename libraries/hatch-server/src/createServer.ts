@@ -335,6 +335,7 @@ const getPortAndHostname = (logger: Logger): {port: number, hostname: string | u
   return {port, hostname};
 };
 
+// eslint-disable-next-line complexity
 const createServerAsync = async <T extends ServerComposition>(
   serverComposer: ServerComposer<T>,
   serverExtension?: ServerExtension<T>,

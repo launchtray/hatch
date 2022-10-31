@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions -- not working for type guards */
 import {Response} from 'express';
 import stream from 'stream';
 import {
@@ -10,6 +11,7 @@ import {
   isStream,
 } from '@launchtray/hatch-util';
 
+// eslint-disable-next-line complexity -- any further reduction is forced
 export const alternateActionResponseSent = (
   delegateResponse: unknown,
   res: Response,
@@ -25,7 +27,7 @@ export const alternateActionResponseSent = (
     if (statusCode != null) {
       const contentTypeHeader: string | undefined = delegateResponse.headers?.['Content-Type'] as string | undefined;
       res.status(statusCode);
-      const {body} = delegateResponse as {body?: any};
+      const {body} = delegateResponse as {body?: unknown};
       if (body == null) {
         res.end();
       } else if (isStream(body)) {
@@ -58,7 +60,7 @@ export const apiErrorResponseSent = (err: unknown, res: Response): boolean => {
       if (alternateActionResponseSent(altAction, res)) {
         return true;
       }
-    } catch (err: unknown) {
+    } catch (error: unknown) {
       return false;
     }
   }

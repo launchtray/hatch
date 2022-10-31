@@ -1,5 +1,5 @@
 # This file can be used to add additional paths that use OpenAPI features that (e.g.) might not be supported by Spot
 # Note that the extension is YAML, but that YAML is a superset of JSON. In the case of conflicts with the Spot spec,
-# the Spot file will override values in this file, the build scripts in package.json are modified to change the
-# ordering of CLI arguments to hatch-api
+# this file will override values in the Spot file, unless the build scripts in package.json are modified to change the
+# ordering of CLI arguments to hatch-api.
 {}

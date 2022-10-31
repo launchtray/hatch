@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 {{>licenseInfo}}
+import {Response} from 'express';
 import stream from 'stream';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
@@ -8,13 +9,14 @@ import {
   ApiAlternateAction,
   ApiDelegateResponse,
   ApiError,
-  preventsControllerResponse,
-  PREVENT_CONTROLLER_RESPONSE,
+  preventsDefaultResponse,
   getStatusCode,
   isApiError,
   getAlternateAction,
   isApiAlternateAction,
-} from './models';
+} from '@launchtray/hatch-util';
+
+import {alternateActionResponseSent} from '@launchtray/hatch-server';
 
 const isStream = (value: unknown) => value != null && (value as {pipeTo?: unknown}).pipeTo != null;
 
@@ -30,11 +32,11 @@ export function mapValues(data: any, fn: (item: any) => any) {
   );
 }
 
-export const apiErrorResponseSent = (err: unknown, basicRouteParams: BasicRouteParams): boolean => {
+export const apiErrorResponseSent = (err: unknown, res: Response): boolean => {
   if (isApiError(err)) {
     try {
       const altAction = getAlternateAction(err);
-      if (alternateActionResponseSent(altAction, basicRouteParams)) {
+      if (alternateActionResponseSent(altAction, res)) {
         return true;
       }
     } catch (err: unknown) {
@@ -50,55 +52,14 @@ export const throwInvalidParamError = (paramName: string): never => {
 
 {{> common-runtime}}
 
-export const alternateActionResponseSent = (
-  delegateResponse: unknown,
-  basicRouteParams: BasicRouteParams
-): delegateResponse is ApiAlternateAction => {
-  if (isApiAlternateAction(delegateResponse)) {
-    if (preventsControllerResponse(delegateResponse)) {
-      return true;
-    }
-    const statusCode = getStatusCode(delegateResponse);
-    if (delegateResponse.headers != null) {
-      basicRouteParams.res.set(delegateResponse.headers);
-    }
-    if (statusCode != null) {
-      const contentTypeHeader: string | undefined = delegateResponse.headers?.['Content-Type'] as string | undefined;
-      basicRouteParams.res.status(statusCode);
-      const {body} = delegateResponse as {body?: any};
-      if (body == null) {
-        basicRouteParams.res.end();
-      } else if (isStream(body)) {
-        basicRouteParams.res.set('Content-Type', contentTypeHeader ?? 'application/octet-stream');
-        // https://stackoverflow.com/questions/73308289
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        stream.Readable.fromWeb(body).pipe(basicRouteParams.res);
-      } else {
-        if (typeof body === 'string') {
-          basicRouteParams.res.set('Content-Type', contentTypeHeader ?? 'text/plain');
-        } else {
-          basicRouteParams.res.set('Content-Type', contentTypeHeader ?? 'application/json');
-        }
-        basicRouteParams.res.send(body);
-      }
-      return true;
-    }
-    basicRouteParams.res.set('Content-Type', 'text/plain');
-    basicRouteParams.res.status(500).send('Unknown alternate action');
-    return true;
-  }
-  return false;
-};
-
 export const getLocalApiReturnValue = <T>(
   delegateResponse: T | ApiAlternateAction,
 ): T => {
   if (isApiAlternateAction(delegateResponse)) {
-    if (preventsControllerResponse(delegateResponse)) {
+    if (preventsDefaultResponse(delegateResponse)) {
       throw new ApiError(
         new ApiAlternateAction(500),
-        'Use of PREVENT_CONTROLLER_RESPONSE for local server-side API calls is not supported. ' +
+        'Use of PREVENT_DEFAULT_RESPONSE for local server-side API calls is not supported. ' +
           'Refactor ApiDelegate to avoid this path for local calls (e.g. via branching on request.isLocal)'
       );
     }

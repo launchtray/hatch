@@ -6,6 +6,8 @@ import {
   Class,
   DependencyContainer,
   injectable,
+  isApiAlternateAction,
+  isApiError,
   resolveParams,
   ROOT_CONTAINER,
 } from '@launchtray/hatch-util';
@@ -20,6 +22,7 @@ import {
   ServerMiddlewareClass,
 } from './ServerMiddleware';
 import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses} from './OpenAPI';
+import {alternateActionResponseSent, apiErrorResponseSent} from './api-utils';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
 
@@ -158,7 +161,16 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
       } else {
         args.push(...(await resolveParams(container, target, propertyKey)));
       }
-      await originalMethod.apply(ctlr, args);
+      try {
+        const methodResponse = await originalMethod.apply(ctlr, args);
+        if (alternateActionResponseSent(methodResponse, res)) {
+          return;
+        }
+      } catch (err: unknown) {
+        if (!apiErrorResponseSent(err, res)) {
+          throw err;
+        }
+      }
     };
 
     if (target[routeDefinersKey] == null) {

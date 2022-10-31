@@ -21,7 +21,6 @@
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-util": "0.20.0",
     "@launchtray/tsyringe-async": "4.3.3",
     "@launchtray/hatch-sdk-generator": "0.20.0",
     "eslint": "^8",

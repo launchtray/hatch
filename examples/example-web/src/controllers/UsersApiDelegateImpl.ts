@@ -1,8 +1,13 @@
 import {Readable} from 'stream';
-import {containerSingleton, inject, Logger} from '@launchtray/hatch-util';
 import {
   ApiAlternateAction,
   ApiDelegateResponse,
+  containerSingleton,
+  inject,
+  Logger,
+  PREVENT_DEFAULT_RESPONSE,
+} from '@launchtray/hatch-util';
+import {
   CreateUserRequest,
   CreateUserResponse,
   CreateUserResponsePayloadRoleEnum,
@@ -17,7 +22,6 @@ import {
   MakeAdminRequest,
   Metric,
   MetricsApiDelegate,
-  PREVENT_CONTROLLER_RESPONSE,
   ReportApiDelegate,
   SaveMetricsRequest,
   SaveMetricsResponse,
@@ -50,6 +54,11 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   wildcard3(params: BasicRouteParams) {
     this.logger.info(`THREE: ${params.req.url}`);
     params.next();
+  }
+
+  @route.get('/api/users/error')
+  wildcard4() {
+    return new ApiAlternateAction(500, 'Test error');
   }
 
   @appInfoProvider()
@@ -168,6 +177,6 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   ) {
     logger.debug(`handleMakeAdmin: ${JSON.stringify(request)}`);
     basicRouteParams.res.sendStatus(500);
-    return PREVENT_CONTROLLER_RESPONSE;
+    return PREVENT_DEFAULT_RESPONSE;
   }
 }

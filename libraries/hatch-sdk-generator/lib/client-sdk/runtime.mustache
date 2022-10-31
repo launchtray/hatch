@@ -5,7 +5,7 @@
 import {
   ApiAlternateAction,
   ApiError,
-} from './models';
+} from '@launchtray/hatch-util';
 
 const isStream = (value: unknown) => value != null && (value as {pipeTo?: unknown}).pipeTo != null;
 

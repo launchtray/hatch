@@ -2,12 +2,21 @@
 /* eslint-disable @typescript-eslint/no-empty-interface,dot-notation */
 import stream from 'stream';
 import {
+  alternateActionResponseSent,
+
+
+apiErrorResponseSent,
   controller,
   Delegator,
   route,
 } from '@launchtray/hatch-server';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
-import {inject, injectable, Logger} from '@launchtray/hatch-util';
+import {
+  ApiDelegateResponse,
+  inject,
+  injectable,
+  Logger,
+} from '@launchtray/hatch-util';
 import {
   DependencyContainer,
   resolveParams,
@@ -29,7 +38,7 @@ export interface {{classname}}Delegate {
   handle{{operationIdCamelCase}}(
     request: models.{{operationIdCamelCase}}Request & {isLocal: boolean, isFromSsr: boolean},
     ...optionalInjections: unknown[]
-  ): models.ApiDelegateResponse<models.{{> response-type}}>;
+  ): ApiDelegateResponse<models.{{> response-type}}>;
   {{/operation}}
   {{/operations}}
 }
@@ -171,7 +180,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
 
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
-      if (runtime.alternateActionResponseSent(delegateResponse, basicRouteParams)) {
+      if (alternateActionResponseSent(delegateResponse, basicRouteParams.res)) {
         return;
       }
 
@@ -231,7 +240,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{/returnType}}
     } catch (err: unknown) {
       this.logger.info(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
-      if (runtime.apiErrorResponseSent(err, basicRouteParams)) {
+      if (apiErrorResponseSent(err, basicRouteParams.res)) {
         return;
       }
       basicRouteParams.res.set('Content-Type', 'text/plain');

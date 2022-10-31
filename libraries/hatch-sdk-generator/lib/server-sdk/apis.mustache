@@ -90,6 +90,9 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
 
   @route.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}('{{path}}'{{#pathParams.0}}.replace(/{([^}]*)}/g, ':$1'){{/pathParams.0}})
   async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
+    {{#hasFormParams}}
+    throw new Error('NOT SUPPORTED: The hatch SDK generator does not (yet?) support form params');
+    {{/hasFormParams}}
     const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
     try {
       const request: models.{{operationIdCamelCase}}Request = {
@@ -137,6 +140,16 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {{#queryParams.0}}
         queryParams: {
         {{#queryParams}}
+        {{#isListContainer}}
+          {{paramName}}: runtime.{{> require-param }}Array(
+            basicRouteParams.req.query.{{baseName}}{{^isCollectionFormatMulti}}.split(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]){{/isCollectionFormatMulti}},
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
+            'query param: "{{baseName}}"',
+          ),
+        {{/isListContainer}}
+        {{^isListContainer}}
           {{paramName}}: runtime.{{> require-param }}(
             basicRouteParams.req.query.{{baseName}},
             {{#isEnum}}
@@ -144,6 +157,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
             {{/isEnum}}
             'query param: "{{baseName}}"',
           ),
+        {{/isListContainer}}
         {{/queryParams}}
         },
         {{/queryParams.0}}

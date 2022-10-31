@@ -19,6 +19,20 @@ export const requireOptionalString = (value: unknown | null | undefined, name: s
   return requireString(value, name);
 };
 
+export const requireStringArray = (value: unknown[] | null | undefined, name: string): string[] => {
+  if (value != null && value.length != null) {
+    return value.map((element) => requireString(element, name)) as string[];
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalStringArray = (value: unknown[] | null | undefined, name: string): string[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireStringArray(value, name);
+};
+
 export const requireDate = (value: unknown | null | undefined, name: string): Date => {
   const date = new Date(requireString(value, name));
   if (Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date.getTime())) {
@@ -32,6 +46,20 @@ export const requireOptionalDate = (value: unknown | null | undefined, name: str
     return undefined;
   }
   return requireDate(value, name);
+};
+
+export const requireDateArray = (value: unknown[] | null | undefined, name: string): Date[] => {
+  if (value != null && value.length != null) {
+    return value.map((element) => requireDate(element, name)) as Date[];
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalDateArray = (value: unknown[] | null | undefined, name: string): Date[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireDateArray(value, name);
 };
 
 export const requireEnum = <E, V>(value: unknown | null | undefined, enumValues: V[], name: string): E => {
@@ -52,6 +80,28 @@ export const requireOptionalEnum = <E, V>(
   return requireEnum<E, V>(value, enumValues, name);
 };
 
+export const requireEnumArray = <E, V>(
+  value: unknown[] | null | undefined,
+  enumValues: V[],
+  name: string,
+): E[] => {
+  if (value != null && value.length != null) {
+    return value.map((element) => requireEnum<E, V>(element, enumValues, name)) as E[];
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalEnumArray = <E, V>(
+  value: unknown[] | null | undefined,
+  enumValues: V[],
+  name: string,
+): E[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireEnumArray(value, enumValues, name);
+};
+
 export const requireNumber = (value: unknown | null | undefined, name: string): number => {
   if (value == null) {
     return throwInvalidParamError(name);
@@ -68,6 +118,20 @@ export const requireOptionalNumber = (value: unknown | null | undefined, name: s
     return undefined;
   }
   return requireNumber(value, name);
+};
+
+export const requireNumberArray = (value: unknown[] | null | undefined, name: string): number[] => {
+  if (value != null && value.length != null) {
+    return value.map((element) => requireNumber(element, name)) as number[];
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalNumberArray = (value: unknown[] | null | undefined, name: string): number[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireNumberArray(value, name);
 };
 
 export const requireBoolean = (value: unknown | null | undefined, name: string): boolean => {
@@ -99,6 +163,20 @@ export const requireOptionalBoolean = (value: unknown | null | undefined, name: 
     return undefined;
   }
   return requireBoolean(value, name);
+};
+
+export const requireBooleanArray = (value: unknown[] | null | undefined, name: string): boolean[] => {
+  if (value != null && value.length != null) {
+    return value.map((element) => requireBoolean(element, name)) as boolean[];
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalBooleanArray = (value: unknown[] | null | undefined, name: string): boolean[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireBooleanArray(value, name);
 };
 
 export const getFirstElement = <T>(

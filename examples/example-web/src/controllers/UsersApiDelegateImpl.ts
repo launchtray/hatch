@@ -155,7 +155,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
         id: request.pathParams.id,
       },
       headers: {
-        xExampleResponse: request.queryParams.search,
+        xExampleResponse: request.queryParams.search?.join('!'),
       },
     };
   }

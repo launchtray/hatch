@@ -1,17 +1,25 @@
 /* tslint:disable */
 /* eslint-disable */
 {{>licenseInfo}}
-import {injectAll, injectable} from '@launchtray/hatch-util';
+import {inject, injectAll, injectable} from '@launchtray/hatch-util';
 import * as runtime from '../runtime';
 import {
   {{#imports}}
   {{className}},
   {{/imports}}
+  {{#operations}}
+  {{classFilename}}BaseUrlInjectionToken,
+  {{/operations}}
 } from '../models';
 import * as models from '../models';
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
+
+interface ForwardedCredentials {
+  cookie?: string;
+  authHeader?: string;
+};
 
 {{#operations}}
 @injectable()
@@ -19,17 +27,17 @@ export class Remote{{classname}} implements models.{{classname}} {
   static configurationToken = Symbol('Remote{{classname}}Configuration');
   private readonly configuration: runtime.Configuration;
   private readonly configurableFetchApi: runtime.ConfigurableFetchApi;
+  protected forwardedCredentials?: ForwardedCredentials;
 
   constructor(
     @injectAll(Remote{{classname}}.configurationToken) configurationParams: runtime.ConfigurationParameters[],
+    @inject({{classFilename}}BaseUrlInjectionToken) baseUrl: string,
   ) {
-    if (configurationParams.length > 1) {
-      throw new Error('{{classname}}.configurationToken should only be registered once');
-    } else if (configurationParams.length == 1) {
-      this.configuration = new runtime.Configuration(configurationParams[0]);
-    } else {
-      this.configuration = new runtime.Configuration();
-    }
+    const configParams = runtime.getFirstElement('{{classname}}.configurationToken', configurationParams, () => ({}));
+    this.configuration = new runtime.Configuration({
+      basePath: baseUrl,
+      ...configParams,
+    });
     this.configurableFetchApi = new runtime.ConfigurableFetchApi(this.configuration);
   }
   {{#operation}}
@@ -67,6 +75,18 @@ export class Remote{{classname}} implements models.{{classname}} {
     {{/isListContainer}}
     {{/queryParams}}
     const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.forwardedCredentials != null) {
+      headerParameters['x-req-from-ssr'] = 'true';
+    }
+    const forwardedCookie = this.forwardedCredentials?.cookie;
+    if (forwardedCookie != null) {
+      headerParameters['Cookie'] = forwardedCookie;
+    }
+    const forwardedAuthHeader = this.forwardedCredentials?.authHeader;
+    if (forwardedAuthHeader != null) {
+      headerParameters['Authorization'] = forwardedAuthHeader;
+    }
 
     {{#bodyParam}}
     {{^consumes}}
@@ -317,6 +337,23 @@ export class Remote{{classname}} implements models.{{classname}} {
   {{/returnType}}
   {{/operation}}
 }
+
+@injectable()
+export class AuthForwarding{{classname}} extends Remote{{classname}} {
+  constructor(
+    @injectAll(Remote{{classname}}.configurationToken) configurationParams: runtime.ConfigurationParameters[],
+    @inject({{classFilename}}BaseUrlInjectionToken) baseUrl: string,
+    @injectAll('cookie') public readonly cookie: string[],
+    @injectAll('authHeader') public readonly authHeader: string[],
+  ) {
+    super(configurationParams, baseUrl);
+    this.forwardedCredentials = {
+      cookie: runtime.getFirstElement('cookie', cookie),
+      authHeader: runtime.getFirstElement('authHeader', authHeader),
+    };
+  }
+}
+
 {{/operations}}
 {{#hasEnums}}
 

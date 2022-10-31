@@ -1,7 +1,9 @@
 import {
   getApiMiddleware,
-  registerLocalApis,
 } from '@launchtray/example-server-sdk';
+import {
+  registerLocalApis,
+} from '@launchtray/example-client-sdk';
 import {middlewareFor} from '@launchtray/hatch-server';
 import {
   JSONBodyParser,

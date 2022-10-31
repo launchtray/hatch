@@ -98,47 +98,85 @@ export interface ConfigurationParameters {
   accessToken?: string | ((name?: string, scopes?: string[]) => string); // parameter for oauth2 security
   headers?: HTTPHeaders; //header params we want to use on every request
   credentials?: RequestCredentials; //value for the credentials param we want to use on each request
+  // Callback to allow certain responses to update the accessToken automatically (e.g. for token refresh APIs)
+  extractUpdatedAccessToken?: (
+    responseContext: ResponseContext,
+    invalidateSession: () => void
+  ) => Promise<string | undefined>;
 }
 
 export class Configuration {
-  constructor(private configuration: ConfigurationParameters = {}) {}
+  private privateAccessToken: string | ((name: string, scopes?: string[]) => string | undefined) | undefined;
+  private privateAccessTokenValue: string | undefined;
+  private configParams: ConfigurationParameters;
+
+  constructor(configParams: ConfigurationParameters = {}) {
+    const privateMiddleware: Middleware[] = [];
+    if (configParams.accessToken == null || typeof configParams.accessToken === 'string') {
+      this.privateAccessTokenValue = configParams.accessToken ?? '';
+      this.privateAccessToken = () => this.privateAccessTokenValue;
+      if (configParams.extractUpdatedAccessToken != null) {
+        const authMiddleware = {
+          post: async (responseContext: ResponseContext) => {
+            const invalidateSession = () => {
+              this.privateAccessTokenValue = undefined;
+            };
+            const extractedToken = await configParams.extractUpdatedAccessToken?.(responseContext, invalidateSession);
+            if (extractedToken != null) {
+              this.privateAccessTokenValue = extractedToken;
+            }
+          },
+        };
+        privateMiddleware.push(authMiddleware);
+      }
+    } else {
+      this.privateAccessToken = configParams.accessToken;
+    }
+    this.configParams = {
+      ...configParams,
+      middleware: [
+        ...(configParams.middleware ?? []),
+        ...privateMiddleware,
+      ],
+    };
+  }
 
   get basePath(): string {
-    return this.configuration.basePath != null ? this.configuration.basePath : '';
+    return this.configParams.basePath != null ? this.configParams.basePath : '';
   }
 
   get fetchApi(): FetchAPI {
     // Must ensure global binding remains in place
     const defaultFetch = (((...args: [RequestInfo | URL, RequestInit | undefined]) => fetch(...args)));
-    return this.configuration.fetchApi || defaultFetch;
+    return this.configParams.fetchApi || defaultFetch;
   }
 
   get middleware(): Middleware[] {
-    return this.configuration.middleware || [];
+    return this.configParams.middleware || [];
   }
 
   get queryParamsStringify(): (params: HTTPQuery) => string {
-    return this.configuration.queryParamsStringify || querystring;
+    return this.configParams.queryParamsStringify || querystring;
   }
 
   get username(): string | undefined {
-    return this.configuration.username;
+    return this.configParams.username;
   }
 
   get password(): string | undefined {
-    return this.configuration.password;
+    return this.configParams.password;
   }
 
   get apiKey(): ((name: string) => string) | undefined {
-    const apiKey = this.configuration.apiKey;
+    const apiKey = this.configParams.apiKey;
     if (apiKey) {
       return typeof apiKey === 'function' ? apiKey : () => apiKey;
     }
     return undefined;
   }
 
-  get accessToken(): ((name: string, scopes?: string[]) => string) | undefined {
-    const accessToken = this.configuration.accessToken;
+  get accessToken(): ((name: string, scopes?: string[]) => string | undefined) | undefined {
+    const accessToken = this.privateAccessToken;
     if (accessToken) {
       return typeof accessToken === 'function' ? accessToken : () => accessToken;
     }
@@ -146,11 +184,11 @@ export class Configuration {
   }
 
   get headers():  HTTPHeaders | undefined {
-    return this.configuration.headers;
+    return this.configParams.headers;
   }
 
   get credentials(): RequestCredentials | undefined {
-    return this.configuration.credentials;
+    return this.configParams.credentials;
   }
 }
 

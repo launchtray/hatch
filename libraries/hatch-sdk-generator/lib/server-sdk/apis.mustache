@@ -27,7 +27,7 @@ export interface {{classname}}Delegate {
   {{#operations}}
   {{#operation}}
   handle{{operationIdCamelCase}}(
-    request: models.{{operationIdCamelCase}}Request & {isLocal: boolean},
+    request: models.{{operationIdCamelCase}}Request & {isLocal: boolean, isFromSsr: boolean},
     ...optionalInjections: unknown[]
   ): models.ApiDelegateResponse<models.{{> response-type}}>;
   {{/operation}}
@@ -40,12 +40,12 @@ const apiDelegateToken = Symbol('{{classname}}Delegate');
 
 {{#operations}}
 @injectable()
-export class Local{{classname}} implements {{classname}} {
+export class UnprotectedLocal{{classname}} implements {{classname}} {
   static delegateToken = apiDelegateToken;
 
   constructor(
     @inject('Logger') private readonly logger: Logger,
-    @inject(Local{{classname}}.delegateToken) public readonly delegate: {{classname}}Delegate,
+    @inject(UnprotectedLocal{{classname}}.delegateToken) public readonly delegate: {{classname}}Delegate,
     @inject('weakContainer') public readonly weakContainer: WeakRef<DependencyContainer>,
   ) {
   }
@@ -61,8 +61,8 @@ export class Local{{classname}} implements {{classname}} {
       clientRequestContainer,
       target,
       'handle{{operationIdCamelCase}}',
-      {...request, isLocal: true},
-    ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean}, ...unknown[]];
+      {...request, isLocal: true, isFromSsr: true},
+    ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
     const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
     return runtime.getLocalApiReturnValue(delegateResponse);
   }
@@ -153,8 +153,8 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         requestContainer,
         target,
         'handle{{operationIdCamelCase}}',
-        {...request, isLocal: false},
-      ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean}, ...unknown[]];
+        {...request, isLocal: false, isFromSsr: basicRouteParams.req.header('x-req-from-ssr') === 'true'},
+      ) as [models.{{operationIdCamelCase}}Request & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
 
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
       if (runtime.alternateActionResponseSent(delegateResponse, basicRouteParams)) {

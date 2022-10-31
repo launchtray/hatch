@@ -21,7 +21,7 @@ api[ASSOCIATED_API_SPEC_ID_KEY] = Symbol('uniqueApiIdentifier'); // Guaranteed u
 {{#apis}}
 {{#operations}}
 import {
-  Local{{classFilename}},
+  UnprotectedLocal{{classFilename}},
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 } from './{{classFilename}}';
@@ -57,20 +57,26 @@ const getApiMiddleware = ({
 {{/operations}}
 {{/apis}}
 
-const registerLocalApis = (container: DependencyContainer, getToken?: (apiName: string) => string | symbol) => {
+const registerUnprotectedLocalApis = (
+  container: DependencyContainer,
+  getToken?: (apiName: string) => string | symbol,
+) => {
   {{#apis}}
   {{#operations}}
-  container.registerSingleton(getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken, Local{{classFilename}});
+  container.registerSingleton(
+    getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
+    UnprotectedLocal{{classFilename}},
+  );
   {{/operations}}
   {{/apis}}
 };
 
 export {
   getApiMiddleware,
-  registerLocalApis,
+  registerUnprotectedLocalApis,
 {{#apis}}
 {{#operations}}
-  Local{{classFilename}},
+  UnprotectedLocal{{classFilename}},
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 {{/operations}}

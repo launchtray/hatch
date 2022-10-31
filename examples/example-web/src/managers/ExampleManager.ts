@@ -89,6 +89,8 @@ export default class ExampleManager {
         const altAction = getAlternateAction(err);
         const body = await convertStreamToString(altAction.body as ReadableStream);
         this.logger.error(`getReportPdf error: ${body}`);
+      } else {
+        this.logger.error('getReportPdf error', err);
       }
     }
   }

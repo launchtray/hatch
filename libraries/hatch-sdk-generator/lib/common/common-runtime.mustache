@@ -100,3 +100,17 @@ export const requireOptionalBoolean = (value: unknown | null | undefined, name: 
   }
   return requireBoolean(value, name);
 };
+
+export const getFirstElement = <T>(
+  name: string,
+  inputArray: T[],
+  createDefaultValue?: () => T | undefined,
+): T | undefined => {
+  if (inputArray.length > 1) {
+    throw new Error(`${name} should only be registered once`);
+  } else if (inputArray.length == 1) {
+    return inputArray[0];
+  }
+  return createDefaultValue?.();
+};
+

@@ -3,6 +3,7 @@ import {DependencyContainer} from '@launchtray/tsyringe-async';
 {{#apis}}
 {{#operations}}
 import {
+  AuthForwarding{{classFilename}},
   Remote{{classFilename}},
 } from './{{classFilename}}';
 {{/operations}}
@@ -11,23 +12,52 @@ import {
 import {
   {{#apis}}
   {{#operations}}
+  {{classFilename}}BaseUrlInjectionToken,
   {{classFilename}}InjectionToken,
   {{/operations}}
   {{/apis}}
 } from '../models';
 
-const registerRemoteApis = (container: DependencyContainer, getToken?: (apiName: string) => string | symbol) => {
+// Use this to register APIs client-side, whether from a browser-side app or a dependent service
+const registerRemoteApis = (
+  container: DependencyContainer,
+  baseUrl?: string,
+  getToken?: (apiName: string) => string | symbol,
+) => {
   {{#apis}}
   {{#operations}}
-  container.registerSingleton(getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken, Remote{{classFilename}});
+  container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? '');
+  container.registerSingleton(
+    getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
+    Remote{{classFilename}},
+  );
+  {{/operations}}
+  {{/apis}}
+};
+
+// Use this to register APIs server-side for the service implementing the API
+const registerLocalApis = (
+  container: DependencyContainer,
+  baseUrl?: string,
+  getToken?: (apiName: string) => string | symbol,
+) => {
+  {{#apis}}
+  {{#operations}}
+  container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? `http://localhost:${process.env.PORT}`);
+  container.registerSingleton(
+    getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
+    AuthForwarding{{classFilename}},
+  );
   {{/operations}}
   {{/apis}}
 };
 
 export {
+  registerLocalApis,
   registerRemoteApis,
   {{#apis}}
   {{#operations}}
+  AuthForwarding{{classFilename}},
   Remote{{classFilename}},
   {{/operations}}
   {{/apis}}

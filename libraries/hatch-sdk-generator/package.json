@@ -17,8 +17,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1",
     "@launchtray/hatch-api": "0.21.0-alpha.0",
+    "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1",
     "atlassian-openapi": "^1.0.17",
     "fs-extra": "^8",
     "tmp": "^0.2.1"

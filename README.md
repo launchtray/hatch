@@ -55,6 +55,17 @@ architectural patterns that hatch uses.
 
 ### Supported templates
 Currently, the hatch CLI supports hatching projects using the following templates:
+* **[api](tools/hatch-cli/src/templates/api)** -- a project that defines or generates an 
+  [OpenAPI Specification](https://swagger.io/resources/open-api/) using multiple input YAML or JSON API specifications
+  and/or specifications using the [Spot](https://github.com/airtasker/spot) DSL.
+* **[client-sdk](tools/hatch-cli/src/templates/client-sdk)** -- An auto-generated client SDK library that stays in sync 
+  with a specified [OpenAPI Specification](https://swagger.io/resources/open-api/) and/or 
+  [api](tools/hatch-cli/src/templates/api) project
+* **[server-sdk](tools/hatch-cli/src/templates/server-sdk)** -- An auto-generated client SDK library that stays in sync
+  with a specified [OpenAPI Specification](https://swagger.io/resources/open-api/) and/or
+  [api](tools/hatch-cli/src/templates/api) project. This library contains TypeScript interfaces that a server must 
+  implement in order to provide an API defined by the input OpenAPI spec, as well as functions to register those
+  interfaces as middleware for the webapp or microservice projects described below. 
 * **[webapp](tools/hatch-cli/src/templates/webapp)** --
 a [single-page web application](https://en.wikipedia.org/wiki/Single-page_application) with:
     * Dependency injection, with the help of [tsyringe](https://github.com/microsoft/tsyringe)
@@ -68,6 +79,10 @@ a [single-page web application](https://en.wikipedia.org/wiki/Single-page_applic
         [React Router](https://reacttraining.com/react-router)
     * Flexible logging using [winston](https://github.com/winstonjs/winston)
     * Optional error reporting via [Sentry](https://sentry.io)
+* **[microservice](tools/hatch-cli/src/templates/microservice)** -- a lighter server which uses similar design patterns
+  to the webapp template, but does not include code for a client UI
+* **[monorepo](tools/hatch-cli/src/templates/monorepo)** -- an (initially) empty monorepo using Rush and Hatch best 
+  practices
     
 Refer to documentation for the project types above for more details on what individual modules can be hatched for each
 project type.
@@ -105,8 +120,19 @@ own outside of a project created by `hatch`.
 * [hatch-server-user-management](libraries/hatch-server-user-management) -- a library for server-side user management 
   such as authentication, user registration, and password resetting that adheres to the interface defined in 
   [hatch-user-management-client](libraries/hatch-user-management-client)
-* [hatch-client-sdk](libraries/hatch-client-sdk) -- a library for generating a client-sdk library from an [OpenAPI 
-  Specification](https://swagger.io/resources/open-api/), hatch microservice, or hatch webapp
+* [hatch-rpc](libraries/hatch-rpc) -- a library that contains type definitions and helper classes for making remote 
+  procedure calls (RPC).
+* [hatch-rpc-node](libraries/hatch-rpc-node) -- library that provides remote procedure call (RPC) utilities
+  for node-based projects. It includes RPC transport implementations (which can be used by classes in `hatch-rpc`) for
+  worker threads and child processes, as well as higher-level utilities for sending a ReadableStream across an RPC
+  interface.
+* [hatch-api](libraries/hatch-api) -- a library for generating a single
+  [OpenAPI Specification](https://swagger.io/resources/open-api/) using multiple input YAML or JSON API specifications
+  and/or specifications using the [Spot](https://github.com/airtasker/spot) DSL.
+* [hatch-sdk-generator](libraries/hatch-sdk-generator) -- a library for generating a client-sdk and/or server-sdk
+  library from an [OpenAPI Specification](https://swagger.io/resources/open-api/). A project generated using this
+  library can use a library created via [hatch-api](libraries/hatch-api) as its input specification.
+
 
 
 ## Developer setup
@@ -117,7 +143,7 @@ necessary if you just want to use hatch.
 
     ```
     $ brew uninstall node
-    $ brew install node@12
+    $ brew install node@18
     $ brew link --force --overwrite node@12
     ```
 

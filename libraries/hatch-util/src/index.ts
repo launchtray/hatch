@@ -36,12 +36,7 @@ import {
   isStream,
   ApiDelegateResponse,
 } from './api-utils';
-import {
-  convertWebStreamToNodeReadable,
-  convertNodeReadableToWebStream,
-  convertNodeReadableToBuffer,
-  convertBufferToNodeReadable,
-} from './streams';
+import StreamUtils from './StreamUtils';
 
 export {
   ALT_ACTION_CODE_KEY,
@@ -80,8 +75,5 @@ export {
   ROOT_CONTAINER,
   SentryMonitor,
   SentryReporter,
-  convertWebStreamToNodeReadable,
-  convertNodeReadableToWebStream,
-  convertNodeReadableToBuffer,
-  convertBufferToNodeReadable,
+  StreamUtils,
 };

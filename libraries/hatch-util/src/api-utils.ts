@@ -4,6 +4,7 @@ export const ALT_ACTION_KEY: unique symbol = Symbol('@launchtray/hatch-sdk-gener
 
 export class ApiAlternateAction {
   public readonly [ALT_ACTION_CODE_KEY]: number | symbol;
+  public readonly status: number | undefined;
 
   constructor(
     code: number | symbol,
@@ -11,14 +12,20 @@ export class ApiAlternateAction {
     public readonly headers?: Record<string, unknown>,
   ) {
     this[ALT_ACTION_CODE_KEY] = code;
+    this.status = getStatusCode(this);
   }
 }
 
 export class ApiError extends Error {
   public readonly [ALT_ACTION_KEY]: ApiAlternateAction;
+  public readonly alternateAction: ApiAlternateAction;
+  public readonly status: number | undefined;
+
   constructor(alternateAction: ApiAlternateAction, message?: string) {
     super(message);
     this[ALT_ACTION_KEY] = alternateAction;
+    this.alternateAction = alternateAction;
+    this.status = getStatusCode(alternateAction);
   }
 }
 

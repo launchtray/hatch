@@ -34,8 +34,38 @@ export const createApiFromOpenApi3Specs = async (apis: SwaggerV3[]) => {
   const typesFile = path.resolve(
     './node_modules/atlassian-openapi/lib/swagger.d.ts',
   );
+  const packageInfoFile = path.resolve(
+    './package.json',
+  );
+  const packageInfo = YAML.parseDocument(fs.readFileSync(packageInfoFile, 'utf8')).toJS();
+
+  let mergedInfo: Swagger.Info | undefined;
+  for (const api of apis) {
+    if (api.info != null) {
+      mergedInfo = {
+        ...api.info,
+        ...mergedInfo,
+      };
+    }
+  }
+  if (mergedInfo?.title === '' || mergedInfo?.title === '__PACKAGE_NAME__') {
+    mergedInfo.title = packageInfo.name;
+  }
+
+  const patchedApis = apis == null || apis.length === 0 ? [] : [
+    {
+      ...apis[0],
+      info: {
+        title: packageInfo.name,
+        version: packageInfo.version,
+        ...mergedInfo,
+      },
+    },
+    ...apis.slice(1),
+  ];
+
   const mergeResult = merge(
-    apis.map((api: SwaggerV3) => ({
+    patchedApis.map((api: SwaggerV3) => ({
       oas: api,
     })),
   );

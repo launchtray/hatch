@@ -8,12 +8,14 @@ import {
   {{/operations}}
 } from '../runtime';
 import * as runtime from '../runtime';
+{{#imports.0}}
+import * as models from '../models';
 import {
   {{#imports}}
   {{className}},
   {{/imports}}
 } from '../models';
-import * as models from '../models';
+{{/imports.0}}
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;

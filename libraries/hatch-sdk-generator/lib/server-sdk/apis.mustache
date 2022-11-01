@@ -21,12 +21,14 @@ import {
   DependencyContainer,
   resolveParams,
 } from '@launchtray/tsyringe-async';
+{{#imports.0}}
 import * as models from '../models';
 import {
-{{#imports}}
+  {{#imports}}
   {{className}},
-{{/imports}}
+  {{/imports}}
 } from '../models';
+{{/imports.0}}
 import * as runtime from '../runtime';
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream

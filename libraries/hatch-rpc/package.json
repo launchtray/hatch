@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-rpc",
-  "version": "0.21.0-alpha.0",
+  "version": "0.21.0-alpha.1",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -14,11 +14,11 @@
     "build": "rimraf dist && tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.21.0-alpha.0"
+    "@launchtray/hatch-util": "0.21.0-alpha.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.0",
-    "@launchtray/hatch-util": "0.21.0-alpha.0",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.1",
+    "@launchtray/hatch-util": "0.21.0-alpha.1",
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",

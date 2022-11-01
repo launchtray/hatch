@@ -68,11 +68,18 @@ export class UnprotectedLocal{{classname}} implements {{classname}} {
     if (clientRequestContainer == null) {
       throw new Error('Weak reference to client request container no longer exists');
     }
+    const requestWithExtras = {
+      {{#allParams.0}}
+      ...request,
+      {{/allParams.0}}
+      isLocal: true,
+      isFromSsr: true,
+    };
     const args = await resolveParams(
       clientRequestContainer,
       target,
       'handle{{operationIdCamelCase}}',
-      {...request, isLocal: true, isFromSsr: true},
+      requestWithExtras,
     ) as [runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
     const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
     return runtime.getLocalApiReturnValue(delegateResponse);

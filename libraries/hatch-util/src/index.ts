@@ -37,9 +37,10 @@ import {
   ApiDelegateResponse,
 } from './api-utils';
 import {
-  convertToNodeReadable,
-  convertToWebReadable,
-  writeToBuffer,
+  convertWebStreamToNodeReadable,
+  convertNodeReadableToWebStream,
+  convertNodeReadableToBuffer,
+  convertBufferToNodeReadable,
 } from './streams';
 
 export {
@@ -79,7 +80,8 @@ export {
   ROOT_CONTAINER,
   SentryMonitor,
   SentryReporter,
-  convertToNodeReadable,
-  convertToWebReadable,
-  writeToBuffer,
+  convertWebStreamToNodeReadable,
+  convertNodeReadableToWebStream,
+  convertNodeReadableToBuffer,
+  convertBufferToNodeReadable,
 };

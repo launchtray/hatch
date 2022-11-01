@@ -8,86 +8,9 @@ import {
 {{/model}}
 {{/models}}
 
-// Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
-type Blob = ReadableStream;
-
 {{#models}}
 {{#model}}
 export * from './{{{classFilename}}}';
 {{/model}}
 {{/models}}
-{{#apiInfo}}
-{{#apis}}
-{{#operations}}
-{{#operation}}
 
-export interface {{operationIdCamelCase}}HttpRequest {
-{{#headerParams.0}}
-  headers: {
-  {{#headerParams}}
-    {{> param-type-definition}}
-  {{/headerParams}}
-  };
-{{/headerParams.0}}
-{{#bodyParam}}
-{{#dataType}}
-  body: {{{dataType}}};
-{{/dataType}}
-{{/bodyParam}}
-{{#pathParams.0}}
-  pathParams: {
-  {{#pathParams}}
-    {{> param-type-definition}}
-  {{/pathParams}}
-  };
-{{/pathParams.0}}
-{{#queryParams.0}}
-  queryParams: {
-  {{#queryParams}}
-    {{> param-type-definition}}
-  {{/queryParams}}
-  };
-{{/queryParams.0}}
-}
-
-export interface {{operationIdCamelCase}}HttpResponse {
-{{#responseHeaders.0}}
-  headers: {
-    contentType?: string;
-  {{#responseHeaders}}
-    {{> param-type-definition}}
-  {{/responseHeaders}}
-  };
-{{/responseHeaders.0}}
-{{^responseHeaders.0}}
-  headers?: {
-    contentType?: string;
-  };
-{{/responseHeaders.0}}
-{{#returnType}}
-  body: {{{returnType}}} | Promise<{{{returnType}}}>;
-{{/returnType}}
-  statusCode?: number;
-}
-{{/operation}}
-{{/operations}}
-{{#hasEnums}}
-{{#operations}}
-{{#operation}}
-{{#allParams}}
-{{#isEnum}}
-
-export enum {{operationIdCamelCase}}{{enumName}} {
-{{#allowableValues}}
-  {{#enumVars}}
-  {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
-  {{/enumVars}}
-{{/allowableValues}}
-}
-{{/isEnum}}
-{{/allParams}}
-{{/operation}}
-{{/operations}}
-{{/hasEnums}}
-{{/apis}}
-{{/apiInfo}}

@@ -2,14 +2,16 @@
 /* eslint-disable */
 {{>licenseInfo}}
 import {inject, injectAll, injectable} from '@launchtray/hatch-util';
+import {
+  {{#operations}}
+  {{classFilename}}BaseUrlInjectionToken,
+  {{/operations}}
+} from '../runtime';
 import * as runtime from '../runtime';
 import {
   {{#imports}}
   {{className}},
   {{/imports}}
-  {{#operations}}
-  {{classFilename}}BaseUrlInjectionToken,
-  {{/operations}}
 } from '../models';
 import * as models from '../models';
 
@@ -23,7 +25,7 @@ interface ForwardedCredentials {
 
 {{#operations}}
 @injectable()
-export class Remote{{classname}} implements models.{{classname}} {
+export class Remote{{classname}} implements runtime.{{classname}} {
   static configurationToken = Symbol('Remote{{classname}}Configuration');
   private readonly configuration: runtime.Configuration;
   private readonly configurableFetchApi: runtime.ConfigurableFetchApi;
@@ -42,7 +44,7 @@ export class Remote{{classname}} implements models.{{classname}} {
   }
   {{#operation}}
 
-  async {{nickname}}Raw({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<models.{{> response-type}} & {raw: Response}> {
+  async {{nickname}}Raw({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{> response-type}} & {raw: Response}> {
     const queryParameters: any = {};
 
     {{#queryParams}}
@@ -331,7 +333,7 @@ export class Remote{{classname}} implements models.{{classname}} {
   }
   {{#returnType}}
 
-  async {{nickname}}({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
+  async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
     return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}})).body;
   }
   {{/returnType}}

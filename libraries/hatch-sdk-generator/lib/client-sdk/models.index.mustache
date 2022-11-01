@@ -1,16 +1,1 @@
 {{> common-models}}
-
-{{#apiInfo}}
-{{#apis}}
-{{#operations}}
-// Note: intentional use of Symbol.for (vs. Symbol(...)) below to ensure client and server SDKs use same symbol
-export {{> api-injection-token}}
-export {{> api-base-url-injection-token}}
-
-/**
- *{{#lambda.indented_star_1}}{{#unescapedDescription}} {{{unescapedDescription}}}{{/unescapedDescription}}{{/lambda.indented_star_1}}
- */
-export {{> api-interface}}
-{{/operations}}
-{{/apis}}
-{{/apiInfo}}

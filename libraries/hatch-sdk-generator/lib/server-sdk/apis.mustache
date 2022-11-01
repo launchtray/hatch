@@ -5,9 +5,7 @@
 import stream from 'stream';
 import {
   alternateActionResponseSent,
-
-
-apiErrorResponseSent,
+  apiErrorResponseSent,
   controller,
   Delegator,
   route,
@@ -38,9 +36,9 @@ export interface {{classname}}Delegate {
   {{#operations}}
   {{#operation}}
   handle{{operationIdCamelCase}}(
-    request: models.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean},
+    request: runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean},
     ...optionalInjections: unknown[]
-  ): ApiDelegateResponse<models.{{> response-type}}>;
+  ): ApiDelegateResponse<runtime.{{> response-type}}>;
   {{/operation}}
   {{/operations}}
 }
@@ -62,7 +60,7 @@ export class UnprotectedLocal{{classname}} implements {{classname}} {
   }
   {{#operation}}
 
-  async {{nickname}}Raw({{#allParams.0}}request: models.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<models.{{> response-type}}> {
+  async {{nickname}}Raw({{#allParams.0}}request: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{> response-type}}> {
     const target = this.delegate.constructor.prototype;
     const clientRequestContainer = this.weakContainer.deref();
     if (clientRequestContainer == null) {
@@ -73,13 +71,13 @@ export class UnprotectedLocal{{classname}} implements {{classname}} {
       target,
       'handle{{operationIdCamelCase}}',
       {...request, isLocal: true, isFromSsr: true},
-    ) as [models.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
+    ) as [runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
     const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
     return runtime.getLocalApiReturnValue(delegateResponse);
   }
   {{#returnType}}
 
-  async {{nickname}}({{#allParams.0}}request: models.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
+  async {{nickname}}({{#allParams.0}}request: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
     return (await this.{{nickname}}Raw({{#allParams.0}}request{{/allParams.0}})).body;
   }
   {{/returnType}}
@@ -106,7 +104,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
     {{/hasFormParams}}
     const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
     try {
-      const request: models.{{operationIdCamelCase}}HttpRequest = {
+      const request: runtime.{{operationIdCamelCase}}HttpRequest = {
         {{#headerParams.0}}
         headers: {
         {{#headerParams}}
@@ -179,7 +177,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         target,
         'handle{{operationIdCamelCase}}',
         {...request, isLocal: false, isFromSsr: basicRouteParams.req.header('x-req-from-ssr') === 'true'},
-      ) as [models.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
+      ) as [runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
 
       const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
       if (alternateActionResponseSent(delegateResponse, basicRouteParams.res)) {

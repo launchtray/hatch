@@ -79,7 +79,7 @@ const determinePackageName = (
     projectName = apiPackageName
       .replace(/([-./])api$/, `$1${isServer ? 'server' : 'client'}$1${desiredSuffix}`);
     if (!projectName.endsWith(desiredSuffix)) {
-      projectName = `${projectName}-${desiredSuffix}`;
+      projectName = `${projectName}-${isServer ? 'server' : 'client'}-${desiredSuffix}`;
     }
   } else {
     projectName = overriddenName as string;

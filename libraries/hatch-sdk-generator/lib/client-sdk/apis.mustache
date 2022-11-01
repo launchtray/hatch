@@ -325,12 +325,10 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/responseHeaders.0}}
     {{/returnType}}
   }
-  {{#returnType}}
 
-  async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
-    return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}})).body;
+  async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
+    {{#returnType}}return ({{/returnType}}await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}}){{#returnType}}).body{{/returnType}};
   }
-  {{/returnType}}
   {{/operation}}
 }
 

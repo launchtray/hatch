@@ -33,6 +33,10 @@ export class Remote{{classname}} implements runtime.{{classname}} {
   private readonly configurableFetchApi: runtime.ConfigurableFetchApi;
   protected forwardedCredentials?: ForwardedCredentials;
 
+  static create(configurationParams?: runtime.ConfigurationParameters) {
+    return new Remote{{classname}}([configurationParams ?? {}], '');
+  }
+
   constructor(
     @injectAll(Remote{{classname}}.configurationToken) configurationParams: runtime.ConfigurationParameters[],
     @inject({{classFilename}}BaseUrlInjectionToken) baseUrl: string,

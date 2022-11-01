@@ -46,7 +46,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
   }
   {{#operation}}
 
-  async {{nickname}}Raw({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{> response-type}} & {raw: Response}> {
+  async {{nickname}}Raw({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{> response-type}}> {
     const queryParameters: any = {};
 
     {{#queryParams}}
@@ -254,7 +254,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{#returnType}}
     {{#isResponseFile}}
     return {
-      raw: response,
       body: runtime.requireNonNull(response.body, 'body'),
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -265,7 +264,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{#returnTypeIsPrimitive}}
     {{#isMapContainer}}
     return {
-      raw: response,
       body: response.json(),
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -274,7 +272,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/isMapContainer}}
     {{#isListContainer}}
     return {
-      raw: response,
       body: response.json(),
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -283,7 +280,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/isListContainer}}
     {{#returnSimpleType}}
     return {
-      raw: response,
       body: response.text() as any,
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -294,7 +290,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{^returnTypeIsPrimitive}}
     {{#isListContainer}}
     return {
-      raw: response,
       body: response.json().then((jsonValue) => jsonValue.map(models.{{returnBaseType}}FromJSON)),
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -304,7 +299,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{^isListContainer}}
     {{#isMapContainer}}
     return {
-      raw: response,
       body: response.json().then((jsonValue) => runtime.mapValues(jsonValue, models.{{returnBaseType}}FromJSON)),
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -313,7 +307,6 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/isMapContainer}}
     {{^isMapContainer}}
     return {
-      raw: response,
       body: response.json().then((jsonValue) => models.{{returnBaseType}}FromJSON(jsonValue)),
       {{#responseHeaders.0}}
       headers: responseHeaders,
@@ -325,12 +318,11 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/isResponseFile}}
     {{/returnType}}
     {{^returnType}}
+    {{#responseHeaders.0}}
     return {
-      raw: response,
-      {{#responseHeaders.0}}
       headers: responseHeaders,
-      {{/responseHeaders.0}}
     };
+    {{/responseHeaders.0}}
     {{/returnType}}
   }
   {{#returnType}}

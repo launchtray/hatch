@@ -42,7 +42,7 @@ export class Remote{{classname}} implements models.{{classname}} {
   }
   {{#operation}}
 
-  async {{nickname}}Raw({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<models.{{> response-type}} & {raw: Response}> {
+  async {{nickname}}Raw({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<models.{{> response-type}} & {raw: Response}> {
     const queryParameters: any = {};
 
     {{#queryParams}}
@@ -331,7 +331,7 @@ export class Remote{{classname}} implements models.{{classname}} {
   }
   {{#returnType}}
 
-  async {{nickname}}({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}Request{{/allParams.0}}): Promise<{{{returnType}}}> {
+  async {{nickname}}({{#allParams.0}}requestParameters: models.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
     return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}})).body;
   }
   {{/returnType}}

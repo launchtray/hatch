@@ -8,27 +8,27 @@ import {
   PREVENT_DEFAULT_RESPONSE,
 } from '@launchtray/hatch-util';
 import {
-  CreateUserRequest,
-  CreateUserResponse,
+  CreateUserHttpRequest,
+  CreateUserHttpResponse,
   CreateUserResponsePayloadRoleEnum,
-  GetLatestMetricsRequest,
-  GetLatestMetricsResponse,
-  GetMetricsCountRequest,
-  GetMetricsCountResponse,
-  GetReportPdfRequest,
-  GetReportPdfResponse,
-  GetUserRequest,
-  GetUserResponse,
-  MakeAdminRequest,
+  GetLatestMetricsHttpRequest,
+  GetLatestMetricsHttpResponse,
+  GetMetricsCountHttpRequest,
+  GetMetricsCountHttpResponse,
+  GetReportPdfHttpRequest,
+  GetReportPdfHttpResponse,
+  GetUserHttpRequest,
+  GetUserHttpResponse,
+  MakeAdminHttpRequest,
   Metric,
   MetricsApiDelegate,
   ReportApiDelegate,
-  SaveMetricsRequest,
-  SaveMetricsResponse,
+  SaveMetricsHttpRequest,
+  SaveMetricsHttpResponse,
   UsersApiDelegate,
 } from '@launchtray/example-server-sdk';
 import {BasicRouteParams, WebSocketRouteParams} from '@launchtray/hatch-server-middleware';
-import {CreateTesterRequest} from '@launchtray/example-client-sdk';
+import {CreateTesterHttpRequest} from '@launchtray/example-client-sdk';
 import {appInfoProvider, route} from '@launchtray/hatch-server';
 import WebSocket from 'ws';
 
@@ -80,7 +80,9 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     });
   }
 
-  handleGetReportPdf(request: GetReportPdfRequest & {isFromSsr: boolean}): GetReportPdfResponse | ApiAlternateAction {
+  handleGetReportPdf(
+    request: GetReportPdfHttpRequest & {isFromSsr: boolean},
+  ): GetReportPdfHttpResponse | ApiAlternateAction {
     this.logger.debug(`handleGetReportPdf: ${JSON.stringify(request)}`);
     const readable = new Readable();
     // eslint-disable-next-line no-underscore-dangle
@@ -104,7 +106,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     };
   }
 
-  handleGetLatestMetrics(request: GetLatestMetricsRequest): GetLatestMetricsResponse {
+  handleGetLatestMetrics(request: GetLatestMetricsHttpRequest): GetLatestMetricsHttpResponse {
     this.logger.debug(`handleGetLatestMetrics: ${JSON.stringify(request)}`);
     const body: {[key: string]: Metric} = {};
     for (const metricType of request.body) {
@@ -115,20 +117,20 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     };
   }
 
-  handleGetMetricsCount(request: GetMetricsCountRequest): GetMetricsCountResponse {
+  handleGetMetricsCount(request: GetMetricsCountHttpRequest): GetMetricsCountHttpResponse {
     this.logger.debug(`handleGetMetricsCount: ${JSON.stringify(request)}`);
     return {
       body: [1, 2, 3],
     };
   }
 
-  handleSaveMetrics(request: SaveMetricsRequest): ApiDelegateResponse<SaveMetricsResponse> {
+  handleSaveMetrics(request: SaveMetricsHttpRequest): ApiDelegateResponse<SaveMetricsHttpResponse> {
     this.logger.debug(`handleSaveMetrics: ${JSON.stringify(request)}`);
     throw new Error('Method not implemented.');
   }
 
   handleCreateTester(
-    request: CreateTesterRequest,
+    request: CreateTesterHttpRequest,
     @inject('Logger') logger: Logger,
   ) {
     logger.debug(`handleCreateTester: ${JSON.stringify(request)}`);
@@ -136,9 +138,9 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   handleCreateUser(
-    request: CreateUserRequest,
+    request: CreateUserHttpRequest,
     @inject('Logger') logger: Logger,
-  ): CreateUserResponse {
+  ): CreateUserHttpResponse {
     logger.debug(`handleCreateUserOperation: ${JSON.stringify(request)}`);
     return {
       headers: {
@@ -152,9 +154,9 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   handleGetUser(
-    request: GetUserRequest,
+    request: GetUserHttpRequest,
     @inject('Logger') logger: Logger,
-  ): GetUserResponse {
+  ): GetUserHttpResponse {
     logger.debug(`handleGetUser: ${JSON.stringify(request)}`);
     return {
       body: {
@@ -170,7 +172,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
 
   // Demonstrates how a delegate can prevent the default response and send a response via the underlying response obj
   handleMakeAdmin(
-    request: MakeAdminRequest,
+    request: MakeAdminHttpRequest,
     @inject('Logger') logger: Logger,
     basicRouteParams: BasicRouteParams,
   ) {

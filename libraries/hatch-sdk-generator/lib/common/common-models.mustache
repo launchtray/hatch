@@ -21,7 +21,7 @@ export * from './{{{classFilename}}}';
 {{#operations}}
 {{#operation}}
 
-export interface {{operationIdCamelCase}}Request {
+export interface {{operationIdCamelCase}}HttpRequest {
 {{#headerParams.0}}
   headers: {
   {{#headerParams}}
@@ -50,7 +50,7 @@ export interface {{operationIdCamelCase}}Request {
 {{/queryParams.0}}
 }
 
-export interface {{operationIdCamelCase}}Response {
+export interface {{operationIdCamelCase}}HttpResponse {
 {{#responseHeaders.0}}
   headers: {
     contentType?: string;

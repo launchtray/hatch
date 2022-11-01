@@ -1,5 +1,5 @@
 # Filter down to minimum input files for rush update so dependencies are cached
-FROM node:12 as cache-dependencies
+FROM node:18 as cache-dependencies
 WORKDIR /workspace
 COPY ./ ./
 RUN find apps libraries tools -not -name "package.json" -mindepth 2 -maxdepth 2 -print | xargs rm -rf
@@ -10,7 +10,7 @@ RUN find apps libraries tools -mindepth 1 -maxdepth 1 -type f -print | xargs rm 
 # build arg to "false" to disable, or to "libraries" to only pre-build libraries.
 # Note that for multi-app workspaces, parallelization provided by PREBUILD=all (the
 # default) might make it the fastest option.
-FROM node:12 as prebuild
+FROM node:18 as prebuild
 RUN apt-get update
 # Needed for client SDK generation
 RUN apt-get -y install openjdk-8-jdk

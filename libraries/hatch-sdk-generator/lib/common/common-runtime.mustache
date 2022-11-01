@@ -41,6 +41,13 @@ export interface {{operationIdCamelCase}}HttpRequest {
   {{/queryParams}}
   };
 {{/queryParams.0}}
+{{#formParams.0}}
+  formParams: {
+  {{#formParams}}
+    {{> param-type-definition}}
+  {{/formParams}}
+  };
+{{/formParams.0}}
 }
 
 export interface {{operationIdCamelCase}}HttpResponse {

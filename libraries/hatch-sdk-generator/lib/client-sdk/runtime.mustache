@@ -115,12 +115,12 @@ export class Configuration {
     if (configParams.accessToken == null || typeof configParams.accessToken === 'string') {
       this.privateAccessTokenValue = configParams.accessToken ?? '';
       this.privateAccessToken = () => this.privateAccessTokenValue;
+      const invalidateSession = () => {
+        this.privateAccessTokenValue = undefined;
+      };
       if (configParams.extractUpdatedAccessToken != null) {
         const authMiddleware = {
           post: async (responseContext: ResponseContext) => {
-            const invalidateSession = () => {
-              this.privateAccessTokenValue = undefined;
-            };
             const extractedToken = await configParams.extractUpdatedAccessToken?.(responseContext, invalidateSession);
             if (extractedToken != null) {
               this.privateAccessTokenValue = extractedToken;

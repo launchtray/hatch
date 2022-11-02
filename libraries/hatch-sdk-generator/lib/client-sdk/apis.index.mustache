@@ -35,8 +35,7 @@ const registerRemoteApis = (
   {{/apis}}
 };
 
-// Use this to register APIs server-side for the service implementing the API
-const registerLocalApis = (
+const registerAuthForwardingApis = (
   container: DependencyContainer,
   baseUrl?: string,
   getToken?: (apiName: string) => string | symbol,
@@ -52,8 +51,12 @@ const registerLocalApis = (
   {{/apis}}
 };
 
+// Use this to register APIs server-side for the service implementing the API
+const registerLocalApis = registerAuthForwardingApis;
+
 export {
   registerLocalApis,
+  registerAuthForwardingApis,
   registerRemoteApis,
   {{#apis}}
   {{#operations}}

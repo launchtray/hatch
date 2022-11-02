@@ -16,18 +16,18 @@
     "build:watch": "tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.21.0-alpha.16",
-    "@launchtray/hatch-fetch-util": "0.21.0-alpha.16",
+    "@launchtray/hatch-util": "0.21.0-alpha.17",
+    "@launchtray/hatch-fetch-util": "0.21.0-alpha.17",
     "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-util": "0.21.0-alpha.16",
-    "@launchtray/hatch-fetch-util": "0.21.0-alpha.16",
+    "@launchtray/hatch-util": "0.21.0-alpha.17",
+    "@launchtray/hatch-fetch-util": "0.21.0-alpha.17",
     "@launchtray/tsyringe-async": "4.3.3",
-    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.16",
+    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.17",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.16",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.17",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

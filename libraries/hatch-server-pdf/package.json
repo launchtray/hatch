@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server-pdf",
-  "version": "0.21.0-alpha.16",
+  "version": "0.21.0-alpha.17",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -15,15 +15,15 @@
     "build:watch": "tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.16",
-    "@launchtray/hatch-util": "0.21.0-alpha.16",
+    "@launchtray/hatch-server-middleware": "0.21.0-alpha.17",
+    "@launchtray/hatch-util": "0.21.0-alpha.17",
     "@launchtray/react-pdf-renderer": "^1.6.13-beta.0",
     "react": "^16"
   },
   "devDependencies": {
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.16",
-    "@launchtray/hatch-util": "0.21.0-alpha.16",
-    "@launchtray/hatch-web-eslint-config": "0.21.0-alpha.16",
+    "@launchtray/hatch-server-middleware": "0.21.0-alpha.17",
+    "@launchtray/hatch-util": "0.21.0-alpha.17",
+    "@launchtray/hatch-web-eslint-config": "0.21.0-alpha.17",
     "@launchtray/react-pdf-renderer": "^1.6.13-beta.0",
     "@types/node": "^18",
     "@types/react": "^16",

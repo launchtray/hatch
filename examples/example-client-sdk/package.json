@@ -17,13 +17,13 @@
   },
   "peerDependencies": {
     "@launchtray/hatch-util": "0.21.0-alpha.13",
-    "@launchtray/hatch-fetch-utils": "0.21.0-alpha.13",
+    "@launchtray/hatch-fetch-util": "0.21.0-alpha.13",
     "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
     "@types/node": "^18",
     "@launchtray/hatch-util": "0.21.0-alpha.13",
-    "@launchtray/hatch-fetch-utils": "0.21.0-alpha.13",
+    "@launchtray/hatch-fetch-util": "0.21.0-alpha.13",
     "@launchtray/tsyringe-async": "4.3.3",
     "@launchtray/hatch-sdk-generator": "0.21.0-alpha.13",
     "eslint": "^8",

@@ -16,18 +16,18 @@
     "build:watch": "hatch-client-sdk --dependency @launchtray/example-api && tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.21.0-alpha.21",
-    "@launchtray/hatch-fetch-util": "0.21.0-alpha.21",
+    "@launchtray/hatch-util": "0.21.0-alpha.22",
+    "@launchtray/hatch-fetch-util": "0.21.0-alpha.22",
     "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-util": "0.21.0-alpha.21",
-    "@launchtray/hatch-fetch-util": "0.21.0-alpha.21",
+    "@launchtray/hatch-util": "0.21.0-alpha.22",
+    "@launchtray/hatch-fetch-util": "0.21.0-alpha.22",
     "@launchtray/tsyringe-async": "4.3.3",
-    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.21",
+    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.22",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.21",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.22",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

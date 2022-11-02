@@ -233,46 +233,8 @@ export function querystring(params: HttpQuery, prefix = ''): string {
 }
 
 export class Configuration {
-  private privateAccessToken: string | ((name: string, scopes?: string[]) => string | undefined) | undefined;
-  private accessTokenContainer: {accessToken?: string};
-  private configParams: ConfigurationParameters;
 
-  constructor(configParams: ConfigurationParameters = {}) {
-    const privateMiddleware: Middleware[] = [];
-    // By default, share access token conainer across shared ConfigParams objects
-    if ((configParams.sharedAccessTokenContainer == null) && (configParams.extractUpdatedAccessToken != null)) {
-      // eslint-disable-next-line no-param-reassign -- intentional reassign
-      configParams.sharedAccessTokenContainer = {};
-    }
-    this.accessTokenContainer = configParams.sharedAccessTokenContainer ?? {};
-    if (configParams.accessToken == null || typeof configParams.accessToken === 'string') {
-      this.accessTokenContainer.accessToken = configParams.accessToken ?? '';
-      this.privateAccessToken = () => this.accessTokenContainer.accessToken;
-      const invalidateSession = () => {
-        this.accessTokenContainer.accessToken = undefined;
-      };
-      if (configParams.extractUpdatedAccessToken != null) {
-        const authMiddleware = {
-          post: async (responseContext: ResponseContext) => {
-            const extractedToken = await configParams.extractUpdatedAccessToken?.(responseContext, invalidateSession);
-            if (extractedToken != null) {
-              this.accessTokenContainer.accessToken = extractedToken;
-            }
-          },
-        };
-        privateMiddleware.push(authMiddleware);
-      }
-    } else {
-      this.privateAccessToken = configParams.accessToken;
-    }
-    this.configParams = {
-      ...configParams,
-      middleware: [
-        ...(configParams.middleware ?? []),
-        ...privateMiddleware,
-      ],
-    };
-  }
+  constructor(private configParams: ConfigurationParameters = {}) {}
 
   get basePath(): string {
     return this.configParams.basePath != null ? this.configParams.basePath : '';
@@ -308,8 +270,8 @@ export class Configuration {
     return undefined;
   }
 
-  get accessToken(): ((name: string, scopes?: string[]) => string | undefined) | undefined {
-    const accessToken = this.privateAccessToken;
+  get accessToken(): ((name: string, scopes?: string[]) => string) | undefined {
+    const {accessToken} = this.configParams;
     if (accessToken != null) {
       return typeof accessToken === 'function' ? accessToken : () => accessToken;
     }
@@ -409,12 +371,6 @@ export interface ConfigurationParameters {
   accessToken?: string | ((name?: string, scopes?: string[]) => string); // parameter for oauth2 security
   headers?: HttpHeaders; // header params we want to use on every request
   credentials?: RequestCredentials; // value for the credentials param we want to use on each request
-  // Callback to allow certain responses to update the accessToken automatically (e.g. for token refresh APIs)
-  extractUpdatedAccessToken?: (
-    responseContext: ResponseContext,
-    invalidateSession: () => void
-  ) => Promise<string | undefined>;
-  sharedAccessTokenContainer?: {accessToken?: string};
 }
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';

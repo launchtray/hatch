@@ -481,6 +481,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-fetch-utils",
+      "projectFolder": "libraries/hatch-fetch-utils",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-server-pdf",
       "projectFolder": "libraries/hatch-server-pdf",
       "versionPolicyName": "hatchVersionPolicy"

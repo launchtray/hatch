@@ -92,6 +92,13 @@ export enum {{operationIdCamelCase}}{{enumName}} {
 {{/apis}}
 {{/apiInfo}}
 
+export const COLLECTION_FORMATS = {
+  csv: ",",
+  ssv: " ",
+  tsv: "\t",
+  pipes: "|",
+};
+
 export const requireNonNull = <T>(value: T | null | undefined, name: string): T => {
   if (value != null) {
     return value;

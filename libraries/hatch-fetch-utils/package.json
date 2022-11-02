@@ -1,6 +1,6 @@
 {
-  "name": "@launchtray/example-client-sdk",
-  "version": "0.1.0",
+  "name": "@launchtray/hatch-fetch-utils",
+  "version": "0.21.0-alpha.13",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -12,20 +12,18 @@
     "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && hatch-client-sdk --dependency @launchtray/example-api && tsc",
-    "build:watch": "hatch-client-sdk --dependency @launchtray/example-api && tsc"
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.21.0-alpha.13",
-    "@launchtray/hatch-fetch-utils": "0.21.0-alpha.13",
-    "@launchtray/tsyringe-async": "4.3.3"
+    "@launchtray/hatch-util": "0.21.0-alpha.13"
   },
   "devDependencies": {
-    "@types/node": "^18",
     "@launchtray/hatch-util": "0.21.0-alpha.13",
-    "@launchtray/hatch-fetch-utils": "0.21.0-alpha.13",
-    "@launchtray/tsyringe-async": "4.3.3",
-    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.13",
+    "@types/node": "^18",
+    "@types/jest": "^27.5.2",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.5",
     "eslint": "^8",
     "@launchtray/hatch-eslint-config": "0.21.0-alpha.13",
     "@typescript-eslint/parser": "^5",
@@ -34,7 +32,24 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
     "rimraf": "3.0.0",
-    "typescript": "4.7.4",
-    "@launchtray/example-api": "0.1.0"
+    "typescript": "4.7.4"
+  },
+  "jest": {
+    "transform": {
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ]
   }
 }

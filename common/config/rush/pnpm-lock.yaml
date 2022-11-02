@@ -36,6 +36,7 @@ specifiers:
   '@rush-temp/hatch-cdk': file:./projects/hatch-cdk.tgz
   '@rush-temp/hatch-cli': file:./projects/hatch-cli.tgz
   '@rush-temp/hatch-eslint-config': file:./projects/hatch-eslint-config.tgz
+  '@rush-temp/hatch-fetch-utils': file:./projects/hatch-fetch-utils.tgz
   '@rush-temp/hatch-i18n': file:./projects/hatch-i18n.tgz
   '@rush-temp/hatch-mock-server': file:./projects/hatch-mock-server.tgz
   '@rush-temp/hatch-razzle-config': file:./projects/hatch-razzle-config.tgz
@@ -239,6 +240,7 @@ dependencies:
   '@rush-temp/hatch-cdk': file:projects/hatch-cdk.tgz_jest@27.5.1+supports-color@7.2.0
   '@rush-temp/hatch-cli': file:projects/hatch-cli.tgz_jest@27.5.1+supports-color@7.2.0
   '@rush-temp/hatch-eslint-config': file:projects/hatch-eslint-config.tgz_e7d31b03c8e7ff5df7780e84fc65868e
+  '@rush-temp/hatch-fetch-utils': file:projects/hatch-fetch-utils.tgz_966a285e7657d0914f7113bf8da1d625
   '@rush-temp/hatch-i18n': file:projects/hatch-i18n.tgz_e04c523ac33ebe4cd0b31c7b1114146c
   '@rush-temp/hatch-mock-server': file:projects/hatch-mock-server.tgz_d8196d955e89a8c34fd539734db97bd8
   '@rush-temp/hatch-razzle-config': file:projects/hatch-razzle-config.tgz_84dcd8abab79e8d9401c2598bd6feff8
@@ -19960,7 +19962,7 @@ packages:
     dev: false
 
   file:projects/example-api.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-1SKssNAhhnB1Ozq/4e5WH2kKWyVm8+/HzArkFciHD0I8U7orKn2sp1xOEpjmRVP2GY2IPxS7Bw+VkXY72ry7eQ==, tarball: file:projects/example-api.tgz}
+    resolution: {integrity: sha512-dXeuX2k1UsCE/LohqclJA8UlpdGZDqBD4Dqev+5ZLPUg0vuPG3cJT985g4x0YEzTSyEO3mOybpcYjROPzXyWWQ==, tarball: file:projects/example-api.tgz}
     id: file:projects/example-api.tgz
     name: '@rush-temp/example-api'
     version: 0.0.0
@@ -19982,7 +19984,7 @@ packages:
     dev: false
 
   file:projects/example-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-cEG5UG9bgptRwxV3wDzUTtFHQIck2e+cHaKCjlDMOZbkYok5tMTRTGlpzDKmtAGDUP3d2f0q5Ehu3kL3uEQmcg==, tarball: file:projects/example-client-sdk.tgz}
+    resolution: {integrity: sha512-L03m/iSQnAKX1Eugg6a0oh10hwiiPfoSxayawotv1cfW3AFmIijNYPdjSXIyu4Espgi4ho9qYfRpNbCaZdp0Vw==, tarball: file:projects/example-client-sdk.tgz}
     id: file:projects/example-client-sdk.tgz
     name: '@rush-temp/example-client-sdk'
     version: 0.0.0
@@ -20004,7 +20006,7 @@ packages:
     dev: false
 
   file:projects/example-server-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-7rzoAVlGyln/6+L8ckt5/L4dB/rxbyTx1QT6x4VNzd5azWLQWP1d/IVqDUe4RK2rWm3StnmWsh3hhMpSY7yJIA==, tarball: file:projects/example-server-sdk.tgz}
+    resolution: {integrity: sha512-Wi3UuDp06iRuXQVxPW9uVt8JcKf5aLlHZqwHkKbioeI6/hsPWOc4EC9EEFz9Cv5pMLpofRCGEllpcm0zZ+jMXQ==, tarball: file:projects/example-server-sdk.tgz}
     id: file:projects/example-server-sdk.tgz
     name: '@rush-temp/example-server-sdk'
     version: 0.0.0
@@ -20029,7 +20031,7 @@ packages:
     dev: false
 
   file:projects/example-web.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-fwO385b2og+Qplaswg5i9TeJnq9VpEE2Kh8BBkJHCTvV4D84aQbqcnqlfeZow94zd3N3U8ihXwRoJH0dxCbavA==, tarball: file:projects/example-web.tgz}
+    resolution: {integrity: sha512-35J4Mri9PKtikw2FseH7TD4oKAtMR70O4hwond7Pcur4y/WLxKZHhNiWVMZnFhvRMQkE3dghg0TNBqsckfJHhg==, tarball: file:projects/example-web.tgz}
     id: file:projects/example-web.tgz
     name: '@rush-temp/example-web'
     version: 0.0.0
@@ -20133,7 +20135,7 @@ packages:
     dev: false
 
   file:projects/hatch-api.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-SQFPt+sgV0Q6orf0Jakzm8MM+rlSE2wkCkcKHcc3d4x5iySZdOqBS/dpN9peQkIViz4bfov6NyBHpa8Q50mHcg==, tarball: file:projects/hatch-api.tgz}
+    resolution: {integrity: sha512-mFIXZ0RcF+uuNKpVBjBC2u9G8Wb+PmD2PTw10arR+bsAAa3CUqHP4IRuF2+PBnin6Cs0J3nobZUNakBiI2mj9Q==, tarball: file:projects/hatch-api.tgz}
     id: file:projects/hatch-api.tgz
     name: '@rush-temp/hatch-api'
     version: 0.0.0
@@ -20160,7 +20162,7 @@ packages:
     dev: false
 
   file:projects/hatch-cdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-feu0XDMokh2Gqr5+m1KDvjdXgNfPCNydnWPKlh1ltFug/I3h3+fzBcuAf0IPj8K1DMkTFp0xD7gCpsRowsE2rw==, tarball: file:projects/hatch-cdk.tgz}
+    resolution: {integrity: sha512-MlxEUqhkX0RfMXa5y2Gl19XJlOpJoMHLAWN0CN8wQIV3t2dh39xf5HX/3PUFnd1DxcOMpZS5hHYysq7IGcTybQ==, tarball: file:projects/hatch-cdk.tgz}
     id: file:projects/hatch-cdk.tgz
     name: '@rush-temp/hatch-cdk'
     version: 0.0.0
@@ -20201,7 +20203,7 @@ packages:
     dev: false
 
   file:projects/hatch-cli.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-jA29iOzg42IU58Yf0Uieocx4/PUM5Sy2DsP7Xfeu+IcQggA62XlNgNUZIPzsKOv4bNCdy8QKkfhzG6mQVBMcBw==, tarball: file:projects/hatch-cli.tgz}
+    resolution: {integrity: sha512-f49cUte0iwOHRN9AITEWrTtwFxDZxubPBQuh69fHf/UAhRVgFsMcFGP/4TTNwQymcN8M10Pxc0sSFdn/VG9m3w==, tarball: file:projects/hatch-cli.tgz}
     id: file:projects/hatch-cli.tgz
     name: '@rush-temp/hatch-cli'
     version: 0.0.0
@@ -20256,8 +20258,38 @@ packages:
       - typescript
     dev: false
 
+  file:projects/hatch-fetch-utils.tgz_966a285e7657d0914f7113bf8da1d625:
+    resolution: {integrity: sha512-y4kSb+Q6ZQdaXjC3enQ+ZPHPeGCl2qoOQ615NwtaWcq2cm90xZaaNHmfOYcty3/mRZiIOdLayXgH6ysg0fYOog==, tarball: file:projects/hatch-fetch-utils.tgz}
+    id: file:projects/hatch-fetch-utils.tgz
+    name: '@rush-temp/hatch-fetch-utils'
+    version: 0.0.0
+    dependencies:
+      '@types/jest': 27.5.2
+      '@types/node': 18.11.7
+      '@typescript-eslint/eslint-plugin': 5.32.0_ac3c15059010ffbf2e5c28ed1b4bdcf6
+      '@typescript-eslint/parser': 5.32.0_8a70c3f9559cefb1d94530f8844a150c
+      eslint: 8.21.0_supports-color@7.2.0
+      eslint-config-airbnb-base: 15.0.0_4826688aebe5ff8b13e05784d4881a01
+      eslint-plugin-import: 2.26.0_eslint@8.21.0
+      eslint-plugin-jest: 26.7.0_08a506a48f346920bcc1f9a895f7ba94
+      jest: 27.5.1_1510559afde85c4495f2889856f2bf5e
+      rimraf: 3.0.0
+      ts-jest: 27.1.5_e807ed7f9a9f77c4be4445f84cb031f7
+      typescript: 4.7.4
+    transitivePeerDependencies:
+      - '@babel/core'
+      - babel-jest
+      - bufferutil
+      - canvas
+      - esbuild
+      - node-notifier
+      - supports-color
+      - ts-node
+      - utf-8-validate
+    dev: false
+
   file:projects/hatch-i18n.tgz_e04c523ac33ebe4cd0b31c7b1114146c:
-    resolution: {integrity: sha512-8zACuu22Yb7X/y/9uyVBSJARJVlG8cBaoWp1xUVaprPtPuhZMSyh2yABvBG8nbjFLgrgIGcmX+l5IigDxHLc9A==, tarball: file:projects/hatch-i18n.tgz}
+    resolution: {integrity: sha512-5inWru/KUs6RhZ/Da4oY/yy30IWb6xLi93khBXfaPv7Bubon6u7IWumcTbDbSaAXUL9Gdi0qKvoSMRsgKYrBMw==, tarball: file:projects/hatch-i18n.tgz}
     id: file:projects/hatch-i18n.tgz
     name: '@rush-temp/hatch-i18n'
     version: 0.0.0
@@ -20282,7 +20314,7 @@ packages:
     dev: false
 
   file:projects/hatch-mock-server.tgz_d8196d955e89a8c34fd539734db97bd8:
-    resolution: {integrity: sha512-6UjGglsAo2YBRv3vWI4l0R7tV55lMKyv43wqgT3yZ6buOFh5Kqx6nvsAL2MXqB24lEStgPxtPITxeS0ipqAwtQ==, tarball: file:projects/hatch-mock-server.tgz}
+    resolution: {integrity: sha512-y25AiIjmU3KQMkmX6gOX2iHnNJQwGDG9iN6nnawa7OxdFxeCWwwEkFBif/56kr3FSdUW+3VFD7ihkfqJ/+4IlQ==, tarball: file:projects/hatch-mock-server.tgz}
     id: file:projects/hatch-mock-server.tgz
     name: '@rush-temp/hatch-mock-server'
     version: 0.0.0
@@ -20345,7 +20377,7 @@ packages:
     dev: false
 
   file:projects/hatch-rpc-node.tgz_966a285e7657d0914f7113bf8da1d625:
-    resolution: {integrity: sha512-70bZ5Fkjf07XAGlq10u6xSDbGK3MOtb03+YrlSeFtWJwt8rX3QWlIWeCMAl8XjjFhIFDR9NBiCGMJejRYMp8/g==, tarball: file:projects/hatch-rpc-node.tgz}
+    resolution: {integrity: sha512-wbxq4bfWtigs+iYkaau6lW7ZpS65IJTamS3MBN3df36SlcRlYOMZq9DMkJyX9cMO60F5W5YRUxCnA6TOMY6W4w==, tarball: file:projects/hatch-rpc-node.tgz}
     id: file:projects/hatch-rpc-node.tgz
     name: '@rush-temp/hatch-rpc-node'
     version: 0.0.0
@@ -20377,7 +20409,7 @@ packages:
     dev: false
 
   file:projects/hatch-rpc.tgz_966a285e7657d0914f7113bf8da1d625:
-    resolution: {integrity: sha512-jUV4VqubFFPxd4hUXhN2OzGsP8a+GlTJxMoPECgJdzuY99cmj0KGJpee2Y5ay/CPESdJ3HcUadVkuzeYG0Vscw==, tarball: file:projects/hatch-rpc.tgz}
+    resolution: {integrity: sha512-NjWUCdEgnr+R67wlzWxuDXyUr1njeLhxc27ziT1ilpAOiHRL11ZYRwzY8tpW52tTEP5JAEJMZgvNeaSmT5XNlA==, tarball: file:projects/hatch-rpc.tgz}
     id: file:projects/hatch-rpc.tgz
     name: '@rush-temp/hatch-rpc'
     version: 0.0.0
@@ -20407,7 +20439,7 @@ packages:
     dev: false
 
   file:projects/hatch-sdk-generator.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-fD9X9OMkBI/r6qfH8sWg6xFgtPpacAcytgjfXGXcLc0hnJ1C21+ErTJHwa9HAl9Y9AcogIRhb+nqbkEYWUMCSA==, tarball: file:projects/hatch-sdk-generator.tgz}
+    resolution: {integrity: sha512-+UgYOC6oTESxtKR5GKz8cnTOvxYBgRwpJcZ6Dk9AgMmZGzyP0H3fpeqLw6qbRh86ZWuYSYIyZkE6JX9u1YJAhA==, tarball: file:projects/hatch-sdk-generator.tgz}
     id: file:projects/hatch-sdk-generator.tgz
     name: '@rush-temp/hatch-sdk-generator'
     version: 0.0.0
@@ -20433,7 +20465,7 @@ packages:
     dev: false
 
   file:projects/hatch-server-middleware.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-hQT3wbMvbTZbKwbUN024et8HwlluYN0sMtj+LHC9cE4VR4Uxyp5aav6e1Ri2kmp80yO51Ma9YzUjb1n+DwfHZg==, tarball: file:projects/hatch-server-middleware.tgz}
+    resolution: {integrity: sha512-0rWQ96DjBa4ipWaiuTMjs9TV55rTmqm0GBlj2zrrQG6nEYXFLDiuMaMfSHMxFW0Kf/Eew3uxoHOd6nS87Fjr6Q==, tarball: file:projects/hatch-server-middleware.tgz}
     id: file:projects/hatch-server-middleware.tgz
     name: '@rush-temp/hatch-server-middleware'
     version: 0.0.0
@@ -20469,7 +20501,7 @@ packages:
     dev: false
 
   file:projects/hatch-server-pdf.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-KOvxiMR4Jyyp0Jhn6pj/bAYuKfzEtDBtg+MWlP+DiDQoUhEg+lJfEney2RTn8XWS/uHZ1kDe/GeSTa8I1oRLiQ==, tarball: file:projects/hatch-server-pdf.tgz}
+    resolution: {integrity: sha512-gntukktuTT/gE60GtgLQBSLSlFCtw6UsxYOz25qtsV0Y2l5Lae26b0aoQzUoW6gtmnahjEHFP+LI45sPjg5GXg==, tarball: file:projects/hatch-server-pdf.tgz}
     id: file:projects/hatch-server-pdf.tgz
     name: '@rush-temp/hatch-server-pdf'
     version: 0.0.0
@@ -20498,7 +20530,7 @@ packages:
     dev: false
 
   file:projects/hatch-server-user-management.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-fPsqdIhU+KXTrfKgYBtsw+e4/d/xi8tANvGW3Tstn1HG/i8Y4AeColRxUt6mqdYt6Rh3CIoIpZe4ZTvjL2WXaA==, tarball: file:projects/hatch-server-user-management.tgz}
+    resolution: {integrity: sha512-MIDYjAtN/IEt0nTQMdIJ7dl9YwznMzOQOiFPdCUpUVwl6o87Z5wd2qzf45nDzU58g6DetM2VZv7++rmOb0Zh0g==, tarball: file:projects/hatch-server-user-management.tgz}
     id: file:projects/hatch-server-user-management.tgz
     name: '@rush-temp/hatch-server-user-management'
     version: 0.0.0
@@ -20528,7 +20560,7 @@ packages:
     dev: false
 
   file:projects/hatch-server.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-V2LbBEFPg9grNa0j77R5PFlPpYXGsZv42un6bEy7Z0thg3YxvDZqw04GDtWdbal6xPb7V0USBQJomxUlIBha9w==, tarball: file:projects/hatch-server.tgz}
+    resolution: {integrity: sha512-cPCmvFWDHLm91WHzRGKaXC/pVKLyps2fFcpN+KK4CUF0nDC9LbKMICGFTP+gsKUozAlVfAh4r1o06mHA/OWEsQ==, tarball: file:projects/hatch-server.tgz}
     id: file:projects/hatch-server.tgz
     name: '@rush-temp/hatch-server'
     version: 0.0.0
@@ -20565,7 +20597,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-api.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-KrMIHP8Y5+2DBzDUsRsG6KzK99SALHRUPlo0wNHBA5By9LhPlXHP57Xhijq6elHSDk4mVNY8jzgWMzUkg+Fv9g==, tarball: file:projects/hatch-template-api.tgz}
+    resolution: {integrity: sha512-0Mc4xPJUTwXcRALdX0wly1dvYs0d5gUE0sBKdIwYNX76owposPZkBfJpMfu84urbysy8srYxMh4UXFgiP8Gxvg==, tarball: file:projects/hatch-template-api.tgz}
     id: file:projects/hatch-template-api.tgz
     name: '@rush-temp/hatch-template-api'
     version: 0.0.0
@@ -20587,7 +20619,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-client-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-Y11mwMlHTKOrajDFj67UaJPhKD3MSGTJ8MbZCkWXI2pcYzcT3Quig0EN3/ng+vK+5NvG9ub3tRLbyNE8ELGvrA==, tarball: file:projects/hatch-template-client-sdk.tgz}
+    resolution: {integrity: sha512-C2xNzC25GMTHlf8XzMi5iU2/GYe3999V4sF0//3eX9hOfkKbWxbDsAGaoAuMbq/h3MEyGmxZzEjHtQfr0bJ9aw==, tarball: file:projects/hatch-template-client-sdk.tgz}
     id: file:projects/hatch-template-client-sdk.tgz
     name: '@rush-temp/hatch-template-client-sdk'
     version: 0.0.0
@@ -20609,7 +20641,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-library.tgz_966a285e7657d0914f7113bf8da1d625:
-    resolution: {integrity: sha512-MXs5lxwGu1eb0m8orumwQbilYqrC1M+Drc6xnvVd4pgUcX5OmTay88IvGYtiAzNwMxT4QpR2GrZ5RX2hVwryqw==, tarball: file:projects/hatch-template-library.tgz}
+    resolution: {integrity: sha512-WLBn0X1LDYI4/+p+kEltOm+wi7Wf5z9bUVA1CnGhcvC/LolmyKtjQvaRYwaaBU/tA3G17ek8x0mIbe2SuYer8A==, tarball: file:projects/hatch-template-library.tgz}
     id: file:projects/hatch-template-library.tgz
     name: '@rush-temp/hatch-template-library'
     version: 0.0.0
@@ -20639,7 +20671,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-microservice.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-MLUKmTkBJMjI1ftpXK4/rzh/0kRlYEixdGNQqv8SK3iImZhUUXzf8FrmEhWHxdBWMjKyW5oPOzEwjw3j77FtZQ==, tarball: file:projects/hatch-template-microservice.tgz}
+    resolution: {integrity: sha512-fNJbuiSPHHyPsR8ZZ9t84Zn714GdqscWbnJpbefoLkYU3+4Juy1J1paChaEBNRRs6rLGe/DlQjaLilfAXV4nww==, tarball: file:projects/hatch-template-microservice.tgz}
     id: file:projects/hatch-template-microservice.tgz
     name: '@rush-temp/hatch-template-microservice'
     version: 0.0.0
@@ -20711,7 +20743,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-server-sdk.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-6aOar4kiuBL7wxxQgIiDfqztQ5ieNd4FdN4sZYV7mHTfgreL+qUxqxBYfA1g/W6J4Hwwl31DePO4WXl9vq3eMQ==, tarball: file:projects/hatch-template-server-sdk.tgz}
+    resolution: {integrity: sha512-ya/Ml+GaPJNF8rh2jgX9vL2w2EffB8RbE6Ilp1VbN0t7R1Of95zcBVR+L156AjzCFxlgB6ItdYRLIH2ptnHTFQ==, tarball: file:projects/hatch-template-server-sdk.tgz}
     id: file:projects/hatch-template-server-sdk.tgz
     name: '@rush-temp/hatch-template-server-sdk'
     version: 0.0.0
@@ -20736,7 +20768,7 @@ packages:
     dev: false
 
   file:projects/hatch-template-webapp.tgz_ts-node@9.1.1:
-    resolution: {integrity: sha512-hABAS45nYF9hQ+XneX/W3qrFE8bGS1SC3FelAiLike2cG0ufVj8tdu+BMP8caGYJQLBUHpXlIs9aoS1ntAnIdQ==, tarball: file:projects/hatch-template-webapp.tgz}
+    resolution: {integrity: sha512-rc3QuEoX7VP7+j9+dnforIoALfUlf+xbB/+27Iv9R4KWcTJVIt9YjknnbmxDveeB03jL9BfCDsNMPstRHlcXTQ==, tarball: file:projects/hatch-template-webapp.tgz}
     id: file:projects/hatch-template-webapp.tgz
     name: '@rush-temp/hatch-template-webapp'
     version: 0.0.0
@@ -20847,7 +20879,7 @@ packages:
     dev: false
 
   file:projects/hatch-test-pdf.tgz_966a285e7657d0914f7113bf8da1d625:
-    resolution: {integrity: sha512-9rvLZJGrukGx+Yfu1XhqNeyHwrxqNRbDZYkOHkaDmnjOL08SH8mLcIAT8HRY0ICw6IImxjN8OUTzlC73MLu3iw==, tarball: file:projects/hatch-test-pdf.tgz}
+    resolution: {integrity: sha512-qMNSBuKps999Sbk9x+LTYsXYmO3EGcbYclAfmebSrMVyr/f0RvRYRtToSStTaG1PC4GNU31ZoOdJrT0nxVrawg==, tarball: file:projects/hatch-test-pdf.tgz}
     id: file:projects/hatch-test-pdf.tgz
     name: '@rush-temp/hatch-test-pdf'
     version: 0.0.0
@@ -20889,7 +20921,7 @@ packages:
     dev: false
 
   file:projects/hatch-test-web.tgz_bd0e465601a848f3a5327a354aec4ba1:
-    resolution: {integrity: sha512-FPZlvwHOJLZxgLpHP0mErt6sb7eE9+UAeQx88IPxhtMWKL1RtnH52omDwsQQ+5OM67fAU/0zv0GlaAbbCP20Bw==, tarball: file:projects/hatch-test-web.tgz}
+    resolution: {integrity: sha512-ecK/wVdL53dcRti5MbwddtPl0c7zHzul+MfRcryKyw81vXGVz5WkE4K1yKOEMGVGkrb1J4oglExTwhfnUL9p3w==, tarball: file:projects/hatch-test-web.tgz}
     id: file:projects/hatch-test-web.tgz
     name: '@rush-temp/hatch-test-web'
     version: 0.0.0
@@ -20915,7 +20947,7 @@ packages:
     dev: false
 
   file:projects/hatch-test.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-MmRPVEl+/9WITlJRsASwJWrYaoJeI8zMa5eZ0BDp5gUXxQ5qkkGgu5Mxlo7g34wv+EoiGy+7sLQ4+5aZZSUsAw==, tarball: file:projects/hatch-test.tgz}
+    resolution: {integrity: sha512-XU2o4uG2neBWjL/TImSgGLSSPn/zp+4sx04xFXioqVNofcoJVHkcqHxxUu0ipebOvXnGy0PTkvDId614GnupBA==, tarball: file:projects/hatch-test.tgz}
     id: file:projects/hatch-test.tgz
     name: '@rush-temp/hatch-test'
     version: 0.0.0
@@ -20935,7 +20967,7 @@ packages:
     dev: false
 
   file:projects/hatch-user-management-client.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-zLa+/huPC0xAV9tl7fcuhqB+pbVSEJ3sFK0tZIeOyK9Lo39H3ModtTOcQ5O0D/IIajXF424qbLG6A1qONOewcg==, tarball: file:projects/hatch-user-management-client.tgz}
+    resolution: {integrity: sha512-0dzhw+LQFUk1Kjfv9+twIWXtR4SzumFgxuWuYoU10h3hhmQYrx5QdQKLzyCusRi/HnJDmo4xtymF99qY5Y8RdQ==, tarball: file:projects/hatch-user-management-client.tgz}
     id: file:projects/hatch-user-management-client.tgz
     name: '@rush-temp/hatch-user-management-client'
     version: 0.0.0
@@ -20957,7 +20989,7 @@ packages:
     dev: false
 
   file:projects/hatch-util.tgz_966a285e7657d0914f7113bf8da1d625:
-    resolution: {integrity: sha512-coyFDdDVT7foljejYZVLn2f2c3MA7kERSbPPog6IAEhxOy8FUVKab83tkzQ/NZIdz75YJ1xqzlF8CgZIstMdPw==, tarball: file:projects/hatch-util.tgz}
+    resolution: {integrity: sha512-wh3fqQ5MZOiQQ8LNjpCvWP62OzAZitkP1tYwKRgS9SabhGvWJcP7/obY3DaftQmp+CRQzmudY6V42GdAAW4X9w==, tarball: file:projects/hatch-util.tgz}
     id: file:projects/hatch-util.tgz
     name: '@rush-temp/hatch-util'
     version: 0.0.0
@@ -20990,7 +21022,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-client.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-9sXPr+PO7kF5iXyVQme0OwNHwqd1hr8+dQI8d/Kf9djic++CDHTZDpU4Sd7J9m0dDARkRejh1GjhAmSvwt73yw==, tarball: file:projects/hatch-web-client.tgz}
+    resolution: {integrity: sha512-uO68kz2im+cSM8hqGJxe/sb4cCRmiLYoO2fZU1unTAgcX0We5UGn9+P25zlLknJWBzKUQYsLETylmvP9RLSAQw==, tarball: file:projects/hatch-web-client.tgz}
     id: file:projects/hatch-web-client.tgz
     name: '@rush-temp/hatch-web-client'
     version: 0.0.0
@@ -21041,7 +21073,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-eslint-config.tgz_e7d31b03c8e7ff5df7780e84fc65868e:
-    resolution: {integrity: sha512-Wrv2BTZtwXNXRrjeuxSDK1tnxp7AVI2p7XcJuthutlTCWJStGPQKiWANXdzT2riLlJTn/Ga0yT3umbektclvEw==, tarball: file:projects/hatch-web-eslint-config.tgz}
+    resolution: {integrity: sha512-m/WUP4KyiMZUXSyOzTwp3AKxasG+qxVoeyOHLYWVxZSBnK7NNWStQJlaLxjN4dJUBoYS1YQSCRE33K/UP4tbGg==, tarball: file:projects/hatch-web-eslint-config.tgz}
     id: file:projects/hatch-web-eslint-config.tgz
     name: '@rush-temp/hatch-web-eslint-config'
     version: 0.0.0
@@ -21064,7 +21096,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-injectables.tgz_e04c523ac33ebe4cd0b31c7b1114146c:
-    resolution: {integrity: sha512-ewWJJnljoiev21/WdTy5gN81m+Bmnl+IpT7Tfja6pBNRQ6IauZh7WIuTO/w1gntpz82Ev3CACC7zhzamPO5g7g==, tarball: file:projects/hatch-web-injectables.tgz}
+    resolution: {integrity: sha512-prKeqlsrmTnaacwgqCBehQOzwl1Z5XPJemYDUvsYHx3P+YFeZCrYzFN9B+f7h1+8FowJY8Q9PN81q0Nxaumffw==, tarball: file:projects/hatch-web-injectables.tgz}
     id: file:projects/hatch-web-injectables.tgz
     name: '@rush-temp/hatch-web-injectables'
     version: 0.0.0
@@ -21091,7 +21123,7 @@ packages:
     dev: false
 
   file:projects/hatch-web-server.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-Eb9Vqygic5oFfm/FITkvLZdWUP/KjEnpRscT2uqew3UKJdkgggQeq38EJFQvyzVv1g4CrT2VUGlItcxcuPXO4A==, tarball: file:projects/hatch-web-server.tgz}
+    resolution: {integrity: sha512-CnPKP/68pRzJfWZ8U++jsCU70L1iX82ugPA6HOppwFL19zk2wQSvYhVc+c35fF64oZpFO/v2GKSCYKghr17Xng==, tarball: file:projects/hatch-web-server.tgz}
     id: file:projects/hatch-web-server.tgz
     name: '@rush-temp/hatch-web-server'
     version: 0.0.0
@@ -21141,7 +21173,7 @@ packages:
     dev: false
 
   file:projects/hatch-web.tgz_jest@27.5.1+supports-color@7.2.0:
-    resolution: {integrity: sha512-cjwruoTT5K1miJkcKc3rsjK9RofeHoE3tSj4sVmr2e7grT1qEw/GgXg5ColHbptzXbBfwybdqlYGWaIUk+4iaA==, tarball: file:projects/hatch-web.tgz}
+    resolution: {integrity: sha512-GcwN2S34TdYrwydpcLnCwLbq2V9Uokhju8DiQr6ZWkfB1R60ox5AoTTNHRsbRhqyM6aCD+I/CWGH1TPmt4Fznw==, tarball: file:projects/hatch-web.tgz}
     id: file:projects/hatch-web.tgz
     name: '@rush-temp/hatch-web'
     version: 0.0.0

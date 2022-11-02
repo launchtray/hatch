@@ -16,6 +16,12 @@ import {
   {{/imports}}
 } from '../models';
 {{/imports.0}}
+import {
+  Configuration,
+  ConfigurableFetchApi,
+  ConfigurationParameters,
+  HttpHeaders,
+} from '@launchtray/hatch-fetch-utils';
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
@@ -29,24 +35,24 @@ interface ForwardedCredentials {
 @injectable()
 export class Remote{{classname}} implements runtime.{{classname}} {
   static configurationToken = Symbol('Remote{{classname}}Configuration');
-  private readonly configuration: runtime.Configuration;
-  private readonly configurableFetchApi: runtime.ConfigurableFetchApi;
+  private readonly configuration: Configuration;
+  private readonly configurableFetchApi: ConfigurableFetchApi;
   protected forwardedCredentials?: ForwardedCredentials;
 
-  static create(configurationParams?: runtime.ConfigurationParameters) {
+  static create(configurationParams?: ConfigurationParameters) {
     return new Remote{{classname}}([configurationParams ?? {}], '');
   }
 
   constructor(
-    @injectAll(Remote{{classname}}.configurationToken) configurationParams: runtime.ConfigurationParameters[],
+    @injectAll(Remote{{classname}}.configurationToken) configurationParams: ConfigurationParameters[],
     @inject({{classFilename}}BaseUrlInjectionToken) baseUrl: string,
   ) {
     const configParams = runtime.getFirstElement('{{classname}}.configurationToken', configurationParams, () => ({}));
-    this.configuration = new runtime.Configuration({
+    this.configuration = new Configuration({
       basePath: baseUrl,
       ...configParams,
     });
-    this.configurableFetchApi = new runtime.ConfigurableFetchApi(this.configuration);
+    this.configurableFetchApi = new ConfigurableFetchApi(this.configuration);
   }
   {{#operation}}
 
@@ -82,7 +88,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
 
     {{/isListContainer}}
     {{/queryParams}}
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: HttpHeaders = {};
 
     if (this.forwardedCredentials != null) {
       headerParameters['x-req-from-ssr'] = 'true';
@@ -339,7 +345,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
 @injectable()
 export class AuthForwarding{{classname}} extends Remote{{classname}} {
   constructor(
-    @injectAll(Remote{{classname}}.configurationToken) configurationParams: runtime.ConfigurationParameters[],
+    @injectAll(Remote{{classname}}.configurationToken) configurationParams: ConfigurationParameters[],
     @inject({{classFilename}}BaseUrlInjectionToken) baseUrl: string,
     @injectAll('cookie') public readonly cookie: string[],
     @injectAll('authHeader') public readonly authHeader: string[],

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-fetch-util",
+      "comment": "",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-fetch-util"
+}

@@ -12,7 +12,9 @@ export class ApiAlternateAction {
     public readonly headers?: Record<string, unknown>,
   ) {
     this[ALT_ACTION_CODE_KEY] = code;
-    this.status = getStatusCode(this);
+    if (typeof code === 'number') {
+      this.status = code;
+    }
   }
 }
 

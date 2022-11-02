@@ -67,7 +67,7 @@ export interface {{operationIdCamelCase}}HttpResponse {
 {{#returnType}}
   body: {{{returnType}}} | Promise<{{{returnType}}}>;
 {{/returnType}}
-  statusCode?: number;
+  status?: number;
 }
 {{/operation}}
 {{/operations}}

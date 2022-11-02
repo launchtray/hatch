@@ -206,7 +206,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       const delegateResponseBody = await delegateResponse.body;
       {{#isResponseFile}}
       basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/octet-stream');
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200);
+      basicRouteParams.res.status(delegateResponse?.status ?? 200);
       // https://stackoverflow.com/questions/73308289
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -223,22 +223,22 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       {{#returnSimpleType}}
       basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'text/plain');
       {{/returnSimpleType}}
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(delegateResponseBody);
+      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(delegateResponseBody);
       {{/returnTypeIsPrimitive}}
       {{^returnTypeIsPrimitive}}
       basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
       {{#isListContainer}}
       const responseJson = delegateResponseBody.map(models.{{returnBaseType}}ToJSON);
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
+      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(responseJson);
       {{/isListContainer}}
       {{^isListContainer}}
       {{#isMapContainer}}
       const responseJson = runtime.mapValues(delegateResponseBody, models.{{returnBaseType}}ToJSON);
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
+      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(responseJson);
       {{/isMapContainer}}
       {{^isMapContainer}}
       const responseJson = models.{{returnBaseType}}ToJSON(delegateResponseBody);
-      basicRouteParams.res.status(delegateResponse?.statusCode ?? 200).send(responseJson);
+      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(responseJson);
       {{/isMapContainer}}
       {{/isListContainer}}
       {{/returnTypeIsPrimitive}}

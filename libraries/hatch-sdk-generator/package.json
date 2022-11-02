@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-sdk-generator",
-  "version": "0.21.0-alpha.18",
+  "version": "0.21.0-alpha.19",
   "license": "MIT",
   "scripts": {
     "prepare": "rimraf dist && tsc",
@@ -17,14 +17,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-api": "0.21.0-alpha.18",
+    "@launchtray/hatch-api": "0.21.0-alpha.19",
     "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1",
     "atlassian-openapi": "^1.0.17",
     "fs-extra": "^8",
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.18",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.19",
     "@types/fs-extra": "^8",
     "@types/node": "^18",
     "@types/tmp": "^0.2.0",

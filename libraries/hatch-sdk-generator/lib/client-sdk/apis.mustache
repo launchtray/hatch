@@ -335,12 +335,12 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/isResponseFile}}
     {{/returnType}}
     {{^returnType}}
-    {{#responseHeaders.0}}
     return {
+      {{#responseHeaders.0}}
       headers: responseHeaders,
+      {{/responseHeaders.0}}
       status: response.status,
     };
-    {{/responseHeaders.0}}
     {{/returnType}}
   }
 

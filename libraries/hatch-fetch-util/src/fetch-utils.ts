@@ -234,23 +234,29 @@ export function querystring(params: HttpQuery, prefix = ''): string {
 
 export class Configuration {
   private privateAccessToken: string | ((name: string, scopes?: string[]) => string | undefined) | undefined;
-  private privateAccessTokenValue: string | undefined;
+  private accessTokenContainer: {accessToken?: string};
   private configParams: ConfigurationParameters;
 
   constructor(configParams: ConfigurationParameters = {}) {
     const privateMiddleware: Middleware[] = [];
+    // By default, share access token conainer across shared ConfigParams objects
+    if ((configParams.sharedAccessTokenContainer == null) && (configParams.extractUpdatedAccessToken != null)) {
+      // eslint-disable-next-line no-param-reassign -- intentional reassign
+      configParams.sharedAccessTokenContainer = {};
+    }
+    this.accessTokenContainer = configParams.sharedAccessTokenContainer ?? {};
     if (configParams.accessToken == null || typeof configParams.accessToken === 'string') {
-      this.privateAccessTokenValue = configParams.accessToken ?? '';
-      this.privateAccessToken = () => this.privateAccessTokenValue;
+      this.accessTokenContainer.accessToken = configParams.accessToken ?? '';
+      this.privateAccessToken = () => this.accessTokenContainer.accessToken;
       const invalidateSession = () => {
-        this.privateAccessTokenValue = undefined;
+        this.accessTokenContainer.accessToken = undefined;
       };
       if (configParams.extractUpdatedAccessToken != null) {
         const authMiddleware = {
           post: async (responseContext: ResponseContext) => {
             const extractedToken = await configParams.extractUpdatedAccessToken?.(responseContext, invalidateSession);
             if (extractedToken != null) {
-              this.privateAccessTokenValue = extractedToken;
+              this.accessTokenContainer.accessToken = extractedToken;
             }
           },
         };
@@ -408,6 +414,7 @@ export interface ConfigurationParameters {
     responseContext: ResponseContext,
     invalidateSession: () => void
   ) => Promise<string | undefined>;
+  sharedAccessTokenContainer?: {accessToken?: string};
 }
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';

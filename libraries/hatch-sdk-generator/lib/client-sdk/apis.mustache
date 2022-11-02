@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 {{>licenseInfo}}
-import {inject, injectAll, injectable} from '@launchtray/hatch-util';
+import {containerSingleton, inject, injectAll} from '@launchtray/hatch-util';
 import {
   {{#operations}}
   {{classFilename}}BaseUrlInjectionToken,
@@ -32,7 +32,7 @@ interface ForwardedCredentials {
 };
 
 {{#operations}}
-@injectable()
+@containerSingleton()
 export class Remote{{classname}} implements runtime.{{classname}} {
   static configurationToken = Symbol('Remote{{classname}}Configuration');
   private readonly configuration: Configuration;
@@ -342,7 +342,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
   {{/operation}}
 }
 
-@injectable()
+@containerSingleton()
 export class AuthForwarding{{classname}} extends Remote{{classname}} {
   constructor(
     @injectAll(Remote{{classname}}.configurationToken) configurationParams: ConfigurationParameters[],

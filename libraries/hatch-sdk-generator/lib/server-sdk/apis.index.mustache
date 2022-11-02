@@ -63,7 +63,7 @@ const registerUnprotectedLocalApis = (
 ) => {
   {{#apis}}
   {{#operations}}
-  container.registerSingleton(
+  container.register(
     getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
     UnprotectedLocal{{classFilename}},
   );

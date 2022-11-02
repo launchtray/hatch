@@ -27,7 +27,7 @@ const registerRemoteApis = (
   {{#apis}}
   {{#operations}}
   container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? '');
-  container.registerSingleton(
+  container.register(
     getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
     Remote{{classFilename}},
   );
@@ -43,7 +43,7 @@ const registerAuthForwardingApis = (
   {{#apis}}
   {{#operations}}
   container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? `http://localhost:${process.env.PORT}`);
-  container.registerSingleton(
+  container.register(
     getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
     AuthForwarding{{classFilename}},
   );

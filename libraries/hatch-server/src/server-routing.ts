@@ -571,7 +571,7 @@ export function middlewareFor<D>(
       if (delegateOriginalRegister != null) {
         await delegateOriginalRegister.bind(this.delegate)(app, server, apiMetadataConsumer);
       }
-      delegateType?.prototype[routeDefinersKey].forEach((boundRouteDefiner: BoundRouteDefiner) => {
+      delegateType?.prototype[routeDefinersKey]?.forEach((boundRouteDefiner: BoundRouteDefiner) => {
         boundRouteDefiner(this.delegate, app, server, apiMetadataConsumer);
       });
     }
@@ -601,7 +601,7 @@ export function middlewareFor<D>(
       if (delegateOriginalRegisterMetadata != null) {
         await delegateOriginalRegisterMetadata.bind(this)(apiMetadataConsumer);
       }
-      this.delegate.prototype[registerMetadataKey].forEach((apiMetadataRegistrar: APIMetadataRegistrar) => {
+      this.delegate.prototype[registerMetadataKey]?.forEach((apiMetadataRegistrar: APIMetadataRegistrar) => {
         apiMetadataRegistrar(apiMetadataConsumer);
       });
     }

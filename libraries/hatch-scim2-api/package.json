@@ -1,12 +1,11 @@
 {
   "name": "@launchtray/hatch-scim2-api",
-  "version": "0.21.0-alpha.24",
+  "version": "0.1.0",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
-  "private": true,
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "scripts": {
     "prepare": "rimraf dist && tsc",
@@ -20,10 +19,10 @@
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-api": "0.21.0-alpha.24",
+    "@launchtray/hatch-api": "0.21.0-alpha.23",
     "atlassian-openapi": "^1.0.17",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.24",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.23",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

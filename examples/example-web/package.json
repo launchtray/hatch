@@ -18,6 +18,7 @@
   "dependencies": {
     "@launchtray/example-server-sdk": "0.1.0",
     "@launchtray/example-client-sdk": "0.1.0",
+    "@launchtray/hatch-scim2-server-sdk": "0.1.0",
     "@launchtray/hatch-server": "0.21.0-alpha.23",
     "@launchtray/hatch-util": "0.21.0-alpha.23",
     "@launchtray/hatch-web": "0.21.0-alpha.23",

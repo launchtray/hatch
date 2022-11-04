@@ -649,6 +649,8 @@ export interface NonStandardRouteDefiners {
   custom: (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrar) => any;
   // eslint-disable-next-line @typescript-eslint/naming-convention -- intentionally using name similar to HTTP method
   m_search: (path: PathParams, metadata?: APIMetadataParameters) => any;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _delete: (path: PathParams, metadata?: APIMetadataParameters) => any;
   websocket: (path: PathParams, metadata?: APIMetadataParameters) => any;
 }
 
@@ -740,6 +742,9 @@ const proxy = {
       return websocket;
     }
     if (method === 'm_search') {
+      adjustedMethod = 'm-search';
+    }
+    if (method === '_delete') {
       adjustedMethod = 'm-search';
     }
     return (path: PathParams, metadata: APIMetadataParameters = {}) => {

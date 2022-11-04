@@ -1,0 +1,35 @@
+{
+  "name": "@launchtray/hatch-scim2-api",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "scripts": {
+    "prepare": "rimraf dist && tsc",
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
+    "build": "rimraf dist && tsc && hatch-api --spec src/api-overrides.yaml --spot src/api.ts && ls dist/api.json",
+    "build:watch": "tsc && hatch-api --spec src/api-overrides.yaml --spot src/api.ts"
+  },
+  "dependencies": {
+    "@airtasker/spot": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "@launchtray/hatch-api": "0.21.0-alpha.23",
+    "atlassian-openapi": "^1.0.17",
+    "eslint": "^8",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.23",
+    "@typescript-eslint/parser": "^5",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "eslint-config-airbnb-base": "^15",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jest": "^26",
+    "rimraf": "3.0.0",
+    "typescript": "4.7.4"
+  }
+}

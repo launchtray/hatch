@@ -33,6 +33,7 @@ import * as runtime from '../runtime';
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
+type Set<T> = Array<T>;
 
 export interface {{classname}}Delegate {
   {{#operations}}
@@ -106,7 +107,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
   {{#operations}}
   {{#operation}}
 
-  @route.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}('{{path}}'{{#pathParams.0}}.replace(/{([^}]*)}/g, ':$1'){{/pathParams.0}})
+  @route.{{#lambda.lowercase}}{{{httpMethod}}}{{/lambda.lowercase}}('{{path}}'{{#pathParams.0}}.replace(/{([^}]*)}/g, ':$1'){{/pathParams.0}}) // {{httpMethod}}
   async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
     {{#hasFormParams}}
     throw new Error('NOT SUPPORTED: The hatch SDK generator does not (yet?) support form params');
@@ -139,7 +140,18 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {{/items}}
         {{/isListContainer}}
         {{^isListContainer}}
+        {{#isPrimitiveType}}
+        body: runtime.{{> require-param }}(
+          basicRouteParams.req.body,
+          {{#isEnum}}
+          {{> enum-values-array}},
+          {{/isEnum}}
+          'body',
+        ),
+        {{/isPrimitiveType}}
+        {{^isPrimitiveType}}
         body: models.{{{dataType}}}FromJSON(basicRouteParams.req.body),
+        {{/isPrimitiveType}}
         {{/isListContainer}}
         {{/bodyParam}}
         {{#pathParams.0}}

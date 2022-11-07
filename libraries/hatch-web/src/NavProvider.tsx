@@ -11,7 +11,7 @@ import {createBrowserHistory, createHashHistory, History, Location as HistoryLoc
 import React, {ReactElement} from 'react';
 import {connect} from 'react-redux';
 import {StaticRouter} from 'react-router-dom';
-import {AnyAction, Dispatch} from 'redux';
+import {Action, AnyAction, Dispatch, Reducer} from 'redux';
 import defineAction, {ActionDefinition, isActionType} from './defineAction';
 import MediaQueryContext, {mediaChangeAction} from './MediaQueryContext';
 
@@ -165,31 +165,41 @@ export const createNavMiddleware = (
   };
 };
 
-export const selectLocation = (state: {router: RouterState}) => {
+// Approximate opaque type via https://stackoverflow.com/a/56749647
+declare const tag: unique symbol;
+export type NavigationState = {
+  readonly [tag]: 'HatchWebNavigationState';
+  mediaQueryMatches: {[key: string]: boolean};
+};
+
+const selectRouter = (state: NavigationState) => {
+  // Keep use of connected-react-router opaque, so we can more easily change navigation libraries
+  const {router} = state as unknown as {router: RouterState};
+  return router;
+};
+
+export const selectLocation = (state: NavigationState) => {
   return selectPath(state) + selectQuery(state) + selectFragment(state);
 };
 
-export const selectPath = (state: {router: RouterState}) => {
-  const {router} = state;
-  return router.location.pathname;
+export const selectPath = (state: NavigationState) => {
+  return selectRouter(state).location.pathname;
 };
 
-export const selectQuery = (state: {router: RouterState}) => {
-  const {router} = state;
-  return router.location.search;
+export const selectQuery = (state: NavigationState) => {
+  return selectRouter(state).location.search;
 };
 
-export const selectFragment = (state: {router: RouterState}) => {
-  const {router} = state;
-  return router.location.hash;
+export const selectFragment = (state: NavigationState) => {
+  return selectRouter(state).location.hash;
 };
 
-export const selectIsMobile = (state: {mediaQueryMatches: {[key: string]: boolean}}) => {
+export const selectIsMobile = (state: NavigationState) => {
   const {mediaQueryMatches} = state;
   return mediaQueryMatches.mobile;
 };
 
-export const selectIsPortrait = (state: {mediaQueryMatches: {[key: string]: boolean}}) => {
+export const selectIsPortrait = (state: NavigationState) => {
   const {mediaQueryMatches} = state;
   return mediaQueryMatches.portrait;
 };
@@ -204,7 +214,8 @@ export const createNavReducers = () => {
       }
       return mediaState;
     },
-    router: connectRouter(browserHistory),
+    // Keep use of connected-react-router opaque, so we can more easily change navigation libraries
+    router: connectRouter(browserHistory) as unknown as Reducer<NavigationState, Action>,
   };
 };
 

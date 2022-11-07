@@ -11,6 +11,13 @@ import NavProvider, {
   Location,
   navActions,
   patchPreloadedStateForClientNav,
+  NavigationState,
+  selectLocation,
+  selectPath,
+  selectQuery,
+  selectFragment,
+  selectIsMobile,
+  selectIsPortrait,
 } from './NavProvider';
 import {
   createSagaForWebAppManagers,
@@ -48,4 +55,11 @@ export {
   createErrorReporterMiddleware,
   runtimeConfig,
   createReactNativeElement,
+  NavigationState,
+  selectLocation,
+  selectPath,
+  selectQuery,
+  selectFragment,
+  selectIsMobile,
+  selectIsPortrait,
 };

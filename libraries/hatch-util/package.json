@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-util",
-  "version": "0.21.0-alpha.28",
+  "version": "0.21.0-alpha.29",
   "description": "Utilities used by several other hatch modules",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -20,8 +20,8 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.28",
-    "@launchtray/hatch-test": "0.21.0-alpha.28",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.29",
+    "@launchtray/hatch-test": "0.21.0-alpha.29",
     "@launchtray/tsyringe-async": "4.3.3",
     "@sentry/types": "^5",
     "@types/jest": "^27.5.2",

@@ -57,6 +57,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': ['error', {
       variables: false
     }],
+    '@typescript-eslint/no-floating-promises': ['error'],
     'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': 'off', // replaced by @typescript version
     '@typescript-eslint/no-unused-vars': ['error'],

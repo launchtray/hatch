@@ -233,7 +233,6 @@ export function querystring(params: HttpQuery, prefix = ''): string {
 }
 
 export class Configuration {
-
   constructor(private configParams: ConfigurationParameters = {}) {}
 
   get basePath(): string {

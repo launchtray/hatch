@@ -16,20 +16,20 @@
     "build:watch": "hatch-server-sdk --dependency @launchtray/example-api && tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server": "0.21.0-alpha.26",
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.26",
-    "@launchtray/hatch-util": "0.21.0-alpha.26",
+    "@launchtray/hatch-server": "0.21.0-alpha.27",
+    "@launchtray/hatch-server-middleware": "0.21.0-alpha.27",
+    "@launchtray/hatch-util": "0.21.0-alpha.27",
     "@launchtray/tsyringe-async": "4.3.3",
     "express": "^4"
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-server": "0.21.0-alpha.26",
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.26",
-    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.26",
+    "@launchtray/hatch-server": "0.21.0-alpha.27",
+    "@launchtray/hatch-server-middleware": "0.21.0-alpha.27",
+    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.27",
     "@launchtray/tsyringe-async": "4.3.3",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.26",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.27",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "atlassian-openapi": "^1.0.17",

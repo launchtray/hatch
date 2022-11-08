@@ -10,6 +10,7 @@ import {
 import {
   effects,
   onClientLoad,
+  onInit,
   onLocationChange,
   runtimeConfig,
   webAppManager,
@@ -141,5 +142,10 @@ export default class ExampleManager {
       yield effects.delay(5000);
       yield effects.put({type: 'ExampleManager3Action', payload: {result: this.dependency.getResult()}});
     }
+  }
+
+  @onInit()
+  public* handleInit() {
+    this.logger.info('ON INIT Runtime config:', runtimeConfig);
   }
 }

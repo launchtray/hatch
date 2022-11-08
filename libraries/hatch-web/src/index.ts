@@ -22,6 +22,7 @@ import NavProvider, {
 import {
   createSagaForWebAppManagers,
   onClientLoad,
+  onInit,
   onLocationChange,
   registerWebAppManagers,
   resolveWebAppManagers,
@@ -38,6 +39,7 @@ export {
   webAppManager,
   onLocationChange,
   onClientLoad,
+  onInit,
   navActions,
   patchPreloadedStateForClientNav,
   createNavReducers,

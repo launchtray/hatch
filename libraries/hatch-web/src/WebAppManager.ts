@@ -14,6 +14,7 @@ import {isActionType} from './defineAction';
 
 export const webAppManager = injectable;
 const locationChangeLoadersKey = Symbol('locationChangeLoaders');
+const onInitKey = Symbol('onInitKey');
 const clientLoadersKey = Symbol('clientLoaders');
 const webAppManagerKey = Symbol('webAppManager');
 export type PathMatcher = (path: string) => match | null;
@@ -73,6 +74,16 @@ export const onClientLoad = () => {
   };
 };
 
+export const onInit = () => {
+  return (target: unknown, propertyKey: string | symbol) => {
+    const asWebAppManager = target as WebAppManager;
+    if (asWebAppManager[onInitKey] == null) {
+      asWebAppManager[onInitKey] = [];
+    }
+    asWebAppManager[onInitKey]?.push({propertyKey});
+  };
+};
+
 const forEachLocationChangeLoader = async (
   target: unknown,
   iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher, runOnClientLoad: boolean) => Promise<void>,
@@ -95,9 +106,24 @@ const forEachClientLoader = async (
   }
 };
 
+const forEachOnInit = async (
+  target: unknown,
+  iterator: (propertyKey: string | symbol) => Promise<void>,
+) => {
+  const asWebAppManager = target as WebAppManager;
+  const clientLoaders = asWebAppManager?.[onInitKey] ?? [];
+  for (const {propertyKey} of clientLoaders) {
+    await iterator(propertyKey);
+  }
+};
+
 const hasWebAppManagerMethods = (target: unknown): boolean => {
   const asWebAppManager = target as WebAppManager;
-  return (asWebAppManager[clientLoadersKey] != null) || (asWebAppManager[locationChangeLoadersKey] != null);
+  return (
+    asWebAppManager[clientLoadersKey] != null
+    || (asWebAppManager[locationChangeLoadersKey] != null)
+    || (asWebAppManager[onInitKey] != null)
+  );
 };
 
 export const createSagaForWebAppManagers = async (dependencyContainer: DependencyContainer): Promise<Saga> => {
@@ -114,9 +140,18 @@ export const createSagaForWebAppManagers = async (dependencyContainer: Dependenc
       throw new Error(`${className} does not have any web app manager decorators, but is registered as a manager.`);
     }
   });
+  const handleOnInitSagas: Effect[] = [];
+  const container = dependencyContainer.createChildContainer();
+  for (const manager of webAppManagers) {
+    const target = manager.constructor.prototype;
+    await forEachOnInit(target, async (propertyKey) => {
+      const args = await resolveParams(container, target, propertyKey);
+      handleOnInitSagas.push(effects.fork([manager, manager[propertyKey]], ...args));
+    });
+  }
+  sagas.push(...handleOnInitSagas);
   if (!isServer) {
     const handleClientLoadSagas: Effect[] = [];
-    const container = dependencyContainer.createChildContainer();
     for (const manager of webAppManagers) {
       const target = manager.constructor.prototype;
       await forEachClientLoader(target, async (propertyKey) => {
@@ -149,13 +184,13 @@ export const createSagaForWebAppManagers = async (dependencyContainer: Dependenc
         if (shouldRunOnClient) {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
-            const container = dependencyContainer.createChildContainer();
+            const locationChangeContainer = dependencyContainer.createChildContainer();
 
-            container.registerInstance('pathMatch', pathMatch);
-            container.registerInstance('Location', location);
-            container.registerInstance('isServer', isServer);
+            locationChangeContainer.registerInstance('pathMatch', pathMatch);
+            locationChangeContainer.registerInstance('Location', location);
+            locationChangeContainer.registerInstance('isServer', isServer);
 
-            const args = await resolveParams(container, target, propertyKey);
+            const args = await resolveParams(locationChangeContainer, target, propertyKey);
             handleLocationChangeSagas.push(call([manager, manager[propertyKey]], ...args));
           }
         }

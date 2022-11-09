@@ -170,7 +170,7 @@ export const COLLECTION_FORMATS = {
 };
 
 export const ensureStatusIsSet = <T extends {status?: number}>(
-  input: T | undefined,
+  input: T | undefined | void,
   defaultStatus: number,
 ): T & {status: number} => {
   if (input?.status == null) {

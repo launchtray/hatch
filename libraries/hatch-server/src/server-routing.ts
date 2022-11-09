@@ -745,7 +745,7 @@ const proxy = {
       adjustedMethod = 'm-search';
     }
     if (method === '_delete') {
-      adjustedMethod = 'm-search';
+      adjustedMethod = 'delete';
     }
     return (path: PathParams, metadata: APIMetadataParameters = {}) => {
       const routeDefiner: RouteDefiner = (app, server, handler, ctlr: any) => {

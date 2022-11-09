@@ -191,3 +191,22 @@ class SaveMetrics {
     @spot.body body: string,
   ) {}
 }
+
+@spot.endpoint({
+  method: 'GET',
+  path: '/api/metrics/status',
+  tags: ['Metrics'],
+})
+class GetStatus {
+  @spot.request
+  request(
+    @spot.queryParams queryParams: {
+      type?: string,
+    },
+  ) {}
+
+  @spot.response({status: 200})
+  response(
+    @spot.body body: string,
+  ) {}
+}

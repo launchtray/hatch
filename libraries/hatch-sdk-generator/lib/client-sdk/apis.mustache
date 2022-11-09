@@ -135,27 +135,27 @@ export class Remote{{classname}} implements runtime.{{classname}} {
 
     {{#queryParams}}
     {{#isListContainer}}
-    if (requestParameters.{{> param-path }}) {
+    if (requestParameters?.{{> param-path }}) {
       {{#isCollectionFormatMulti}}
-      queryParameters['{{baseName}}'] = requestParameters.{{> param-path }};
+      queryParameters['{{baseName}}'] = requestParameters?.{{> param-path }};
       {{/isCollectionFormatMulti}}
       {{^isCollectionFormatMulti}}
-      queryParameters['{{baseName}}'] = requestParameters.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
+      queryParameters['{{baseName}}'] = requestParameters?.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
       {{/isCollectionFormatMulti}}
     }
 
     {{/isListContainer}}
     {{^isListContainer}}
-    if (requestParameters.{{> param-path }} !== undefined) {
+    if (requestParameters?.{{> param-path }} !== undefined) {
       {{#isDateTime}}
-      queryParameters['{{baseName}}'] = (requestParameters.{{> param-path }} as any).toISOString();
+      queryParameters['{{baseName}}'] = (requestParameters?.{{> param-path }} as any).toISOString();
       {{/isDateTime}}
       {{^isDateTime}}
       {{#isDate}}
-      queryParameters['{{baseName}}'] = (requestParameters.{{> param-path }} as any).toISOString().substring(0,10);
+      queryParameters['{{baseName}}'] = (requestParameters?.{{> param-path }} as any).toISOString().substring(0,10);
       {{/isDate}}
       {{^isDate}}
-      queryParameters['{{baseName}}'] = requestParameters.{{> param-path }};
+      queryParameters['{{baseName}}'] = requestParameters?.{{> param-path }};
       {{/isDate}}
       {{/isDateTime}}
     }
@@ -188,23 +188,23 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{/bodyParam}}
     {{#headerParams}}
     {{#isListContainer}}
-    if (requestParameters.{{> param-path }}) {
-      headerParameters['{{baseName}}'] = requestParameters.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
+    if (requestParameters?.{{> param-path }}) {
+      headerParameters['{{baseName}}'] = requestParameters?.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]);
     }
 
     {{/isListContainer}}
     {{^isListContainer}}
     {{^required}}
     const {{paramName}}DefaultValue = {{{defaultValue}}};
-    if (requestParameters.{{> param-path }} != null) {
-      headerParameters['{{baseName}}'] = String(requestParameters.{{> param-path }});
+    if (requestParameters?.{{> param-path }} != null) {
+      headerParameters['{{baseName}}'] = String(requestParameters?.{{> param-path }});
     } else if ({{paramName}}DefaultValue != null) {
       headerParameters['{{baseName}}'] = String({{{defaultValue}}});
     }
     {{/required}}
     {{#required}}
-    if (requestParameters.{{> param-path }} != null) {
-      headerParameters['{{baseName}}'] = String(requestParameters.{{> param-path }});
+    if (requestParameters?.{{> param-path }} != null) {
+      headerParameters['{{baseName}}'] = String(requestParameters?.{{> param-path }});
     }
     {{/required}}
 
@@ -279,42 +279,42 @@ export class Remote{{classname}} implements runtime.{{classname}} {
 
     {{#formParams}}
     {{#isListContainer}}
-    if (requestParameters.{{> param-path }}) {
+    if (requestParameters?.{{> param-path }}) {
       {{#isCollectionFormatMulti}}
-      requestParameters.{{> param-path }}.forEach((element) => {
+      requestParameters?.{{> param-path }}.forEach((element) => {
         formParams.append('{{baseName}}', element as any);
       })
       {{/isCollectionFormatMulti}}
       {{^isCollectionFormatMulti}}
-      formParams.append('{{baseName}}', requestParameters.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]));
+      formParams.append('{{baseName}}', requestParameters?.{{> param-path }}.join(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]));
       {{/isCollectionFormatMulti}}
     }
 
     {{/isListContainer}}
     {{^isListContainer}}
-    if (requestParameters.{{> param-path }} !== undefined) {
-      formParams.append('{{baseName}}', requestParameters.{{> param-path }} as any);
+    if (requestParameters?.{{> param-path }} !== undefined) {
+      formParams.append('{{baseName}}', requestParameters?.{{> param-path }} as any);
     }
 
     {{/isListContainer}}
     {{/formParams}}
     {{/hasFormParams}}
     const response = await this.configurableFetchApi.request({
-      path: `{{{path}}}`{{#pathParams}}.replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(requestParameters.{{> param-path }}))){{/pathParams}},
+      path: `{{{path}}}`{{#pathParams}}.replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(requestParameters?.{{> param-path }}))){{/pathParams}},
       method: '{{httpMethod}}',
       headers: headerParameters,
       query: queryParameters,
       {{#hasBodyParam}}
       {{#bodyParam}}
       {{#isContainer}}
-      body: requestParameters.{{> param-path }}{{#isListContainer}}{{#items}}{{^isPrimitiveType}}.map(models.{{datatype}}ToJSON){{/isPrimitiveType}}{{/items}}{{/isListContainer}},
+      body: requestParameters?.{{> param-path }}{{#isListContainer}}{{#items}}{{^isPrimitiveType}}.map(models.{{datatype}}ToJSON){{/isPrimitiveType}}{{/items}}{{/isListContainer}},
       {{/isContainer}}
       {{^isContainer}}
       {{^isPrimitiveType}}
-      body: models.{{{dataType}}}ToJSON(requestParameters.{{> param-path }}),
+      body: models.{{{dataType}}}ToJSON(requestParameters?.{{> param-path }}),
       {{/isPrimitiveType}}
       {{#isPrimitiveType}}
-      body: requestParameters.{{> param-path }} as any,
+      body: requestParameters?.{{> param-path }} as any,
       {{/isPrimitiveType}}
       {{/isContainer}}
       {{/bodyParam}}

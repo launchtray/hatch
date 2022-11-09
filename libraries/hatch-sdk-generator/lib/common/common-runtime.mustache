@@ -74,7 +74,7 @@ export type {{operationIdCamelCase}}HttpFormParamsBase = {} extends {{operationI
   formParams: {{operationIdCamelCase}}HttpFormParams;
 };
 
-export type {{operationIdCamelCase}}HttpRequest = (
+export type {{operationIdCamelCase}}HttpRequestBase = (
   & {{operationIdCamelCase}}HttpRequestHeadersBase
   & {{operationIdCamelCase}}HttpPathParamsBase
   & {{operationIdCamelCase}}HttpQueryParamsBase
@@ -88,11 +88,25 @@ export type {{operationIdCamelCase}}HttpRequest = (
   }
 );
 
+export type {{operationIdCamelCase}}HttpRequest = {} extends {{operationIdCamelCase}}HttpRequestBase
+  ? void | {{operationIdCamelCase}}HttpRequestBase
+  : {{operationIdCamelCase}}HttpRequestBase;
+
 {{#responses}}
 
-export const is{{operationIdCamelCase}}HttpResponseBodyFor{{code}} = (body?: {{operationIdCamelCase}}HttpResponseBody | void): {{#dataType}}body is {{{dataType}}}{{/dataType}}{{^dataType}}boolean{{/dataType}} => {
-  return (getTypeHint(body) === {{code}});
+{{#dataType}}
+
+/**
+ * Note: may return false positives for primitive types returned by multiple status codes, e.g. if 200 and 201 both
+ * return strings, functions for 200 and 201 will both return true. If and when this presents a problem, remember you
+ * can always use the 'Raw' client SDK method along with is{{operationIdCamelCase}}HttpResponseFor{{code}}
+ */
+export const is{{operationIdCamelCase}}HttpResponseBodyFor{{code}} = (body?: {{operationIdCamelCase}}HttpResponseBody | void): body is {{{dataType}}} => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore -- autogen file may not exist
+  return (typeof body === '{{{dataType}}}') || (getTypeHint(body) === {{code}});
 };
+{{/dataType}}
 
 export const is{{operationIdCamelCase}}HttpResponseFor{{code}} = (response?: {{operationIdCamelCase}}HttpResponse | void): response is {{operationIdCamelCase}}HttpResponseFor{{code}} & {status: number} => {
   return (response?.status === {{code}});

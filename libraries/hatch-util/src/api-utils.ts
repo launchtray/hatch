@@ -4,14 +4,28 @@ export const ALT_ACTION_KEY: unique symbol = Symbol('@launchtray/hatch-sdk-gener
 
 const TYPE_HINT_KEY: unique symbol = Symbol('TYPE_HINT');
 
+export const isPrimitive = (obj: unknown) => {
+  return (
+    obj == null
+    || typeof obj === 'string'
+    || typeof obj === 'number'
+    || typeof obj === 'boolean'
+    || typeof obj === 'bigint'
+    || typeof obj === 'symbol'
+  );
+};
+
 export const setTypeHint = <T>(obj: T, hint: string | symbol | number): T => {
+  if (isPrimitive(obj)) {
+    return obj;
+  }
   // eslint-disable-next-line no-param-reassign
   (obj as unknown as {[key: symbol]: string | symbol | number})[TYPE_HINT_KEY] = hint;
   return obj;
 };
 
 export const getTypeHint = (obj?: unknown): string | symbol | number | undefined => {
-  if (obj == null) {
+  if (isPrimitive(obj)) {
     return undefined;
   }
   return (obj as {[key: symbol]: string | symbol | number})[TYPE_HINT_KEY];

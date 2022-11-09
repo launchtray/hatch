@@ -17,6 +17,8 @@ import {
   GetMetricsCountHttpResponse,
   GetReportPdfHttpRequest,
   GetReportPdfHttpResponse,
+  GetStatusHttpRequestBase,
+  GetStatusHttpResponse,
   GetUserHttpRequest,
   GetUserHttpResponse,
   MakeAdminHttpRequest,
@@ -36,6 +38,14 @@ import WebSocket from 'ws';
 export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsApiDelegate, ReportApiDelegate {
   constructor(@inject('Logger') private logger: Logger) {
     logger.info('Constructing UsersApiControllerDelegateImpl');
+  }
+
+  handleGetStatus(
+    request: GetStatusHttpRequestBase,
+  ): GetStatusHttpResponse {
+    return {
+      body: `${request.queryParams?.type ?? 'ALL'}: OK`,
+    };
   }
 
   @route.get('*')

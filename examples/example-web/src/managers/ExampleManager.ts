@@ -82,6 +82,8 @@ export default class ExampleManager {
   private async initialize() {
     try {
       this.logger.info('sending createUser 1 request');
+      const statusRsp = await this.metricsApi.getStatus();
+      this.logger.info('getStatus response received', statusRsp);
       const createUserRsp1 = await this.userApi.createUser({
         headers: {
           xRole: CreateUserXRoleEnum.Admin,

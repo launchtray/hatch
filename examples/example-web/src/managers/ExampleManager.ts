@@ -29,6 +29,7 @@ import {
   UsersApi,
   UsersApiInjectionToken,
 } from '@launchtray/example-client-sdk';
+import actions from '../actions';
 
 @injectable()
 export class ExampleDependencyForManager {
@@ -157,6 +158,7 @@ export default class ExampleManager {
   public* handleEveryLocationChange() {
     yield* effects.call([this.logger, this.logger.info], 'ExampleManager.handleEveryLocationChange');
     yield effects.put({type: 'TEST_ACTION.handleEveryLocationChange'});
+    yield effects.put(actions.exampleAction2({numberField: 1}));
   }
 
   @onLocationChange({path: '/hi'})
@@ -192,8 +194,15 @@ export default class ExampleManager {
     }
   }
 
+  public* exampleSaga() {
+    this.logger.info('Running exampleSaga');
+    yield effects.delay(100);
+    this.logger.info('Finishing exampleSaga');
+  }
+
   @onInit()
   public* handleInit() {
     this.logger.info('ON INIT Runtime config:', runtimeConfig);
+    yield* effects.takeLatest(actions.exampleAction2, this.exampleSaga.bind(this));
   }
 }

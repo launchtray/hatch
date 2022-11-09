@@ -11,6 +11,7 @@ import {
   selectFirstRenderingFromLocationChangeAction,
 } from './NavProvider';
 import {isActionType} from './defineAction';
+import {END} from '@redux-saga/core';
 
 export const webAppManager = injectable;
 const locationChangeLoadersKey = Symbol('locationChangeLoaders');
@@ -165,7 +166,7 @@ export const createSagaForWebAppManagers = async (dependencyContainer: Dependenc
     navActions.locationChange,
     navActions.serverLocationLoaded,
   ];
-  const navWorker = function* navWorker(action: AnyAction) {
+  const navWorker = function* navWorker(action: AnyAction, isSsr?: boolean) {
     let location: Location;
     let isFirstRendering: boolean;
     if (isActionType(navActions.serverLocationLoaded, action)) {
@@ -196,14 +197,17 @@ export const createSagaForWebAppManagers = async (dependencyContainer: Dependenc
         }
       });
     }
-    logger.info('Calling web app managers with location change:', action);
+    logger.info('Dispatching location change action (may or may not trigger WebAppManager location handlers):', action);
     yield effects.all(handleLocationChangeSagas);
     yield effects.put(navActions.locationChangeApplied({location}));
+    if (isSsr ?? false) {
+      yield effects.put(END);
+    }
   };
   if (isServer) {
     sagas.push(effects.fork(function* navActionSaga() {
       const navAction = yield* effects.take(navigateActions);
-      yield effects.fork(navWorker, navAction);
+      yield effects.fork(navWorker, navAction, true);
     }));
   } else {
     sagas.push(effects.fork(function* navActionSaga() {

@@ -184,9 +184,13 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
       middleware = composeEnhancers(middleware) as any;
     }
-    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
-    const preloadedState: any = patchPreloadedStateForClientNav((window as any).__PRELOADED_STATE__ ?? {}, location);
-    store = createStore(composition.createRootReducer(), preloadedState, middleware);
+    if (ssrEnabled) {
+      // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
+      const preloadedState: any = patchPreloadedStateForClientNav((window as any).__PRELOADED_STATE__ ?? {}, location);
+      store = createStore(composition.createRootReducer(), preloadedState, middleware);
+    } else {
+      store = createStore(composition.createRootReducer(), undefined, middleware);
+    }
   } else {
     store.replaceReducer(composition.createRootReducer());
   }

@@ -2,7 +2,6 @@
 /* eslint-disable */
 {{>licenseInfo}}
 import {Response} from 'express';
-import stream from 'stream';
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 
 import {
@@ -14,6 +13,7 @@ import {
   isApiError,
   getAlternateAction,
   isApiAlternateAction,
+  setTypeHint,
 } from '@launchtray/hatch-util';
 
 import {alternateActionResponseSent} from '@launchtray/hatch-server';
@@ -51,19 +51,3 @@ export const throwInvalidParamError = (paramName: string): never => {
 };
 
 {{> common-runtime}}
-
-export const getLocalApiReturnValue = <T>(
-  delegateResponse: T | ApiAlternateAction,
-): T => {
-  if (isApiAlternateAction(delegateResponse)) {
-    if (preventsDefaultResponse(delegateResponse)) {
-      throw new ApiError(
-        new ApiAlternateAction(500),
-        'Use of PREVENT_DEFAULT_RESPONSE for local server-side API calls is not supported. ' +
-          'Refactor ApiDelegate to avoid this path for local calls (e.g. via branching on request.isLocal)'
-      );
-    }
-    throw new ApiError(delegateResponse);
-  }
-  return delegateResponse;
-};

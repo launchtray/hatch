@@ -22,6 +22,11 @@ import {
   ConfigurationParameters,
   HttpHeaders,
 } from '@launchtray/hatch-fetch-util';
+import {
+  ApiAlternateAction,
+  ApiError,
+  setTypeHint,
+} from '@launchtray/hatch-util';
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
@@ -43,6 +48,74 @@ export class Remote{{classname}} implements runtime.{{classname}} {
   static create(configurationParams?: ConfigurationParameters) {
     return new Remote{{classname}}([configurationParams ?? {}], '');
   }
+
+  {{#operation}}
+  {{#responses}}
+  async _create{{operationIdCamelCase}}ResponseFor{{code}}(
+    response: Response,
+  ): Promise<runtime.{{operationIdCamelCase}}HttpResponseFor{{code}} & {status: number}> {
+    {{#headers.0}}
+    const headers = {
+      {{#headers}}
+      {{name}}: runtime.{{> require-param }}(
+        response.headers.get('{{baseName}}'),
+        'header: "{{baseName}}"',
+      ),
+      {{/headers}}
+    };
+    {{/headers.0}}
+
+    {{#dataType}}
+    {{#isFile}}
+    const bodyWithoutHint = runtime.requireNonNull(response.body, 'body');
+    const body = setTypeHint(bodyWithoutHint, response.status);
+    {{/isFile}}
+    {{^isFile}}
+    {{#primitiveType}}
+    {{#isMapContainer}}
+    const bodyWithoutHint = response.json();
+    {{/isMapContainer}}
+    {{#isListContainer}}
+    const bodyWithoutHint = response.json();
+    {{/isListContainer}}
+    {{#simpleType}}
+    const bodyWithoutHint = response.text() as any;
+    {{/simpleType}}
+    {{/primitiveType}}
+    {{^primitiveType}}
+    {{#isListContainer}}
+    const bodyWithoutHint = response.json().then((jsonValue) => jsonValue.map(models.{{baseType}}FromJSON));
+    {{/isListContainer}}
+    {{^isListContainer}}
+    {{#isMapContainer}}
+    const bodyWithoutHint = response.json().then((jsonValue) => runtime.mapValues(jsonValue, models.{{baseType}}FromJSON));
+    {{/isMapContainer}}
+    {{^isMapContainer}}
+    const bodyWithoutHint = response.json().then((jsonValue) => models.{{baseType}}FromJSON(jsonValue));
+    {{/isMapContainer}}
+    {{/isListContainer}}
+    {{/primitiveType}}
+    const body = bodyWithoutHint.then((value: any) => setTypeHint(value, response.status));
+    {{/isFile}}
+    return {
+      body,
+      {{#headers.0}}
+      headers: headers,
+      {{/headers.0}}
+      status: response.status as any,
+    };
+    {{/dataType}}
+    {{^dataType}}
+    return {
+      {{#headers.0}}
+      headers: headers,
+      {{/headers.0}}
+      status: response.status as any,
+    };
+    {{/dataType}}
+  }
+  {{/responses}}
+  {{/operation}}
 
   constructor(
     @injectAll(Remote{{classname}}.configurationToken) configurationParams: ConfigurationParameters[],
@@ -250,103 +323,17 @@ export class Remote{{classname}} implements runtime.{{classname}} {
       body: formParams,
       {{/hasFormParams}}
     });
+    {{#responses}}
 
-    {{#responseHeaders.0}}
-    const responseHeaders = {
-      {{#responseHeaders}}
-      {{name}}: runtime.{{> require-param }}(
-        response.headers.get('{{baseName}}'),
-        'header: "{{baseName}}"',
-      ),
-      {{/responseHeaders}}
-    };
-    {{/responseHeaders.0}}
-
-    {{#returnType}}
-    {{#isResponseFile}}
-    return {
-      body: runtime.requireNonNull(response.body, 'body'),
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/isResponseFile}}
-    {{^isResponseFile}}
-    {{#returnTypeIsPrimitive}}
-    {{#isMapContainer}}
-    return {
-      body: response.json(),
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/isMapContainer}}
-    {{#isListContainer}}
-    return {
-      body: response.json(),
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/isListContainer}}
-    {{#returnSimpleType}}
-    return {
-      body: response.text() as any,
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/returnSimpleType}}
-    {{/returnTypeIsPrimitive}}
-    {{^returnTypeIsPrimitive}}
-    {{#isListContainer}}
-    return {
-      body: response.json().then((jsonValue) => jsonValue.map(models.{{returnBaseType}}FromJSON)),
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/isListContainer}}
-    {{^isListContainer}}
-    {{#isMapContainer}}
-    return {
-      body: response.json().then((jsonValue) => runtime.mapValues(jsonValue, models.{{returnBaseType}}FromJSON)),
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/isMapContainer}}
-    {{^isMapContainer}}
-    return {
-      body: response.json().then((jsonValue) => models.{{returnBaseType}}FromJSON(jsonValue)),
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/isMapContainer}}
-    {{/isListContainer}}
-    {{/returnTypeIsPrimitive}}
-    {{/isResponseFile}}
-    {{/returnType}}
-    {{^returnType}}
-    return {
-      {{#responseHeaders.0}}
-      headers: responseHeaders,
-      {{/responseHeaders.0}}
-      status: response.status,
-    };
-    {{/returnType}}
+    if (response.status === {{code}}) {
+      return this._create{{operationIdCamelCase}}ResponseFor{{code}}(response);
+    }
+    {{/responses}}
+    throw new ApiError(new ApiAlternateAction(400), `Client received unexpected status: ${response.status}`);
   }
 
-  async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
-    {{#returnType}}return ({{/returnType}}await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}}){{#returnType}}).body{{/returnType}};
+  async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{operationIdCamelCase}}HttpResponseBody> {
+    return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters{{/allParams.0}})).body;
   }
   {{/operation}}
 }

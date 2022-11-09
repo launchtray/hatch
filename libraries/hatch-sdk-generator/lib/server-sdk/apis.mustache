@@ -2,7 +2,6 @@
 /* eslint-disable */
 {{>licenseInfo}}
 /* eslint-disable @typescript-eslint/no-empty-interface,dot-notation */
-import stream from 'stream';
 import {
   alternateActionResponseSent,
   apiErrorResponseSent,
@@ -16,6 +15,7 @@ import {
   inject,
   injectable,
   Logger,
+  StreamUtils,
 } from '@launchtray/hatch-util';
 import {
   DependencyContainer,
@@ -41,59 +41,12 @@ export interface {{classname}}Delegate {
   handle{{operationIdCamelCase}}(
     request: runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean},
     ...optionalInjections: unknown[]
-  ): ApiDelegateResponse<runtime.{{> response-type}}>;
+  ): ApiDelegateResponse<runtime.{{> response-type}}{{^returnType}}{{^responseHeaders.0}} | void{{/responseHeaders.0}}{{/returnType}}>;
   {{/operation}}
   {{/operations}}
 }
 
-{{> api-interface}}
-
 const apiDelegateToken = Symbol('{{classname}}Delegate');
-
-{{#operations}}
-@injectable()
-export class UnprotectedLocal{{classname}} implements {{classname}} {
-  static delegateToken = apiDelegateToken;
-
-  constructor(
-    @inject('Logger') private readonly logger: Logger,
-    @inject(UnprotectedLocal{{classname}}.delegateToken) public readonly delegate: {{classname}}Delegate,
-    @inject('weakContainer') public readonly weakContainer: WeakRef<DependencyContainer>,
-  ) {
-  }
-  {{#operation}}
-
-  async {{nickname}}Raw({{#allParams.0}}request: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{> response-type}}> {
-    const target = this.delegate.constructor.prototype;
-    const clientRequestContainer = this.weakContainer.deref();
-    if (clientRequestContainer == null) {
-      throw new Error('Weak reference to client request container no longer exists');
-    }
-    const requestWithExtras = {
-      {{#allParams.0}}
-      ...request,
-      {{/allParams.0}}
-      isLocal: true,
-      isFromSsr: true,
-    };
-    const args = await resolveParams(
-      clientRequestContainer,
-      target,
-      'handle{{operationIdCamelCase}}',
-      requestWithExtras,
-    ) as [runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
-    const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
-    return runtime.getLocalApiReturnValue(delegateResponse);
-  }
-  {{#returnType}}
-
-  async {{nickname}}({{#allParams.0}}request: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{{returnType}}}> {
-    return (await this.{{nickname}}Raw({{#allParams.0}}request{{/allParams.0}})).body;
-  }
-  {{/returnType}}
-  {{/operation}}
-}
-{{/operations}}
 
 @controller({injectContainerOnly: true})
 export class {{classname}}Controller implements Delegator<{{classname}}Delegate> {
@@ -107,10 +60,69 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
   {{#operations}}
   {{#operation}}
 
+  {{#responses}}
+  async _handle{{operationIdCamelCase}}For{{code}}(
+    delegateResponse: runtime.{{operationIdCamelCase}}HttpResponseFor{{code}} & {status: number},
+    basicRouteParams: BasicRouteParams,
+  ) {
+    {{#headers.0}}
+    const headers = {};
+    {{#headers}}
+    if (delegateResponse.headers?.{{name}} != null) {
+      headers['{{baseName}}'] = delegateResponse.headers.{{name}};
+    }
+    {{/headers}}
+    basicRouteParams.res.set(headers);
+    {{/headers.0}}
+    {{#dataType}}
+    const delegateResponseBody = await delegateResponse.body;
+    {{#isFile}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/octet-stream');
+    basicRouteParams.res.status(delegateResponse.status);
+    StreamUtils.convertWebStreamToNodeReadable(delegateResponseBody).pipe(basicRouteParams.res);
+    {{/isFile}}
+    {{^isFile}}
+    {{#primitiveType}}
+    {{#isMapContainer}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+    {{/isMapContainer}}
+    {{#isListContainer}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+    {{/isListContainer}}
+    {{#simpleType}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'text/plain');
+    {{/simpleType}}
+    basicRouteParams.res.status(delegateResponse.status).send(delegateResponseBody);
+    {{/primitiveType}}
+    {{^primitiveType}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+    {{#isListContainer}}
+    const responseJson = delegateResponseBody.map(models.{{baseType}}ToJSON);
+    basicRouteParams.res.status(delegateResponse.status).send(responseJson);
+    {{/isListContainer}}
+    {{^isListContainer}}
+    {{#isMapContainer}}
+    const responseJson = runtime.mapValues(delegateResponseBody, models.{{baseType}}ToJSON);
+    basicRouteParams.res.status(delegateResponse.status).send(responseJson);
+    {{/isMapContainer}}
+    {{^isMapContainer}}
+    const responseJson = models.{{baseType}}ToJSON(delegateResponseBody);
+    basicRouteParams.res.status(delegateResponse.status).send(responseJson);
+    {{/isMapContainer}}
+    {{/isListContainer}}
+    {{/primitiveType}}
+    {{/isFile}}
+    {{/dataType}}
+    {{^dataType}}
+    basicRouteParams.res.sendStatus(delegateResponse.status);
+    {{/dataType}}
+  }
+  {{/responses}}
+
   @route.{{#lambda.lowercase}}{{{httpMethod}}}{{/lambda.lowercase}}('{{path}}'{{#pathParams.0}}.replace(/{([^}]*)}/g, ':$1'){{/pathParams.0}}) // {{httpMethod}}
   async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
     {{#hasFormParams}}
-    throw new Error('NOT SUPPORTED: The hatch SDK generator does not (yet?) support form params');
+    throw new Error('NOT SUPPORTED: The hatch server SDK generator does not (yet?) support form params');
     {{/hasFormParams}}
     const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
     try {
@@ -200,73 +212,34 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         {...request, isLocal: false, isFromSsr: basicRouteParams.req.header('x-req-from-ssr') === 'true'},
       ) as [runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
 
-      const delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
+      let delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
       if (alternateActionResponseSent(delegateResponse, basicRouteParams.res)) {
         return;
       }
+      {{^responses.1}}
 
-      {{#responseHeaders.0}}
-      const responseHeaders = {};
-      {{#responseHeaders}}
-      if (delegateResponse.headers.{{name}} != null) {
-        responseHeaders['{{baseName}}'] = delegateResponse.headers.{{name}};
+      {{#responses.0}}
+      delegateResponse = runtime.ensureStatusIsSet(delegateResponse, {{{code}}});
+      {{/responses.0}}
+      {{/responses.1}}
+      {{#responses}}
+
+      if (runtime.is{{operationIdCamelCase}}HttpResponseFor{{code}}(delegateResponse)) {
+        await this._handle{{operationIdCamelCase}}For{{code}}(delegateResponse, basicRouteParams);
+        return;
       }
-      {{/responseHeaders}}
-      basicRouteParams.res.set(responseHeaders);
-      {{/responseHeaders.0}}
-      {{#returnType}}
-      const delegateResponseBody = await delegateResponse.body;
-      {{#isResponseFile}}
-      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/octet-stream');
-      basicRouteParams.res.status(delegateResponse?.status ?? 200);
-      // https://stackoverflow.com/questions/73308289
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      stream.Readable.fromWeb(delegateResponseBody).pipe(basicRouteParams.res);
-      {{/isResponseFile}}
-      {{^isResponseFile}}
-      {{#returnTypeIsPrimitive}}
-      {{#isMapContainer}}
-      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
-      {{/isMapContainer}}
-      {{#isListContainer}}
-      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
-      {{/isListContainer}}
-      {{#returnSimpleType}}
-      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'text/plain');
-      {{/returnSimpleType}}
-      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(delegateResponseBody);
-      {{/returnTypeIsPrimitive}}
-      {{^returnTypeIsPrimitive}}
-      basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
-      {{#isListContainer}}
-      const responseJson = delegateResponseBody.map(models.{{returnBaseType}}ToJSON);
-      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(responseJson);
-      {{/isListContainer}}
-      {{^isListContainer}}
-      {{#isMapContainer}}
-      const responseJson = runtime.mapValues(delegateResponseBody, models.{{returnBaseType}}ToJSON);
-      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(responseJson);
-      {{/isMapContainer}}
-      {{^isMapContainer}}
-      const responseJson = models.{{returnBaseType}}ToJSON(delegateResponseBody);
-      basicRouteParams.res.status(delegateResponse?.status ?? 200).send(responseJson);
-      {{/isMapContainer}}
-      {{/isListContainer}}
-      {{/returnTypeIsPrimitive}}
-      {{/isResponseFile}}
-      {{/returnType}}
-      {{^returnType}}
-      basicRouteParams.res.sendStatus(200);
-      {{/returnType}}
+      {{/responses}}
+      this.logger.error(`Unexpected status code from handle{{operationIdCamelCase}}: ${
+        (delegateResponse as unknown as {status?: number}).status
+      }`);
     } catch (err: unknown) {
-      this.logger.info(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
+      this.logger.error(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
       if (apiErrorResponseSent(err, basicRouteParams.res)) {
         return;
       }
-      basicRouteParams.res.set('Content-Type', 'text/plain');
-      basicRouteParams.res.status(500).send((err as {message?: string}).message ?? '');
     }
+    basicRouteParams.res.set('Content-Type', 'text/plain');
+    basicRouteParams.res.sendStatus(500);
   }
   {{/operation}}
   {{/operations}}

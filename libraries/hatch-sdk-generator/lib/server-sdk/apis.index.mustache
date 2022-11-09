@@ -21,7 +21,6 @@ api[ASSOCIATED_API_SPEC_ID_KEY] = Symbol('uniqueApiIdentifier'); // Guaranteed u
 {{#apis}}
 {{#operations}}
 import {
-  UnprotectedLocal{{classFilename}},
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 } from './{{classFilename}}';
@@ -50,33 +49,10 @@ const getApiMiddleware = ({
   ];
 };
 
-// Note: intentional use of Symbol.for (vs. Symbol(...)) below to ensure client and server SDKs use same symbol
-{{#apis}}
-{{#operations}}
-{{> api-injection-token}}
-{{/operations}}
-{{/apis}}
-
-const registerUnprotectedLocalApis = (
-  container: DependencyContainer,
-  getToken?: (apiName: string) => string | symbol,
-) => {
-  {{#apis}}
-  {{#operations}}
-  container.register(
-    getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
-    UnprotectedLocal{{classFilename}},
-  );
-  {{/operations}}
-  {{/apis}}
-};
-
 export {
   getApiMiddleware,
-  registerUnprotectedLocalApis,
 {{#apis}}
 {{#operations}}
-  UnprotectedLocal{{classFilename}},
   {{classFilename}}Controller,
   {{classFilename}}Delegate,
 {{/operations}}

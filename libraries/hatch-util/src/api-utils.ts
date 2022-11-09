@@ -2,6 +2,21 @@ export const PREVENT_DEFAULT_RESPONSE_CODE = Symbol('@launchtray/hatch-sdk-gener
 export const ALT_ACTION_CODE_KEY: unique symbol = Symbol('@launchtray/hatch-sdk-generator#altActionCodeKey');
 export const ALT_ACTION_KEY: unique symbol = Symbol('@launchtray/hatch-sdk-generator#altActionKey');
 
+const TYPE_HINT_KEY: unique symbol = Symbol('TYPE_HINT');
+
+export const setTypeHint = <T>(obj: T, hint: string | symbol | number): T => {
+  // eslint-disable-next-line no-param-reassign
+  (obj as unknown as {[key: symbol]: string | symbol | number})[TYPE_HINT_KEY] = hint;
+  return obj;
+};
+
+export const getTypeHint = (obj?: unknown): string | symbol | number | undefined => {
+  if (obj == null) {
+    return undefined;
+  }
+  return (obj as {[key: symbol]: string | symbol | number})[TYPE_HINT_KEY];
+};
+
 export class ApiAlternateAction {
   public readonly [ALT_ACTION_CODE_KEY]: number | symbol;
   public readonly status: number | undefined;

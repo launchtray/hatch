@@ -142,13 +142,21 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
     @inject('Logger') logger: Logger,
   ): CreateUserHttpResponse {
     logger.debug(`handleCreateUserOperation: ${JSON.stringify(request)}`);
+    if (request.body.firstName !== 'Existing') {
+      return {
+        status: 201,
+        headers: {},
+        body: {
+          ...request.body,
+          role: CreateUserResponsePayloadRoleEnum.Admin,
+        },
+      };
+    }
     return {
-      headers: {
-
-      },
+      status: 200,
       body: {
         ...request.body,
-        role: CreateUserResponsePayloadRoleEnum.Admin,
+        id: '123',
       },
     };
   }
@@ -165,7 +173,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
         id: request.pathParams.id,
       },
       headers: {
-        xExampleResponse: request.queryParams.search?.join('!'),
+        xExampleResponse: request.queryParams?.search?.join('!'),
       },
     };
   }

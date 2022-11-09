@@ -25,6 +25,8 @@ import {
   PREVENT_DEFAULT_RESPONSE_CODE,
   ALT_ACTION_CODE_KEY,
   ALT_ACTION_KEY,
+  getTypeHint,
+  setTypeHint,
   ApiAlternateAction,
   ApiError,
   preventsDefaultResponse,
@@ -41,6 +43,8 @@ import StreamUtils from './StreamUtils';
 export {
   ALT_ACTION_CODE_KEY,
   ALT_ACTION_KEY,
+  getTypeHint,
+  setTypeHint,
   AnyJson,
   AnyJsonObject,
   ApiAlternateAction,

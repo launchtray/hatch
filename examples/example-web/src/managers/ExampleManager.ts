@@ -17,6 +17,8 @@ import {
 } from '@launchtray/hatch-web';
 import {LocationChangeContext} from '@launchtray/hatch-web-injectables';
 import {
+  CreateUserXRoleEnum,
+  isCreateUserHttpResponseBodyFor201,
   MetricsApi,
   MetricsApiInjectionToken,
   ReportApi,
@@ -77,30 +79,52 @@ export default class ExampleManager {
   @initializer()
   private async initialize() {
     try {
-      const errorResp = await this.userApi.getUser({
-        headers: {},
-        pathParams: {
-          id: 'abc',
+      this.logger.info('sending createUser 1 request');
+      const createUserRsp1 = await this.userApi.createUser({
+        headers: {
+          xRole: CreateUserXRoleEnum.Admin,
         },
-        queryParams: {},
+        body: {
+          firstName: 'Existing',
+          lastName: 'Dude',
+        },
       });
-      this.logger.info('getUser response received', errorResp);
-      const response = await this.reportApi.getReportPdf({
-        headers: {},
+      this.logger.info('createUser response 1 received', createUserRsp1);
+      if (isCreateUserHttpResponseBodyFor201(createUserRsp1)) {
+        this.logger.info(`Created user 1 with role: ${createUserRsp1.role}`);
+      } else {
+        this.logger.info(`User 1 already existed: ${createUserRsp1.id}`);
+      }
+      const createUserRsp2 = await this.userApi.createUser({
+        headers: {
+          xRole: CreateUserXRoleEnum.Admin,
+        },
+        body: {
+          firstName: 'New',
+          lastName: 'Dude',
+        },
+      });
+      this.logger.info('createUser response 2 received', createUserRsp2);
+      if (isCreateUserHttpResponseBodyFor201(createUserRsp2)) {
+        this.logger.info(`Created user 2 with role: ${createUserRsp2.role}`);
+      } else {
+        this.logger.info(`User 2 already existed: ${createUserRsp2.id}`);
+      }
+      const getReportRsp = await this.reportApi.getReportPdf({
         queryParams: {
           // Uncomment to trigger error case: // timestamp: new Date(),
           startDate: new Date(),
         },
       });
-      const body = await convertStreamToString(response);
+      const body = await convertStreamToString(getReportRsp);
       this.logger.info(`getReportPdf response received: ${body}`);
     } catch (err: unknown) {
       if (isApiError(err)) {
         const altAction = getAlternateAction(err);
         const body = await convertStreamToString(altAction.body as ReadableStream);
-        this.logger.error(`getReportPdf error: ${body}`);
+        this.logger.error(`ExampleManager.initialize error: ${body}`);
       } else {
-        this.logger.error('getReportPdf error', err);
+        this.logger.error('ExampleManager.initialize error', err);
       }
     }
   }

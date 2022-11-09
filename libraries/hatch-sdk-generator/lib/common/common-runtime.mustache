@@ -5,6 +5,9 @@ import {
 } from './models/{{{classFilename}}}';
 {{/model}}
 {{/models}}
+import {
+  getTypeHint,
+} from '@launchtray/hatch-util';
 
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
@@ -15,61 +18,127 @@ type Set<T> = Array<T>;
 {{#operations}}
 {{#operation}}
 
-export interface {{operationIdCamelCase}}HttpRequest {
-{{#headerParams.0}}
-  headers: {
+export interface {{operationIdCamelCase}}HttpRequestHeaders {
   {{#headerParams}}
-    {{> param-type-definition}}
+  {{> param-type-definition}}
   {{/headerParams}}
-  };
-{{/headerParams.0}}
-{{#bodyParam}}
-{{#dataType}}
-  body: {{{dataType}}};
-{{/dataType}}
-{{/bodyParam}}
-{{#pathParams.0}}
-  pathParams: {
-  {{#pathParams}}
-    {{> param-type-definition}}
-  {{/pathParams}}
-  };
-{{/pathParams.0}}
-{{#queryParams.0}}
-  queryParams: {
-  {{#queryParams}}
-    {{> param-type-definition}}
-  {{/queryParams}}
-  };
-{{/queryParams.0}}
-{{#formParams.0}}
-  formParams: {
-  {{#formParams}}
-    {{> param-type-definition}}
-  {{/formParams}}
-  };
-{{/formParams.0}}
 }
 
-export interface {{operationIdCamelCase}}HttpResponse {
-{{#responseHeaders.0}}
-  headers: {
-    contentType?: string;
-  {{#responseHeaders}}
-    {{> param-type-definition}}
-  {{/responseHeaders}}
-  };
-{{/responseHeaders.0}}
-{{^responseHeaders.0}}
-  headers?: {
-    contentType?: string;
-  };
-{{/responseHeaders.0}}
-{{#returnType}}
-  body: {{{returnType}}} | Promise<{{{returnType}}}>;
-{{/returnType}}
-  status?: number;
+export type {{operationIdCamelCase}}HttpRequestHeadersBase = {} extends {{operationIdCamelCase}}HttpRequestHeaders ? {
+  {{#headerParams.0}}
+  headers?: {{operationIdCamelCase}}HttpRequestHeaders;
+  {{/headerParams.0}}
+} : {
+  headers: {{operationIdCamelCase}}HttpRequestHeaders;
+};
+
+export interface {{operationIdCamelCase}}HttpPathParams {
+  {{#pathParams}}
+  {{> param-type-definition}}
+  {{/pathParams}}
 }
+
+export type {{operationIdCamelCase}}HttpPathParamsBase = {} extends {{operationIdCamelCase}}HttpPathParams ? {
+  {{#pathParams.0}}
+  pathParams?: {{operationIdCamelCase}}HttpPathParams;
+  {{/pathParams.0}}
+} : {
+  pathParams: {{operationIdCamelCase}}HttpPathParams;
+};
+
+export interface {{operationIdCamelCase}}HttpQueryParams {
+  {{#queryParams}}
+  {{> param-type-definition}}
+  {{/queryParams}}
+}
+
+export type {{operationIdCamelCase}}HttpQueryParamsBase = {} extends {{operationIdCamelCase}}HttpQueryParams ? {
+  {{#queryParams.0}}
+  queryParams?: {{operationIdCamelCase}}HttpQueryParams;
+  {{/queryParams.0}}
+} : {
+  queryParams: {{operationIdCamelCase}}HttpQueryParams;
+};
+
+export interface {{operationIdCamelCase}}HttpFormParams {
+  {{#formParams}}
+  {{> param-type-definition}}
+  {{/formParams}}
+}
+
+export type {{operationIdCamelCase}}HttpFormParamsBase = {} extends {{operationIdCamelCase}}HttpFormParams ? {
+  {{#formParams.0}}
+  formParams?: {{operationIdCamelCase}}HttpFormParams;
+  {{/formParams.0}}
+} : {
+  formParams: {{operationIdCamelCase}}HttpFormParams;
+};
+
+export type {{operationIdCamelCase}}HttpRequest = (
+  & {{operationIdCamelCase}}HttpRequestHeadersBase
+  & {{operationIdCamelCase}}HttpPathParamsBase
+  & {{operationIdCamelCase}}HttpQueryParamsBase
+  & {{operationIdCamelCase}}HttpFormParamsBase
+  & {
+    {{#bodyParam}}
+    {{#dataType}}
+    body: {{{dataType}}};
+    {{/dataType}}
+    {{/bodyParam}}
+  }
+);
+
+{{#responses}}
+
+export const is{{operationIdCamelCase}}HttpResponseBodyFor{{code}} = (body?: {{operationIdCamelCase}}HttpResponseBody | void): {{#dataType}}body is {{{dataType}}}{{/dataType}}{{^dataType}}boolean{{/dataType}} => {
+  return (getTypeHint(body) === {{code}});
+};
+
+export const is{{operationIdCamelCase}}HttpResponseFor{{code}} = (response?: {{operationIdCamelCase}}HttpResponse | void): response is {{operationIdCamelCase}}HttpResponseFor{{code}} & {status: number} => {
+  return (response?.status === {{code}});
+};
+{{/responses}}
+
+export type {{operationIdCamelCase}}HttpResponseBody = (
+  {{#responses}}
+  {{#dataType}}| {{{dataType}}}{{/dataType}}{{^dataType}}| void{{/dataType}}
+  {{/responses}}
+);
+{{#responses}}
+
+export interface {{operationIdCamelCase}}HttpResponseFor{{code}}Headers {
+  contentType?: string;
+  {{#headers}}
+  {{> param-type-definition}}
+  {{/headers}}
+}
+
+export type {{operationIdCamelCase}}HttpResponseFor{{code}}HeadersBase = {} extends {{operationIdCamelCase}}HttpResponseFor{{code}}Headers ? {
+  headers?: {{operationIdCamelCase}}HttpResponseFor{{code}}Headers;
+} : {
+  headers: {{operationIdCamelCase}}HttpResponseFor{{code}}Headers;
+};
+
+export type {{operationIdCamelCase}}HttpResponseFor{{code}} = (
+  {{operationIdCamelCase}}HttpResponseFor{{code}}HeadersBase
+  & {
+    {{#dataType}}
+    body: {{{dataType}}} | Promise<{{{dataType}}}>;
+    {{/dataType}}
+    {{^dataType}}
+    body?: void;
+    {{/dataType}}
+    status{{^responses.1}}?{{/responses.1}}: {{{code}}};
+  }
+);
+{{/responses}}
+
+export type {{operationIdCamelCase}}HttpResponse = (
+  {{#responses}}
+  | {{operationIdCamelCase}}HttpResponseFor{{code}}
+  {{/responses}}
+);
+
 {{/operation}}
 {{/operations}}
 {{#hasEnums}}
@@ -98,6 +167,19 @@ export const COLLECTION_FORMATS = {
   ssv: " ",
   tsv: "\t",
   pipes: "|",
+};
+
+export const ensureStatusIsSet = <T extends {status?: number}>(
+  input: T | undefined,
+  defaultStatus: number,
+): T & {status: number} => {
+  if (input?.status == null) {
+    return {
+      ...input,
+      status: defaultStatus,
+    } as (T & {status: number});
+  }
+  return input as (T & {status: number});
 };
 
 export const requireNonNull = <T>(value: T | null | undefined, name: string): T => {

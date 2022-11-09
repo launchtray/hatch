@@ -19,6 +19,6 @@ interface {{classname}} {
   {{/summary}}
    * Helper method for the common case that only the HTTP body is needed from the response
    */
-  {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}>
+  {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{operationIdCamelCase}}HttpResponseBody>;
 {{/operation}}
 }

@@ -40,9 +40,16 @@ const registerAuthForwardingApis = (
   baseUrl?: string,
   getToken?: (apiName: string) => string | symbol,
 ) => {
+  const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
+  let port: number;
+  if (portString != null) {
+    port = parseInt(portString, 10);
+  } else {
+    port = 3000;
+  }
   {{#apis}}
   {{#operations}}
-  container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? `http://localhost:${process.env.PORT}`);
+  container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? `http://localhost:${port}`);
   container.register(
     getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
     AuthForwarding{{classFilename}},

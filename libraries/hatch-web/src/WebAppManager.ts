@@ -181,8 +181,6 @@ export const createSagaForWebAppManagers = async (dependencyContainer: Dependenc
       yield forEachLocationChangeLoader(manager, async (propertyKey, pathMatcher, runOnClientLoad) => {
         const hasFragment = location.fragment != null && location.fragment !== '';
         const shouldRunOnClient = runOnClientLoad || !ssrEnabled || !isFirstRendering || hasFragment;
-        // eslint-disable-next-line no-console
-        console.log({shouldRunOnClient, runOnClientLoad, ssrEnabled, isFirstRendering, hasFragment});
         if (shouldRunOnClient) {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {

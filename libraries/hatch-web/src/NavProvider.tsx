@@ -51,6 +51,7 @@ export const patchPreloadedStateForClientNav = (
     };
     /* eslint-enable no-param-reassign */
   }
+  return preloadedState;
 };
 
 export const selectLocationFromLocationChangeAction = (action: AnyAction) => {

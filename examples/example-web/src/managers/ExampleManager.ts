@@ -19,6 +19,7 @@ import {LocationChangeContext} from '@launchtray/hatch-web-injectables';
 import {
   CreateUserXRoleEnum,
   isCreateUserHttpResponseBodyFor201,
+  isCreateUserHttpResponseBodyFor200,
   MetricsApi,
   MetricsApiInjectionToken,
   ReportApi,
@@ -85,30 +86,53 @@ export default class ExampleManager {
           xRole: CreateUserXRoleEnum.Admin,
         },
         body: {
-          firstName: 'Existing',
+          firstName: 'New',
           lastName: 'Dude',
         },
       });
       this.logger.info('createUser response 1 received', createUserRsp1);
       if (isCreateUserHttpResponseBodyFor201(createUserRsp1)) {
         this.logger.info(`Created user 1 with role: ${createUserRsp1.role}`);
-      } else {
+      } else if (isCreateUserHttpResponseBodyFor200(createUserRsp1)) {
         this.logger.info(`User 1 already existed: ${createUserRsp1.id}`);
+      } else {
+        this.logger.info('No content for user 1');
       }
+      this.logger.info('sending createUser 1 request');
       const createUserRsp2 = await this.userApi.createUser({
         headers: {
           xRole: CreateUserXRoleEnum.Admin,
         },
         body: {
-          firstName: 'New',
+          firstName: 'Existing',
           lastName: 'Dude',
         },
       });
       this.logger.info('createUser response 2 received', createUserRsp2);
       if (isCreateUserHttpResponseBodyFor201(createUserRsp2)) {
         this.logger.info(`Created user 2 with role: ${createUserRsp2.role}`);
-      } else {
+      } else if (isCreateUserHttpResponseBodyFor200(createUserRsp2)) {
         this.logger.info(`User 2 already existed: ${createUserRsp2.id}`);
+      } else {
+        this.logger.info('No content for user 2');
+      }
+      this.logger.info('sending createUser 1 request');
+      const createUserRsp3 = await this.userApi.createUser({
+        headers: {
+          xRole: CreateUserXRoleEnum.Admin,
+        },
+        body: {
+          firstName: 'None',
+          lastName: 'Dude',
+        },
+      });
+      this.logger.info('createUser response 3 received', createUserRsp3);
+      if (isCreateUserHttpResponseBodyFor201(createUserRsp3)) {
+        this.logger.info(`Created user 3 with role: ${createUserRsp3.role}`);
+      } else if (isCreateUserHttpResponseBodyFor200(createUserRsp3)) {
+        this.logger.info(`User 3 already existed: ${createUserRsp3.id}`);
+      } else {
+        this.logger.info('No content for user 3');
       }
       const getReportRsp = await this.reportApi.getReportPdf({
         queryParams: {

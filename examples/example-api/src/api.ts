@@ -83,9 +83,16 @@ class CreateUser {
   @spot.response({status: 200})
   alternateResponse(
     @spot.headers h: {
-      'x-example-response-204'?: string;
+      'x-example-response-200'?: string;
     },
     @spot.body body: User,
+  ) {}
+
+  @spot.response({status: 204})
+  emptyResponse(
+    @spot.headers h: {
+      'x-example-response-204'?: string;
+    },
   ) {}
 }
 

@@ -18,6 +18,10 @@ interface User {
   id: string;
 }
 
+interface UserRequestError {
+  reason: string;
+}
+
 interface Metric {
   timestamp: spot.Int64;
   txId: string;
@@ -93,6 +97,14 @@ class CreateUser {
     @spot.headers h: {
       'x-example-response-204'?: string;
     },
+  ) {}
+
+  @spot.response({status: 404})
+  missingResponse(
+    @spot.headers h: {
+      'x-example-response-404'?: string;
+    },
+    @spot.body body: UserRequestError,
   ) {}
 }
 

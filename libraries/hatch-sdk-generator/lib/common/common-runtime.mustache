@@ -12,6 +12,12 @@ import {
 // Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
 type Blob = ReadableStream;
 type Set<T> = Array<T>;
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>
+
+type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
+type SuccessHttpStatus = IntRange<200, 300>;
 
 {{#apiInfo}}
 {{#apis}}
@@ -103,7 +109,7 @@ export type {{operationIdCamelCase}}HttpRequest = {} extends {{operationIdCamelC
  */
 export const is{{operationIdCamelCase}}HttpResponseBodyFor{{code}} = (body?: {{operationIdCamelCase}}HttpResponseBody | void): body is {{{dataType}}} => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore -- autogen file may not exist
+  // @ts-ignore -- autogen file, type may not exist
   return (typeof body === '{{{dataType}}}') || (getTypeHint(body) === {{code}});
 };
 {{/dataType}}
@@ -113,10 +119,21 @@ export const is{{operationIdCamelCase}}HttpResponseFor{{code}} = (response?: {{o
 };
 {{/responses}}
 
-export type {{operationIdCamelCase}}HttpResponseBody = (
+export type {{operationIdCamelCase}}HttpResponseSuccessBody = (
   {{#responses}}
-  {{#dataType}}| {{{dataType}}}{{/dataType}}{{^dataType}}| void{{/dataType}}
+  {{#dataType}}| ({{{code}}} extends SuccessHttpStatus ? {{{dataType}}} : never){{/dataType}}{{^dataType}}| void{{/dataType}}
   {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpResponseErrorBody = (
+  {{#responses}}
+  {{#dataType}}| ({{{code}}} extends SuccessHttpStatus ? never : {{{dataType}}}){{/dataType}}{{^dataType}}| void{{/dataType}}
+  {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpResponseBody = (
+  | {{operationIdCamelCase}}HttpResponseSuccessBody
+  | {{operationIdCamelCase}}HttpResponseErrorBody
 );
 {{#responses}}
 
@@ -147,10 +164,21 @@ export type {{operationIdCamelCase}}HttpResponseFor{{code}} = (
 );
 {{/responses}}
 
-export type {{operationIdCamelCase}}HttpResponse = (
+export type {{operationIdCamelCase}}HttpSuccessResponse = (
   {{#responses}}
-  | {{operationIdCamelCase}}HttpResponseFor{{code}}
+  | ({{{code}}} extends SuccessHttpStatus ? {{operationIdCamelCase}}HttpResponseFor{{code}} : never)
   {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpErrorResponse = (
+  {{#responses}}
+  | ({{{code}}} extends SuccessHttpStatus ? never : {{operationIdCamelCase}}HttpResponseFor{{code}})
+  {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpResponse = (
+  | {{operationIdCamelCase}}HttpSuccessResponse
+  | {{operationIdCamelCase}}HttpErrorResponse
 );
 
 {{/operation}}

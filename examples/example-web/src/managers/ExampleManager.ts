@@ -27,7 +27,7 @@ import {
   TestersApi,
   TestersApiInjectionToken,
   UsersApi,
-  UsersApiInjectionToken,
+  UsersApiInjectionToken, isCreateUserHttpResponseBodyFor404,
 } from '@launchtray/example-client-sdk';
 import actions from '../actions';
 
@@ -79,11 +79,31 @@ export default class ExampleManager {
 
   // Example of API-dependent code that works both client and server-side
   @initializer()
+  // eslint-disable-next-line complexity
   private async initialize() {
     try {
       this.logger.info('sending createUser 1 request');
       const statusRsp = await this.metricsApi.getStatus();
       this.logger.info('getStatus response received', statusRsp);
+      const createUserRsp0 = await this.userApi.createUser({
+        headers: {
+          xRole: CreateUserXRoleEnum.Admin,
+        },
+        body: {
+          firstName: 'Missing',
+          lastName: 'Dude',
+        },
+      }, true);
+      this.logger.info('createUser response 1 received', createUserRsp0);
+      if (isCreateUserHttpResponseBodyFor201(createUserRsp0)) {
+        this.logger.info(`Created user 1 with role: ${createUserRsp0.role}`);
+      } else if (isCreateUserHttpResponseBodyFor200(createUserRsp0)) {
+        this.logger.info(`User 1 already existed: ${createUserRsp0.id}`);
+      } else if (isCreateUserHttpResponseBodyFor404(createUserRsp0)) {
+        this.logger.info(`User not found: ${createUserRsp0}`);
+      } else {
+        this.logger.info(`No content for user 1: ${createUserRsp0}`);
+      }
       const createUserRsp1 = await this.userApi.createUser({
         headers: {
           xRole: CreateUserXRoleEnum.Admin,
@@ -92,14 +112,16 @@ export default class ExampleManager {
           firstName: 'New',
           lastName: 'Dude',
         },
-      });
+      }, true);
       this.logger.info('createUser response 1 received', createUserRsp1);
       if (isCreateUserHttpResponseBodyFor201(createUserRsp1)) {
         this.logger.info(`Created user 1 with role: ${createUserRsp1.role}`);
       } else if (isCreateUserHttpResponseBodyFor200(createUserRsp1)) {
         this.logger.info(`User 1 already existed: ${createUserRsp1.id}`);
+      } else if (isCreateUserHttpResponseBodyFor404(createUserRsp1)) {
+        this.logger.info(`User not found: ${createUserRsp1}`);
       } else {
-        this.logger.info('No content for user 1');
+        this.logger.info(`No content for user 1: ${createUserRsp1}`);
       }
       this.logger.info('sending createUser 1 request');
       const createUserRsp2 = await this.userApi.createUser({

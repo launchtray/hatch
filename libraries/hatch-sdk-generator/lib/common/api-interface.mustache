@@ -9,7 +9,9 @@ interface {{classname}} {
   {{/summary}}
    * Returns object containing status code, headers, and a promise for the body contents
    */
-  {{nickname}}Raw({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{> response-type}}>;
+  {{nickname}}Raw({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{operationIdCamelCase}}HttpSuccessResponse & {status: number}>;
+  {{nickname}}Raw({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: false): Promise<{{operationIdCamelCase}}HttpSuccessResponse & {status: number}>;
+  {{nickname}}Raw({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: true): Promise<{{operationIdCamelCase}}HttpResponse & {status: number}>;
   /**
   {{#notes}}
    * {{&notes}}
@@ -19,6 +21,8 @@ interface {{classname}} {
   {{/summary}}
    * Helper method for the common case that only the HTTP body is needed from the response
    */
-  {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{operationIdCamelCase}}HttpResponseBody>;
+  {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<{{operationIdCamelCase}}HttpResponseSuccessBody>;
+  {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: false): Promise<{{operationIdCamelCase}}HttpResponseSuccessBody>;
+  {{nickname}}({{#allParams.0}}request: {{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: true): Promise<{{operationIdCamelCase}}HttpResponseBody>;
 {{/operation}}
 }

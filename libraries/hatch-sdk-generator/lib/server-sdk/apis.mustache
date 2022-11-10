@@ -41,7 +41,7 @@ export interface {{classname}}Delegate {
   handle{{operationIdCamelCase}}(
     request: runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean},
     ...optionalInjections: unknown[]
-  ): ApiDelegateResponse<runtime.{{> response-type}}{{^returnType}}{{^responseHeaders.0}} | void{{/responseHeaders.0}}{{/returnType}}>;
+  ): ApiDelegateResponse<runtime.{{operationIdCamelCase}}HttpResponse{{^returnType}}{{^responseHeaders.0}} | void{{/responseHeaders.0}}{{/returnType}}>;
   {{/operation}}
   {{/operations}}
 }

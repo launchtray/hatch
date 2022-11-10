@@ -166,6 +166,14 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
         },
       };
     }
+    if (request.body.firstName === 'Missing') {
+      return {
+        status: 404,
+        body: {
+          reason: 'Not found',
+        },
+      };
+    }
     return {
       status: 201,
       body: {

@@ -293,10 +293,10 @@ export class ConfigurableFetchApi {
     this.middleware = configuration.middleware;
   }
 
-  public async request(context: RequestOpts): Promise<Response> {
+  public async request(context: RequestOpts, allowError = false): Promise<Response> {
     const {url, init} = this.createFetchParams(context);
     const response = await this.fetchApi(url, init as RequestInit);
-    if (response.status >= 200 && response.status < 300) {
+    if (allowError || (response.status >= 200 && response.status < 300)) {
       return response;
     }
     const headers: Record<string, unknown> = {};

@@ -37,7 +37,13 @@ export class ApiAlternateAction {
 
   constructor(
     code: number | symbol,
-    public readonly body?: unknown, // ReadableStream or anything supported by Response.send (string, object, etc.)
+    public readonly body?: (
+      | string
+      | Promise<string>
+      | object
+      | Promise<object>
+      | ReadableStream
+    ),
     public readonly headers?: Record<string, unknown>,
   ) {
     this[ALT_ACTION_CODE_KEY] = code;

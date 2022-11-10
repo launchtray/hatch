@@ -97,7 +97,6 @@ export type {{operationIdCamelCase}}HttpRequestBase = (
 export type {{operationIdCamelCase}}HttpRequest = {} extends {{operationIdCamelCase}}HttpRequestBase
   ? void | {{operationIdCamelCase}}HttpRequestBase
   : {{operationIdCamelCase}}HttpRequestBase;
-
 {{#responses}}
 
 {{#dataType}}

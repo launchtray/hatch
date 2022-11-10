@@ -333,19 +333,14 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     }
     {{/responses}}
 
-    const headers: Record<string, unknown> = {};
-    response.headers.forEach((value, key) => {
-      headers[key] = value;
-    });
-    const fallbackBody = setTypeHint(response.body, response.status);
-    throw new ApiError(new ApiAlternateAction(response.status, fallbackBody, headers), `Client received unexpected status: ${response.status}`);
+    throw new ApiError(ConfigurableFetchApi.createAlternateActionForResponse(response));
   }
 
   async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest{{/allParams.0}}): Promise<runtime.{{operationIdCamelCase}}HttpResponseSuccessBody>
   async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: false): Promise<runtime.{{operationIdCamelCase}}HttpResponseSuccessBody>
   async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: true): Promise<runtime.{{operationIdCamelCase}}HttpResponseBody>
   async {{nickname}}({{#allParams.0}}requestParameters: runtime.{{operationIdCamelCase}}HttpRequest, {{/allParams.0}}allowError: boolean = false): Promise<runtime.{{operationIdCamelCase}}HttpResponseBody> {
-    return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters, {{/allParams.0}}allowError)).body;
+    return (await this.{{nickname}}Raw({{#allParams.0}}requestParameters, {{/allParams.0}}allowError as any)).body;
   }
   {{/operation}}
 }

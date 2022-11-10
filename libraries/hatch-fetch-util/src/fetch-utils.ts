@@ -209,6 +209,7 @@
 import {
   ApiAlternateAction,
   ApiError,
+  setTypeHint,
 } from '@launchtray/hatch-util';
 
 const isStream = (value: unknown) => value != null && (value as {pipeTo?: unknown}).pipeTo != null;
@@ -293,17 +294,30 @@ export class ConfigurableFetchApi {
     this.middleware = configuration.middleware;
   }
 
-  public async request(context: RequestOpts, allowError = false): Promise<Response> {
+  public static createAlternateActionForResponse(response: Response): ApiAlternateAction {
+    const headers: Record<string, unknown> = {};
+    response.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+    let body;
+    const contentType = response.headers.get('Content-Type')?.toLowerCase() ?? '';
+    if (contentType.includes('application/json')) {
+      body = response.json().then((value) => setTypeHint(value, response.status));
+    } else if (contentType.includes('text/plain')) {
+      body = response.text().then((value) => setTypeHint(value, response.status));
+    } else {
+      body = setTypeHint(response.body, response.status);
+    }
+    return new ApiAlternateAction(response.status, body ?? undefined, headers);
+  }
+
+  public async request(context: RequestOpts, allowError = false): Promise<Response> | never {
     const {url, init} = this.createFetchParams(context);
     const response = await this.fetchApi(url, init as RequestInit);
     if (allowError || (response.status >= 200 && response.status < 300)) {
       return response;
     }
-    const headers: Record<string, unknown> = {};
-    response.headers.forEach((value, key) => {
-      headers[key] = value;
-    });
-    throw new ApiError(new ApiAlternateAction(response.status, response.body, headers));
+    throw new ApiError(ConfigurableFetchApi.createAlternateActionForResponse(response));
   }
 
   private createFetchParams(context: RequestOpts) {

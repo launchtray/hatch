@@ -27,7 +27,7 @@ import {
   TestersApi,
   TestersApiInjectionToken,
   UsersApi,
-  UsersApiInjectionToken, isCreateUserHttpResponseBodyFor404,
+  UsersApiInjectionToken, isCreateUserHttpResponseBodyFor404, CreateUserHttpResponseBody,
 } from '@launchtray/example-client-sdk';
 import actions from '../actions';
 
@@ -158,6 +158,28 @@ export default class ExampleManager {
         this.logger.info(`User 3 already existed: ${createUserRsp3.id}`);
       } else {
         this.logger.info('No content for user 3');
+      }
+      try {
+        await this.userApi.createUser({
+          headers: {
+            xRole: CreateUserXRoleEnum.Admin,
+          },
+          body: {
+            firstName: 'Missing',
+            lastName: 'Dude',
+          },
+        });
+      } catch (err) {
+        if (isApiError(err)) {
+          const errorBody = (await err.alternateAction.body) as CreateUserHttpResponseBody;
+          if (isCreateUserHttpResponseBodyFor404(errorBody)) {
+            this.logger.info(`Caught 404 error ${JSON.stringify(errorBody)}`);
+          } else {
+            this.logger.info('Unexpected API error', err.alternateAction);
+          }
+        } else {
+          this.logger.info('Unexpected non-API error', err);
+        }
       }
       const getReportRsp = await this.reportApi.getReportPdf({
         queryParams: {

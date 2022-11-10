@@ -317,7 +317,9 @@ export class ConfigurableFetchApi {
     if (allowError || (response.status >= 200 && response.status < 300)) {
       return response;
     }
-    throw new ApiError(ConfigurableFetchApi.createAlternateActionForResponse(response));
+    throw new ApiError(ConfigurableFetchApi.createAlternateActionForResponse(response), `Error fetching URL: ${
+      JSON.stringify({url, init})
+    }`);
   }
 
   private createFetchParams(context: RequestOpts) {

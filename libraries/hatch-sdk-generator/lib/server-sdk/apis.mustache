@@ -233,7 +233,7 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
         (delegateResponse as unknown as {status?: number}).status
       }`);
     } catch (err: unknown) {
-      this.logger.error(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`);
+      this.logger.error(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`, err);
       if (apiErrorResponseSent(err, basicRouteParams.res)) {
         return;
       }

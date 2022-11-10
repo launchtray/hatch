@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-test-web",
-  "version": "0.21.0-alpha.37",
+  "version": "0.21.0-alpha.38",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -19,9 +19,9 @@
     "xvfb": "^0.4.0"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.37",
-    "@launchtray/hatch-test": "0.21.0-alpha.37",
-    "@launchtray/hatch-util": "0.21.0-alpha.37",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.38",
+    "@launchtray/hatch-test": "0.21.0-alpha.38",
+    "@launchtray/hatch-util": "0.21.0-alpha.38",
     "@types/node": "^18",
     "@types/selenium-webdriver": "4.1.1",
     "@typescript-eslint/eslint-plugin": "^5",
@@ -35,8 +35,8 @@
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-test": "0.21.0-alpha.37",
-    "@launchtray/hatch-util": "0.21.0-alpha.37",
+    "@launchtray/hatch-test": "0.21.0-alpha.38",
+    "@launchtray/hatch-util": "0.21.0-alpha.38",
     "selenium-webdriver": "^4.3.1"
   }
 }

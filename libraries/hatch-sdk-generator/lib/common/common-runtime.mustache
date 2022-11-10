@@ -17,7 +17,7 @@ type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] exte
   : Enumerate<N, [...Acc, Acc['length']]>
 
 type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
-type SuccessHttpStatus = IntRange<200, 300>;
+type SuccessHttpStatus = IntRange<200, 300> | 0; // For now, treat "default" / 0 as success
 
 {{#apiInfo}}
 {{#apis}}

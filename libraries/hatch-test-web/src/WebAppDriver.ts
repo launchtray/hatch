@@ -86,7 +86,7 @@ export class WebAppDriverExtension {
   public async getVolatileExistenceOfElement(locator: ElementLocator) {
     const {byClause, webDriver} = this.getByClauseAndDriver(locator);
     try {
-      const el = webDriver.findElement(byClause);
+      const el = await webDriver.findElement(byClause);
       return el.isDisplayed();
     } catch (err) {
       return false;

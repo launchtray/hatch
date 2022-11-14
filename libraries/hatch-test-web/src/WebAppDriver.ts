@@ -83,12 +83,15 @@ export class WebAppDriverExtension {
     return webDriver.wait(until.elementIsVisible(el), timeout);
   }
 
-  public async getVolatileExistenceOfElement(locator: ElementLocator) {
+  public async getVolatileExistenceOfElement(locator: ElementLocator): Promise<boolean> {
     const {byClause, webDriver} = this.getByClauseAndDriver(locator);
     try {
       const el = await webDriver.findElement(byClause);
       return el.isDisplayed();
     } catch (err) {
+      if (err.name === 'StaleElementReferenceError') {
+        return this.getVolatileExistenceOfElement(locator);
+      }
       return false;
     }
   }

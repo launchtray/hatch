@@ -1,4 +1,5 @@
 import {Spot} from '@airtasker/spot';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 import path from 'path';
 import fs from 'fs-extra';
 import YAML from 'yaml';
@@ -30,7 +31,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 `;
 
-export const createApiFromOpenApi3Specs = async (apis: SwaggerV3[]) => {
+export const createApiFromOpenApi3Specs = async (apiPromises: Promise<SwaggerV3>[]) => {
+  const apis = await Promise.all(apiPromises);
   const typesFile = path.resolve(
     './node_modules/atlassian-openapi/lib/swagger.d.ts',
   );
@@ -65,8 +67,8 @@ export const createApiFromOpenApi3Specs = async (apis: SwaggerV3[]) => {
   ];
 
   const mergeResult = merge(
-    patchedApis.map((api: SwaggerV3) => ({
-      oas: api,
+    patchedApis.map((patchedApi: SwaggerV3) => ({
+      oas: patchedApi,
     })),
   );
 
@@ -93,11 +95,25 @@ export const createApiFromOpenApi3Specs = async (apis: SwaggerV3[]) => {
   }
 };
 
-export const createApiByYamlOrJsonFile = (inputJsonFile: string) => {
-  return YAML.parseDocument(fs.readFileSync(inputJsonFile, 'utf8')).toJS() as SwaggerV3;
+export const dereferenceIfDesired = async (spec: SwaggerV3, resolveRefs: boolean, workingPath: string) => {
+  if (!resolveRefs) {
+    return spec as SwaggerV3;
+  }
+  const cwd = process.cwd();
+  try {
+    process.chdir(workingPath);
+    return (await $RefParser.bundle(spec)) as SwaggerV3;
+  } finally {
+    process.chdir(cwd);
+  }
 };
 
-export const createApiBySpotFile = (inputSpotApi: string) => {
+export const createApiByYamlOrJsonFile = async (inputJsonFile: string, resolveRefs: boolean) => {
+  const specWithRefs = YAML.parseDocument(fs.readFileSync(inputJsonFile, 'utf8')).toJS() as SwaggerV3;
+  return await dereferenceIfDesired(specWithRefs, resolveRefs, path.basename(path.dirname(inputJsonFile)));
+};
+
+export const createApiBySpotFile = async (inputSpotApi: string) => {
   const contract = Spot.parseContract(inputSpotApi);
   return Spot.OpenApi3.generateOpenAPI3(contract) as SwaggerV3;
 };

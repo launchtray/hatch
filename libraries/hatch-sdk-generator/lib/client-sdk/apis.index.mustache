@@ -1,4 +1,5 @@
 import {DependencyContainer} from '@launchtray/tsyringe-async';
+import {ConfigurationParameters} from '@launchtray/hatch-fetch-util';
 {{#apiInfo}}
 {{#apis}}
 {{#operations}}
@@ -18,14 +19,31 @@ import {
   {{/apis}}
 } from '../runtime';
 
+const isNode = typeof process !== 'undefined' && process?.versions?.node != null;
+
 // Use this to register APIs client-side, whether from a browser-side app or a dependent service
 const registerRemoteApis = (
   container: DependencyContainer,
-  baseUrl?: string,
+  baseUrlOrConfig?: string | ConfigurationParameters,
   getToken?: (apiName: string) => string | symbol,
 ) => {
+  let baseUrl: string | undefined;
+  if (typeof baseUrlOrConfig === 'string') {
+    baseUrl = baseUrlOrConfig;
+  } else if (baseUrlOrConfig != null) {
+    baseUrl = baseUrlOrConfig.basePath;
+    {{#apis}}
+    {{#operations}}
+    container.register(Remote{{classFilename}}.configurationToken, {useValue: baseUrlOrConfig});
+    {{/operations}}
+    {{/apis}}
+  }
+  if (baseUrl == null && isNode) {
+    throw new Error('Base URL must not be undefined in server-side call to registerRemoteApis for API: "{{#openAPI}}{{#info}}{{{title}}}{{/info}}{{/openAPI}}"');
+  }
   {{#apis}}
   {{#operations}}
+
   container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? '');
   container.register(
     getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,
@@ -37,7 +55,7 @@ const registerRemoteApis = (
 
 const registerAuthForwardingApis = (
   container: DependencyContainer,
-  baseUrl?: string,
+  baseUrlOrConfig?: string | ConfigurationParameters,
   getToken?: (apiName: string) => string | symbol,
 ) => {
   const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
@@ -47,8 +65,21 @@ const registerAuthForwardingApis = (
   } else {
     port = 3000;
   }
+
+  let baseUrl: string | undefined;
+  if (typeof baseUrlOrConfig === 'string') {
+    baseUrl = baseUrlOrConfig;
+  } else if (baseUrlOrConfig != null) {
+    baseUrl = baseUrlOrConfig.basePath;
+    {{#apis}}
+    {{#operations}}
+    container.register(AuthForwarding{{classFilename}}.configurationToken, {useValue: baseUrlOrConfig});
+    {{/operations}}
+    {{/apis}}
+  }
   {{#apis}}
   {{#operations}}
+
   container.registerInstance({{classFilename}}BaseUrlInjectionToken, baseUrl ?? `http://localhost:${port}`);
   container.register(
     getToken?.('{{classFilename}}') ?? {{classFilename}}InjectionToken,

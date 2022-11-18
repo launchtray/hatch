@@ -12,7 +12,11 @@ const appName = process.env.APP_NAME ?? 'hatch-client';
 export default async (): Promise<WebClientComposition> => {
   ROOT_CONTAINER.register('appName', {useValue: appName});
 
-  registerRemoteApis(ROOT_CONTAINER);
+  registerRemoteApis(ROOT_CONTAINER, {
+    headers: {
+      'x-example-compose-test': '123',
+    },
+  });
 
   const commonComposition = await composeCommon();
   return {

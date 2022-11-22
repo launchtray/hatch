@@ -82,8 +82,9 @@ export const createApiFromOpenApi3Specs = async (apiPromises: Promise<SwaggerV3>
   }
   let mergedOutput: SwaggerV3 = mergeResult.output;
   if (patchFile != null) {
-    const patcher: ((input: SwaggerV3) => Promise<SwaggerV3>) = await import(patchFile);
-    mergedOutput = await patcher(mergedOutput);
+    const patchModulePath = path.resolve('.', patchFile);
+    const patchModule: {default: ((input: SwaggerV3) => Promise<SwaggerV3>)} = await import(patchModulePath);
+    mergedOutput = await patchModule.default(mergedOutput);
   }
   const apiSpecPromise = fs.writeFile(path.resolve(outputDir, 'api.json'), JSON.stringify(mergedOutput, null, 2));
   const typesFileOut = path.resolve(outputDir, 'api-spec.d.ts');

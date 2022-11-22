@@ -31,7 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 `;
 
-export const createApiFromOpenApi3Specs = async (apiPromises: Promise<SwaggerV3>[]) => {
+export const createApiFromOpenApi3Specs = async (apiPromises: Promise<SwaggerV3>[], patchFile?: string) => {
   const apis = await Promise.all(apiPromises);
   const typesFile = path.resolve(
     './node_modules/atlassian-openapi/lib/swagger.d.ts',
@@ -80,7 +80,12 @@ export const createApiFromOpenApi3Specs = async (apiPromises: Promise<SwaggerV3>
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, {recursive: true});
   }
-  const apiSpecPromise = fs.writeFile(path.resolve(outputDir, 'api.json'), JSON.stringify(mergeResult.output, null, 2));
+  let mergedOutput: SwaggerV3 = mergeResult.output;
+  if (patchFile != null) {
+    const patcher: ((input: SwaggerV3) => Promise<SwaggerV3>) = await import(patchFile);
+    mergedOutput = await patcher(mergedOutput);
+  }
+  const apiSpecPromise = fs.writeFile(path.resolve(outputDir, 'api.json'), JSON.stringify(mergedOutput, null, 2));
   const typesFileOut = path.resolve(outputDir, 'api-spec.d.ts');
   const typesDataPromise = fs.readFile(typesFile);
   const fd = fs.openSync(typesFileOut, 'w+');
@@ -109,6 +114,9 @@ export const dereferenceIfDesired = async (spec: SwaggerV3, resolveRefs: boolean
 };
 
 export const createApiByYamlOrJsonFile = async (inputJsonFile: string, resolveRefs: boolean) => {
+  if (inputJsonFile.startsWith('http://') || inputJsonFile.startsWith('https://')) {
+    return (await $RefParser.bundle(inputJsonFile)) as SwaggerV3;
+  }
   const specWithRefs = YAML.parseDocument(fs.readFileSync(inputJsonFile, 'utf8')).toJS() as SwaggerV3;
   return await dereferenceIfDesired(specWithRefs, resolveRefs, path.basename(path.dirname(inputJsonFile)));
 };

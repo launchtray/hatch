@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-api",
-  "version": "0.21.0-alpha.45",
+  "version": "0.21.0-alpha.46",
   "license": "MIT",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -25,7 +25,7 @@
     "yaml": "2.0.0-3"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.45",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.46",
     "@types/fs-extra": "^8",
     "@types/node": "^18",
     "@types/tmp": "^0.2.0",

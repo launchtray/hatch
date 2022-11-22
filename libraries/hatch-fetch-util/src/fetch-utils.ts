@@ -337,7 +337,11 @@ export class ConfigurableFetchApi {
       || (typeof context.body === 'string')
     ) ? context.body : JSON.stringify(context.body);
 
-    const headers = {...this.configuration.headers, ...context.headers};
+    const headers = {
+      ...this.configuration.headers,
+      ...context.headers,
+      'x-bypass-csrf-check': 'true', // If we can set headers, we are an allowed domain and this is safe
+    };
     const init = {
       method: context.method,
       headers,

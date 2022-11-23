@@ -245,7 +245,7 @@ export const requireOptionalString = (value: unknown | null | undefined, name: s
 };
 
 export const requireStringArray = (value: unknown[] | null | undefined, name: string): string[] => {
-  if (value != null && value.length != null) {
+  if (value != null && typeof value !== 'string' && value.length != null) {
     return value.map((element) => requireString(element, name)) as string[];
   }
   return [requireString(value as unknown, name)];
@@ -274,7 +274,7 @@ export const requireOptionalDate = (value: unknown | null | undefined, name: str
 };
 
 export const requireDateArray = (value: unknown[] | null | undefined, name: string): Date[] => {
-  if (value != null && value.length != null) {
+  if (value != null && typeof value !== 'string' && value.length != null) {
     return value.map((element) => requireDate(element, name)) as Date[];
   }
   return [requireDate(value as unknown, name)];
@@ -310,7 +310,7 @@ export const requireEnumArray = <E, V>(
   enumValues: V[],
   name: string,
 ): E[] => {
-  if (value != null && value.length != null) {
+  if (value != null && typeof value !== 'string' && value.length != null) {
     return value.map((element) => requireEnum<E, V>(element, enumValues, name)) as E[];
   }
   return [requireEnum(value as unknown, enumValues, name)];
@@ -346,7 +346,7 @@ export const requireOptionalNumber = (value: unknown | null | undefined, name: s
 };
 
 export const requireNumberArray = (value: unknown[] | null | undefined, name: string): number[] => {
-  if (value != null && value.length != null) {
+  if (value != null && typeof value !== 'string' && value.length != null) {
     return value.map((element) => requireNumber(element, name)) as number[];
   }
   return [requireNumber(value as unknown, name)];
@@ -391,7 +391,7 @@ export const requireOptionalBoolean = (value: unknown | null | undefined, name: 
 };
 
 export const requireBooleanArray = (value: unknown[] | null | undefined, name: string): boolean[] => {
-  if (value != null && value.length != null) {
+  if (value != null && typeof value !== 'string' && value.length != null) {
     return value.map((element) => requireBoolean(element, name)) as boolean[];
   }
   return [requireBoolean(value as unknown, name)];

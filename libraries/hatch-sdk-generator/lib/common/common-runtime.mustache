@@ -248,7 +248,7 @@ export const requireStringArray = (value: unknown[] | null | undefined, name: st
   if (value != null && value.length != null) {
     return value.map((element) => requireString(element, name)) as string[];
   }
-  return throwInvalidParamError(name);
+  return [requireString(value as unknown, name)];
 };
 
 export const requireOptionalStringArray = (value: unknown[] | null | undefined, name: string): string[] | undefined => {
@@ -277,7 +277,7 @@ export const requireDateArray = (value: unknown[] | null | undefined, name: stri
   if (value != null && value.length != null) {
     return value.map((element) => requireDate(element, name)) as Date[];
   }
-  return throwInvalidParamError(name);
+  return [requireDate(value as unknown, name)];
 };
 
 export const requireOptionalDateArray = (value: unknown[] | null | undefined, name: string): Date[] | undefined => {
@@ -313,7 +313,7 @@ export const requireEnumArray = <E, V>(
   if (value != null && value.length != null) {
     return value.map((element) => requireEnum<E, V>(element, enumValues, name)) as E[];
   }
-  return throwInvalidParamError(name);
+  return [requireEnum(value as unknown, enumValues, name)];
 };
 
 export const requireOptionalEnumArray = <E, V>(
@@ -349,7 +349,7 @@ export const requireNumberArray = (value: unknown[] | null | undefined, name: st
   if (value != null && value.length != null) {
     return value.map((element) => requireNumber(element, name)) as number[];
   }
-  return throwInvalidParamError(name);
+  return [requireNumber(value as unknown, name)];
 };
 
 export const requireOptionalNumberArray = (value: unknown[] | null | undefined, name: string): number[] | undefined => {
@@ -394,7 +394,7 @@ export const requireBooleanArray = (value: unknown[] | null | undefined, name: s
   if (value != null && value.length != null) {
     return value.map((element) => requireBoolean(element, name)) as boolean[];
   }
-  return throwInvalidParamError(name);
+  return [requireBoolean(value as unknown, name)];
 };
 
 export const requireOptionalBooleanArray = (value: unknown[] | null | undefined, name: string): boolean[] | undefined => {

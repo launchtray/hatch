@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-rpc-node",
-  "version": "0.21.0-alpha.47",
+  "version": "0.21.0-alpha.48",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -18,13 +18,13 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@launchtray/hatch-rpc": "0.21.0-alpha.47",
-    "@launchtray/hatch-util": "0.21.0-alpha.47"
+    "@launchtray/hatch-rpc": "0.21.0-alpha.48",
+    "@launchtray/hatch-util": "0.21.0-alpha.48"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.47",
-    "@launchtray/hatch-rpc": "0.21.0-alpha.47",
-    "@launchtray/hatch-util": "0.21.0-alpha.47",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.48",
+    "@launchtray/hatch-rpc": "0.21.0-alpha.48",
+    "@launchtray/hatch-util": "0.21.0-alpha.48",
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
     "@types/uuid": "^8.3.0",

@@ -75,9 +75,7 @@ export const registerServerMiddleware = async (
       }
     }
     container.registerSingleton(serverMiddlewareKey, middleware);
-    if (associatedApiSpec != null) {
-      await middleware.registerAPIMetadata?.(apiMetadataConsumer);
-    }
+    await middleware.registerAPIMetadata?.(apiMetadataConsumer);
   }
   return apiSpecs;
 };

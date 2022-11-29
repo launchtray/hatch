@@ -77,25 +77,25 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
     {{#dataType}}
     const delegateResponseBody = await delegateResponse.body;
     {{#isFile}}
-    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/octet-stream');
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/octet-stream'{{/produces.0}});
     basicRouteParams.res.status(delegateResponse.status);
     StreamUtils.convertWebStreamToNodeReadable(delegateResponseBody).pipe(basicRouteParams.res);
     {{/isFile}}
     {{^isFile}}
     {{#primitiveType}}
     {{#isMapContainer}}
-    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/json'{{/produces.0}});
     {{/isMapContainer}}
     {{#isListContainer}}
-    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/json'{{/produces.0}});
     {{/isListContainer}}
     {{#simpleType}}
-    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'text/plain');
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'text/plain'{{/produces.0}});
     {{/simpleType}}
     basicRouteParams.res.status(delegateResponse.status).send(delegateResponseBody);
     {{/primitiveType}}
     {{^primitiveType}}
-    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType ?? 'application/json');
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/json'{{/produces.0}});
     {{#isListContainer}}
     const responseJson = delegateResponseBody.map(models.{{baseType}}ToJSON);
     basicRouteParams.res.status(delegateResponse.status).send(responseJson);

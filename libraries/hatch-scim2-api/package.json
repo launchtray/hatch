@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-scim2-api",
-  "version": "0.21.0-alpha.51",
+  "version": "0.21.0-alpha.52",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
@@ -18,8 +18,8 @@
     "@airtasker/spot": "^1.9.0"
   },
   "devDependencies": {
-    "@launchtray/hatch-api": "0.21.0-alpha.51",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.51",
+    "@launchtray/hatch-api": "0.21.0-alpha.52",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.52",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",

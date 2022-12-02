@@ -36,6 +36,7 @@ export default class StreamUtils {
     startStreaming: (
       streamChunk: (chunk: unknown, encoding?: BufferEncoding) => Promise<boolean>,
     ) => Promise<void>,
+    onComplete: () => void,
   }): Readable {
     const responseStream = new Readable();
     let readCalledFuture = new CompletableFuture();
@@ -63,13 +64,21 @@ export default class StreamUtils {
         return false;
       },
     ).finally(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      readCalledFuture.get().then(() => {
-        if (!connectionClosed) {
-          responseStream.push(null);
-          connectionClosed = true;
-        }
-      });
+      if (!connectionClosed) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        readCalledFuture.get()
+          .then(() => {
+            if (!connectionClosed) {
+              responseStream.push(null);
+              connectionClosed = true;
+            }
+          })
+          .finally(() => {
+            dataSource.onComplete();
+          });
+      } else {
+        dataSource.onComplete();
+      }
     });
     return responseStream;
   }

@@ -49,7 +49,12 @@ const {assets, assetsPrefix} = loadStaticAssetsMetadata();
 const renderStaticClient = async (requestContext: ClientRenderRequestContext): Promise<string> => {
   const {composition} = requestContext;
   const faviconPath = `${assetsPrefix}/favicon.ico`;
-  const assetsScript = `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  let assetsScript: string;
+  if (assets?.client?.js != null) {
+    assetsScript = `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  } else {
+    assetsScript = '';
+  }
   return (`<!doctype html>
     <html lang="">
     <head>
@@ -62,7 +67,7 @@ const renderStaticClient = async (requestContext: ClientRenderRequestContext): P
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      ${assets.client.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets?.client?.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
       ${assetsScript}
     </head>
     <body>
@@ -137,9 +142,14 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
   const {helmet} = helmetContext;
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = `${assetsPrefix}/favicon.ico`;
-  const assetsScript = crossOrigin
-    ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-    : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  let assetsScript: string;
+  if (assets?.client?.js != null) {
+    assetsScript = crossOrigin
+      ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
+      : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  } else {
+    assetsScript = '';
+  }
 
   return (`<!doctype html>
     <html lang="" ${helmet.htmlAttributes.toString()}>
@@ -157,7 +167,7 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
-      ${assets.client.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets?.client?.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
       ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>

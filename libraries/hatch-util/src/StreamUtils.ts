@@ -1,4 +1,4 @@
-import {Readable, Writable} from 'stream';
+import {Readable} from 'stream';
 import CompletableFuture from './CompletableFuture';
 
 export default class StreamUtils {

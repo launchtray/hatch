@@ -2,8 +2,59 @@ import express, {Application} from 'express';
 import fs from 'fs';
 import path from 'path';
 
-export const loadStaticAssetsMetadata = () => {
+// This works around a Razzle bug where assets.json is incomplete after a client compilation failure
+let warningShown = false;
+const getAssets = () => {
   const assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './assets.json')) as unknown as string);
+  if (process.env.NODE_ENV === 'development') {
+    const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
+    let port: number;
+    if (portString != null) {
+      port = parseInt(portString, 10);
+    } else {
+      port = 3000;
+    }
+    const razzleFix = {
+      client: {
+        js: [
+          `http://localhost:${port + 1}/static/js/client.js`,
+        ],
+        map: [
+          `http://localhost:${port + 1}/static/js/client.js.map`,
+        ],
+        chunks: [
+          'client',
+        ],
+      },
+    };
+    if (assets?.client == null && !warningShown) {
+      warningShown = true;
+      // eslint-disable-next-line no-console
+      console.error(`
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !! Encounterd Razzle bug that prevents assets.json from containing client asset information.   !!
+      !! Hatch will attempt to work around this, but you may need to restart your development server !!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      
+      `);
+    }
+    return {
+      ...razzleFix,
+      ...assets,
+    };
+  }
+  return assets;
+};
+
+export const loadStaticAssetsMetadata = () => {
   let assetsPrefix: string;
   if (process.env.NODE_ENV === 'development') {
     assetsPrefix = '';
@@ -16,6 +67,7 @@ export const loadStaticAssetsMetadata = () => {
     // eslint-disable-next-line no-undef -- global
     __webpack_public_path__ = `${assetsPrefix}/`;
   }
+  const assets = getAssets();
   return {assets, assetsPrefix};
 };
 

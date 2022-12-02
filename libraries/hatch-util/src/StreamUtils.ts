@@ -29,14 +29,14 @@ export default class StreamUtils {
     return Readable.from(buffer);
   }
 
-  static createAsyncReadable(dataSource: {
-    registerCancellationListener: (
+  static createAsyncReadable(dataSource?: {
+    registerCancellation?: (
       cancelStreaming: () => void,
     ) => void,
-    startStreaming: (
+    startStreaming?: (
       streamChunk: (chunk: unknown, encoding?: BufferEncoding) => Promise<boolean>,
     ) => Promise<void>,
-    onComplete: () => void,
+    onComplete?: () => void,
   }): Readable {
     const responseStream = new Readable();
     let readCalledFuture = new CompletableFuture();
@@ -46,40 +46,45 @@ export default class StreamUtils {
     };
 
     let connectionClosed = false;
-    dataSource.registerCancellationListener(() => {
+    dataSource?.registerCancellation?.(() => {
       if (!connectionClosed) {
         connectionClosed = true;
       }
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    dataSource.startStreaming(
-      async (chunk, encoding) => {
+    if (dataSource?.startStreaming != null) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      dataSource.startStreaming(
+        async (chunk, encoding) => {
+          if (!connectionClosed) {
+            await readCalledFuture.get();
+            responseStream.push(chunk, encoding);
+            readCalledFuture = new CompletableFuture();
+            return true;
+          }
+          return false;
+        },
+      ).finally(() => {
         if (!connectionClosed) {
-          await readCalledFuture.get();
-          responseStream.push(chunk, encoding);
-          readCalledFuture = new CompletableFuture();
-          return true;
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          readCalledFuture.get()
+            .then(() => {
+              if (!connectionClosed) {
+                responseStream.push(null);
+                connectionClosed = true;
+              }
+            })
+            .finally(() => {
+              dataSource.onComplete?.();
+            });
+        } else {
+          dataSource.onComplete?.();
         }
-        return false;
-      },
-    ).finally(() => {
-      if (!connectionClosed) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        readCalledFuture.get()
-          .then(() => {
-            if (!connectionClosed) {
-              responseStream.push(null);
-              connectionClosed = true;
-            }
-          })
-          .finally(() => {
-            dataSource.onComplete();
-          });
-      } else {
-        dataSource.onComplete();
-      }
-    });
+      });
+    } else {
+      responseStream.push(null);
+      dataSource?.onComplete?.();
+    }
     return responseStream;
   }
 }

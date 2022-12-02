@@ -1,4 +1,4 @@
-import {Readable} from 'stream';
+import {Readable, Writable} from 'stream';
 import CompletableFuture from './CompletableFuture';
 
 export default class StreamUtils {
@@ -27,5 +27,50 @@ export default class StreamUtils {
 
   static convertBufferToNodeReadable(buffer: Buffer) {
     return Readable.from(buffer);
+  }
+
+  static createAsyncReadable(dataSource: {
+    registerCancellationListener: (
+      cancelStreaming: () => void,
+    ) => void,
+    startStreaming: (
+      streamChunk: (chunk: unknown, encoding?: BufferEncoding) => Promise<boolean>,
+    ) => Promise<void>,
+  }): Readable {
+    const responseStream = new Readable();
+    let readCalledFuture = new CompletableFuture();
+    // eslint-disable-next-line no-underscore-dangle
+    responseStream._read = () => {
+      readCalledFuture.complete();
+    };
+
+    let connectionClosed = false;
+    dataSource.registerCancellationListener(() => {
+      if (!connectionClosed) {
+        connectionClosed = true;
+      }
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dataSource.startStreaming(
+      async (chunk, encoding) => {
+        if (!connectionClosed) {
+          await readCalledFuture.get();
+          responseStream.push(chunk, encoding);
+          readCalledFuture = new CompletableFuture();
+          return true;
+        }
+        return false;
+      },
+    ).finally(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      readCalledFuture.get().then(() => {
+        if (!connectionClosed) {
+          responseStream.push(null);
+          connectionClosed = true;
+        }
+      });
+    });
+    return responseStream;
   }
 }

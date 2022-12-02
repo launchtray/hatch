@@ -20,6 +20,7 @@ module.exports = {
   ],
   globals: {
     'WeakRef': false,
+    'BufferEncoding': 'readonly',
   },
   parserOptions: {
     project: resolveApp('./tsconfig.json'),

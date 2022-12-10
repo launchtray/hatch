@@ -12,6 +12,7 @@ import {
 import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
 import {
   ApiDelegateResponse,
+  ErrorReporter,
   inject,
   injectable,
   Logger,
@@ -237,6 +238,8 @@ export class {{classname}}Controller implements Delegator<{{classname}}Delegate>
       if (apiErrorResponseSent(err, basicRouteParams.res)) {
         return;
       }
+      const errorReporter = await requestContainer.resolve<ErrorReporter>('ErrorReporter');
+      errorReporter.captureException(err as Error);
     }
     basicRouteParams.res.set('Content-Type', 'text/plain');
     basicRouteParams.res.sendStatus(500);

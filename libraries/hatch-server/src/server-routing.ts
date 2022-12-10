@@ -5,7 +5,9 @@
 import {
   Class,
   DependencyContainer,
+  ErrorReporter,
   injectable,
+  Logger,
   resolveParams,
   ROOT_CONTAINER,
 } from '@launchtray/hatch-util';
@@ -142,6 +144,13 @@ export const registerPerRequestDependencies = (
   });
 };
 
+export const reportError = async (container: DependencyContainer, label: string, err: unknown) => {
+  const errorReporter = await container.resolve<ErrorReporter>('ErrorReporter');
+  const logger = await container.resolve<Logger>('Logger');
+  logger.error(`${label}:`, err);
+  errorReporter.captureException(err as Error);
+};
+
 const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
@@ -153,20 +162,21 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
         req[requestContainerKey] = container;
         registerPerRequestDependencies(container, req, res, next);
       }
-      const args = [];
-      if ((target[injectContainerOnlyKey] as boolean | undefined) ?? false) {
-        args.push(container);
-      } else {
-        args.push(...(await resolveParams(container, target, propertyKey)));
-      }
       try {
+        const args = [];
+        if ((target[injectContainerOnlyKey] as boolean | undefined) ?? false) {
+          args.push(container);
+        } else {
+          args.push(...(await resolveParams(container, target, propertyKey)));
+        }
         const methodResponse = await originalMethod.apply(ctlr, args);
         if (alternateActionResponseSent(methodResponse, res)) {
           return;
         }
       } catch (err: unknown) {
         if (!apiErrorResponseSent(err, res)) {
-          throw err;
+          await reportError(container, `Error servicing route '${String(propertyKey)}'`, err);
+          res.sendStatus(500);
         }
       }
     };
@@ -400,34 +410,41 @@ export interface Delegator<D> {
   delegate?: D;
 }
 
-// eslint-disable-next-line complexity
-const registerHealthChecks = (
+const originalGetLivenessStateKey = Symbol('originalGetLivenessState');
+const originalGetReadinessStateKey = Symbol('originalGetReadinessState');
+const originalGetAppInfoKey = Symbol('originalGetAppInfo');
+
+const saveOriginalHealthCheckMethods = <D>(target?: DelegatingControllerClass<D> | Class<D>) => {
+  if (target != null) {
+    if (target[originalGetLivenessStateKey] === undefined) {
+      target[originalGetLivenessStateKey] = target.prototype.getLivenessState ?? null;
+    }
+    if (target[originalGetReadinessStateKey] === undefined) {
+      target[originalGetReadinessStateKey] = target.prototype.getReadinessState ?? null;
+    }
+    if (target[originalGetAppInfoKey] === undefined) {
+      target[originalGetAppInfoKey] = target.prototype.getAppInfo ?? null;
+    }
+  }
+};
+
+const registerLivenessChecks = (
+  container: DependencyContainer,
   target: any,
   delegateType: any,
-  {
-    originalGetLivenessState,
-    originalGetReadinessState,
-    originalGetAppInfo,
-    delegateOriginalGetLivenessState,
-    delegateOriginalGetReadinessState,
-    delegateOriginalGetAppInfo,
-  }: {
-    originalGetLivenessState: any,
-    originalGetReadinessState: any,
-    originalGetAppInfo: any,
-    delegateOriginalGetLivenessState?: any,
-    delegateOriginalGetReadinessState?: any,
-    delegateOriginalGetAppInfo?: any,
-  },
 ) => {
   const livenessChecks = target.prototype[livenessChecksKey] ?? [];
+  target.prototype[livenessChecksKey] = [];
   const delegateLivenessChecks = delegateType?.prototype[livenessChecksKey] ?? [];
+  if (delegateType != null) {
+    delegateType.prototype[livenessChecksKey] = [];
+  }
   if (livenessChecks != null && livenessChecks.length > 0) {
     // eslint-disable-next-line complexity
     target.prototype.getLivenessState = async function getLivenessStateWrapper() {
       let overallState: LivenessState | undefined;
-      if (originalGetLivenessState != null) {
-        const state = await originalGetLivenessState.bind(this)();
+      if (target[originalGetLivenessStateKey] != null) {
+        const state = await target[originalGetLivenessStateKey].bind(this)();
         if (state != null && state !== true && state !== LivenessState.CORRECT) {
           overallState = state;
         }
@@ -439,8 +456,8 @@ const registerHealthChecks = (
         }
       }
       if (delegateType != null) {
-        if (delegateOriginalGetLivenessState != null) {
-          const state = await delegateOriginalGetLivenessState.bind(this.delegate)();
+        if (delegateType[originalGetLivenessStateKey] != null) {
+          const state = await delegateType[originalGetLivenessStateKey].bind(this.delegate)();
           if (state != null && state !== true && state !== LivenessState.CORRECT) {
             overallState = state;
           }
@@ -455,15 +472,25 @@ const registerHealthChecks = (
       return overallState ?? LivenessState.CORRECT;
     };
   }
+};
 
+const registerReadinessChecks = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
   const readinessChecks = target.prototype[readinessChecksKey] ?? [];
+  target.prototype[readinessChecksKey] = [];
   const delegateReadinessChecks = delegateType?.prototype[readinessChecksKey] ?? [];
+  if (delegateType != null) {
+    delegateType.prototype[readinessChecksKey] = [];
+  }
   if (readinessChecks != null && readinessChecks.length > 0) {
     // eslint-disable-next-line complexity
     target.prototype.getReadinessState = async function getReadinessStateWrapper() {
       let overallState: ReadinessState | undefined;
-      if (originalGetReadinessState != null) {
-        const state = await originalGetReadinessState.bind(this)();
+      if (target[originalGetReadinessStateKey] != null) {
+        const state = await target[originalGetReadinessStateKey].bind(this)();
         if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
           overallState = state;
         }
@@ -475,8 +502,8 @@ const registerHealthChecks = (
         }
       }
       if (delegateType != null) {
-        if (delegateOriginalGetReadinessState != null) {
-          const state = await delegateOriginalGetReadinessState.bind(this.delegate)();
+        if (delegateType[originalGetReadinessStateKey] != null) {
+          const state = await delegateType[originalGetReadinessStateKey].bind(this.delegate)();
           if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
             overallState = state;
           }
@@ -491,48 +518,86 @@ const registerHealthChecks = (
       return overallState ?? ReadinessState.ACCEPTING_TRAFFIC;
     };
   }
+};
 
+const registerAppInfoProviders = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
   const appInfoProviders = target.prototype[appInfoKey] ?? [];
+  target.prototype[appInfoKey] = [];
   const delegateAppInfoProviders = delegateType?.prototype[appInfoKey] ?? [];
+  if (delegateType != null) {
+    delegateType.prototype[appInfoKey] = [];
+  }
   if (
     (appInfoProviders != null && appInfoProviders.length > 0)
     || (delegateAppInfoProviders != null && delegateAppInfoProviders.length > 0)
   ) {
     target.prototype.getAppInfo = async function getAppInfoWrapper() {
-      let overalInfo: {[key: string]: any} = {};
-      if (originalGetAppInfo != null) {
-        const info = await originalGetAppInfo.bind(this)();
-        overalInfo = {
-          ...overalInfo,
-          ...info,
-        };
+      let overallInfo: {[key: string]: any} = {};
+      if (target[originalGetAppInfoKey] != null) {
+        try {
+          const info = await target[originalGetAppInfoKey].bind(this)();
+          overallInfo = {
+            ...overallInfo,
+            ...info,
+          };
+        } catch (err) {
+          await reportError(container, 'Error gathering app info', err);
+        }
       }
       for (const appInfoProvider of appInfoProviders) {
-        const info = await appInfoProvider(this);
-        overalInfo = {
-          ...overalInfo,
-          ...info,
-        };
+        try {
+          const info = await appInfoProvider(this);
+          overallInfo = {
+            ...overallInfo,
+            ...info,
+          };
+        } catch (err) {
+          await reportError(container, 'Error gathering app info', err);
+        }
       }
       if (delegateType != null) {
-        if (delegateOriginalGetAppInfo != null) {
-          const info = await delegateOriginalGetAppInfo.bind(this.delegate)();
-          overalInfo = {
-            ...overalInfo,
-            ...info,
-          };
+        if (delegateType[originalGetAppInfoKey] != null) {
+          try {
+            const info = await delegateType[originalGetAppInfoKey].bind(this.delegate)();
+            overallInfo = {
+              ...overallInfo,
+              ...info,
+            };
+          } catch (err) {
+            await reportError(container, 'Error gathering app info', err);
+          }
         }
         for (const appInfoProvider of delegateAppInfoProviders) {
-          const info = await appInfoProvider(this.delegate);
-          overalInfo = {
-            ...overalInfo,
-            ...info,
-          };
+          try {
+            const info = await appInfoProvider(this.delegate);
+            overallInfo = {
+              ...overallInfo,
+              ...info,
+            };
+          } catch (err) {
+            await reportError(container, 'Error gathering app info', err);
+          }
         }
       }
-      return overalInfo;
+      return overallInfo;
     };
   }
+};
+
+const registerAllHealthChecks = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
+  saveOriginalHealthCheckMethods(target);
+  saveOriginalHealthCheckMethods(delegateType);
+  registerLivenessChecks(container, target, delegateType);
+  registerReadinessChecks(container, target, delegateType);
+  registerAppInfoProviders(container, target, delegateType);
 };
 
 export type DelegatingControllerClass<D> = Class<Delegator<D>> & {delegateToken?: string | symbol};
@@ -583,14 +648,7 @@ export function middlewareFor<D>(
     });
   };
 
-  registerHealthChecks(target, delegateType, {
-    originalGetLivenessState: target.prototype.getLivenessState,
-    originalGetReadinessState: target.prototype.getReadinessState,
-    originalGetAppInfo: target.prototype.getAppInfo,
-    delegateOriginalGetLivenessState: delegateType?.prototype.getLivenessState,
-    delegateOriginalGetReadinessState: delegateType?.prototype.getReadinessState,
-    delegateOriginalGetAppInfo: delegateType?.prototype.getAppInfo,
-  });
+  registerAllHealthChecks(ROOT_CONTAINER, target, delegateType);
 
   const originalRegisterMetadata = target.constructor.prototype.registerAPIMetadata;
   const delegateOriginalRegisterMetadata = delegateType?.prototype.registerAPIMetadata;

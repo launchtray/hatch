@@ -43,7 +43,13 @@ export default class SentryReporter implements ErrorReporter {
     if (this.initialized) {
       try {
         if (exception?.stack != null) {
-          this.sentry.setExtra('exceptionContext', exception.stack);
+          // Remove ANSI color codes, per https://stackoverflow.com/questions/25245716
+          const stack = exception.stack.replace(
+            // eslint-disable-next-line no-control-regex
+            /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+            '',
+          );
+          this.sentry.setExtra('exceptionContext', stack);
         }
         this.sentry.captureException(exception);
       } catch (error) {

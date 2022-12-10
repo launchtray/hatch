@@ -95,7 +95,6 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
   requestContainer.register('isServer', {useValue: true});
   requestContainer.register('ssrEnabled', {useValue: true});
   const rootSaga = await createSagaForWebAppManagers(requestContainer);
-
   const rootSagaTask = sagaMiddleware.run(rootSaga);
   store.dispatch(navActions.serverLocationLoaded({location}));
 
@@ -223,8 +222,9 @@ export default (options: CreateServerOptions<WebServerComposition>) => {
         renderClient(requestContext).then((body) => {
           res.cookie('double_submit', buf.toString('hex'));
           res.status(200).send(body);
-        }).catch((renderError: Error) => {
-          next?.(renderError);
+        }).catch((error) => {
+          errorReporter.captureException(error);
+          res.sendStatus(500);
         });
       });
     };

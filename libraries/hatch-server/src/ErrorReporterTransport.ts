@@ -30,6 +30,12 @@ export class ErrorReporterTransport extends TransportStream {
         return formatObjectForLog(obj);
       }).join(' ')}`;
     }
+    // Remove ANSI color codes, per https://stackoverflow.com/questions/25245716
+    messageWithArgs = messageWithArgs.replace(
+      // eslint-disable-next-line no-control-regex
+      /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+      '',
+    );
     const paddedLevel = `[${level}]`.padEnd(RAW_LEVEL_MAX_LENGTH + 2);
     this.errorReporter.captureLog(`${paddedLevel}: ${messageWithArgs}`);
     callback();

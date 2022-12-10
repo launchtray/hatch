@@ -31,6 +31,7 @@ import {
   HealthStatus,
   LivenessState,
   ReadinessState,
+  reportError,
 } from './server-routing';
 import {ServerComposer, ServerComposition} from './ServerComposer';
 import {
@@ -112,7 +113,8 @@ const createServerLogger = async (appName: string) => {
     rootContainer.register('logLevel', {useValue: defaultLogLevel});
   }
   const logLevel = await rootContainer.resolve<string>('logLevel');
-  const colorizeLog = process.env.COLORIZE_LOG === 'true';
+  // Don't colorize by default when Sentry is enabled, since Sentry doesn't support color codes
+  const colorizeLog = process.env.COLORIZE_LOG === 'true' || process.env.SENTRY_DSN == null;
 
   if (process.env.NODE_ENV === 'development' || process.env.LOG_TO_CONSOLE === 'true') {
     logger.add(new transports.Console({
@@ -155,7 +157,11 @@ const sentryMonitor: SentryMonitor = {
   },
 };
 
-const getLivenessStatus = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<HealthStatus> => {
+const getLivenessStatus = async (
+  container: DependencyContainer,
+  logger: Logger,
+  serverMiddlewareList: ServerMiddleware[],
+): Promise<HealthStatus> => {
   let overallStatus: HealthStatus | undefined;
   for (const serverMiddleware of serverMiddlewareList) {
     try {
@@ -164,14 +170,18 @@ const getLivenessStatus = async (logger: Logger, serverMiddlewareList: ServerMid
         overallStatus = HealthStatus.DOWN;
       }
     } catch (err) {
-      logger.error('Error during liveness check:', err);
+      await reportError(container, 'Error during liveness check', err);
       return HealthStatus.DOWN;
     }
   }
   return overallStatus ?? HealthStatus.UP;
 };
 
-const getReadinessStatus = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<HealthStatus> => {
+const getReadinessStatus = async (
+  container: DependencyContainer,
+  logger: Logger,
+  serverMiddlewareList: ServerMiddleware[],
+): Promise<HealthStatus> => {
   let overallStatus: HealthStatus | undefined;
   for (const serverMiddleware of serverMiddlewareList) {
     try {
@@ -180,14 +190,18 @@ const getReadinessStatus = async (logger: Logger, serverMiddlewareList: ServerMi
         overallStatus = HealthStatus.OUT_OF_SERVICE;
       }
     } catch (err) {
-      logger.error('Error during readiness check:', err);
+      await reportError(container, 'Error during readiness check', err);
       return HealthStatus.DOWN;
     }
   }
   return overallStatus ?? HealthStatus.UP;
 };
 
-const getAppInfo = async (logger: Logger, serverMiddlewareList: ServerMiddleware[]): Promise<AnyJsonObject> => {
+const getAppInfo = async (
+  container: DependencyContainer,
+  logger: Logger,
+  serverMiddlewareList: ServerMiddleware[],
+): Promise<AnyJsonObject> => {
   let overallInfo: AnyJsonObject = {};
   for (const serverMiddleware of serverMiddlewareList) {
     try {
@@ -196,7 +210,7 @@ const getAppInfo = async (logger: Logger, serverMiddlewareList: ServerMiddleware
         ...(await serverMiddleware.getAppInfo?.()),
       };
     } catch (err) {
-      logger.error('Error gathering app info:', err);
+      await reportError(container, 'Error gathering app info', err);
     }
   }
   overallInfo.commitId = process.env.HATCH_BUILDTIME_COMMIT_ID;
@@ -237,7 +251,7 @@ const addHealthChecks = async (
 
     if (livenessRoute != null) {
       app.get(livenessRoute, async (req, res) => {
-        const status = await getLivenessStatus(logger, serverMiddlewareList);
+        const status = await getLivenessStatus(container, logger, serverMiddlewareList);
         const components = {livenessProbe: {status}};
         res.setHeader('Content-Type', 'application/json');
         res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
@@ -250,7 +264,7 @@ const addHealthChecks = async (
     }
     if (readinessRoute != null) {
       app.get(readinessRoute, async (req, res) => {
-        const status = await getReadinessStatus(logger, serverMiddlewareList);
+        const status = await getReadinessStatus(container, logger, serverMiddlewareList);
         const components = {readinessProbe: {status}};
         res.setHeader('Content-Type', 'application/json');
         res.status(codeForHealthStatus(status)).send(JSON.stringify({status, components}));
@@ -263,16 +277,16 @@ const addHealthChecks = async (
     }
     if (infoRoute != null) {
       app.get(infoRoute, async (req, res) => {
-        const info = await getAppInfo(logger, serverMiddlewareList);
+        const info = await getAppInfo(container, logger, serverMiddlewareList);
         res.setHeader('Content-Type', 'application/json');
         res.status(200).send(JSON.stringify(info));
       });
     }
 
     app.get(healthRoute, async (req, res) => {
-      const livenessStatus = await getLivenessStatus(logger, serverMiddlewareList);
-      const readinessStatus = await getReadinessStatus(logger, serverMiddlewareList);
-      const info = await getAppInfo(logger, serverMiddlewareList);
+      const livenessStatus = await getLivenessStatus(container, logger, serverMiddlewareList);
+      const readinessStatus = await getReadinessStatus(container, logger, serverMiddlewareList);
+      const info = await getAppInfo(container, logger, serverMiddlewareList);
       const components = {livenessProbe: {status: livenessStatus}, readinessProbe: {status: readinessStatus}};
       const groups = ['liveness', 'readiness'];
       res.setHeader('Content-Type', 'application/json');

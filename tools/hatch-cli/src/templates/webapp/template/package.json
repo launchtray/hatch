@@ -2,8 +2,9 @@
   "name": "@launchtray/hatch-template-webapp",
   "version": "0.1.0",
   "license": "MIT",
+  "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "scripts": {
     "start": "razzle start",

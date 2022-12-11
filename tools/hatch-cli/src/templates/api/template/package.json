@@ -4,8 +4,9 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
+  "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "scripts": {
     "prepare": "rimraf dist && tsc",

@@ -11,7 +11,6 @@
     "access": "public"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
@@ -19,12 +18,12 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "mockserver-client": "^5.11.1",
-    "mockserver-node": "^5.11.1",
+    "mockserver-client": "5.13.2",
+    "mockserver-node": "5.13.2",
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.57",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
     "@types/tmp": "^0.2.0",

@@ -8,7 +8,6 @@
     "access": "public"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
@@ -18,13 +17,13 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@launchtray/hatch-rpc": "0.21.0-alpha.57",
-    "@launchtray/hatch-util": "0.21.0-alpha.57"
+    "@launchtray/hatch-rpc": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.57",
-    "@launchtray/hatch-rpc": "0.21.0-alpha.57",
-    "@launchtray/hatch-util": "0.21.0-alpha.57",
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@launchtray/hatch-rpc": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
     "@types/uuid": "^8.3.0",

@@ -9,27 +9,27 @@
     "access": "restricted"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && hatch-server-sdk --dependency @launchtray/example-api && tsc",
     "build:watch": "hatch-server-sdk --dependency @launchtray/example-api && tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server": "0.21.0-alpha.57",
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.57",
-    "@launchtray/hatch-util": "0.21.0-alpha.57",
+    "@launchtray/hatch-server": "workspace:*",
+    "@launchtray/hatch-server-middleware": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
     "@launchtray/tsyringe-async": "4.3.3",
     "express": "^4"
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-server": "0.21.0-alpha.57",
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.57",
-    "@launchtray/hatch-sdk-generator": "0.21.0-alpha.57",
+    "@launchtray/hatch-server": "workspace:*",
+    "@launchtray/hatch-server-middleware": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/hatch-sdk-generator": "workspace:*",
     "@launchtray/tsyringe-async": "4.3.3",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.57",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "atlassian-openapi": "^1.0.17",
@@ -41,6 +41,6 @@
     "@types/express-serve-static-core": "^4",
     "rimraf": "3.0.0",
     "typescript": "4.7.4",
-    "@launchtray/example-api": "0.1.0"
+    "@launchtray/example-api": "workspace:*"
   }
 }

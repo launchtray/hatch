@@ -9,7 +9,6 @@
     "access": "restricted"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
@@ -22,7 +21,7 @@
     "jest": "^27.5.1",
     "ts-jest": "^27.1.5",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.57",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

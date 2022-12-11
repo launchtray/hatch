@@ -18,17 +18,85 @@ module.exports = {
   }
 };
 
-function overridePackageVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
-  const existingVersion = packageJson.dependencies[packageName];
-  if (existingVersion != null) {
-    const selector = existingVersionSelector == null ? () => true : existingVersionSelector;
-    if (selector(existingVersion)) {
-      const parent = packageJson.name;
-      context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
-      packageJson.dependencies[packageName] = desiredVersion;
+
+function overridePackageVersionHelper(
+  packageJson,
+  context,
+  depType,
+  packageName,
+  desiredVersion,
+  existingVersionSelector,
+) {
+  if (packageJson != null && packageJson[depType] != null) {
+    const existingVersion = packageJson[depType][packageName];
+    if (existingVersion != null && existingVersion !== desiredVersion) {
+      const selector = existingVersionSelector == null ? () => true : existingVersionSelector;
+      if (selector(existingVersion)) {
+        const parent = packageJson.name;
+        context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
+        packageJson[depType][packageName] = desiredVersion;
+      }
     }
   }
 }
+
+function overrideDependencyVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
+  overridePackageVersionHelper(
+    packageJson,
+    context,
+    'dependencies',
+    packageName,
+    desiredVersion,
+    existingVersionSelector,
+  );
+}
+
+function overridePeerDependencyVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
+  overridePackageVersionHelper(
+    packageJson,
+    context,
+    'peerDependencies',
+    packageName,
+    desiredVersion,
+    existingVersionSelector,
+  );
+}
+
+function overrideDevDependencyVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
+  overridePackageVersionHelper(
+    packageJson,
+    context,
+    'devDependencies',
+    packageName,
+    desiredVersion,
+    existingVersionSelector,
+  );
+}
+
+function overrideAllDependencyVersions(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
+  overrideDependencyVersion(
+    packageJson,
+    context,
+    packageName,
+    desiredVersion,
+    existingVersionSelector,
+  );
+  overridePeerDependencyVersion(
+    packageJson,
+    context,
+    packageName,
+    desiredVersion,
+    existingVersionSelector,
+  );
+  overrideDevDependencyVersion(
+    packageJson,
+    context,
+    packageName,
+    desiredVersion,
+    existingVersionSelector,
+  );
+}
+
 /**
  * This hook is invoked during installation before a package's dependencies
  * are selected.
@@ -38,8 +106,8 @@ function overridePackageVersion(packageJson, context, packageName, desiredVersio
  * The return value is the updated object.
  */
 function readPackage(packageJson, context) {
-  overridePackageVersion(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
-  overridePackageVersion(packageJson, context, 'postcss', '8.2.12', (existingVersion) => {
+  overrideAllDependencyVersions(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
+  overrideAllDependencyVersions(packageJson, context, 'postcss', '8.2.12', (existingVersion) => {
     return existingVersion.startsWith('8.2') || existingVersion.startsWith('^8.2') || existingVersion.startsWith('~8.2');
   });
   return packageJson;

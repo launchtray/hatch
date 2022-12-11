@@ -8,22 +8,21 @@
     "access": "public"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
     "build:watch": "tsc"
   },
   "peerDependencies": {
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.57",
-    "@launchtray/hatch-util": "0.21.0-alpha.57",
+    "@launchtray/hatch-server-middleware": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
     "@launchtray/react-pdf-renderer": "^1.6.13-beta.0",
     "react": "^16"
   },
   "devDependencies": {
-    "@launchtray/hatch-server-middleware": "0.21.0-alpha.57",
-    "@launchtray/hatch-util": "0.21.0-alpha.57",
-    "@launchtray/hatch-web-eslint-config": "0.21.0-alpha.57",
+    "@launchtray/hatch-server-middleware": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/hatch-web-eslint-config": "workspace:*",
     "@launchtray/react-pdf-renderer": "^1.6.13-beta.0",
     "@types/node": "^18",
     "@types/react": "^16",

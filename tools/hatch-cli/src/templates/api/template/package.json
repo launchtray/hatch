@@ -9,7 +9,6 @@
     "access": "restricted"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc && hatch-api --spec src/api-overrides.yaml --spot src/api.ts --final-patch dist/final-patch.js && ls dist/api.json",
@@ -21,9 +20,9 @@
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-api": "0.21.0-alpha.57",
+    "@launchtray/hatch-api": "workspace:*",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.57",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

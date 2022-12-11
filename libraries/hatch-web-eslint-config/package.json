@@ -20,7 +20,8 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-react-native": "^4"
+    "eslint-plugin-react-native": "^4",
+    "typescript": "4.7.4"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5",
@@ -33,9 +34,10 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-react-native": "^4"
+    "eslint-plugin-react-native": "^4",
+    "typescript": "4.7.4"
   },
   "dependencies": {
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.57"
+    "@launchtray/hatch-eslint-config": "workspace:*"
   }
 }

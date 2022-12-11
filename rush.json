@@ -526,21 +526,6 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
-      "packageName": "@launchtray/hatch-scim2-api",
-      "projectFolder": "libraries/hatch-scim2-api",
-      "versionPolicyName": "hatchVersionPolicy"
-    },
-    {
-      "packageName": "@launchtray/hatch-scim2-client-sdk",
-      "projectFolder": "libraries/hatch-scim2-client-sdk",
-      "versionPolicyName": "hatchVersionPolicy"
-    },
-    {
-      "packageName": "@launchtray/hatch-scim2-server-sdk",
-      "projectFolder": "libraries/hatch-scim2-server-sdk",
-      "versionPolicyName": "hatchVersionPolicy"
-    },
-    {
       "packageName": "@launchtray/hatch-template-webapp",
       "projectFolder": "tools/hatch-cli/src/templates/webapp/template",
       "shouldPublish": false

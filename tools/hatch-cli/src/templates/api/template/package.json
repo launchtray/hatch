@@ -21,9 +21,9 @@
   },
   "devDependencies": {
     "@types/node": "^18",
-    "@launchtray/hatch-api": "0.21.0-alpha.55",
+    "@launchtray/hatch-api": "0.21.0-alpha.56",
     "eslint": "^8",
-    "@launchtray/hatch-eslint-config": "0.21.0-alpha.55",
+    "@launchtray/hatch-eslint-config": "0.21.0-alpha.56",
     "@typescript-eslint/parser": "^5",
     "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",

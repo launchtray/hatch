@@ -1,3 +1,5 @@
 src/templates/**/node_modules
 src/templates/**/.rush
 src/templates/**/*.log
+.rush
+*.log

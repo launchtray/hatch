@@ -15,6 +15,7 @@
     "start:prod": "NODE_ENV=production node build/server.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
+
   },
   "dependencies": {
     "@launchtray/hatch-server": "workspace:*",
@@ -28,11 +29,6 @@
     "@redux-saga/core": "^1",
     "@sentry/browser": "^5",
     "@sentry/node": "^5",
-    "@storybook/addon-actions": "^5.3.19",
-    "@storybook/addon-links": "^5.3.19",
-    "@storybook/addons": "^5.3.19",
-    "@storybook/preset-typescript": "^3.0.0",
-    "@storybook/react": "^5.3.19",
     "bufferutil": "^4",
     "cors": "2.8.5",
     "express": "^4",
@@ -118,7 +114,17 @@
     "eslint-plugin-jest": "^26",
     "babel-preset-razzle": "4.2.17",
     "rimraf": "3.0.0",
-    "typescript": "4.7.4"
+    "typescript": "4.7.4",
+    "@storybook/addon-actions": "^6.5.14",
+    "@storybook/addon-essentials": "^6.5.14",
+    "@storybook/addon-interactions": "^6.5.14",
+    "@storybook/addon-links": "^6.5.14",
+    "@storybook/builder-webpack4": "^6.5.14",
+    "@storybook/manager-webpack4": "^6.5.14",
+    "@storybook/react": "^6.5.14",
+    "@storybook/testing-library": "^0.0.13",
+    "eslint-plugin-storybook": "^0.6.8",
+    "require-from-string": "^2.0.2"
   },
   "jest": {
     "transform": {

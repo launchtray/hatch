@@ -114,7 +114,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
-    "babel-preset-razzle": "4.2.17"
+    "babel-preset-razzle": "4.2.17",
+    "eslint-plugin-storybook": "^0.6.8"
   },
   "jest": {
     "transform": {

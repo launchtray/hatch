@@ -652,6 +652,11 @@ export const createFromTemplate = async (
           from: `@launchtray/hatch-template-${templateName}`,
           to: name,
         });
+        await replace({
+          files: `${tempFilePath}/package.json`,
+          from: 'workspace:*',
+          to: `${require('../package.json').version}`,
+        });
 
         // Handle hidden / project files
         const tsconfigExtendsPath = path.resolve(tempFilePath, 'tsconfig-extends');

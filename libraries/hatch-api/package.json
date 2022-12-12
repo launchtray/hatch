@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-api",
-  "version": "0.21.0-alpha.58",
+  "version": "0.21.0-alpha.59",
   "license": "MIT",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",

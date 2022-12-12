@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-fetch-util",
-  "version": "0.21.0-alpha.65",
+  "version": "0.21.0-alpha.66",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

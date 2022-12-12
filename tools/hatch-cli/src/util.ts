@@ -654,7 +654,7 @@ export const createFromTemplate = async (
         });
         await replace({
           files: `${tempFilePath}/package.json`,
-          from: 'workspace:*',
+          from: /workspace:\*/g,
           to: `${require('../package.json').version}`,
         });
 

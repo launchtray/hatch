@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-mock-server",
-  "version": "0.21.0-alpha.66",
+  "version": "0.21.0-alpha.67",
   "main": "./dist/index.js",
   "bin": {
     "mock-server": "./dist/main.js"

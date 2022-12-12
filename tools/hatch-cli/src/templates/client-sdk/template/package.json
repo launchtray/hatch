@@ -17,7 +17,8 @@
   "peerDependencies": {
     "@launchtray/hatch-util": "workspace:*",
     "@launchtray/hatch-fetch-util": "workspace:*",
-    "@launchtray/tsyringe-async": "4.3.3"
+    "@launchtray/tsyringe-async": "4.3.3",
+    "@sentry/types": "^5"
   },
   "devDependencies": {
     "@types/node": "^18",
@@ -33,6 +34,7 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
     "rimraf": "3.0.0",
-    "typescript": "4.7.4"
+    "typescript": "4.7.4",
+    "@sentry/types": "^5"
   }
 }

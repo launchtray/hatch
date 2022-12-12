@@ -1492,6 +1492,7 @@ importers:
       '@launchtray/hatch-sdk-generator': workspace:*
       '@launchtray/hatch-util': workspace:*
       '@launchtray/tsyringe-async': 4.3.3
+      '@sentry/types': ^5
       '@types/node': ^18
       '@typescript-eslint/eslint-plugin': ^5
       '@typescript-eslint/parser': ^5
@@ -1507,6 +1508,7 @@ importers:
       '@launchtray/hatch-sdk-generator': link:../../../../../../libraries/hatch-sdk-generator
       '@launchtray/hatch-util': link:../../../../../../libraries/hatch-util
       '@launchtray/tsyringe-async': 4.3.3
+      '@sentry/types': 5.30.0
       '@types/node': 18.11.13
       '@typescript-eslint/eslint-plugin': 5.46.0_2n2ezhhcqb3765264ccwqskpci
       '@typescript-eslint/parser': 5.46.0_ixh6nceclvqov4hcu5gszby2fi
@@ -1674,12 +1676,16 @@ importers:
       '@launchtray/hatch-server-middleware': workspace:*
       '@launchtray/hatch-util': workspace:*
       '@launchtray/tsyringe-async': 4.3.3
+      '@sentry/node': ^5
+      '@sentry/types': ^5
       '@types/express': ^4
       '@types/express-serve-static-core': ^4
       '@types/node': ^18
       '@typescript-eslint/eslint-plugin': ^5
       '@typescript-eslint/parser': ^5
       atlassian-openapi: ^1.0.17
+      bufferutil: ^4
+      cors: 2.8.5
       eslint: ^8
       eslint-config-airbnb-base: ^15
       eslint-plugin-import: ^2
@@ -1687,6 +1693,10 @@ importers:
       express: ^4
       rimraf: 3.0.0
       typescript: 4.7.4
+      utf-8-validate: ^5
+      winston: ^3
+      winston-transport: ^4
+      ws: ^7
     devDependencies:
       '@launchtray/hatch-eslint-config': link:../../../../../../libraries/hatch-eslint-config
       '@launchtray/hatch-sdk-generator': link:../../../../../../libraries/hatch-sdk-generator
@@ -1694,12 +1704,16 @@ importers:
       '@launchtray/hatch-server-middleware': link:../../../../../../libraries/hatch-server-middleware
       '@launchtray/hatch-util': link:../../../../../../libraries/hatch-util
       '@launchtray/tsyringe-async': 4.3.3
+      '@sentry/node': 5.30.0
+      '@sentry/types': 5.30.0
       '@types/express': 4.17.14
       '@types/express-serve-static-core': 4.17.31
       '@types/node': 18.11.13
       '@typescript-eslint/eslint-plugin': 5.46.0_2n2ezhhcqb3765264ccwqskpci
       '@typescript-eslint/parser': 5.46.0_ixh6nceclvqov4hcu5gszby2fi
       atlassian-openapi: 1.0.17
+      bufferutil: 4.0.7
+      cors: 2.8.5
       eslint: 8.29.0
       eslint-config-airbnb-base: 15.0.0_lt3hqehuojhfcbzgzqfngbtmrq
       eslint-plugin-import: 2.26.0_eslint@8.29.0
@@ -1707,6 +1721,10 @@ importers:
       express: 4.18.2
       rimraf: 3.0.0
       typescript: 4.7.4
+      utf-8-validate: 5.0.10
+      winston: 3.8.2
+      winston-transport: 4.5.0
+      ws: 7.5.9_3cxu5zja4e2r5wmvge7mdcljwq
 
   ../../tools/hatch-cli/src/templates/webapp/template:
     specifiers:
@@ -2277,6 +2295,7 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/custom-resources': 1.73.0_tzghliv5jxmmwcwyncjzvda5a4
       constructs: 3.4.182
+      punycode: 2.1.1
     transitivePeerDependencies:
       - '@aws-cdk/aws-ec2'
       - '@aws-cdk/aws-logs'
@@ -2327,6 +2346,7 @@ packages:
       '@aws-cdk/core': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       constructs: 3.4.182
+      minimatch: 3.1.2
     transitivePeerDependencies:
       - '@aws-cdk/aws-ec2'
       - '@aws-cdk/aws-logs'
@@ -2848,6 +2868,9 @@ packages:
   /@aws-cdk/cloud-assembly-schema/1.73.0:
     resolution: {integrity: sha512-3m5nJDLSApAuUMra2WrQF7GHt6xgxqFET91WShtKtj48brZk4MBJ3dLre2LjDVsmMMOVdd6FpjY7tE5C1v9Hyw==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
+    dependencies:
+      jsonschema: 1.4.1
+      semver: 7.3.8
     bundledDependencies:
       - jsonschema
       - semver
@@ -2871,7 +2894,11 @@ packages:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
       '@aws-cdk/cx-api': 1.73.0
       '@aws-cdk/region-info': 1.73.0
+      '@balena/dockerignore': 1.0.2
       constructs: 3.4.182
+      fs-extra: 9.1.0
+      ignore: 5.2.1
+      minimatch: 3.1.2
     bundledDependencies:
       - fs-extra
       - minimatch
@@ -2903,6 +2930,7 @@ packages:
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     dependencies:
       '@aws-cdk/cloud-assembly-schema': 1.73.0
+      semver: 7.3.8
     bundledDependencies:
       - semver
 
@@ -2913,6 +2941,8 @@ packages:
   /@aws-cdk/yaml-cfn/1.73.0:
     resolution: {integrity: sha512-m65JeI5dXdMfhKy6rgNrMgcIpeoYkKpZmB6zCKoazgu/VjOoKs9OHs+4mhdvvYrdEcclKJw3NxJH1bTBMT2BPA==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
+    dependencies:
+      yaml: 1.10.0
     dev: true
     bundledDependencies:
       - yaml
@@ -4404,6 +4434,9 @@ packages:
       '@babel/helper-string-parser': 7.19.4
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
+
+  /@balena/dockerignore/1.0.2:
+    resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
 
   /@bcoe/v8-coverage/0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
@@ -12368,7 +12401,7 @@ packages:
     dependencies:
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.8
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
     dev: true
@@ -12400,7 +12433,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.8
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -15570,6 +15603,9 @@ packages:
     resolution: {integrity: sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==}
     engines: {node: '>=0.10.0'}
 
+  /jsonschema/1.4.1:
+    resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
+
   /jsonwebtoken/8.5.1:
     resolution: {integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==}
     engines: {node: '>=4', npm: '>=1.4.28'}
@@ -16371,6 +16407,7 @@ packages:
     resolution: {integrity: sha512-6FsRAQsxQ61mw+qP1ZzbL9Bc78x2p5OqNgNpnoAFLTrX8n5Kxph0CsnhmKKNXTWjXqU5L0pGPR7hYk+XWZr60Q==}
     dependencies:
       brace-expansion: 1.1.11
+    dev: true
 
   /minimatch/3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -22404,6 +22441,11 @@ packages:
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+
+  /yaml/1.10.0:
+    resolution: {integrity: sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==}
+    engines: {node: '>= 6'}
+    dev: true
 
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}

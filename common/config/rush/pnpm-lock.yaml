@@ -1,5 +1,9 @@
 lockfileVersion: 5.4
 
+overrides:
+  fork-ts-checker-webpack-plugin: 6.4.0
+  postcss@^8.2: 8.2.12
+
 importers:
 
   .:

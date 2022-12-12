@@ -18,85 +18,6 @@ module.exports = {
   }
 };
 
-
-function overridePackageVersionHelper(
-  packageJson,
-  context,
-  depType,
-  packageName,
-  desiredVersion,
-  existingVersionSelector,
-) {
-  if (packageJson != null && packageJson[depType] != null) {
-    const existingVersion = packageJson[depType][packageName];
-    if (existingVersion != null && existingVersion !== desiredVersion) {
-      const selector = existingVersionSelector == null ? () => true : existingVersionSelector;
-      if (selector(existingVersion)) {
-        const parent = packageJson.name;
-        context.log('Patching ' + packageName + ' from ' + existingVersion + ' to ' + desiredVersion + ' for ' + parent);
-        packageJson[depType][packageName] = desiredVersion;
-      }
-    }
-  }
-}
-
-function overrideDependencyVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
-  overridePackageVersionHelper(
-    packageJson,
-    context,
-    'dependencies',
-    packageName,
-    desiredVersion,
-    existingVersionSelector,
-  );
-}
-
-function overridePeerDependencyVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
-  overridePackageVersionHelper(
-    packageJson,
-    context,
-    'peerDependencies',
-    packageName,
-    desiredVersion,
-    existingVersionSelector,
-  );
-}
-
-function overrideDevDependencyVersion(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
-  overridePackageVersionHelper(
-    packageJson,
-    context,
-    'devDependencies',
-    packageName,
-    desiredVersion,
-    existingVersionSelector,
-  );
-}
-
-function overrideAllDependencyVersions(packageJson, context, packageName, desiredVersion, existingVersionSelector) {
-  overrideDependencyVersion(
-    packageJson,
-    context,
-    packageName,
-    desiredVersion,
-    existingVersionSelector,
-  );
-  overridePeerDependencyVersion(
-    packageJson,
-    context,
-    packageName,
-    desiredVersion,
-    existingVersionSelector,
-  );
-  overrideDevDependencyVersion(
-    packageJson,
-    context,
-    packageName,
-    desiredVersion,
-    existingVersionSelector,
-  );
-}
-
 /**
  * This hook is invoked during installation before a package's dependencies
  * are selected.
@@ -106,9 +27,12 @@ function overrideAllDependencyVersions(packageJson, context, packageName, desire
  * The return value is the updated object.
  */
 function readPackage(packageJson, context) {
-  overrideAllDependencyVersions(packageJson, context, 'fork-ts-checker-webpack-plugin', '6.4.0');
-  overrideAllDependencyVersions(packageJson, context, 'postcss', '8.2.12', (existingVersion) => {
-    return existingVersion.startsWith('8.2') || existingVersion.startsWith('^8.2') || existingVersion.startsWith('~8.2');
-  });
+
+  // // The karma types have a missing dependency on typings from the log4js package.
+  // if (packageJson.name === '@types/karma') {
+  //  context.log('Fixed up dependencies for @types/karma');
+  //  packageJson.dependencies['log4js'] = '0.6.38';
+  // }
+
   return packageJson;
 }

@@ -397,25 +397,40 @@ const updateVersionPolicies = (monorepoPath: string) => {
   fs.writeFileSync(versionPoliciesPath, versionPoliciesRawUpdated);
 };
 
+const updatePnpmConfig = (monorepoPath: string) => {
+  const pnpmConfigPath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'pnpm-config.json');
+  const pnpmConfigRaw = fs.readFileSync(pnpmConfigPath).toString();
+  const pnpmConfigParsed = parse(pnpmConfigRaw);
+  pnpmConfigParsed.strictPeerDependencies = true;
+  pnpmConfigParsed.useWorkspaces = true;
+  pnpmConfigParsed.globalOverrides = {
+    ...pnpmConfigParsed.globalOverrides,
+    'fork-ts-checker-webpack-plugin': '6.4.0',
+    'postcss@^8.2': '8.2.12',
+  };
+  const pnpmConfigRawUpdated = stringify(pnpmConfigParsed, null, 2);
+  fs.writeFileSync(pnpmConfigPath, pnpmConfigRawUpdated);
+};
+
 const updateCustomCommands = (monorepoPath: string) => {
   const commandLinePath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'command-line.json');
   const commandLineRaw = fs.readFileSync(commandLinePath).toString();
   const commandLineParsed = parse(commandLineRaw);
   commandLineParsed.commands.push({
     commandKind: 'global',
-    name: 'dev',
+    name: 'start',
     summary: 'Runs all apps locally in dev mode',
     description: 'This command will run all hatch servers locally in development mode',
     safeForSimultaneousRushProcesses: true,
-    shellCommand: './dev',
+    shellCommand: './run-apps-in-dev-mode',
   });
   commandLineParsed.commands.push({
     commandKind: 'global',
-    name: 'prod',
+    name: 'start:containers',
     summary: 'Runs all apps locally via Docker',
     description: 'This command will run all hatch servers locally as production builds in Docker',
     safeForSimultaneousRushProcesses: true,
-    shellCommand: './prod',
+    shellCommand: './run-apps-in-containers',
   });
   commandLineParsed.commands.push({
     commandKind: 'bulk',
@@ -446,6 +461,16 @@ const updateCustomCommands = (monorepoPath: string) => {
     ignoreDependencyOrder: true,
     ignoreMissingScript: true,
     allowWarningsInSuccessfulBuild: true,
+  });
+  commandLineParsed.commands.push({
+    name: 'build:watch',
+    commandKind: 'bulk',
+    summary: 'Build projects and watch for changes',
+    description: 'For details, see the article "Using watch mode" on the Rush website: https://rushjs.io/',
+    incremental: true,
+    enableParallelism: true,
+    ignoreMissingScript: true,
+    watchForChanges: true,
   });
 
   const commandLineRawUpdated = stringify(commandLineParsed, null, 2);
@@ -586,6 +611,7 @@ export const createFromTemplate = async (
         }
         updateVersionPolicies(tempFilePath);
         updateCustomCommands(tempFilePath);
+        updatePnpmConfig(tempFilePath);
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {

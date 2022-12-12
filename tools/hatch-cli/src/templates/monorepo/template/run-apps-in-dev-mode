@@ -1,4 +1,7 @@
 #!/bin/bash
+# Runs all apps in dev mode, with all dependencies being "watched" by Rush and rebuilt automatically as changes are
+# made. Dev mode for each app will pick up on these dependency rebuilds to give a "hot reloading"-like experience
+# for all code in the repository.
 scriptDir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd $scriptDir
 
@@ -6,14 +9,15 @@ set -e
 # Kills subprocesses on exit
 trap "trap - SIGTERM && kill -- -$$ 2>/dev/null" SIGINT SIGTERM EXIT
 
-rush update
-if [ ! -z "$(rush list -p | grep " libraries/")" ]; then
-  rush build --to-version-policy libraries
-fi
-if [ ! -z "$(rush list -p | grep " tools/")" ]; then
-  rush build --to-version-policy tools
+if [ "${AUTO_RUN_GIMME_AWS_CREDS}" = "true" ]; then
+  gimme-aws-creds
+else
+  echo "Not auto-running gimme-aws-creds. Set AUTO_RUN_GIMME_AWS_CREDS to true to enable this."
 fi
 
+rush update
+
+# Note: assumes package name is "@org/[app-directory-name]"
 appShortNames="$( \
   rush list --json \
   | grep "\"path\": \"apps/" \
@@ -22,19 +26,22 @@ appShortNames="$( \
 )"
 
 maxShortNameLength=0
-serviceCount=0
+buildCommand="rush build:watch"
 while IFS= read -r shortName; do
-  serviceCount=$((serviceCount + 1))
-  shortNameLength=${#shortName}
-  if [ $shortNameLength -gt $maxShortNameLength ]; then
-    maxShortNameLength=$shortNameLength
+  if [ -f "apps/${shortName}/razzle.config.js" ]; then
+    packageName=$(grep \"name\": "apps/${shortName}/package.json" | awk '{ print $2 }' | sed 's/[,"]//g')
+    buildCommand="${buildCommand} --to-except ${packageName}"
+    shortNameLength=${#shortName}
+    if [ $shortNameLength -gt $maxShortNameLength ]; then
+      maxShortNameLength=$shortNameLength
+    fi
   fi
 done <<< "$appShortNames"
+${buildCommand} &
 
 set -a # automatically export all variables
 source .env
 set -o xtrace # print out variables as they are set
-source common.env
 source dev.env
 set +o xtrace
 set +a
@@ -44,9 +51,7 @@ set +a
 #   https://github.com/docker/compose/blob/master/compose/cli/colors.py
 declare -a colorCodes=("36" "33" "32" "35" "34" "36;1" "33;1" "32;1" "35;1" "34;1")
 colorCount=${#colorCodes[@]}
-# Start at service count to match production colors, since for the production build,
-# the static file servers will take the first $serviceCount colors
-colorIndex=$serviceCount
+colorIndex=0
 while IFS= read -r shortName; do
   colorIndex=$(($colorIndex % $colorCount))
   colorCode=${colorCodes[$colorIndex]}
@@ -60,7 +65,7 @@ while IFS= read -r shortName; do
     envName="$(echo "${shortName//[^[:alnum:]]/_}" | awk '{print toupper($0)}')"
     portName="${envName}_PORT"
     appPort=$(grep "^$portName=" ../../.env | awk -F '=' '{print $2}')
-    (PORT=$appPort rushx start | sed -e "s/^/`printf "${colorStart}${appTagPrefix}${colorEnd}"`/") &
+    (PORT=$appPort rushx start:no-watch | sed -e "s/^/`printf "${colorStart}${appTagPrefix}${colorEnd}"`/") &
   fi
   cd ../..
 done <<< "$appShortNames"

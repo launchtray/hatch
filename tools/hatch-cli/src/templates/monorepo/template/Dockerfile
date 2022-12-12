@@ -13,13 +13,14 @@ RUN find apps libraries tools -mindepth 1 -maxdepth 1 -type f -print | xargs rm 
 FROM node:18 as prebuild
 RUN apt-get update
 # Needed for client SDK generation
-RUN apt-get -y install openjdk-8-jdk
+RUN apt-get -y install openjdk-11-jdk
 WORKDIR /workspace
 COPY --from=cache-dependencies /workspace .
 RUN npm install -g @microsoft/rush
 RUN rush update --purge
 COPY ./libraries ./libraries
 ARG PREBUILD=all
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN if [ "$PREBUILD" = "libraries" ] && [ ! -z "$(rush list -p | grep " libraries/")" ] ; then \
       rush build -p 3 --to-version-policy libraries ; \
     fi
@@ -45,11 +46,12 @@ FROM remove-sourcemaps as clean-for-production
 RUN find build -name "public" -maxdepth 1 -print | xargs rm -rf
 
 # Create thin distroless server image from production files
-FROM gcr.io/distroless/nodejs:12 as production-app
+FROM gcr.io/distroless/nodejs:18 as production-app
 ARG APP_NAME=webapp
 COPY --from=clean-for-production /workspace/apps/$APP_NAME/build /
 EXPOSE 80
 ENV PORT=80
+ENV NODE_OPTIONS=--openssl-legacy-provider
 CMD ["server.js"]
 
 # Create thin image for serving static files

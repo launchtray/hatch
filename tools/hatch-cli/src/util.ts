@@ -422,7 +422,7 @@ const updateCustomCommands = (monorepoPath: string) => {
     summary: 'Runs all apps locally in dev mode',
     description: 'This command will run all hatch servers locally in development mode',
     safeForSimultaneousRushProcesses: true,
-    shellCommand: './run-apps-in-dev-mode',
+    shellCommand: 'bash ./run-apps-in-dev-mode',
   });
   commandLineParsed.commands.push({
     commandKind: 'global',
@@ -430,7 +430,7 @@ const updateCustomCommands = (monorepoPath: string) => {
     summary: 'Runs all apps locally via Docker',
     description: 'This command will run all hatch servers locally as production builds in Docker',
     safeForSimultaneousRushProcesses: true,
-    shellCommand: './run-apps-in-containers',
+    shellCommand: 'bash ./run-apps-in-containers',
   });
   commandLineParsed.commands.push({
     commandKind: 'bulk',
@@ -753,6 +753,14 @@ export const createFromTemplate = async (
           await fs.move(testPath, path.resolve(tempFilePath, 'src', '__test__', `${toShortName(name)}.test.ts`));
         }
         if (rushConfigPath != null && monorepoRootDir != null && projectFolder != null) {
+          patchPackageJson(tempFilePath, (packageParsed) => {
+            const updatedPackage = packageParsed;
+            if (packageParsed.scripts?.start != null) {
+              updatedPackage.scripts['start:no-watch'] = packageParsed.scripts.start;
+              updatedPackage.scripts.start = `rush build:watch --to-except ${name} & rushx start:no-watch`;
+            }
+            return updatedPackage;
+          });
           const rushConfigRaw = fs.readFileSync(rushConfigPath).toString();
           const rushConfigParsed = parse(rushConfigRaw);
           if (sdkOptions != null) {

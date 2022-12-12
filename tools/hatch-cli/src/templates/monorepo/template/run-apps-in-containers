@@ -4,15 +4,16 @@
 scriptDir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd "$scriptDir"
 
-COMMIT_ID="$(git rev-parse HEAD 2> /dev/null)$(git diff --quiet || echo '-dirty')"
-COMMIT_DATE="$(git show -s --format=%aI HEAD)"
-# Older git versions don't support strict ISO strings, fall back to non-strict
-if [[ "$COMMIT_DATE" == *"%aI"* ]]; then
-  COMMIT_DATE="$(git show -s --format=%ai HEAD)"
+if [ -d .git ]; then
+  COMMIT_ID="$(git rev-parse HEAD 2> /dev/null)$(git diff --quiet || echo '-dirty')"
+  COMMIT_DATE="$(git show -s --format=%aI HEAD)"
+  # Older git versions don't support strict ISO strings, fall back to non-strict
+  if [[ "$COMMIT_DATE" == *"%aI"* ]]; then
+    COMMIT_DATE="$(git show -s --format=%ai HEAD)"
+  fi
+  export COMMIT_ID
+  export COMMIT_DATE
 fi
-
-export COMMIT_ID
-export COMMIT_DATE
 
 set -e
 if ! command -v docker-compose &> /dev/null

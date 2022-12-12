@@ -8,36 +8,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5",
-    "@typescript-eslint/parser": "^5",
-    "eslint": "^8",
-    "razzle": "4.2.17",
-    "razzle-dev-utils": "4.2.17",
-    "mini-css-extract-plugin": "0.9.0",
-    "postcss": "8.2.12",
-    "razzle-plugin-typescript": "4.2.17",
-    "sockjs-client": "^1.4.0",
-    "webpack": "4.46.0",
-    "html-webpack-plugin": "4.5.2",
-    "webpack-dev-server": "^3.11.0",
-    "typescript": "4.7.4",
-    "@babel/core": "^7",
-    "babel-preset-razzle": "4.2.17"
-  },
-  "devDependencies": {
-    "razzle": "4.2.17",
-    "razzle-dev-utils": "4.2.17",
-    "mini-css-extract-plugin": "0.9.0",
-    "postcss": "8.2.12",
-    "razzle-plugin-typescript": "4.2.17",
-    "sockjs-client": "^1.4.0",
-    "webpack": "4.46.0",
-    "html-webpack-plugin": "4.5.2",
-    "webpack-dev-server": "^3.11.0",
-    "typescript": "4.7.4",
-    "@babel/core": "^7",
-    "babel-preset-razzle": "4.2.17"
   }
 }

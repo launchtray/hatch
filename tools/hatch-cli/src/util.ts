@@ -250,8 +250,7 @@ const createDockerService = (doc: YAML.Document, shortName: string, isStaticServ
   };
   if (!isStaticServer) {
     service.value.env_file = [
-      './common.env',
-      './prod.env',
+      './containers.env',
     ];
     service.value.environment = {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- following typical ENV_VAR naming convention
@@ -369,7 +368,7 @@ const updateDockerComposition = async (templateName: string, monorepoRootDir: st
       `${toPortName(shortName, true)}=${ports[1]}`,
     ]);
 
-    const prodEnvPath = path.resolve(monorepoRootDir, 'prod.env');
+    const prodEnvPath = path.resolve(monorepoRootDir, 'containers.env');
     appendToFile(prodEnvPath, [
       `${toEnvName(shortName)}_BASE_URL=http://${toDockerServiceName(shortName, false)}`,
     ]);

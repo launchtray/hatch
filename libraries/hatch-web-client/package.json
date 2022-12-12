@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-client",
-  "version": "0.21.0-alpha.57",
+  "version": "0.21.0-alpha.58",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

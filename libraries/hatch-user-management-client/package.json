@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-user-management-client",
-  "version": "0.21.0-alpha.67",
+  "version": "0.21.0-alpha.68",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

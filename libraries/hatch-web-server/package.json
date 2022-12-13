@@ -14,7 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "serialize-javascript": "^2.1.0"
+    "serialize-javascript": "^6.0.0"
   },
   "devDependencies": {
     "@launchtray/hatch-server": "workspace:*",
@@ -32,7 +32,7 @@
     "@types/react-redux": "^7",
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",
-    "@types/serialize-javascript": "^1.5.0",
+    "@types/serialize-javascript": "^5.0.2",
     "@types/webpack-env": "^1",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",

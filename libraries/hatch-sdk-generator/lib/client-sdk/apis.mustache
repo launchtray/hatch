@@ -149,7 +149,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
 
     {{/isListContainer}}
     {{^isListContainer}}
-    if (requestParameters?.{{> param-path }} !== undefined) {
+    if (requestParameters?.{{> param-path }} != null) {
       {{#isDateTime}}
       queryParameters['{{baseName}}'] = (requestParameters?.{{> param-path }} as any).toISOString();
       {{/isDateTime}}
@@ -216,7 +216,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
     {{#authMethods}}
     {{#isBasic}}
     {{#isBasicBasic}}
-    if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+    if (this.configuration && (this.configuration.username != null || this.configuration.password != null)) {
       headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
     }
     {{/isBasicBasic}}
@@ -295,7 +295,7 @@ export class Remote{{classname}} implements runtime.{{classname}} {
 
     {{/isListContainer}}
     {{^isListContainer}}
-    if (requestParameters?.{{> param-path }} !== undefined) {
+    if (requestParameters?.{{> param-path }} != null) {
       formParams.append('{{baseName}}', requestParameters?.{{> param-path }} as any);
     }
 

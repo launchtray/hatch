@@ -12,7 +12,7 @@ export const throwInvalidParamError = (paramName: string): never => {
 
 export function exists(json: any, key: string) {
   const value = json[key];
-  return value !== null && value !== undefined;
+  return value != null;
 }
 
 export function mapValues(data: any, fn: (item: any) => any) {

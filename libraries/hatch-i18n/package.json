@@ -17,7 +17,7 @@
     "i18next": "^19.8.0",
     "i18next-react-postprocessor": "^3.0.4",
     "luxon": "^1.25.0",
-    "react": "^16"
+    "react": "^17"
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "workspace:*",
@@ -34,6 +34,6 @@
     "luxon": "^1.25.0",
     "rimraf": "3.0.0",
     "typescript": "4.7.4",
-    "react": "^16"
+    "react": "^17"
   }
 }

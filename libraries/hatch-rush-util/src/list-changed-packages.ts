@@ -50,16 +50,18 @@ export const runCli = async () => {
     args[argv[i]] = argv[i + 1];
   }
 
+  const rushConfig = RushConfiguration.loadFromDefaultLocation();
+  const defaultBranch = rushConfig.repositoryDefaultFullyQualifiedRemoteBranch ?? 'origin/develop';
   const includeExternalDependencies = getBoolean(args['--include-external-dependencies']) ?? true;
   const enableFiltering = getBoolean(args['--enable-filtering']) ?? true;
-  const targetBranchName = args['--target-branch'] ?? process.env.ghprbTargetBranch ?? 'develop';
+  const targetBranchName = args['--target-branch'] ?? `origin/${process.env.ghprbTargetBranch}` ?? defaultBranch;
   const outputFormat = args['--format'] ?? 'list';
   const formats = Object.keys(formatPrinters);
   if (!formats.includes(outputFormat)) {
     throw new Error(`Invalid format argument '${outputFormat}'. Expected one of: ${formats.join(', ')}`);
   }
 
-  const changeAnalyzer = new ProjectChangeAnalyzer(RushConfiguration.loadFromDefaultLocation());
+  const changeAnalyzer = new ProjectChangeAnalyzer(rushConfig);
   const terminal: Terminal = new Terminal(new ConsoleTerminalProvider());
   const projects: Set<RushConfigurationProject> = await changeAnalyzer.getChangedProjectsAsync({
     terminal,

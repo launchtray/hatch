@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-test-pdf",
-  "version": "0.21.0-alpha.70",
+  "version": "0.21.0-alpha.71",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

@@ -20,7 +20,7 @@
     "@launchtray/hatch-util": "workspace:*",
     "@launchtray/tsyringe-async": "4.3.3",
     "@microsoft/rush": "^5.29.1",
-    "@microsoft/rush-lib": "^5.29.1",
+    "@microsoft/rush-lib": "^5.86.0",
     "@sentry/types": "^5",
     "ansi-escapes": "^4",
     "chalk": "^3",

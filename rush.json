@@ -447,6 +447,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-rush-util",
+      "projectFolder": "libraries/hatch-rush-util",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-template-webapp",
       "projectFolder": "tools/hatch-cli/src/templates/webapp/template",
       "shouldPublish": false

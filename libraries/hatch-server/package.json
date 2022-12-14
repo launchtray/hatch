@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server",
-  "version": "0.21.0-alpha.74",
+  "version": "0.21.0-alpha.75",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

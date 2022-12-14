@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-sdk-generator",
-  "version": "0.21.0-alpha.72",
+  "version": "0.21.0-alpha.73",
   "license": "MIT",
   "scripts": {
     "lint": "eslint --max-warnings=0 .",

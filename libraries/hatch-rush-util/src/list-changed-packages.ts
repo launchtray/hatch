@@ -5,19 +5,19 @@ const getBoolean = (value?: string): boolean | undefined => {
   if (value == null) {
     return undefined;
   }
-  switch(value.toLowerCase()){
-    case "true":
-    case "1":
-    case "yes":
+  switch (value.toLowerCase()) {
+    case 'true':
+    case '1':
+    case 'yes':
       return true;
     default:
       return false;
   }
-}
+};
 
 export const runCli = async () => {
   const formatPrinters: {[key: string]: (projects: Set<RushConfigurationProject>, terminal: Terminal) => void} = {
-    'list': (projects, terminal) => {
+    list: (projects, terminal) => {
       for (const project of projects) {
         terminal.writeLine(project.packageName);
       }
@@ -25,11 +25,21 @@ export const runCli = async () => {
     'from-args': (projects, terminal) => {
       let i = 0;
       for (const project of projects) {
-        terminal.write(`--from ${project.packageName}`);
+        terminal.write(`-f ${project.packageName}`);
         if (i !== projects.size - 1) {
           terminal.write(' ');
         }
-        i++;
+        i += 1;
+      }
+    },
+    'impacted-by-args': (projects, terminal) => {
+      let i = 0;
+      for (const project of projects) {
+        terminal.write(`-i ${project.packageName}`);
+        if (i !== projects.size - 1) {
+          terminal.write(' ');
+        }
+        i += 1;
       }
     },
   };
@@ -61,4 +71,5 @@ export const runCli = async () => {
   formatPrinter(projects, terminal);
 };
 
-runCli().then();
+// eslint-disable-next-line no-console
+runCli().catch(console.error);

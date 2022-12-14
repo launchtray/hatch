@@ -14,7 +14,7 @@
     "build:watch": "tsc"
   },
   "bin": {
-    "list-changed-projects": "./bin/list-changed-packages"
+    "list-changed-packages": "./bin/list-changed-packages"
   },
   "dependencies": {
     "@microsoft/rush-lib": "^5.86.0",

@@ -54,7 +54,10 @@ export const runCli = async () => {
   const defaultBranch = rushConfig.repositoryDefaultFullyQualifiedRemoteBranch ?? 'origin/develop';
   const includeExternalDependencies = getBoolean(args['--include-external-dependencies']) ?? true;
   const enableFiltering = getBoolean(args['--enable-filtering']) ?? true;
-  const targetBranchName = args['--target-branch'] ?? `origin/${process.env.ghprbTargetBranch}` ?? defaultBranch;
+  const pullRequestTargetBranch = process.env.ghprbTargetBranch == null
+    ? undefined
+    : `origin/${process.env.ghprbTargetBranch}`;
+  const targetBranchName = args['--target-branch'] ?? pullRequestTargetBranch ?? defaultBranch;
   const outputFormat = args['--format'] ?? 'list';
   const formats = Object.keys(formatPrinters);
   if (!formats.includes(outputFormat)) {

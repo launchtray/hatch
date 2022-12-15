@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+require('../dist/list-external-direct-dependencies.js')

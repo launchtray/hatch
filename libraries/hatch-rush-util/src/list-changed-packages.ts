@@ -1,5 +1,6 @@
 import {ProjectChangeAnalyzer, RushConfiguration, RushConfigurationProject} from '@microsoft/rush-lib';
 import {Terminal, ConsoleTerminalProvider} from '@rushstack/node-core-library';
+import process from 'process';
 
 const getBoolean = (value?: string): boolean | undefined => {
   if (value == null) {
@@ -76,5 +77,8 @@ export const runCli = async () => {
   formatPrinter(projects, terminal);
 };
 
-// eslint-disable-next-line no-console
-runCli().catch(console.error);
+runCli().catch((err) => {
+  // eslint-disable-next-line no-console
+  console.error(err.message);
+  process.exit(1);
+});

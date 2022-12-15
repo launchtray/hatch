@@ -23,7 +23,8 @@
     "@aws-cdk/aws-elasticloadbalancingv2": "1.73.0",
     "@aws-cdk/aws-iam": "1.73.0",
     "@aws-cdk/aws-logs": "1.73.0",
-    "@aws-cdk/core": "1.73.0"
+    "@aws-cdk/core": "1.73.0",
+    "@aws-cdk/aws-kms": "1.73.0"
   },
   "dependencies": {
     "@aws-cdk/assets": "1.73.0",

@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-eslint-config",
-  "version": "0.21.0-alpha.75",
+  "version": "0.21.0-alpha.76",
   "main": "index.js",
   "license": "MIT",
   "scripts": {

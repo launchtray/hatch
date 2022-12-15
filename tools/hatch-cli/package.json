@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-cli",
-  "version": "0.21.0-alpha.75",
+  "version": "0.21.0-alpha.76",
   "description": "",
   "bin": {
     "hatch": "./dist/index.js"

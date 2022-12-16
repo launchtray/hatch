@@ -1,30 +1,27 @@
 {
   "name": "@launchtray/hatch-user-management-client",
-  "version": "0.20.0",
+  "version": "0.21.0-alpha.77",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
   },
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "cross-fetch": "^3.0.4"
-  },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2"
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/tsyringe-async": "4.3.3"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.20.0",
-    "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
-    "@types/node": "^16",
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/tsyringe-async": "4.3.3",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",

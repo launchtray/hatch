@@ -1,8 +1,13 @@
+import {
+  alternateActionResponseSent,
+  apiErrorResponseSent,
+} from './api-utils';
 import createMicroservice from './createMicroservice';
 import createServer, {CreateServerOptions} from './createServer';
 import route, {
   assignRootContainerToController,
   controller,
+  Delegator,
   CUSTOM_INFO_ROUTE,
   CUSTOM_LIVENESS_ROUTE,
   CUSTOM_READINESS_ROUTE,
@@ -14,6 +19,7 @@ import route, {
   middlewareFor,
   readinessCheck,
   ReadinessState,
+  registerPerRequestDependencies,
   requestMatchesRouteList,
   Route,
 } from './server-routing';
@@ -27,6 +33,8 @@ import {
 } from './ServerComposer';
 import {
   APIMetadataParameters,
+  ASSOCIATED_API_SPEC_KEY,
+  ASSOCIATED_API_SPEC_ID_KEY,
   registerServerMiddleware,
   resolveServerMiddleware,
   Server,
@@ -36,9 +44,14 @@ import {
 
 export {
   addStaticRoutes,
+  alternateActionResponseSent,
   APIMetadataParameters,
+  apiErrorResponseSent,
+  ASSOCIATED_API_SPEC_KEY,
+  ASSOCIATED_API_SPEC_ID_KEY,
   route,
   controller,
+  Delegator,
   createServer,
   ServerMiddleware,
   ServerMiddlewareClass,
@@ -48,6 +61,7 @@ export {
   assignRootContainerToController,
   hasControllerRoutes,
   HTTPMethod,
+  registerPerRequestDependencies,
   registerServerMiddleware,
   resolveServerMiddleware,
   ServerComposer,

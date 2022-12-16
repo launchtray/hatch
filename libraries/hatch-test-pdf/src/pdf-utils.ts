@@ -1,7 +1,6 @@
 import {PDFImage} from 'pdf-image';
 import stream from 'stream';
 import fs from 'fs';
-import fetch from 'node-fetch';
 import tmp from 'tmp';
 import util from 'util';
 import sharp, {Sharp} from 'sharp';
@@ -79,7 +78,7 @@ export class PDF {
     private fetchOptions: {
       headers?: {[key: string]: string},
       method?: string,
-      body?: unknown,
+      body?: BodyInit,
     },
     private imageMagickVersion: string = defaultRequiredImageMagickVersion,
   ) {
@@ -113,7 +112,13 @@ export class PDF {
         this.pdfTestMetadata = JSON.parse(testMetadataString);
       }
       if (response.ok) {
-        await pipeline(response.body, fs.createWriteStream(this.tmpPdfFile.name));
+        if (response.body == null) {
+          throw new Error(`Failed to fetch PDF body: ${response.statusText}`);
+        }
+        // https://stackoverflow.com/questions/73308289
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        await pipeline(stream.Readable.fromWeb(response.body), fs.createWriteStream(this.tmpPdfFile.name));
         this.pdfImage = new PDFImage(this.tmpPdfFile.name, {
           convertOptions: {
             '-density': `${PNG_PIXELS_PER_INCH}`,

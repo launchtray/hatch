@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-rush-util",
+      "comment": "Add utility for detecting changed packages",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-rush-util"
+}

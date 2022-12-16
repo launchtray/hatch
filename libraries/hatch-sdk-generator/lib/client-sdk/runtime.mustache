@@ -1,0 +1,53 @@
+/* tslint:disable */
+/* eslint-disable */
+{{>licenseInfo}}
+import {
+  ApiAlternateAction,
+  ApiError,
+} from '@launchtray/hatch-util';
+
+export const throwInvalidParamError = (paramName: string): never => {
+  throw new ApiError(new ApiAlternateAction(500), `Bad response from server: missing/invalid ${paramName}`);
+};
+
+export function exists(json: any, key: string) {
+  const value = json[key];
+  return value != null;
+}
+
+export function mapValues(data: any, fn: (item: any) => any) {
+  return Object.keys(data).reduce(
+    (acc, key) => ({...acc, [key]: fn(data[key])}),
+    {},
+  );
+}
+
+export interface Consume {
+  contentType: string;
+}
+
+export function canConsumeForm(consumes: Consume[]): boolean {
+  for (const consume of consumes) {
+    if (consume.contentType === 'multipart/form-data') {
+      return true;
+    }
+  }
+  return false;
+}
+
+{{> common-runtime}}
+
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+// Note: intentional use of Symbol.for (vs. Symbol(...)) below to ensure client and server SDKs use same symbol
+export {{> api-injection-token}}
+export {{> api-base-url-injection-token}}
+
+/**
+ *{{#lambda.indented_star_1}}{{#unescapedDescription}} {{{unescapedDescription}}}{{/unescapedDescription}}{{/lambda.indented_star_1}}
+ */
+export {{> api-interface}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}

@@ -13,6 +13,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'airbnb',
     'plugin:react/recommended',
+    'plugin:storybook/recommended',
   ],
   rules: {
     ...baseConfig.rules,

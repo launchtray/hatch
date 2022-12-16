@@ -1,12 +1,14 @@
 {
   "name": "@launchtray/hatch-api",
-  "version": "0.20.0",
+  "version": "0.21.0-alpha.77",
   "license": "MIT",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
   },
   "bin": {
     "hatch-api": "./bin/hatch-api"
@@ -16,13 +18,15 @@
   },
   "dependencies": {
     "@airtasker/spot": "^1.9.0",
+    "@apidevtools/json-schema-ref-parser": "^9.0.9",
     "fs-extra": "^8",
+    "openapi-merge": "^1.3.2",
     "yaml": "2.0.0-3"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.20.0",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@types/fs-extra": "^8",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/tmp": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
@@ -31,6 +35,10 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
     "rimraf": "3.0.0",
-    "typescript": "4.7.4"
+    "typescript": "4.7.4",
+    "atlassian-openapi": "^1.0.17"
+  },
+  "peerDependencies": {
+    "atlassian-openapi": "^1.0.17"
   }
 }

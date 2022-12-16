@@ -1,6 +1,6 @@
 import {Class, DependencyContainer, injectable, Logger, resolveParams} from '@launchtray/hatch-util';
 import {match, matchPath, RouteProps} from 'react-router';
-import {AnyAction, Store} from 'redux';
+import {AnyAction} from 'redux';
 import {Saga} from 'redux-saga';
 import {call} from 'redux-saga/effects';
 import effects, {Effect} from './effects';
@@ -11,9 +11,11 @@ import {
   selectFirstRenderingFromLocationChangeAction,
 } from './NavProvider';
 import {isActionType} from './defineAction';
+import {END} from '@redux-saga/core';
 
 export const webAppManager = injectable;
 const locationChangeLoadersKey = Symbol('locationChangeLoaders');
+const onInitKey = Symbol('onInitKey');
 const clientLoadersKey = Symbol('clientLoaders');
 const webAppManagerKey = Symbol('webAppManager');
 export type PathMatcher = (path: string) => match | null;
@@ -73,6 +75,16 @@ export const onClientLoad = () => {
   };
 };
 
+export const onInit = () => {
+  return (target: unknown, propertyKey: string | symbol) => {
+    const asWebAppManager = target as WebAppManager;
+    if (asWebAppManager[onInitKey] == null) {
+      asWebAppManager[onInitKey] = [];
+    }
+    asWebAppManager[onInitKey]?.push({propertyKey});
+  };
+};
+
 const forEachLocationChangeLoader = async (
   target: unknown,
   iterator: (propertyKey: string | symbol, pathMatcher: PathMatcher, runOnClientLoad: boolean) => Promise<void>,
@@ -95,21 +107,31 @@ const forEachClientLoader = async (
   }
 };
 
-const hasWebAppManagerMethods = (target: unknown): boolean => {
+const forEachOnInit = async (
+  target: unknown,
+  iterator: (propertyKey: string | symbol) => Promise<void>,
+) => {
   const asWebAppManager = target as WebAppManager;
-  return (asWebAppManager[clientLoadersKey] != null) || (asWebAppManager[locationChangeLoadersKey] != null);
+  const clientLoaders = asWebAppManager?.[onInitKey] ?? [];
+  for (const {propertyKey} of clientLoaders) {
+    await iterator(propertyKey);
+  }
 };
 
-export const createSagaForWebAppManagers = async (
-  logger: Logger,
-  webAppManagers: WebAppManager[],
-  store: Store,
-  rootContainer: DependencyContainer,
-  cookie?: string,
-  authHeader?: string,
-  isServer = false,
-  ssrEnabled = true,
-): Promise<Saga> => {
+const hasWebAppManagerMethods = (target: unknown): boolean => {
+  const asWebAppManager = target as WebAppManager;
+  return (
+    asWebAppManager[clientLoadersKey] != null
+    || (asWebAppManager[locationChangeLoadersKey] != null)
+    || (asWebAppManager[onInitKey] != null)
+  );
+};
+
+export const createSagaForWebAppManagers = async (dependencyContainer: DependencyContainer): Promise<Saga> => {
+  const logger = await dependencyContainer.resolve<Logger>('Logger');
+  const isServer = await dependencyContainer.resolve<boolean>('isServer');
+  const ssrEnabled = await dependencyContainer.resolve<boolean>('ssrEnabled');
+  const webAppManagers = await resolveWebAppManagers(dependencyContainer);
   const sagas: Effect[] = [];
   logger.debug(`Total web app manager count: ${webAppManagers.length}`);
   webAppManagers.forEach((manager) => {
@@ -119,12 +141,18 @@ export const createSagaForWebAppManagers = async (
       throw new Error(`${className} does not have any web app manager decorators, but is registered as a manager.`);
     }
   });
+  const handleOnInitSagas: Effect[] = [];
+  const container = dependencyContainer.createChildContainer();
+  for (const manager of webAppManagers) {
+    const target = manager.constructor.prototype;
+    await forEachOnInit(target, async (propertyKey) => {
+      const args = await resolveParams(container, target, propertyKey);
+      handleOnInitSagas.push(effects.fork([manager, manager[propertyKey]], ...args));
+    });
+  }
+  sagas.push(...handleOnInitSagas);
   if (!isServer) {
     const handleClientLoadSagas: Effect[] = [];
-    const container = rootContainer.createChildContainer();
-    container.registerInstance('Store', store);
-    container.registerInstance('cookie', cookie ?? '');
-    container.registerInstance('authHeader', authHeader ?? '');
     for (const manager of webAppManagers) {
       const target = manager.constructor.prototype;
       await forEachClientLoader(target, async (propertyKey) => {
@@ -138,7 +166,7 @@ export const createSagaForWebAppManagers = async (
     navActions.locationChange,
     navActions.serverLocationLoaded,
   ];
-  const navWorker = function* navWorker(action: AnyAction) {
+  const navWorker = function* navWorker(action: AnyAction, isSsr?: boolean) {
     let location: Location;
     let isFirstRendering: boolean;
     if (isActionType(navActions.serverLocationLoaded, action)) {
@@ -157,29 +185,29 @@ export const createSagaForWebAppManagers = async (
         if (shouldRunOnClient) {
           const pathMatch = pathMatcher(location.path);
           if (pathMatch != null) {
-            const container = rootContainer.createChildContainer();
+            const locationChangeContainer = dependencyContainer.createChildContainer();
 
-            container.registerInstance('pathMatch', pathMatch);
-            container.registerInstance('Location', location);
-            container.registerInstance('isServer', isServer);
-            container.registerInstance('Store', store);
-            container.registerInstance('cookie', cookie ?? '');
-            container.registerInstance('authHeader', authHeader ?? '');
+            locationChangeContainer.registerInstance('pathMatch', pathMatch);
+            locationChangeContainer.registerInstance('Location', location);
+            locationChangeContainer.registerInstance('isServer', isServer);
 
-            const args = await resolveParams(container, target, propertyKey);
+            const args = await resolveParams(locationChangeContainer, target, propertyKey);
             handleLocationChangeSagas.push(call([manager, manager[propertyKey]], ...args));
           }
         }
       });
     }
-    logger.info('Calling web app managers with location change:', action);
+    logger.info('Dispatching location change action (may or may not trigger WebAppManager location handlers):', action);
     yield effects.all(handleLocationChangeSagas);
     yield effects.put(navActions.locationChangeApplied({location}));
+    if (isSsr ?? false) {
+      yield effects.put(END);
+    }
   };
   if (isServer) {
     sagas.push(effects.fork(function* navActionSaga() {
       const navAction = yield* effects.take(navigateActions);
-      yield effects.fork(navWorker, navAction);
+      yield effects.fork(navWorker, navAction, true);
     }));
   } else {
     sagas.push(effects.fork(function* navActionSaga() {

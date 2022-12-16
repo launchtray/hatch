@@ -1,5 +1,4 @@
 import {CognitoIdentityServiceProvider, CredentialProviderChain, AWSError} from 'aws-sdk';
-import fetch from 'cross-fetch';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import {inject, injectable, Logger} from '@launchtray/hatch-util';

@@ -1,5 +1,4 @@
 import {inject, injectable, Logger} from '@launchtray/hatch-util';
-import fetch from 'cross-fetch';
 import {
   TENANT_ID_HEADER,
   UserManagementClient,

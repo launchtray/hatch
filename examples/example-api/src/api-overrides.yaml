@@ -1,0 +1,172 @@
+# This file can be used to add additional paths that use OpenAPI features that (e.g.) might not be supported by Spot
+# Note that the extension is YAML, but that YAML is a superset of JSON. In the case of conflicts with the Spot spec,
+# this file will override values in the Spot file, unless the build scripts in package.json are modified to change the
+# ordering of CLI arguments to hatch-api.
+{
+  "paths": {
+    "/api/metrics/latest-metrics": {
+      "post": {
+        "tags": [
+          "Metrics"
+        ],
+        "description": "Find the latest metrics for a user",
+        "operationId": "GetLatestMetrics",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/Metric"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "The pdf report",
+            "headers": {
+              "x-timestamp": {
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              },
+              "x-start-date": {
+                "required": true,
+                "schema": {
+                  "type": "number"
+                }
+              }
+            },
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "x-request-id",
+            "in": "header",
+            "required": false,
+            "description": "Header identifying each user-level request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numberOfDays",
+            "in": "query",
+            "required": false,
+            "description": "Optional query parameter for specifying the number of days for the requested report.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "description": "Optional query parameter to generate a report for a given user ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": false,
+            "description": "Optional query parameter to generate a report for a given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "description": "Query parameter to generate a report for a given start date",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "required": false,
+            "description": "Optional query parameter to specify the time zone for generating the report",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "operationId": "getReportPdf",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": [
+
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

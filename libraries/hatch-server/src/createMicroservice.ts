@@ -12,9 +12,14 @@ const {assets, assetsPrefix} = loadStaticAssetsMetadata();
 const renderClient = async (): Promise<string> => {
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = `${assetsPrefix}/favicon.ico`;
-  const assetsScript = crossOrigin
-    ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-    : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  let assetsScript: string;
+  if (assets?.client?.js != null) {
+    assetsScript = crossOrigin
+      ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
+      : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  } else {
+    assetsScript = '';
+  }
 
   return (`<!doctype html>
     <html lang="">
@@ -26,7 +31,7 @@ const renderClient = async (): Promise<string> => {
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      ${assets.client.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets?.client?.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
       ${assetsScript}
     </head>
     <body>
@@ -38,7 +43,7 @@ const renderClient = async (): Promise<string> => {
 
 export default (options: CreateServerOptions<ServerComposition>) => {
   createServer(options, (server, app) => {
-    if (process.env.ENABLE_API_SPEC === 'true') {
+    if (process.env.ENABLE_API_SPEC === 'true' || process.env.NODE_ENV === 'development') {
       addStaticRoutes(app, assetsPrefix);
       app.get('/api', (req, res, next) => {
         crypto.randomBytes(32, (err, buf) => {

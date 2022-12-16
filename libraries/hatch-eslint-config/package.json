@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-eslint-config",
-  "version": "0.20.0",
+  "version": "0.21.0-alpha.77",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -15,7 +15,8 @@
     "eslint": "^8",
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
-    "eslint-plugin-jest": "^26"
+    "eslint-plugin-jest": "^26",
+    "typescript": "4.7.4"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5",
@@ -23,6 +24,7 @@
     "eslint": "^8",
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
-    "eslint-plugin-jest": "^26"
+    "eslint-plugin-jest": "^26",
+    "typescript": "4.7.4"
   }
 }

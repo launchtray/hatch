@@ -1,0 +1,249 @@
+/* tslint:disable */
+/* eslint-disable */
+{{>licenseInfo}}
+/* eslint-disable @typescript-eslint/no-empty-interface,dot-notation */
+import {
+  alternateActionResponseSent,
+  apiErrorResponseSent,
+  controller,
+  Delegator,
+  route,
+} from '@launchtray/hatch-server';
+import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
+import {
+  ApiDelegateResponse,
+  ErrorReporter,
+  inject,
+  injectable,
+  Logger,
+  StreamUtils,
+} from '@launchtray/hatch-util';
+import {
+  DependencyContainer,
+  resolveParams,
+} from '@launchtray/tsyringe-async';
+{{#imports.0}}
+import * as models from '../models';
+import {
+  {{#imports}}
+  {{className}},
+  {{/imports}}
+} from '../models';
+{{/imports.0}}
+import * as runtime from '../runtime';
+
+// Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
+type Blob = ReadableStream;
+type Set<T> = Array<T>;
+
+export interface {{classname}}Delegate {
+  {{#operations}}
+  {{#operation}}
+  handle{{operationIdCamelCase}}(
+    request: runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean},
+    ...optionalInjections: unknown[]
+  ): ApiDelegateResponse<runtime.{{operationIdCamelCase}}HttpResponse{{^returnType}}{{^responseHeaders.0}} | void{{/responseHeaders.0}}{{/returnType}}>;
+  {{/operation}}
+  {{/operations}}
+}
+
+const apiDelegateToken = Symbol('{{classname}}Delegate');
+
+@controller({injectContainerOnly: true})
+export class {{classname}}Controller implements Delegator<{{classname}}Delegate> {
+  static delegateToken = apiDelegateToken;
+
+  constructor(
+    @inject('Logger') private readonly logger: Logger,
+    @inject({{classname}}Controller.delegateToken) public readonly delegate: {{classname}}Delegate,
+  ) {
+  }
+  {{#operations}}
+  {{#operation}}
+
+  {{#responses}}
+  async _handle{{operationIdCamelCase}}For{{code}}(
+    delegateResponse: runtime.{{operationIdCamelCase}}HttpResponseFor{{code}} & {status: number},
+    basicRouteParams: BasicRouteParams,
+  ) {
+    {{#headers.0}}
+    const headers = {};
+    {{#headers}}
+    if (delegateResponse.headers?.{{name}} != null) {
+      headers['{{baseName}}'] = delegateResponse.headers.{{name}};
+    }
+    {{/headers}}
+    basicRouteParams.res.set(headers);
+    {{/headers.0}}
+    {{#dataType}}
+    const delegateResponseBody = await delegateResponse.body;
+    {{#isFile}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/octet-stream'{{/produces.0}});
+    basicRouteParams.res.status(delegateResponse.status);
+    StreamUtils.convertWebStreamToNodeReadable(delegateResponseBody).pipe(basicRouteParams.res);
+    {{/isFile}}
+    {{^isFile}}
+    {{#primitiveType}}
+    {{#isMapContainer}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/json'{{/produces.0}});
+    {{/isMapContainer}}
+    {{#isListContainer}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/json'{{/produces.0}});
+    {{/isListContainer}}
+    {{#simpleType}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'text/plain'{{/produces.0}});
+    {{/simpleType}}
+    basicRouteParams.res.status(delegateResponse.status).send(delegateResponseBody);
+    {{/primitiveType}}
+    {{^primitiveType}}
+    basicRouteParams.res.set('Content-Type', delegateResponse.headers?.contentType {{#produces.0}}?? '{{{mediaType}}}'{{/produces.0}}{{^produces.0}}?? 'application/json'{{/produces.0}});
+    {{#isListContainer}}
+    const responseJson = delegateResponseBody.map(models.{{baseType}}ToJSON);
+    basicRouteParams.res.status(delegateResponse.status).send(responseJson);
+    {{/isListContainer}}
+    {{^isListContainer}}
+    {{#isMapContainer}}
+    const responseJson = runtime.mapValues(delegateResponseBody, models.{{baseType}}ToJSON);
+    basicRouteParams.res.status(delegateResponse.status).send(responseJson);
+    {{/isMapContainer}}
+    {{^isMapContainer}}
+    const responseJson = models.{{baseType}}ToJSON(delegateResponseBody);
+    basicRouteParams.res.status(delegateResponse.status).send(responseJson);
+    {{/isMapContainer}}
+    {{/isListContainer}}
+    {{/primitiveType}}
+    {{/isFile}}
+    {{/dataType}}
+    {{^dataType}}
+    basicRouteParams.res.sendStatus(delegateResponse.status);
+    {{/dataType}}
+  }
+  {{/responses}}
+
+  @route.{{#lambda.lowercase}}{{{httpMethod}}}{{/lambda.lowercase}}('{{path}}'{{#pathParams.0}}.replace(/{([^}]*)}/g, ':$1'){{/pathParams.0}}) // {{httpMethod}}
+  async handle{{operationIdCamelCase}}(requestContainer: DependencyContainer) {
+    {{#hasFormParams}}
+    throw new Error('NOT SUPPORTED: The hatch server SDK generator does not (yet?) support form params');
+    {{/hasFormParams}}
+    const basicRouteParams = await requestContainer.resolve(BasicRouteParams);
+    try {
+      const request: runtime.{{operationIdCamelCase}}HttpRequest = {
+        {{#headerParams.0}}
+        headers: {
+        {{#headerParams}}
+          {{paramName}}: runtime.{{> require-param }}(
+            basicRouteParams.req.header('{{baseName}}'),
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
+            'header: "{{baseName}}"',
+          ),
+        {{/headerParams}}
+        },
+        {{/headerParams.0}}
+        {{#bodyParam}}
+        {{#isListContainer}}
+        {{#items}}
+        {{#isPrimitiveType}}
+        body: basicRouteParams.req.body{{#isNumeric}}.map(Number){{/isNumeric}},
+        {{/isPrimitiveType}}
+        {{^isPrimitiveType}}
+        body: basicRouteParams.req.body.map(models.{{{baseType}}}FromJSON),
+        {{/isPrimitiveType}}
+        {{/items}}
+        {{/isListContainer}}
+        {{^isListContainer}}
+        {{#isPrimitiveType}}
+        body: runtime.{{> require-param }}(
+          basicRouteParams.req.body,
+          {{#isEnum}}
+          {{> enum-values-array}},
+          {{/isEnum}}
+          'body',
+        ),
+        {{/isPrimitiveType}}
+        {{^isPrimitiveType}}
+        body: models.{{{dataType}}}FromJSON(basicRouteParams.req.body),
+        {{/isPrimitiveType}}
+        {{/isListContainer}}
+        {{/bodyParam}}
+        {{#pathParams.0}}
+        pathParams: {
+        {{#pathParams}}
+          {{paramName}}: runtime.{{> require-param }}(
+            basicRouteParams.req.params.{{baseName}},
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
+            'path param: "{{baseName}}"',
+          ),
+        {{/pathParams}}
+        },
+        {{/pathParams.0}}
+        {{#queryParams.0}}
+        queryParams: {
+        {{#queryParams}}
+        {{#isListContainer}}
+          {{paramName}}: runtime.{{> require-param }}Array(
+            basicRouteParams.req.query.{{baseName}}{{^isCollectionFormatMulti}}.split(runtime.COLLECTION_FORMATS["{{collectionFormat}}"]){{/isCollectionFormatMulti}},
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
+            'query param: "{{baseName}}"',
+          ),
+        {{/isListContainer}}
+        {{^isListContainer}}
+          {{paramName}}: runtime.{{> require-param }}(
+            basicRouteParams.req.query.{{baseName}},
+            {{#isEnum}}
+            {{> enum-values-array}},
+            {{/isEnum}}
+            'query param: "{{baseName}}"',
+          ),
+        {{/isListContainer}}
+        {{/queryParams}}
+        },
+        {{/queryParams.0}}
+      };
+      const target = this.delegate.constructor.prototype;
+      const args = await resolveParams(
+        requestContainer,
+        target,
+        'handle{{operationIdCamelCase}}',
+        {...request, isLocal: false, isFromSsr: basicRouteParams.req.header('x-req-from-ssr') === 'true'},
+      ) as [runtime.{{operationIdCamelCase}}HttpRequest & {isLocal: boolean, isFromSsr: boolean}, ...unknown[]];
+
+      let delegateResponse = await this.delegate.handle{{operationIdCamelCase}}(...args);
+      if (alternateActionResponseSent(delegateResponse, basicRouteParams.res)) {
+        return;
+      }
+      {{^responses.1}}
+
+      {{#responses.0}}
+      delegateResponse = runtime.ensureStatusIsSet(delegateResponse, {{{code}}});
+      {{/responses.0}}
+      {{/responses.1}}
+      {{#responses}}
+
+      if (runtime.is{{operationIdCamelCase}}HttpResponseFor{{code}}(delegateResponse)) {
+        await this._handle{{operationIdCamelCase}}For{{code}}(delegateResponse, basicRouteParams);
+        return;
+      }
+      {{/responses}}
+      this.logger.error(`Unexpected status code from handle{{operationIdCamelCase}}: ${
+        (delegateResponse as unknown as {status?: number}).status
+      }`);
+    } catch (err: unknown) {
+      this.logger.error(`Error servicing handle{{operationIdCamelCase}}: ${(err as {message?: string}).message}`, err);
+      if (apiErrorResponseSent(err, basicRouteParams.res)) {
+        return;
+      }
+      const errorReporter = await requestContainer.resolve<ErrorReporter>('ErrorReporter');
+      errorReporter.captureException(err as Error);
+    }
+    basicRouteParams.res.set('Content-Type', 'text/plain');
+    basicRouteParams.res.sendStatus(500);
+  }
+  {{/operation}}
+  {{/operations}}
+}

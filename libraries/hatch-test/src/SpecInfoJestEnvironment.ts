@@ -24,6 +24,7 @@ class SpecInfoJestEnvironment extends NodeEnvironment {
   async handleTestEvent(event?: {name?: string, test?: {name?: string, parent?: {name?: string}}}) {
     if (event?.name === 'test_start') {
       this.global.currentTestLoggerJestEnvironment = this;
+      this.global.fetch = fetch;
       this.currentTestName = event?.test?.name;
       this.currentSuiteName = event?.test?.parent?.name;
     }

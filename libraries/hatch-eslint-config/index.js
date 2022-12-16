@@ -11,12 +11,17 @@ module.exports = {
   ],
   env: {
     'jest/globals': true,
+    'es2021': true,
   },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'airbnb-base',
   ],
+  globals: {
+    'WeakRef': false,
+    'BufferEncoding': 'readonly',
+  },
   parserOptions: {
     project: resolveApp('./tsconfig.json'),
     tsconfigRootDir: resolveApp('.'),
@@ -42,6 +47,7 @@ module.exports = {
     'dot-storybook',
     '.storybook',
     'cdk.out',
+    '**/autogen/**',
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -52,6 +58,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': ['error', {
       variables: false
     }],
+    '@typescript-eslint/no-floating-promises': ['error'],
     'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': 'off', // replaced by @typescript version
     '@typescript-eslint/no-unused-vars': ['error'],

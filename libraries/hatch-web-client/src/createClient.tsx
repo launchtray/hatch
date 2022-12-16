@@ -1,5 +1,7 @@
 /* eslint-disable import/first -- __webpack_public_path__ needs to be set before imports */
 /* eslint-disable no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle */
+import {DependencyContainer} from '@launchtray/tsyringe-async';
+
 const staticAssetsBaseURL = (window as any).__STATIC_ASSETS_BASE_URL__;
 if (staticAssetsBaseURL !== '/') {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -26,7 +28,6 @@ import {
   patchPreloadedStateForClientNav,
   registerWebAppManagers,
   resetDefinedActions,
-  resolveWebAppManagers,
   runtimeConfig,
 } from '@launchtray/hatch-web';
 import {
@@ -133,6 +134,15 @@ const sentryMonitor: SentryMonitor = {
   },
 };
 
+// Keep consistent with version in createClient.tsx, or consolidate to common library
+export const registerPerRequestAuthDependencies = (
+  container: DependencyContainer,
+  {cookie, authHeader}: {cookie?: string, authHeader?: string},
+) => {
+  container.registerInstance('cookie', cookie ?? '');
+  container.registerInstance('authHeader', authHeader ?? '');
+};
+
 // eslint-disable-next-line complexity
 const createClientAsync = async (clientComposer: WebClientComposer) => {
   if (runningRootSagaTask != null) {
@@ -174,9 +184,13 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dev tools typings are incomplete
       middleware = composeEnhancers(middleware) as any;
     }
-    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
-    const preloadedState: any = patchPreloadedStateForClientNav((window as any).__PRELOADED_STATE__ ?? {}, location);
-    store = createStore(composition.createRootReducer(), preloadedState, middleware);
+    if (ssrEnabled) {
+      // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any, no-underscore-dangle -- global window
+      const preloadedState: any = patchPreloadedStateForClientNav((window as any).__PRELOADED_STATE__ ?? {}, location);
+      store = createStore(composition.createRootReducer(), preloadedState, middleware);
+    } else {
+      store = createStore(composition.createRootReducer(), undefined, middleware);
+    }
   } else {
     store.replaceReducer(composition.createRootReducer());
   }
@@ -187,19 +201,13 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     ...webAppManagers,
   );
 
-  const webAppManagerInstances = await resolveWebAppManagers(container);
   // eslint-disable-next-line no-undef -- global document object
   const {cookie} = document;
-  const rootSaga = await createSagaForWebAppManagers(
-    logger,
-    webAppManagerInstances,
-    store,
-    container,
-    cookie,
-    undefined,
-    false,
-    ssrEnabled,
-  );
+  container.registerInstance('Store', store);
+  container.register('isServer', {useValue: false});
+  container.register('ssrEnabled', {useValue: ssrEnabled});
+  registerPerRequestAuthDependencies(container, {cookie});
+  const rootSaga = await createSagaForWebAppManagers(container);
 
   if (rootSaga != null) {
     onSagaError = (error) => {

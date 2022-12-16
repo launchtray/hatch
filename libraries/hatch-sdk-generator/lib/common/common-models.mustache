@@ -1,0 +1,16 @@
+/* eslint-disable no-redeclare,import/export,@typescript-eslint/no-empty-interface,@typescript-eslint/no-unused-vars */
+{{>licenseInfo}}
+{{#models}}
+{{#model}}
+import {
+  {{classFilename}},
+} from './{{{classFilename}}}';
+{{/model}}
+{{/models}}
+
+{{#models}}
+{{#model}}
+export * from './{{{classFilename}}}';
+{{/model}}
+{{/models}}
+

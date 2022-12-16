@@ -1,0 +1,39 @@
+{
+  "name": "@launchtray/hatch-sdk-generator",
+  "version": "0.21.0-alpha.77",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
+  },
+  "bin": {
+    "hatch-client-sdk": "./bin/hatch-client-sdk",
+    "hatch-server-sdk": "./bin/hatch-server-sdk"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@launchtray/hatch-api": "workspace:*",
+    "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1",
+    "atlassian-openapi": "^1.0.17",
+    "fs-extra": "^8",
+    "tmp": "^0.2.1"
+  },
+  "devDependencies": {
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@types/fs-extra": "^8",
+    "@types/node": "^18",
+    "@types/tmp": "^0.2.0",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "eslint": "^8",
+    "eslint-config-airbnb-base": "^15",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jest": "^26",
+    "rimraf": "3.0.0",
+    "typescript": "4.7.4"
+  }
+}

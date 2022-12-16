@@ -63,7 +63,7 @@ export class WebAppDriverExtension {
     private artifactsPath?: string,
   ) {}
 
-  public async waitForElement(locator: ElementLocator): Promise<WebElement> {
+  private getByClauseAndDriver(locator: ElementLocator): {byClause: Locator, webDriver: WebDriver} {
     if (this.webDriver == null) {
       throw new Error('WebDriver has is no longer valid. Was quit() called?');
     }
@@ -73,9 +73,38 @@ export class WebAppDriverExtension {
     } else {
       byClause = By.css(`*[data-testid="${locator.testID}"]`);
     }
+    return {byClause, webDriver: this.webDriver};
+  }
+
+  public async waitForElement(locator: ElementLocator): Promise<WebElement> {
+    const {byClause, webDriver} = this.getByClauseAndDriver(locator);
     const timeout = locator.timeoutInMS ?? 2000;
-    const el = await this.webDriver.wait(until.elementLocated(byClause), timeout);
-    return this.webDriver.wait(until.elementIsVisible(el), timeout);
+    const el = await webDriver.wait(until.elementLocated(byClause), timeout);
+    return webDriver.wait(until.elementIsVisible(el), timeout);
+  }
+
+  public async getVolatileExistenceOfElement(locator: ElementLocator): Promise<boolean> {
+    const {byClause, webDriver} = this.getByClauseAndDriver(locator);
+    try {
+      const el = await webDriver.findElement(byClause);
+      return el.isDisplayed();
+    } catch (err) {
+      if (err.name === 'StaleElementReferenceError') {
+        return this.getVolatileExistenceOfElement(locator);
+      }
+      return false;
+    }
+  }
+
+  public async waitForNonExistenceOfElement(locator: ElementLocator) {
+    if (this.webDriver == null) {
+      throw new Error('WebDriver has is no longer valid. Was quit() called?');
+    }
+    const timeout = locator.timeoutInMS ?? 2000;
+    await this.webDriver.wait(async () => {
+      const exists = await this.getVolatileExistenceOfElement(locator);
+      return !exists;
+    }, timeout);
   }
 
   public async quit(): Promise<void> {

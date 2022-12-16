@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-mock-server",
-  "version": "0.20.0",
+  "version": "0.21.0-alpha.77",
   "main": "./dist/index.js",
   "bin": {
     "mock-server": "./dist/main.js"
@@ -11,25 +11,24 @@
     "access": "public"
   },
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
+    "build:watch": "tsc",
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "mockserver-client": "^5.11.1",
-    "mockserver-node": "^5.11.1",
+    "mockserver-client": "5.13.2",
+    "mockserver-node": "5.13.2",
     "tmp": "^0.2.1"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.20.0",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/tmp": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "cross-fetch": "^3.0.4",
     "eslint": "^8",
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",

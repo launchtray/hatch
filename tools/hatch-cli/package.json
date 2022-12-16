@@ -1,26 +1,26 @@
 {
   "name": "@launchtray/hatch-cli",
-  "version": "0.20.0",
+  "version": "0.21.0-alpha.77",
   "description": "",
   "bin": {
     "hatch": "./dist/index.js"
   },
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
   },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@microsoft/rush": "^5.29.1",
-    "@microsoft/rush-lib": "^5.29.1",
+    "@microsoft/rush-lib": "^5.86.0",
     "@sentry/types": "^5",
     "ansi-escapes": "^4",
     "chalk": "^3",
@@ -35,9 +35,9 @@
     "yaml": "2.0.0-3"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.20.0",
+    "@launchtray/hatch-eslint-config": "workspace:*",
     "@types/fs-extra": "^8",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/tmp": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
@@ -46,7 +46,10 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
     "rimraf": "3.0.0",
-    "typescript": "4.7.4"
+    "typescript": "4.7.4",
+    "jest": "^27.5.1",
+    "@babel/core": "^7",
+    "supports-color": "^7.2.0"
   },
   "eslintIgnore": [
     "src/templates"

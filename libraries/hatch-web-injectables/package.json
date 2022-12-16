@@ -1,24 +1,24 @@
 {
   "name": "@launchtray/hatch-web-injectables",
-  "version": "0.20.0",
+  "version": "0.21.0-alpha.77",
   "description": "Injectable utility components for web applications",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "prepare": "rimraf dist && tsc",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "0.20.0",
-    "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/hatch-web": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/hatch-web": "workspace:*",
+    "@launchtray/tsyringe-async": "4.3.3",
     "@types/react-dom": "^16",
     "@types/react-router": "^5",
     "@types/react-router-dom": "^5",
@@ -28,6 +28,7 @@
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
+    "react": "^17",
     "react-router": "^5",
     "react-router-dom": "^5",
     "redux": "^4",
@@ -35,9 +36,10 @@
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "@launchtray/hatch-util": "0.20.0",
-    "@launchtray/hatch-web": "0.20.0",
-    "@launchtray/tsyringe-async": "4.3.2",
+    "@launchtray/hatch-util": "workspace:*",
+    "@launchtray/hatch-web": "workspace:*",
+    "@launchtray/tsyringe-async": "4.3.3",
+    "react": "^17",
     "react-router": "^5",
     "react-router-dom": "^5",
     "redux": "^4"

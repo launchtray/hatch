@@ -1,0 +1,62 @@
+import {
+  ASSOCIATED_API_SPEC_KEY,
+  ASSOCIATED_API_SPEC_ID_KEY,
+  middlewareFor,
+} from '@launchtray/hatch-server';
+
+import {DependencyContainer} from '@launchtray/tsyringe-async';
+
+import {Class} from '@launchtray/hatch-util';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {Swagger} from '../../api-spec';
+import SwaggerV3 = Swagger.SwaggerV3;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import api from '../../api.json';
+
+api[ASSOCIATED_API_SPEC_ID_KEY] = Symbol('uniqueApiIdentifier'); // Guaranteed unique per module
+
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+import {
+  {{classFilename}}Controller,
+  {{classFilename}}Delegate,
+} from './{{classFilename}}';
+{{/operations}}
+{{/apis}}
+
+{{#apis}}
+{{#operations}}
+{{classFilename}}Controller[ASSOCIATED_API_SPEC_KEY] = api;
+{{/operations}}
+{{/apis}}
+
+const getApiMiddleware = ({
+{{#apis}}
+  delegateFor{{classFilename}},
+{{/apis}}
+} : {
+{{#apis}}
+  delegateFor{{classFilename}}: Class<{{classFilename}}Delegate>,
+{{/apis}}
+}) => {
+  return [
+{{#apis}}
+    middlewareFor({{classFilename}}Controller, delegateFor{{classFilename}}),
+{{/apis}}
+  ];
+};
+
+export {
+  getApiMiddleware,
+{{#apis}}
+{{#operations}}
+  {{classFilename}}Controller,
+  {{classFilename}}Delegate,
+{{/operations}}
+{{/apis}}
+};
+
+{{/apiInfo}}

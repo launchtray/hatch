@@ -1,0 +1,53 @@
+/* tslint:disable */
+/* eslint-disable */
+{{>licenseInfo}}
+import {Response} from 'express';
+import {BasicRouteParams} from '@launchtray/hatch-server-middleware';
+
+import {
+  ApiAlternateAction,
+  ApiDelegateResponse,
+  ApiError,
+  preventsDefaultResponse,
+  getStatusCode,
+  isApiError,
+  getAlternateAction,
+  isApiAlternateAction,
+  setTypeHint,
+} from '@launchtray/hatch-util';
+
+import {alternateActionResponseSent} from '@launchtray/hatch-server';
+
+const isStream = (value: unknown) => value != null && (value as {pipeTo?: unknown}).pipeTo != null;
+
+export function exists(json: any, key: string) {
+  const value = json[key];
+  return value != null;
+}
+
+export function mapValues(data: any, fn: (item: any) => any) {
+  return Object.keys(data).reduce(
+    (acc, key) => ({ ...acc, [key]: fn(data[key]) }),
+    {}
+  );
+}
+
+export const apiErrorResponseSent = (err: unknown, res: Response): boolean => {
+  if (isApiError(err)) {
+    try {
+      const altAction = getAlternateAction(err);
+      if (alternateActionResponseSent(altAction, res)) {
+        return true;
+      }
+    } catch (err: unknown) {
+      return false;
+    }
+  }
+  return false;
+}
+
+export const throwInvalidParamError = (paramName: string): never => {
+  throw new ApiError(new ApiAlternateAction(400), `Bad request: missing/invalid ${paramName}`);
+};
+
+{{> common-runtime}}

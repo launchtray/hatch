@@ -1,0 +1,419 @@
+{{#models}}
+{{#model}}
+import {
+  {{classFilename}},
+} from './models/{{{classFilename}}}';
+{{/model}}
+{{/models}}
+import {
+  getTypeHint,
+} from '@launchtray/hatch-util';
+
+// Redirect Blob type (hardcoded by typescript-fetch openapi-generator template) to ReadableStream
+type Blob = ReadableStream;
+type Set<T> = Array<T>;
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>
+
+type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
+type SuccessHttpStatus = IntRange<200, 300> | 0; // For now, treat "default" / 0 as success
+
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+{{#operation}}
+
+export interface {{operationIdCamelCase}}HttpRequestHeaders {
+  {{#headerParams}}
+  {{> param-type-definition}}
+  {{/headerParams}}
+}
+
+export type {{operationIdCamelCase}}HttpRequestHeadersBase = {} extends {{operationIdCamelCase}}HttpRequestHeaders ? {
+  {{#headerParams.0}}
+  headers?: {{operationIdCamelCase}}HttpRequestHeaders;
+  {{/headerParams.0}}
+} : {
+  headers: {{operationIdCamelCase}}HttpRequestHeaders;
+};
+
+export interface {{operationIdCamelCase}}HttpPathParams {
+  {{#pathParams}}
+  {{> param-type-definition}}
+  {{/pathParams}}
+}
+
+export type {{operationIdCamelCase}}HttpPathParamsBase = {} extends {{operationIdCamelCase}}HttpPathParams ? {
+  {{#pathParams.0}}
+  pathParams?: {{operationIdCamelCase}}HttpPathParams;
+  {{/pathParams.0}}
+} : {
+  pathParams: {{operationIdCamelCase}}HttpPathParams;
+};
+
+export interface {{operationIdCamelCase}}HttpQueryParams {
+  {{#queryParams}}
+  {{> param-type-definition}}
+  {{/queryParams}}
+}
+
+export type {{operationIdCamelCase}}HttpQueryParamsBase = {} extends {{operationIdCamelCase}}HttpQueryParams ? {
+  {{#queryParams.0}}
+  queryParams?: {{operationIdCamelCase}}HttpQueryParams;
+  {{/queryParams.0}}
+} : {
+  queryParams: {{operationIdCamelCase}}HttpQueryParams;
+};
+
+export interface {{operationIdCamelCase}}HttpFormParams {
+  {{#formParams}}
+  {{> param-type-definition}}
+  {{/formParams}}
+}
+
+export type {{operationIdCamelCase}}HttpFormParamsBase = {} extends {{operationIdCamelCase}}HttpFormParams ? {
+  {{#formParams.0}}
+  formParams?: {{operationIdCamelCase}}HttpFormParams;
+  {{/formParams.0}}
+} : {
+  formParams: {{operationIdCamelCase}}HttpFormParams;
+};
+
+export type {{operationIdCamelCase}}HttpRequestBase = (
+  & {{operationIdCamelCase}}HttpRequestHeadersBase
+  & {{operationIdCamelCase}}HttpPathParamsBase
+  & {{operationIdCamelCase}}HttpQueryParamsBase
+  & {{operationIdCamelCase}}HttpFormParamsBase
+  & {
+    {{#bodyParam}}
+    {{#dataType}}
+    body: {{{dataType}}};
+    {{/dataType}}
+    {{/bodyParam}}
+  }
+);
+
+export type {{operationIdCamelCase}}HttpRequest = {} extends {{operationIdCamelCase}}HttpRequestBase
+  ? void | {{operationIdCamelCase}}HttpRequestBase
+  : {{operationIdCamelCase}}HttpRequestBase;
+{{#responses}}
+
+{{#dataType}}
+
+/**
+ * Note: may return false positives for primitive types returned by multiple status codes, e.g. if 200 and 201 both
+ * return strings, functions for 200 and 201 will both return true. If and when this presents a problem, remember you
+ * can always use the 'Raw' client SDK method along with is{{operationIdCamelCase}}HttpResponseFor{{code}}
+ */
+export const is{{operationIdCamelCase}}HttpResponseBodyFor{{code}} = (body?: {{operationIdCamelCase}}HttpResponseBody | void): body is {{{dataType}}} => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore -- autogen file, type may not exist
+  return (typeof body === '{{{dataType}}}') || (getTypeHint(body) === {{code}});
+};
+{{/dataType}}
+
+export const is{{operationIdCamelCase}}HttpResponseFor{{code}} = (response?: {{operationIdCamelCase}}HttpResponse | void): response is {{operationIdCamelCase}}HttpResponseFor{{code}} & {status: number} => {
+  return (response?.status === {{code}});
+};
+{{/responses}}
+
+export type {{operationIdCamelCase}}HttpResponseSuccessBody = (
+  {{#responses}}
+  {{#dataType}}| ({{{code}}} extends SuccessHttpStatus ? {{{dataType}}} : never){{/dataType}}{{^dataType}}| void{{/dataType}}
+  {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpResponseErrorBody = (
+  {{#responses}}
+  {{#dataType}}| ({{{code}}} extends SuccessHttpStatus ? never : {{{dataType}}}){{/dataType}}{{^dataType}}| void{{/dataType}}
+  {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpResponseBody = (
+  | {{operationIdCamelCase}}HttpResponseSuccessBody
+  | {{operationIdCamelCase}}HttpResponseErrorBody
+);
+{{#responses}}
+
+export interface {{operationIdCamelCase}}HttpResponseFor{{code}}Headers {
+  contentType?: string;
+  {{#headers}}
+  {{> param-type-definition}}
+  {{/headers}}
+}
+
+export type {{operationIdCamelCase}}HttpResponseFor{{code}}HeadersBase = {} extends {{operationIdCamelCase}}HttpResponseFor{{code}}Headers ? {
+  headers?: {{operationIdCamelCase}}HttpResponseFor{{code}}Headers;
+} : {
+  headers: {{operationIdCamelCase}}HttpResponseFor{{code}}Headers;
+};
+
+export type {{operationIdCamelCase}}HttpResponseFor{{code}} = (
+  {{operationIdCamelCase}}HttpResponseFor{{code}}HeadersBase
+  & {
+    {{#dataType}}
+    body: {{{dataType}}} | Promise<{{{dataType}}}>;
+    {{/dataType}}
+    {{^dataType}}
+    body?: void;
+    {{/dataType}}
+    status{{^responses.1}}?{{/responses.1}}: {{{code}}};
+  }
+);
+{{/responses}}
+
+export type {{operationIdCamelCase}}HttpSuccessResponse = (
+  {{#responses}}
+  | ({{{code}}} extends SuccessHttpStatus ? {{operationIdCamelCase}}HttpResponseFor{{code}} : never)
+  {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpErrorResponse = (
+  {{#responses}}
+  | ({{{code}}} extends SuccessHttpStatus ? never : {{operationIdCamelCase}}HttpResponseFor{{code}})
+  {{/responses}}
+);
+
+export type {{operationIdCamelCase}}HttpResponse = (
+  | {{operationIdCamelCase}}HttpSuccessResponse
+  | {{operationIdCamelCase}}HttpErrorResponse
+);
+
+{{/operation}}
+{{/operations}}
+{{#hasEnums}}
+{{#operations}}
+{{#operation}}
+{{#allParams}}
+{{#isEnum}}
+
+export enum {{operationIdCamelCase}}{{enumName}} {
+{{#allowableValues}}
+  {{#enumVars}}
+  {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+  {{/enumVars}}
+{{/allowableValues}}
+}
+{{/isEnum}}
+{{/allParams}}
+{{/operation}}
+{{/operations}}
+{{/hasEnums}}
+{{/apis}}
+{{/apiInfo}}
+
+export const COLLECTION_FORMATS = {
+  csv: ",",
+  ssv: " ",
+  tsv: "\t",
+  pipes: "|",
+};
+
+export const ensureStatusIsSet = <T extends {status?: number}>(
+  input: T | undefined | void,
+  defaultStatus: number,
+): T & {status: number} => {
+  if (input?.status == null) {
+    return {
+      ...input,
+      status: defaultStatus,
+    } as (T & {status: number});
+  }
+  return input as (T & {status: number});
+};
+
+export const requireNonNull = <T>(value: T | null | undefined, name: string): T => {
+  if (value != null) {
+    return value;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireString = (value: unknown | null | undefined, name: string): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalString = (value: unknown | null | undefined, name: string): string | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireString(value, name);
+};
+
+export const requireStringArray = (value: unknown[] | null | undefined, name: string): string[] => {
+  if (value != null && typeof value !== 'string' && value.length != null) {
+    return value.map((element) => requireString(element, name)) as string[];
+  }
+  return [requireString(value as unknown, name)];
+};
+
+export const requireOptionalStringArray = (value: unknown[] | null | undefined, name: string): string[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireStringArray(value, name);
+};
+
+export const requireDate = (value: unknown | null | undefined, name: string): Date => {
+  const date = new Date(requireString(value, name));
+  if (Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date.getTime())) {
+    return date;
+  }
+  return throwInvalidParamError(name);
+}
+
+export const requireOptionalDate = (value: unknown | null | undefined, name: string): Date | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireDate(value, name);
+};
+
+export const requireDateArray = (value: unknown[] | null | undefined, name: string): Date[] => {
+  if (value != null && typeof value !== 'string' && value.length != null) {
+    return value.map((element) => requireDate(element, name)) as Date[];
+  }
+  return [requireDate(value as unknown, name)];
+};
+
+export const requireOptionalDateArray = (value: unknown[] | null | undefined, name: string): Date[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireDateArray(value, name);
+};
+
+export const requireEnum = <E, V>(value: unknown | null | undefined, enumValues: V[], name: string): E => {
+  if (enumValues.includes(value as V)) {
+    return value as E;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalEnum = <E, V>(
+  value: unknown | null | undefined,
+  enumValues: V[],
+  name: string
+): E | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireEnum<E, V>(value, enumValues, name);
+};
+
+export const requireEnumArray = <E, V>(
+  value: unknown[] | null | undefined,
+  enumValues: V[],
+  name: string,
+): E[] => {
+  if (value != null && typeof value !== 'string' && value.length != null) {
+    return value.map((element) => requireEnum<E, V>(element, enumValues, name)) as E[];
+  }
+  return [requireEnum(value as unknown, enumValues, name)];
+};
+
+export const requireOptionalEnumArray = <E, V>(
+  value: unknown[] | null | undefined,
+  enumValues: V[],
+  name: string,
+): E[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireEnumArray(value, enumValues, name);
+};
+
+export const requireNumber = (value: unknown | null | undefined, name: string): number => {
+  if (value == null) {
+    return throwInvalidParamError(name);
+  }
+  const asNumber = Number(value);
+  if (!isNaN(asNumber)) {
+    return asNumber;
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalNumber = (value: unknown | null | undefined, name: string): number | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireNumber(value, name);
+};
+
+export const requireNumberArray = (value: unknown[] | null | undefined, name: string): number[] => {
+  if (value != null && typeof value !== 'string' && value.length != null) {
+    return value.map((element) => requireNumber(element, name)) as number[];
+  }
+  return [requireNumber(value as unknown, name)];
+};
+
+export const requireOptionalNumberArray = (value: unknown[] | null | undefined, name: string): number[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireNumberArray(value, name);
+};
+
+export const requireBoolean = (value: unknown | null | undefined, name: string): boolean => {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    const lowerCaseValue = value.toLowerCase();
+    if (lowerCaseValue === 'true' || lowerCaseValue === 'yes' || lowerCaseValue === '1') {
+      return true;
+    }
+    if (lowerCaseValue === 'false' || lowerCaseValue === 'no' || lowerCaseValue === '0') {
+      return false;
+    }
+  }
+  if (typeof value === 'number') {
+    if (value === 1) {
+      return true;
+    }
+    if (value === 0) {
+      return false;
+    }
+  }
+  return throwInvalidParamError(name);
+};
+
+export const requireOptionalBoolean = (value: unknown | null | undefined, name: string): boolean | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireBoolean(value, name);
+};
+
+export const requireBooleanArray = (value: unknown[] | null | undefined, name: string): boolean[] => {
+  if (value != null && typeof value !== 'string' && value.length != null) {
+    return value.map((element) => requireBoolean(element, name)) as boolean[];
+  }
+  return [requireBoolean(value as unknown, name)];
+};
+
+export const requireOptionalBooleanArray = (value: unknown[] | null | undefined, name: string): boolean[] | undefined => {
+  if (value == null) {
+    return undefined;
+  }
+  return requireBooleanArray(value, name);
+};
+
+export const getFirstElement = <T>(
+  name: string,
+  inputArray: T[],
+  createDefaultValue?: () => T | undefined,
+): T | undefined => {
+  if (inputArray.length > 1) {
+    throw new Error(`${name} should only be registered once`);
+  } else if (inputArray.length == 1) {
+    return inputArray[0];
+  }
+  return createDefaultValue?.();
+};
+

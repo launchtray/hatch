@@ -1,3 +1,8 @@
 src/templates/**/node_modules
 src/templates/**/.rush
+src/templates/**/cache
+src/templates/**/build
+src/templates/**/dist
 src/templates/**/*.log
+.rush
+*.log

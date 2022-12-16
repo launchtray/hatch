@@ -1,23 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-param-reassign --
  * This code is very dynamic by nature, so I'm making some lint exceptions for now to make things easier while APIs are
- * still in flux. This may get cleaned up with a future "API-first" redesign. Do as I say, not as I do.
+ * still in flux.
  */
 import {
   Class,
   DependencyContainer,
+  ErrorReporter,
   injectable,
+  Logger,
   resolveParams,
+  ROOT_CONTAINER,
 } from '@launchtray/hatch-util';
 import express, {Application, NextFunction, Request, RequestHandler, Response, Router} from 'express';
 import WebSocket from 'ws';
 import * as HttpStatus from 'http-status-codes';
 import {
+  ASSOCIATED_API_SPEC_KEY,
   APIMetadataConsumer,
   APIMetadataParameters,
   Server,
   ServerMiddlewareClass,
 } from './ServerMiddleware';
 import {OpenAPIMethod, OpenAPIParameter, OpenAPIRequestBody, OpenAPIResponses} from './OpenAPI';
+import {alternateActionResponseSent, apiErrorResponseSent} from './api-utils';
 
 export type PathParams = string | RegExp | Array<string | RegExp>;
 
@@ -109,6 +114,42 @@ const requestContainerKey = Symbol('requestContainer');
 const livenessChecksKey = Symbol('livenessChecksKey');
 const readinessChecksKey = Symbol('readinessChecksKey');
 const appInfoKey = Symbol('appInfoKey');
+const injectContainerOnlyKey = Symbol('injectContainerOnlyKey');
+
+// Keep consistent with version in createClient.tsx, or consolidate to common library
+const registerPerRequestAuthDependencies = (
+  container: DependencyContainer,
+  {cookie, authHeader}: {cookie?: string, authHeader?: string},
+) => {
+  container.registerInstance('cookie', cookie ?? '');
+  container.registerInstance('authHeader', authHeader ?? '');
+};
+
+export const registerPerRequestDependencies = (
+  container: DependencyContainer,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  container.registerInstance('Request', req);
+  container.registerInstance('Response', res);
+  container.registerInstance('NextFunction', next);
+
+  // Use WeakRef to avoid creating a strong circular reference to itself
+  container.registerInstance('weakContainer', new WeakRef(container));
+
+  registerPerRequestAuthDependencies(container, {
+    cookie: req.headers.cookie,
+    authHeader: req.headers.authorization,
+  });
+};
+
+export const reportError = async (container: DependencyContainer, label: string, err: unknown) => {
+  const errorReporter = await container.resolve<ErrorReporter>('ErrorReporter');
+  const logger = await container.resolve<Logger>('Logger');
+  logger.error(`${label}:`, err);
+  errorReporter.captureException(err as Error);
+};
 
 const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrarWithAnnotationData) => {
   return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
@@ -119,14 +160,25 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
         const rootContainer = ctlr[rootContainerKey] as DependencyContainer;
         container = rootContainer.createChildContainer();
         req[requestContainerKey] = container;
+        registerPerRequestDependencies(container, req, res, next);
       }
-      container.registerInstance('Request', req);
-      container.registerInstance('Response', res);
-      container.registerInstance('NextFunction', next);
-      container.registerInstance('cookie', req.headers.cookie ?? '');
-      container.registerInstance('authHeader', req.headers.authorization ?? '');
-      const args = await resolveParams(container, target, propertyKey);
-      await originalMethod.apply(ctlr, args);
+      try {
+        const args = [];
+        if ((target[injectContainerOnlyKey] as boolean | undefined) ?? false) {
+          args.push(container);
+        } else {
+          args.push(...(await resolveParams(container, target, propertyKey)));
+        }
+        const methodResponse = await originalMethod.apply(ctlr, args);
+        if (alternateActionResponseSent(methodResponse, res)) {
+          return;
+        }
+      } catch (err: unknown) {
+        if (!apiErrorResponseSent(err, res)) {
+          await reportError(container, `Error servicing route '${String(propertyKey)}'`, err);
+          res.sendStatus(500);
+        }
+      }
     };
 
     if (target[routeDefinersKey] == null) {
@@ -147,7 +199,9 @@ const custom = (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegist
     target[routeDefinersKey].push(ctlrRouteDefiner);
     if (registerMetadata != null) {
       const metadataRegistrar: APIMetadataRegistrar = (apiMetadataConsumer) => {
-        registerMetadata(apiMetadataConsumer, target, propertyKey, descriptor);
+        if (target.constructor[ASSOCIATED_API_SPEC_KEY] == null) {
+          registerMetadata(apiMetadataConsumer, target, propertyKey, descriptor);
+        }
       };
       target[registerMetadataKey].push(metadataRegistrar);
     }
@@ -345,98 +399,270 @@ export const hasControllerRoutes = (maybeController: any) => {
   return maybeController.prototype[routeDefinersKey] != null;
 };
 
-type ControllerBoundRouteDefiner = (
+type BoundRouteDefiner = (
     controller: any,
     app: Application,
     server: Server,
     apiMetadataConsumer: APIMetadataConsumer
 ) => void;
 
-export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewareClass => {
-  if (!hasControllerRoutes(target)) {
-    throw new Error(`Cannot register ${target.name} as middleware, as it has no @routes defined.`);
-  }
+export interface Delegator<D> {
+  delegate?: D;
+}
 
-  const originalRegister = target.prototype.register;
-  target.prototype.register = async function registerWrapper(
-    app: Application,
-    server: Server,
-    apiMetadataConsumer: APIMetadataConsumer,
-  ) {
-    if (originalRegister != null) {
-      await originalRegister.bind(this)(app, server, apiMetadataConsumer);
+const originalGetLivenessStateKey = Symbol('originalGetLivenessState');
+const originalGetReadinessStateKey = Symbol('originalGetReadinessState');
+const originalGetAppInfoKey = Symbol('originalGetAppInfo');
+
+const saveOriginalHealthCheckMethods = <D>(target?: DelegatingControllerClass<D> | Class<D>) => {
+  if (target != null) {
+    if (target[originalGetLivenessStateKey] === undefined) {
+      target[originalGetLivenessStateKey] = target.prototype.getLivenessState ?? null;
     }
-    target.prototype[routeDefinersKey].forEach((controllerBoundRouteDefiner: ControllerBoundRouteDefiner) => {
-      controllerBoundRouteDefiner(this, app, server, apiMetadataConsumer);
-    });
-  };
+    if (target[originalGetReadinessStateKey] === undefined) {
+      target[originalGetReadinessStateKey] = target.prototype.getReadinessState ?? null;
+    }
+    if (target[originalGetAppInfoKey] === undefined) {
+      target[originalGetAppInfoKey] = target.prototype.getAppInfo ?? null;
+    }
+  }
+};
 
-  if (target.prototype[livenessChecksKey] != null && target.prototype[livenessChecksKey].length > 0) {
-    const originalGetLivenessState = target.prototype.getLivenessState;
+const registerLivenessChecks = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
+  const livenessChecks = target.prototype[livenessChecksKey] ?? [];
+  target.prototype[livenessChecksKey] = [];
+  const delegateLivenessChecks = delegateType?.prototype[livenessChecksKey] ?? [];
+  if (delegateType != null) {
+    delegateType.prototype[livenessChecksKey] = [];
+  }
+  if (livenessChecks != null && livenessChecks.length > 0) {
+    // eslint-disable-next-line complexity
     target.prototype.getLivenessState = async function getLivenessStateWrapper() {
       let overallState: LivenessState | undefined;
-      if (originalGetLivenessState != null) {
-        const state = await originalGetLivenessState.bind(this)();
+      if (target[originalGetLivenessStateKey] != null) {
+        const state = await target[originalGetLivenessStateKey].bind(this)();
         if (state != null && state !== true && state !== LivenessState.CORRECT) {
           overallState = state;
         }
       }
-      for (const livenessCheck of target.prototype[livenessChecksKey]) {
+      for (const livenessCheck of livenessChecks) {
         const state = await livenessCheck(this);
         if (state != null && state !== true && state !== LivenessState.CORRECT) {
           overallState = state;
         }
       }
+      if (delegateType != null) {
+        if (delegateType[originalGetLivenessStateKey] != null) {
+          const state = await delegateType[originalGetLivenessStateKey].bind(this.delegate)();
+          if (state != null && state !== true && state !== LivenessState.CORRECT) {
+            overallState = state;
+          }
+        }
+        for (const livenessCheck of delegateLivenessChecks) {
+          const state = await livenessCheck(this.delegate);
+          if (state != null && state !== true && state !== LivenessState.CORRECT) {
+            overallState = state;
+          }
+        }
+      }
       return overallState ?? LivenessState.CORRECT;
     };
   }
+};
 
-  if (target.prototype[readinessChecksKey] != null && target.prototype[readinessChecksKey].length > 0) {
-    const originalGetReadinessState = target.prototype.getReadinessState;
+const registerReadinessChecks = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
+  const readinessChecks = target.prototype[readinessChecksKey] ?? [];
+  target.prototype[readinessChecksKey] = [];
+  const delegateReadinessChecks = delegateType?.prototype[readinessChecksKey] ?? [];
+  if (delegateType != null) {
+    delegateType.prototype[readinessChecksKey] = [];
+  }
+  if (readinessChecks != null && readinessChecks.length > 0) {
+    // eslint-disable-next-line complexity
     target.prototype.getReadinessState = async function getReadinessStateWrapper() {
       let overallState: ReadinessState | undefined;
-      if (originalGetReadinessState != null) {
-        const state = await originalGetReadinessState.bind(this)();
+      if (target[originalGetReadinessStateKey] != null) {
+        const state = await target[originalGetReadinessStateKey].bind(this)();
         if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
           overallState = state;
         }
       }
-      for (const readinessCheck of target.prototype[readinessChecksKey]) {
+      for (const readinessCheck of readinessChecks) {
         const state = await readinessCheck(this);
         if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
           overallState = state;
         }
       }
+      if (delegateType != null) {
+        if (delegateType[originalGetReadinessStateKey] != null) {
+          const state = await delegateType[originalGetReadinessStateKey].bind(this.delegate)();
+          if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
+            overallState = state;
+          }
+        }
+        for (const readinessCheck of delegateReadinessChecks) {
+          const state = await readinessCheck(this.delegate);
+          if (state != null && state !== true && state !== ReadinessState.ACCEPTING_TRAFFIC) {
+            overallState = state;
+          }
+        }
+      }
       return overallState ?? ReadinessState.ACCEPTING_TRAFFIC;
     };
   }
+};
 
-  if (target.prototype[appInfoKey] != null && target.prototype[appInfoKey].length > 0) {
-    const originalGetAppInfo = target.prototype.getAppInfo;
+const registerAppInfoProviders = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
+  const appInfoProviders = target.prototype[appInfoKey] ?? [];
+  target.prototype[appInfoKey] = [];
+  const delegateAppInfoProviders = delegateType?.prototype[appInfoKey] ?? [];
+  if (delegateType != null) {
+    delegateType.prototype[appInfoKey] = [];
+  }
+  if (
+    (appInfoProviders != null && appInfoProviders.length > 0)
+    || (delegateAppInfoProviders != null && delegateAppInfoProviders.length > 0)
+  ) {
     target.prototype.getAppInfo = async function getAppInfoWrapper() {
-      let overalInfo: {[key: string]: any} = {};
-      if (originalGetAppInfo != null) {
-        const info = await originalGetAppInfo.bind(this)();
-        overalInfo = {
-          ...overalInfo,
-          ...info,
-        };
+      let overallInfo: {[key: string]: any} = {};
+      if (target[originalGetAppInfoKey] != null) {
+        try {
+          const info = await target[originalGetAppInfoKey].bind(this)();
+          overallInfo = {
+            ...overallInfo,
+            ...info,
+          };
+        } catch (err) {
+          await reportError(container, 'Error gathering app info', err);
+        }
       }
-      for (const readinessCheck of target.prototype[appInfoKey]) {
-        const info = await readinessCheck(this);
-        overalInfo = {
-          ...overalInfo,
-          ...info,
-        };
+      for (const appInfoProvider of appInfoProviders) {
+        try {
+          const info = await appInfoProvider(this);
+          overallInfo = {
+            ...overallInfo,
+            ...info,
+          };
+        } catch (err) {
+          await reportError(container, 'Error gathering app info', err);
+        }
       }
-      return overalInfo;
+      if (delegateType != null) {
+        if (delegateType[originalGetAppInfoKey] != null) {
+          try {
+            const info = await delegateType[originalGetAppInfoKey].bind(this.delegate)();
+            overallInfo = {
+              ...overallInfo,
+              ...info,
+            };
+          } catch (err) {
+            await reportError(container, 'Error gathering app info', err);
+          }
+        }
+        for (const appInfoProvider of delegateAppInfoProviders) {
+          try {
+            const info = await appInfoProvider(this.delegate);
+            overallInfo = {
+              ...overallInfo,
+              ...info,
+            };
+          } catch (err) {
+            await reportError(container, 'Error gathering app info', err);
+          }
+        }
+      }
+      return overallInfo;
     };
   }
+};
+
+const registerAllHealthChecks = (
+  container: DependencyContainer,
+  target: any,
+  delegateType: any,
+) => {
+  saveOriginalHealthCheckMethods(target);
+  saveOriginalHealthCheckMethods(delegateType);
+  registerLivenessChecks(container, target, delegateType);
+  registerReadinessChecks(container, target, delegateType);
+  registerAppInfoProviders(container, target, delegateType);
+};
+
+export type DelegatingControllerClass<D> = Class<Delegator<D>> & {delegateToken?: string | symbol};
+
+export function middlewareFor<T extends Class<any>>(target: T): ServerMiddlewareClass;
+// eslint-disable-next-line no-redeclare
+export function middlewareFor<D>(target: DelegatingControllerClass<D>, delegateType: Class<D>): ServerMiddlewareClass;
+// eslint-disable-next-line no-redeclare
+export function middlewareFor<D>(
+  target: DelegatingControllerClass<D>,
+  delegateType?: Class<D>,
+): ServerMiddlewareClass {
+  if (!hasControllerRoutes(target)) {
+    throw new Error(`Cannot register ${target.name} as middleware, as it has no @routes defined.`);
+  }
+  const {delegateToken} = target as DelegatingControllerClass<D>;
+  if (delegateToken != null) {
+    if (delegateType == null) {
+      throw new Error(`Missing delegate parameter for call to middlewareFor for ${target.name}`);
+    }
+    ROOT_CONTAINER.registerSingleton(delegateType);
+    ROOT_CONTAINER.register(delegateToken, {
+      useFactory: (container) => container.resolve(delegateType),
+    });
+  }
+
+  const originalRegister = target.prototype.register;
+  const delegateOriginalRegister = delegateType?.prototype.register;
+  target.prototype.register = async function registerWrapper(
+    app: Application,
+    server: Server,
+    apiMetadataConsumer: APIMetadataConsumer,
+  ) {
+    if (delegateType != null && this.delegate != null && this.delegate[rootContainerKey] == null) {
+      this.delegate[rootContainerKey] = this[rootContainerKey];
+      if (delegateOriginalRegister != null) {
+        await delegateOriginalRegister.bind(this.delegate)(app, server, apiMetadataConsumer);
+      }
+      delegateType?.prototype[routeDefinersKey]?.forEach((boundRouteDefiner: BoundRouteDefiner) => {
+        boundRouteDefiner(this.delegate, app, server, apiMetadataConsumer);
+      });
+    }
+    if (originalRegister != null) {
+      await originalRegister.bind(this)(app, server, apiMetadataConsumer);
+    }
+    target.prototype[routeDefinersKey].forEach((boundRouteDefiner: BoundRouteDefiner) => {
+      boundRouteDefiner(this, app, server, apiMetadataConsumer);
+    });
+  };
+
+  registerAllHealthChecks(ROOT_CONTAINER, target, delegateType);
 
   const originalRegisterMetadata = target.constructor.prototype.registerAPIMetadata;
+  const delegateOriginalRegisterMetadata = delegateType?.prototype.registerAPIMetadata;
   target.constructor.prototype.registerAPIMetadata = async function registerAPIMetadataWrapper(
     apiMetadataConsumer: APIMetadataConsumer,
   ) {
+    if (this.delegate != null && this.delegate[rootContainerKey] == null) {
+      if (delegateOriginalRegisterMetadata != null) {
+        await delegateOriginalRegisterMetadata.bind(this)(apiMetadataConsumer);
+      }
+      this.delegate.prototype[registerMetadataKey]?.forEach((apiMetadataRegistrar: APIMetadataRegistrar) => {
+        apiMetadataRegistrar(apiMetadataConsumer);
+      });
+    }
     if (originalRegisterMetadata != null) {
       await originalRegisterMetadata.bind(this)(apiMetadataConsumer);
     }
@@ -444,8 +670,8 @@ export const middlewareFor = <T extends Class<any>> (target: T): ServerMiddlewar
       apiMetadataRegistrar(apiMetadataConsumer);
     });
   };
-  return target;
-};
+  return target as unknown as ServerMiddlewareClass;
+}
 
 export type HTTPMethod =
   | 'all'
@@ -481,12 +707,25 @@ export interface NonStandardRouteDefiners {
   custom: (routeDefiner: RouteDefiner, registerMetadata?: APIMetadataRegistrar) => any;
   // eslint-disable-next-line @typescript-eslint/naming-convention -- intentionally using name similar to HTTP method
   m_search: (path: PathParams, metadata?: APIMetadataParameters) => any;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _delete: (path: PathParams, metadata?: APIMetadataParameters) => any;
   websocket: (path: PathParams, metadata?: APIMetadataParameters) => any;
 }
 
 export type RouteDefiners = StandardRouteDefiners & NonStandardRouteDefiners;
 
-export const controller: <T>() => (target: Class<T>) => void = injectable;
+export interface ControllerProps {
+  injectContainerOnly?: boolean;
+}
+
+type ClassDecorator<T> = (target: Class<T>) => void;
+
+export const controller = <T>(controllerProps?: ControllerProps): ClassDecorator<T> => {
+  return (target) => {
+    target.prototype[injectContainerOnlyKey] = controllerProps?.injectContainerOnly ?? false;
+    return injectable()(target);
+  };
+};
 
 export const convertExpressPathToOpenAPIPath = (
   path: PathParams,
@@ -562,6 +801,9 @@ const proxy = {
     }
     if (method === 'm_search') {
       adjustedMethod = 'm-search';
+    }
+    if (method === '_delete') {
+      adjustedMethod = 'delete';
     }
     return (path: PathParams, metadata: APIMetadataParameters = {}) => {
       const routeDefiner: RouteDefiner = (app, server, handler, ctlr: any) => {

@@ -1,4 +1,3 @@
-import fetch from 'cross-fetch';
 import {MockServer, MockServerClient} from '../index';
 
 describe('Simple Mock', () => {

@@ -1,26 +1,35 @@
 import process from 'process';
+import {Swagger} from 'atlassian-openapi';
+import SwaggerV3 = Swagger.SwaggerV3;
 import {
   createApiBySpotFile,
-  createApiByJsonFile,
+  createApiByYamlOrJsonFile,
+  createApiFromOpenApi3Specs,
 } from './util';
 
-const usage = 'Usage: hatch-api --spot [spot-file].ts';
+const usage = 'Usage: hatch-api [--spot {spot-file}.ts] [--spec[-to-dereference] {openapi-3-yaml-or-json-file}]';
 const argv = process.argv.slice(2);
-const typeArg = argv[0];
-if (argv.length < 2) {
+if (argv.length === 0 || argv.length % 2 !== 0) {
   throw new Error(`Invalid arguments:\n${usage}`);
-} else if (typeArg === '--spot') {
-  // location of the Spot spec, as URL or file
-  const inputSpec = argv[1];
-  createApiBySpotFile(inputSpec).catch((err) => {
-    throw new Error(err);
-  });
-} else if (typeArg === '--spec') {
-  // location of the OpenAPI spec, as URL or file
-  const inputSpec = argv[1];
-  createApiByJsonFile(inputSpec).catch((err) => {
-    throw new Error(err);
-  });
-} else {
-  throw new Error(`Invalid type argument:\n${usage}`);
 }
+
+const specs: Promise<SwaggerV3>[] = [];
+let patchFile: string | undefined;
+for (let argPosition = 0; argPosition < argv.length; argPosition += 2) {
+  const typeArg = argv[argPosition];
+  const inputPath = argv[argPosition + 1];
+  if (typeArg === '--spot') {
+    specs.push(createApiBySpotFile(inputPath));
+  } else if (typeArg === '--spec') {
+    specs.push(createApiByYamlOrJsonFile(inputPath, false));
+  } else if (typeArg === '--spec-to-dereference') {
+    specs.push(createApiByYamlOrJsonFile(inputPath, true));
+  } else if (typeArg === '--final-patch') {
+    patchFile = inputPath;
+  } else {
+    throw new Error(`Invalid type argument:\n${usage}`);
+  }
+}
+createApiFromOpenApi3Specs(specs, patchFile).catch((err) => {
+  throw new Error(err);
+});

@@ -1,0 +1,29 @@
+#!/bin/bash
+# Runs all apps via Docker. Optionally, open-test-container-shell (or rush prod-shell) can be used to shell into
+# a container containing all tests
+scriptDir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+cd "$scriptDir"
+
+if [ -d .git ]; then
+  COMMIT_ID="$(git rev-parse HEAD 2> /dev/null)$(git diff --quiet || echo '-dirty')"
+  COMMIT_DATE="$(git show -s --format=%aI HEAD)"
+  # Older git versions don't support strict ISO strings, fall back to non-strict
+  if [[ "$COMMIT_DATE" == *"%aI"* ]]; then
+    COMMIT_DATE="$(git show -s --format=%ai HEAD)"
+  fi
+  export COMMIT_ID
+  export COMMIT_DATE
+fi
+
+set -e
+if ! command -v docker-compose &> /dev/null
+then
+  >&2 echo "Please make sure Docker is installed, with docker-compose in your PATH"
+  >&2 echo "Download it here: https://download.docker.com/mac/stable/Docker.dmg"
+  exit 1
+fi
+docker-compose up --remove-orphans --build --no-start
+echo ==============================
+cat .env | grep -v _STATIC # Prints ports for non-static servers
+echo ==============================
+docker-compose up

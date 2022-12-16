@@ -1,0 +1,53 @@
+{
+  "name": "@launchtray/hatch-fetch-util",
+  "version": "0.21.0-alpha.77",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
+  },
+  "peerDependencies": {
+    "@launchtray/hatch-util": "workspace:*"
+  },
+  "devDependencies": {
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@launchtray/hatch-util": "workspace:*",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^18",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "eslint": "^8",
+    "eslint-config-airbnb-base": "^15",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jest": "^26",
+    "jest": "^27.5.1",
+    "rimraf": "3.0.0",
+    "ts-jest": "^27.1.5",
+    "typescript": "4.7.4"
+  },
+  "jest": {
+    "transform": {
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ]
+  }
+}

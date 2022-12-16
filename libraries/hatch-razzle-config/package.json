@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-razzle-config",
-  "version": "0.21.0-alpha.76",
+  "version": "0.21.0-alpha.77",
   "main": "index.js",
   "license": "MIT",
   "scripts": {

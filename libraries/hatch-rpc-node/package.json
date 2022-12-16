@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-rpc-node",
-  "version": "0.21.0-alpha.76",
+  "version": "0.21.0-alpha.77",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

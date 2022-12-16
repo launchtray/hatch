@@ -1,15 +1,27 @@
-import {Terminal, ConsoleTerminalProvider} from '@rushstack/node-core-library';
-import {spawnSync} from 'child_process';
+import {Terminal, FileWriter} from '@rushstack/node-core-library';
 import fs from 'fs';
 import {createObjectCsvStringifier} from 'csv-writer';
-import {ObjectCsvStringifier} from 'csv-writer/src/lib/csv-stringifiers/object';
 import * as process from 'process';
+import * as path from 'path';
+import jmespath from 'jmespath';
+import YAML from 'yaml';
+import {
+  getProjects,
+  isString,
+  OutputWriter,
+  parseDependencyAnalysisArgs,
+  PnpmListProject,
+} from './util';
 
-interface PnpmListProject {
-  name: string;
-  version: string;
-  path: string;
-  dependencies: {[name: string]: {version: string}},
+interface DependencyMetadata {
+  requiredDependencyFields?: string[];
+  packageJsonFields?: {[fieldName: string]: string};
+  packageNamePrefixAuthors?: {[prefix: string]: string};
+  dependencies?: {
+    [packageName: string]: {
+      [metadataFieldName: string]: string,
+    },
+  };
 }
 
 interface IdentifiedDependency {
@@ -20,10 +32,9 @@ interface IdentifiedDependency {
   };
 }
 
-const processMetadata = (
+const requireMetadata = (
   metadata: {[metadataFieldName: string]: string},
   dependencyName: string,
-  identifiedNonRequiredMetadataFields: string[],
   requiredMetadataFields?: string[],
 ) => {
   if (requiredMetadataFields != null) {
@@ -33,12 +44,64 @@ const processMetadata = (
       }
     }
   }
-  if (metadata != null) {
-    for (const fieldKey of Object.keys(metadata)) {
-      if (requiredMetadataFields == null || !requiredMetadataFields.includes(fieldKey)) {
-        if (!identifiedNonRequiredMetadataFields.includes(fieldKey)) {
-          identifiedNonRequiredMetadataFields.push(fieldKey);
+};
+
+const addMetadataFields = (
+  existingFields: string[],
+  fieldsToAdd: string[] | undefined,
+) => {
+  if (fieldsToAdd != null) {
+    for (const fieldKey of fieldsToAdd) {
+      if (!existingFields.includes(fieldKey)) {
+        existingFields.push(fieldKey);
+      }
+    }
+  }
+};
+
+const addPackageJsonMetadata = (
+  metadata: {[key: string]: string},
+  project: PnpmListProject,
+  dependencyName: string,
+  dependencyMetadata: DependencyMetadata,
+) => {
+  try {
+    const packageJsonPath = path.resolve(project.path, 'node_modules', `${dependencyName}`, 'package.json');
+    const packageInfo = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const packageJsonFields = {
+      author: 'author.name||author',
+      license: 'license',
+      description: 'description',
+      ...dependencyMetadata.packageJsonFields,
+    };
+    for (const key of Object.keys(packageJsonFields)) {
+      try {
+        const valuePath = packageJsonFields[key];
+        if (valuePath != null && metadata[key] == null) {
+          // eslint-disable-next-line no-param-reassign -- intentional modification
+          metadata[key] = jmespath.search(packageInfo, packageJsonFields[key]);
         }
+      } catch (err) {
+        // Ignored
+      }
+    }
+  } catch (err) {
+    // Ignored
+  }
+};
+
+const addAuthorFromPackageNamePrefix = (
+  metadata: {[key: string]: string},
+  dependencyName: string,
+  dependencyMetadata: DependencyMetadata,
+) => {
+  if (metadata.author == null && dependencyMetadata.packageNamePrefixAuthors != null) {
+    const prefixes = Object.keys(dependencyMetadata.packageNamePrefixAuthors);
+    for (const prefix of prefixes) {
+      if (dependencyName.startsWith(prefix)) {
+        // eslint-disable-next-line no-param-reassign -- intentional out param
+        metadata.author = dependencyMetadata.packageNamePrefixAuthors[prefix];
+        return;
       }
     }
   }
@@ -49,31 +112,30 @@ const gatherDependencies = (
   pnpmProjectsByName: Map<string, PnpmListProject>,
   visitedProjects: Set<string>,
   identifiedDependencies: Map<string, IdentifiedDependency>,
-  identifiedNonRequiredMetadataFields: string[],
+  identifiedMetadataFields: string[],
   dependencyMetadataKey?: string,
-  requiredMetadataFields?: string[],
 ) => {
   if (visitedProjects.has(project.name)) {
     return;
   }
   visitedProjects.add(project.name);
   const packageJson: {
-    [key: string]: {
-      [packageName: string]: {
-        [metadataFieldName: string]: string
-      }
-    }
+    [dependencyMetadataKey: string]: string | DependencyMetadata,
   } = JSON.parse(fs.readFileSync(`${project.path}/package.json`, 'utf8'));
-  let dependencyMetadata: {
-    [packageName: string]: {
-      [metadataFieldName: string]: string
-    }
-  };
+  let dependencyMetadata: DependencyMetadata;
   if (dependencyMetadataKey != null && packageJson[dependencyMetadataKey] != null) {
-    dependencyMetadata = packageJson[dependencyMetadataKey];
+    const dependencyMetadataValue = packageJson[dependencyMetadataKey];
+    if (isString(dependencyMetadataValue)) {
+      const metadataFile = path.resolve(project.path, dependencyMetadataValue);
+      dependencyMetadata = YAML.parseDocument(fs.readFileSync(metadataFile, 'utf8')).toJS();
+    } else {
+      dependencyMetadata = dependencyMetadataValue;
+    }
   } else {
     dependencyMetadata = {};
   }
+  const requiredMetadataFields = dependencyMetadata.requiredDependencyFields;
+  addMetadataFields(identifiedMetadataFields, requiredMetadataFields);
   const {dependencies} = project;
   if (dependencies != null) {
     for (const dependency of Object.entries(dependencies)) {
@@ -85,23 +147,24 @@ const gatherDependencies = (
           pnpmProjectsByName,
           visitedProjects,
           identifiedDependencies,
-          identifiedNonRequiredMetadataFields,
+          identifiedMetadataFields,
           dependencyMetadataKey,
-          requiredMetadataFields,
         );
-      } else {
+      } else if (!identifiedDependencies.has(dependencyName)) {
+        const metadata = dependencyMetadata.dependencies?.[dependencyName] ?? {};
+        addPackageJsonMetadata(metadata, project, dependencyName, dependencyMetadata);
+        addAuthorFromPackageNamePrefix(metadata, dependencyName, dependencyMetadata);
+        requireMetadata(metadata, dependencyName, requiredMetadataFields);
+        addMetadataFields(identifiedMetadataFields, Object.keys(metadata));
+
         const dependencyVersion = dependency[1].version;
-        if (!identifiedDependencies.has(dependencyName)) {
-          const metadata = dependencyMetadata[dependencyName];
-          processMetadata(metadata, dependencyName, identifiedNonRequiredMetadataFields, requiredMetadataFields);
-          identifiedDependencies.set(dependencyName, {
-            name: dependencyName,
-            version: dependencyVersion,
-            metadata: {
-              ...metadata,
-            },
-          });
-        }
+        identifiedDependencies.set(dependencyName, {
+          name: dependencyName,
+          version: dependencyVersion,
+          metadata: {
+            ...metadata,
+          },
+        });
       }
     }
   }
@@ -133,11 +196,11 @@ interface DependencyPrinter {
 }
 
 class CsvPrinter implements DependencyPrinter {
-  private stringifier?: ObjectCsvStringifier;
+  private stringifier?: ReturnType<typeof createObjectCsvStringifier>;
   private headerWritten = false;
 
   constructor(
-    private readonly terminal: Terminal,
+    private readonly output: OutputWriter,
   ) {
   }
 
@@ -158,7 +221,7 @@ class CsvPrinter implements DependencyPrinter {
       });
       const headerLine = this.stringifier?.getHeaderString();
       if (headerLine != null) {
-        this.terminal.write(headerLine);
+        this.output.write(headerLine);
       }
     }
   }
@@ -171,7 +234,7 @@ class CsvPrinter implements DependencyPrinter {
       ...dependency.metadata,
     }]);
     if (csvLine != null) {
-      this.terminal.write(csvLine);
+      this.output.write(csvLine);
     }
   }
 }
@@ -181,57 +244,42 @@ class JsonPrinter implements DependencyPrinter {
   private firstDependencyForProjectWritten = false;
 
   constructor(
-    private readonly terminal: Terminal,
+    private readonly output: OutputWriter,
   ) {
   }
 
   startMultiProject() {
-    this.terminal.write('{');
+    this.output.write('{');
   }
 
   startProject({multiProject, project}: PrinterArgsForStartProject) {
     this.firstDependencyForProjectWritten = false;
     if (multiProject) {
       if (this.firstProjectWritten) {
-        this.terminal.write(',');
+        this.output.write(',');
       } else {
         this.firstProjectWritten = true;
       }
-      this.terminal.write(`${JSON.stringify(project.name)}:`);
+      this.output.write(`${JSON.stringify(project.name)}:`);
     }
-    this.terminal.write('[');
+    this.output.write('[');
   }
 
   addDependency({dependency}: PrinterArgsForAddDependency) {
     if (this.firstDependencyForProjectWritten) {
-      this.terminal.write(',');
+      this.output.write(',');
     } else {
       this.firstDependencyForProjectWritten = true;
     }
-    this.terminal.write(JSON.stringify(dependency));
+    this.output.write(JSON.stringify(dependency));
   }
 
   endProject() {
-    this.terminal.write(']');
+    this.output.write(']');
   }
 
   endMultiProject() {
-    this.terminal.write('}');
-  }
-}
-
-class TextPrinter implements DependencyPrinter {
-  constructor(
-    private readonly terminal: Terminal,
-  ) {
-  }
-
-  startProject({project}: PrinterArgsForStartProject) {
-    this.terminal.writeLine(`${project.name}: `);
-  }
-
-  addDependency({dependency}: PrinterArgsForAddDependency) {
-    this.terminal.writeLine(`- ${dependency.name}: ${dependency.version}, ${JSON.stringify(dependency.metadata)}`);
+    this.output.write('}');
   }
 }
 
@@ -253,89 +301,83 @@ const printDependencies = (
   printer.endProject?.({multiProject});
 };
 
-const getDependencyPrinter = (terminal: Terminal, outputFormat?: string): DependencyPrinter => {
+const getDependencyPrinter = (
+  terminal: Terminal,
+  outputPath?: string,
+  outputFormat?: string,
+): DependencyPrinter => {
   const format = outputFormat ?? 'json';
+  let output: OutputWriter;
+  if (outputPath == null) {
+    output = terminal;
+  } else {
+    output = FileWriter.open(outputPath);
+  }
   switch (format.toLowerCase()) {
     case 'json':
-      return new JsonPrinter(terminal);
+      return new JsonPrinter(output);
     case 'csv':
-      return new CsvPrinter(terminal);
-    case 'text':
-      return new TextPrinter(terminal);
+      return new CsvPrinter(output);
     default:
       throw new Error(`Invalid output format: ${format}`);
   }
 };
 
 export const runCli = async () => {
-  const argv = process.argv.slice(2);
-  const args: {[argName: string]: string} = {};
-  for (let i = 0; i < argv.length; i += 2) {
-    args[argv[i]] = argv[i + 1];
-  }
+  const {
+    targetProject,
+    dependencyMetadataKey,
+    outputPath,
+    outputFormat,
+    terminal,
+  } = parseDependencyAnalysisArgs();
 
-  const targetProject = args['--project'];
-  const dependencyMetadataKey = args['--metadata-key'] ?? '@launchtray/dependency-metadata';
-  const requiredMetadataFields = args['--required-fields']?.split(',') ?? [];
-  const terminal: Terminal = new Terminal(new ConsoleTerminalProvider());
-  const dependencyPrinter: DependencyPrinter = getDependencyPrinter(terminal, args['--format']);
+  const dependencyPrinter: DependencyPrinter = getDependencyPrinter(
+    terminal,
+    outputPath,
+    outputFormat,
+  );
 
-  const pnpmListCommand = spawnSync('rush-pnpm', ['list', '-r', '-P', '--json'], {encoding: 'utf8'});
-  if (pnpmListCommand.error != null) {
-    terminal.writeError(pnpmListCommand.stdout);
-    throw new Error(pnpmListCommand.error.message);
-  }
-  const projects: PnpmListProject[] = (JSON.parse(pnpmListCommand.stdout) as PnpmListProject[]).filter(({name}) => {
-    return name !== 'rush-common';
-  });
-  const pnpmProjectsByName = new Map<string, PnpmListProject>();
-
-  for (const project of projects) {
-    pnpmProjectsByName.set(project.name, project);
-  }
+  const {projects, projectsByName} = getProjects();
 
   if (targetProject != null) {
-    const project = pnpmProjectsByName.get(targetProject);
+    const project = projectsByName.get(targetProject);
     if (project == null) {
       throw new Error('Invalid project name');
     }
     const visitedProjects = new Set<string>();
     const identifiedDependencies = new Map<string, IdentifiedDependency>();
-    const identifiedNonRequiredMetadataFields: string[] = [];
+    const metadataFields: string[] = [];
     gatherDependencies(
       project,
-      pnpmProjectsByName,
+      projectsByName,
       visitedProjects,
       identifiedDependencies,
-      identifiedNonRequiredMetadataFields,
+      metadataFields,
       dependencyMetadataKey,
-      requiredMetadataFields,
     );
-    const metadataFields = [...requiredMetadataFields, ...identifiedNonRequiredMetadataFields];
     printDependencies(dependencyPrinter, project, identifiedDependencies, metadataFields, false);
   } else {
     dependencyPrinter.startMultiProject?.();
     const projectDependencies: {
       [projectName: string]: Map<string, IdentifiedDependency>
     } = {};
-    const identifiedNonRequiredMetadataFields: string[] = [];
+    const metadataFields: string[] = [];
     for (const project of projects) {
       const visitedProjects = new Set<string>();
       const identifiedDependencies = new Map<string, IdentifiedDependency>();
       projectDependencies[project.name] = identifiedDependencies;
       gatherDependencies(
         project,
-        pnpmProjectsByName,
+        projectsByName,
         visitedProjects,
         identifiedDependencies,
-        identifiedNonRequiredMetadataFields,
+        metadataFields,
         dependencyMetadataKey,
-        requiredMetadataFields,
       );
     }
     for (const project of projects) {
       const dependencies = projectDependencies[project.name];
-      const metadataFields = [...requiredMetadataFields, ...identifiedNonRequiredMetadataFields];
       printDependencies(dependencyPrinter, project, dependencies, metadataFields, true);
     }
     dependencyPrinter.endMultiProject?.();

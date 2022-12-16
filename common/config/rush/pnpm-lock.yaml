@@ -646,6 +646,7 @@ importers:
       '@launchtray/hatch-eslint-config': workspace:*
       '@microsoft/rush-lib': ^5.86.0
       '@rushstack/node-core-library': ^3.53.3
+      '@types/jmespath': ^0.15.0
       '@types/node': ^18
       '@typescript-eslint/eslint-plugin': ^5
       '@typescript-eslint/parser': ^5
@@ -654,14 +655,19 @@ importers:
       eslint-config-airbnb-base: ^15
       eslint-plugin-import: ^2
       eslint-plugin-jest: ^26
+      jmespath: ^0.16.0
       rimraf: 3.0.0
       typescript: 4.7.4
+      yaml: 2.0.0-3
     dependencies:
       '@microsoft/rush-lib': 5.86.0
       '@rushstack/node-core-library': 3.53.3
       csv-writer: 1.6.0
+      jmespath: 0.16.0
+      yaml: 2.0.0-3
     devDependencies:
       '@launchtray/hatch-eslint-config': link:../hatch-eslint-config
+      '@types/jmespath': 0.15.0
       '@types/node': 18.11.13
       '@typescript-eslint/eslint-plugin': 5.46.1_57lsfxhrvnuchjqw5nfxr44o7y
       '@typescript-eslint/parser': 5.46.1_ixh6nceclvqov4hcu5gszby2fi
@@ -2130,7 +2136,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0_5k7p6vpuli7gv2hwxm32njvfny
       '@aws-cdk/aws-lambda': 1.73.0_mg37cmkcl3klggc7psgbyhzeui
       '@aws-cdk/aws-sns': 1.73.0_kv7ofveqsfosi3pju2xyyspuqm
-      '@aws-cdk/aws-sns-subscriptions': 1.73.0_u6j4chkodhvjdyt6eay7h4bxii
+      '@aws-cdk/aws-sns-subscriptions': 1.73.0_y6zqkgzbhweraxr5eukxylpuma
       '@aws-cdk/aws-sqs': 1.73.0_kv7ofveqsfosi3pju2xyyspuqm
       '@aws-cdk/core': 1.73.0
       constructs: 3.4.183
@@ -2604,7 +2610,7 @@ packages:
       '@aws-cdk/aws-kinesisfirehose': 1.73.0_67r77goejt66ui43cixernsguu
       '@aws-cdk/aws-lambda': 1.73.0_mg37cmkcl3klggc7psgbyhzeui
       '@aws-cdk/aws-sns': 1.73.0_kv7ofveqsfosi3pju2xyyspuqm
-      '@aws-cdk/aws-sns-subscriptions': 1.73.0_u6j4chkodhvjdyt6eay7h4bxii
+      '@aws-cdk/aws-sns-subscriptions': 1.73.0_y6zqkgzbhweraxr5eukxylpuma
       '@aws-cdk/aws-sqs': 1.73.0_kv7ofveqsfosi3pju2xyyspuqm
       '@aws-cdk/aws-stepfunctions': 1.73.0_qmqiutqszeukfz42javv6jeasy
       '@aws-cdk/core': 1.73.0
@@ -2871,13 +2877,11 @@ packages:
       constructs: 3.4.183
     dev: true
 
-  /@aws-cdk/aws-sns-subscriptions/1.73.0_u6j4chkodhvjdyt6eay7h4bxii:
+  /@aws-cdk/aws-sns-subscriptions/1.73.0_y6zqkgzbhweraxr5eukxylpuma:
     resolution: {integrity: sha512-b5LnCM1CsqrNFurSrR7xI4Soldh01xMPsyz8G7qwOY2X7ZJJF2iHRAABjNEmClKDDP6Ln8mdJO50C9m3PM852A==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     peerDependencies:
       '@aws-cdk/aws-iam': 1.73.0
-      '@aws-cdk/aws-lambda': 1.73.0
-      '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
       constructs: ^3.2.0
@@ -2888,6 +2892,12 @@ packages:
       '@aws-cdk/aws-sqs': 1.73.0_kv7ofveqsfosi3pju2xyyspuqm
       '@aws-cdk/core': 1.73.0
       constructs: 3.4.183
+    transitivePeerDependencies:
+      - '@aws-cdk/aws-ec2'
+      - '@aws-cdk/aws-kms'
+      - '@aws-cdk/aws-logs'
+      - '@aws-cdk/aws-s3'
+      - '@aws-cdk/aws-s3-assets'
     dev: true
 
   /@aws-cdk/aws-sns/1.73.0_kv7ofveqsfosi3pju2xyyspuqm:
@@ -7919,6 +7929,10 @@ packages:
     dependencies:
       jest-matcher-utils: 27.5.1
       pretty-format: 27.5.1
+    dev: true
+
+  /@types/jmespath/0.15.0:
+    resolution: {integrity: sha512-uaht4XcYSq5ZrPriQW8C+g5DhptewRd1E84ph7L167sCyzLObz+U3JTpmYq/CNkvjNsz2mtyQoHPNEYQYTzWmg==}
     dev: true
 
   /@types/json-schema/7.0.11:

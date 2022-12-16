@@ -1,0 +1,26 @@
+{
+  # Example comment, since this is YAML, which is a superset of JSON
+  requiredDependencyFields: ["useDescription", "author"],
+  packageNamePrefixAuthors: {
+    "@microsoft/": "Microsoft"
+  },
+  dependencies: {
+    "@microsoft/rush-lib": {
+      "useDescription": "Used to interact with Rush"
+    },
+    "@rushstack/node-core-library": {
+      "useDescription": "Used to interact with Node",
+      "author": "Microsoft and rushstack community"
+    },
+    "csv-writer": {
+      "exampleField": "123",
+      "useDescription": "Used to write CSV files"
+    },
+    "jmespath": {
+      "useDescription": "Used to parse out package.json fields by path"
+    },
+    "yaml": {
+      "useDescription": "Used to parse out package.json and dependency metadata files"
+    }
+  }
+}

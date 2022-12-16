@@ -1,6 +1,11 @@
 # Change Log - @launchtray/hatch-web-eslint-config
 
-This log was last generated on Wed, 05 Oct 2022 18:10:20 GMT and should not be manually modified.
+This log was last generated on Fri, 16 Dec 2022 06:13:49 GMT and should not be manually modified.
+
+## 0.21.0
+Fri, 16 Dec 2022 06:13:49 GMT
+
+_Version update only_
 
 ## 0.20.0
 Wed, 05 Oct 2022 18:10:20 GMT

@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web-injectables",
   "entries": [
     {
+      "version": "0.21.0",
+      "tag": "@launchtray/hatch-web-injectables_v0.21.0",
+      "date": "Fri, 16 Dec 2022 06:13:49 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "API-first design via hatch-api and hatch-sdk-generator to generate client and server SDKs based on OpenAPI specifications"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.20.0",
       "tag": "@launchtray/hatch-web-injectables_v0.20.0",
       "date": "Wed, 05 Oct 2022 18:10:20 GMT",

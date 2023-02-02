@@ -87,4 +87,26 @@ export default class StreamUtils {
     }
     return responseStream;
   }
+
+  static async convertReadableStreamToDataUri(readableStream: ReadableStream): Promise<string> {
+    const streamReader = readableStream.getReader();
+    const chunks: Uint8Array[] = [];
+    let done = false;
+    while (!done) {
+      const {value, done: doneReading} = await streamReader.read();
+      if (value != null) {
+        chunks.push(value);
+      }
+      done = doneReading;
+    }
+    const blob = new Blob(chunks);
+    const dataUri = await new Promise<string>((resolve) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        resolve(fileReader.result as string);
+      };
+      fileReader.readAsDataURL(blob);
+    });
+    return dataUri;
+  }
 }

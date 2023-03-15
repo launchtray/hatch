@@ -30,6 +30,9 @@ export const initializeTranslations = async (translations: Resource) => {
             if (Interval.isInterval(value)) {
               return String(Math.floor(value.length(format as DurationUnit)));
             }
+            if (Array.isArray(value) && value.every(DateTime.isDateTime)) {
+              return value.map((element: DateTime) => element.toFormat(format)).join(', ');
+            }
           }
           return value;
         },

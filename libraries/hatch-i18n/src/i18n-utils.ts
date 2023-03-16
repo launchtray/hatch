@@ -13,7 +13,7 @@ export const initializeTranslations = async (translations: Resource) => {
       postProcess: ['reactPostprocessor'],
       interpolation: {
         escapeValue: false,
-        format: (value, format, lng) => {
+        format: (value, format, lng, edit) => {
           if (format === 'uppercase') {
             return value.toLocaleUpperCase(lng);
           }
@@ -24,15 +24,17 @@ export const initializeTranslations = async (translations: Resource) => {
             return value.toLocaleString(lng, JSON.parse(format));
           }
           if (format != null) {
-            if (DateTime.isDateTime(value)) {
-              return value.toFormat(format);
+            if (Array.isArray(value)) {
+              return value.map((element) => formatElement(element, format))
+                .join(edit?.listSeparator ?? ', ');
             }
-            if (Interval.isInterval(value)) {
-              return String(Math.floor(value.length(format as DurationUnit)));
+            return formatElement(value, format);
+          }
+          if (format != null) {
+            if (Array.isArray(value)) {
+              return formatArray(value, i18n.dir(lng) === 'rtl', format, edit?.listSeparator);
             }
-            if (Array.isArray(value) && value.every(DateTime.isDateTime)) {
-              return value.map((element: DateTime) => element.toFormat(format)).join(', ');
-            }
+            return formatElement(value, format);
           }
           return value;
         },
@@ -41,4 +43,23 @@ export const initializeTranslations = async (translations: Resource) => {
       fallbackLng: 'en-US',
       resources: translations,
     });
+};
+
+const formatElement = (value: unknown, format: string) => {
+  if (DateTime.isDateTime(value)) {
+    return value.toFormat(format);
+  }
+  if (Interval.isInterval(value)) {
+    return String(Math.floor(value.length(format as DurationUnit)));
+  }
+  return value;
+};
+
+const formatArray = (value: unknown[], isRtl: boolean, format: string, listSeparator?: string) => {
+  if (isRtl) {
+    return value.reverse().map((element) => formatElement(element, format))
+      .join(listSeparator ?? ', ');
+  }
+  return value.map((element) => formatElement(element, format))
+    .join(listSeparator ?? ', ');
 };

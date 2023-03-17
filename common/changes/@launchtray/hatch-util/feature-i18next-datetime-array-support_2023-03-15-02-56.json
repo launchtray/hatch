@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-util",
+      "comment": "add method to convert a readable stream to a data uri",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-util"
+}

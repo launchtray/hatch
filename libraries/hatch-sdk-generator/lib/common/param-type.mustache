@@ -1,1 +1,1 @@
-{{#isEnum}}{{operationIdCamelCase}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{#isNullable}} | null{{/isNullable}}{{/isEnum}}
+{{#isEnum}}{{#isListContainer}}Array<{{operationIdCamelCase}}{{enumName}}>{{/isListContainer}}{{^isListContainer}}{{operationIdCamelCase}}{{{datatypeWithEnum}}}{{/isListContainer}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{#isNullable}} | null{{/isNullable}}{{/isEnum}}

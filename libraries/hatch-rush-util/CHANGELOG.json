@@ -2,6 +2,12 @@
   "name": "@launchtray/hatch-rush-util",
   "entries": [
     {
+      "version": "0.22.1",
+      "tag": "@launchtray/hatch-rush-util_v0.22.1",
+      "date": "Wed, 31 May 2023 06:26:00 GMT",
+      "comments": {}
+    },
+    {
       "version": "0.22.0",
       "tag": "@launchtray/hatch-rush-util_v0.22.0",
       "date": "Fri, 17 Mar 2023 03:53:52 GMT",

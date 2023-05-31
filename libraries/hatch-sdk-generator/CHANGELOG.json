@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-sdk-generator",
   "entries": [
     {
+      "version": "0.22.1",
+      "tag": "@launchtray/hatch-sdk-generator_v0.22.1",
+      "date": "Wed, 31 May 2023 06:26:00 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fixed SDK generation for APIs using enum array parameter types"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.22.0",
       "tag": "@launchtray/hatch-sdk-generator_v0.22.0",
       "date": "Fri, 17 Mar 2023 03:53:52 GMT",

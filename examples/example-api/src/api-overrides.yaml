@@ -4,6 +4,66 @@
 # ordering of CLI arguments to hatch-api.
 {
   "paths": {
+    "/api/example-enum-list/{id}": {
+      "get": {
+        "tags": [
+          "Metrics"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id to retrieve",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "itemTypes",
+            "in": "query",
+            "required": false,
+            "description": "The types of items to be returned",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                    "TypeA",
+                    "TypeB",
+                    "TypeC",
+                    "TypeD"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID value"
+          }
+        }
+      }
+    },
     "/api/metrics/latest-metrics": {
       "post": {
         "tags": [

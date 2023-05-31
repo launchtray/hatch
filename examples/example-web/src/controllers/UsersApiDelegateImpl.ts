@@ -8,6 +8,8 @@ import {
   PREVENT_DEFAULT_RESPONSE,
 } from '@launchtray/hatch-util';
 import {
+  ApiExampleEnumListIdGetHttpRequest,
+  ApiExampleEnumListIdGetHttpResponse,
   CreateUserHttpRequest,
   CreateUserHttpResponse,
   CreateUserResponsePayloadRoleEnum,
@@ -38,6 +40,18 @@ import WebSocket from 'ws';
 export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsApiDelegate, ReportApiDelegate {
   constructor(@inject('Logger') private logger: Logger) {
     logger.info('Constructing UsersApiControllerDelegateImpl');
+  }
+
+  handleApiExampleEnumListIdGet(
+    request: ApiExampleEnumListIdGetHttpRequest,
+  ): ApiExampleEnumListIdGetHttpResponse {
+    const results: string[] = request.queryParams?.itemTypes ?? [];
+    return {
+      status: 200,
+      body: {
+        results,
+      },
+    };
   }
 
   handleGetStatus(

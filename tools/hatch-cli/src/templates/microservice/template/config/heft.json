@@ -1,0 +1,22 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/heft/v0/heft.schema.json",
+  "aliasesByName": {
+    "start": {
+      "actionName": "build-watch",
+      "defaultParameters": ["--clean", "--webpack5:serve"]
+    }
+  },
+  "phasesByName": {
+    "build": {
+      "phaseDescription": "This phase compiles the project source code.",
+      "cleanFiles": [{ "sourcePath": "dist" }, { "sourcePath": "build" }],
+      "tasksByName": {
+        "webpack": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft-webpack5-plugin"
+          }
+        }
+      }
+    }
+  }
+}

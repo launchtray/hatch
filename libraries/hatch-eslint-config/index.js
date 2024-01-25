@@ -41,7 +41,7 @@ module.exports = {
   },
   ignorePatterns: [
     '*eslintrc*.js',
-    'razzle.config.js',
+    'webpack*.config.js',
     'build',
     'dist',
     'dot-storybook',

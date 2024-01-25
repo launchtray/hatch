@@ -10,7 +10,7 @@ export default class StreamUtils {
   }
 
   static convertNodeReadableToWebStream(readable: Readable): ReadableStream {
-    return Readable.toWeb(readable);
+    return Readable.toWeb(readable) as unknown as ReadableStream;
   }
 
   static async convertNodeReadableToBuffer(readable: Readable): Promise<Buffer> {

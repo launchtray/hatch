@@ -425,6 +425,7 @@ const updatePnpmConfig = (monorepoPath: string) => {
       'react-dom': '^17',
       'react-native-web': '0.18.8',
     },
+    ignoreMissing: ['react-native'],
   };
   const pnpmConfigRawUpdated = stringify(pnpmConfigParsed, null, 2);
   fs.writeFileSync(pnpmConfigPath, pnpmConfigRawUpdated);

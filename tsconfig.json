@@ -35,7 +35,7 @@
     "**/acceptance-tests",
     "**/webpack",
     "**/jest",
-    "**/razzle.config.js",
+    "**/webpack*.config.js",
     "**/template",
     "**/template.ts",
     "**/template.tsx",

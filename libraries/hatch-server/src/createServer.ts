@@ -344,7 +344,7 @@ const getPortAndHostname = (logger: Logger): {port: number, hostname: string | u
   }
   const hostname = process.env.HOSTNAME ?? process.env.HATCH_BUILDTIME_HOSTNAME;
   if (process.env.NODE_ENV === 'development') {
-    logger.info(`Listening at http://${hostname ?? '0.0.0.0'}:${port}`);
+    logger.info(`Listening at http://${hostname ?? 'localhost'}:${port}`);
   }
   return {port, hostname};
 };

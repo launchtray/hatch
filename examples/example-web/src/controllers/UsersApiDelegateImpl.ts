@@ -6,6 +6,7 @@ import {
   inject,
   Logger,
   PREVENT_DEFAULT_RESPONSE,
+  StreamUtils,
 } from '@launchtray/hatch-util';
 import {
   ApiExampleEnumListIdGetHttpRequest,
@@ -19,7 +20,7 @@ import {
   GetMetricsCountHttpResponse,
   GetReportPdfHttpRequest,
   GetReportPdfHttpResponse,
-  GetStatusHttpRequestBase,
+  GetStatusHttpRequest,
   GetStatusHttpResponse,
   GetUserHttpRequest,
   GetUserHttpResponse,
@@ -55,10 +56,10 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   handleGetStatus(
-    request: GetStatusHttpRequestBase,
+    request: GetStatusHttpRequest,
   ): GetStatusHttpResponse {
     return {
-      body: `${request.queryParams?.type ?? 'ALL'}: OK`,
+      body: `${request?.queryParams?.type ?? 'ALL'}: OK`,
     };
   }
 
@@ -126,7 +127,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
       headers: {
         xStartDate: request.queryParams.startDate.getTime(),
       },
-      body: Readable.toWeb(readable),
+      body: StreamUtils.convertNodeReadableToWebStream(readable),
     };
   }
 

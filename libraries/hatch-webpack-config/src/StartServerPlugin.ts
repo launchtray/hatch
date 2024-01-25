@@ -19,7 +19,7 @@ const exists = async (f: PathLike) => {
   } catch {
     return false;
   }
-}
+};
 
 export interface StartServerPluginOptions {
   verbose: boolean; // print logs
@@ -54,9 +54,9 @@ const DEFAULT_OPTIONS: StartServerPluginOptions = {
 export default class StartServerPlugin {
   private readonly options: StartServerPluginOptions;
   private worker: childProcess.ChildProcess | null;
-  private workerLoaded: boolean = false;
+  private workerLoaded = false;
   private scriptFile: string | undefined;
-  private exiting: boolean = false;
+  private exiting = false;
 
   constructor(options: Partial<StartServerPluginOptions> | string) {
     if (options == null) {
@@ -130,7 +130,7 @@ export default class StartServerPlugin {
 
   private getScript(compilation: Compilation) {
     const {entryName} = this.options;
-    const entrypoints = compilation.entrypoints;
+    const {entrypoints} = compilation;
     const entry = entrypoints.get
       ? entrypoints.get(entryName)
       : entrypoints[entryName];
@@ -138,23 +138,23 @@ export default class StartServerPlugin {
       this.info('compilation: %O', compilation);
       throw new Error(
         `Requested entry "${entryName}" does not exist, try one of: ${(entrypoints.keys
-            ? Array.from(entrypoints.keys())
-            : Object.keys(entrypoints)
-        ).join(' ')}`
+          ? Array.from(entrypoints.keys())
+          : Object.keys(entrypoints)
+        ).join(' ')}`,
       );
     }
 
-    const runtimeChunk = webpack.EntryPlugin && (entry.runtimeChunk || entry._entrypointChunk)
-    const runtimeChunkFiles = runtimeChunk && runtimeChunk.files && runtimeChunk.files.values()
-    const entryScript = (runtimeChunkFiles && runtimeChunkFiles.next().value) || ((entry.chunks[0] || {}).files || [])[0]
+    const runtimeChunk = webpack.EntryPlugin && (entry.runtimeChunk || entry._entrypointChunk);
+    const runtimeChunkFiles = runtimeChunk && runtimeChunk.files && runtimeChunk.files.values();
+    const entryScript = (runtimeChunkFiles && runtimeChunkFiles.next().value) || ((entry.chunks[0] || {}).files || [])[0];
     if (!entryScript) {
-      this.error("Entry chunk not outputted: %O", entry)
-      return
+      this.error('Entry chunk not outputted: %O', entry);
+      return;
     }
     const {path} = compilation.outputOptions;
     if (!path) {
-      this.error("Path not outputted: %O", entry)
-      return
+      this.error('Path not outputted: %O', entry);
+      return;
     }
     return sysPath.resolve(path, entryScript);
   }
@@ -230,7 +230,7 @@ export default class StartServerPlugin {
   }
 
   private runWorker(callback?: () => void) {
-    if (this.worker) return;
+    if (this.worker != null) return;
     const {
       scriptFile,
       options: {scriptArgs},
@@ -252,7 +252,7 @@ export default class StartServerPlugin {
     const worker = childProcess.fork(scriptFile, extScriptArgs, {
       execArgv,
       silent: true,
-      env: Object.assign(process.env, {FORCE_COLOR: 3})
+      env: Object.assign(process.env, {FORCE_COLOR: 3}),
     });
     worker.on('exit', this.handleChildExit);
     worker.on('quit', this.handleChildQuit);
@@ -272,7 +272,7 @@ export default class StartServerPlugin {
 
     this.worker = worker;
 
-    if (callback) callback();
+    if (callback != null) callback();
   }
 
   private hmrWorker(compilation: Compilation, callback: () => void) {
@@ -291,23 +291,23 @@ export default class StartServerPlugin {
   }
 
   async afterEmit(compilation: Compilation, callback: () => void) {
-    // monitor filesystem to wait for assets.json to exist
+    // monitor filesystem to wait for manifest.json to exist
     const {options: {manifestPath}} = this;
     if (manifestPath != null) {
       const {path} = compilation.outputOptions;
-      if (!path) {
+      if (path == null) {
         this.error('Path not known');
         return;
       }
       this.info('Waiting for manifest to exist...');
       while (!(await exists(manifestPath))) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
     }
 
     this.scriptFile = this.getScript(compilation);
 
-    if (this.worker) {
+    if (this.worker != null) {
       return this.hmrWorker(compilation, callback);
     }
 
@@ -322,7 +322,7 @@ export default class StartServerPlugin {
   }
 
   apply(compiler: Compiler) {
-    const inject = this.options.inject;
+    const {inject} = this.options;
     const plugin = {name: 'StartServerPlugin'};
     if (inject) {
       compiler.hooks.make.tap(plugin, (compilation: Compilation) => {
@@ -332,11 +332,10 @@ export default class StartServerPlugin {
             name: this.options.entryName,
           }),
           this.options.entryName,
-          () => {}
+          () => {},
         );
       });
     }
     compiler.hooks.afterEmit.tapAsync(plugin, this.afterEmit);
   }
 }
-

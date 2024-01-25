@@ -13,10 +13,10 @@ const renderClient = async (): Promise<string> => {
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = `${assetsPrefix}/favicon.ico`;
   let assetsScript: string;
-  if (assets?.client?.js != null) {
+  if (assets['client.js'] != null) {
     assetsScript = crossOrigin
-      ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-      : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+      ? `<script src="${assetsPrefix + assets['client.js']}" defer crossorigin></script>`
+      : `<script src="${assetsPrefix + assets['client.js']}" defer></script>`;
   } else {
     assetsScript = '';
   }

@@ -50,8 +50,8 @@ const renderStaticClient = async (requestContext: ClientRenderRequestContext): P
   const {composition} = requestContext;
   const faviconPath = `${assetsPrefix}/favicon.ico`;
   let assetsScript: string;
-  if (assets?.client?.js != null) {
-    assetsScript = `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  if (assets['client.js'] != null) {
+    assetsScript = `<script src="${assetsPrefix + assets['client.js']}" defer></script>`;
   } else {
     assetsScript = '';
   }
@@ -142,10 +142,10 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = `${assetsPrefix}/favicon.ico`;
   let assetsScript: string;
-  if (assets?.client?.js != null) {
+  if (assets['client.js'] != null) {
     assetsScript = crossOrigin
-      ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-      : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+      ? `<script src="${assetsPrefix + assets['client.js']}" defer crossorigin></script>`
+      : `<script src="${assetsPrefix + assets['client.js']}" defer></script>`;
   } else {
     assetsScript = '';
   }

@@ -99,7 +99,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
   hatchDefinitions['process.env.HATCH_BUILDTIME_HOSTNAME'] = process.env.HOSTNAME;
   hatchDefinitions['process.env.HATCH_BUILDTIME_HOST'] = process.env.HOST;
   hatchDefinitions['process.env.HATCH_BUILDTIME_BUILD_DATE'] = JSON.stringify(new Date().toISOString());
-  hatchDefinitions['process.env.HATCH_BUILDTIME_ASSETS_MANIFEST'] = paths.appAssetsManifest;
   hatchDefinitions['process.env.WDS_SOCKET_PORT'] = devServerPort;
 
   try {
@@ -458,73 +457,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
         writeToFileEmit: true,
         fileName: paths.appAssetsManifest,
       }),
-      // TODO: remove legacy code below
-      /* eslint-disable */
-      new WebpackManifestPlugin({
-        fileName: `${path.dirname(paths.appAssetsManifest)}/assets.json`,
-        writeToFileEmit: true,
-        generate: (seed, files) => {
-          const entrypoints = new Set<ChunkGroup>();
-          const noChunkFiles = new Set<FileDescriptor>();
-          files.forEach((file) => {
-            if (file.isChunk) {
-              for (const group of (file.chunk?.groupsIterable ?? [])) {
-                entrypoints.add(group);
-              }
-            } else {
-              noChunkFiles.add(file);
-            }
-          });
-          const entries = [...entrypoints];
-          const entryArrayManifest: Record<string, any> = entries.reduce((acc, entry) => {
-            const entrypoint = (
-              entry as ChunkGroup & {runtimeChunk?: webpack.Chunk, getRuntimeChunk?: () => webpack.Chunk}
-            );
-            const name = entry.options?.name
-              ?? entrypoint.runtimeChunk?.name
-              ?? entrypoint.getRuntimeChunk?.()?.name
-              ?? entry.id;
-
-            const allFiles = ([] as (string | boolean)[])
-              .concat(
-                ...(entry.chunks ?? []).map((chunk) => Array.from(chunk.files).map((path) => !path.startsWith('/.') && config.output?.publicPath + path)),
-              )
-              .filter(Boolean) as string[];
-
-            const filesByType = allFiles.reduce((types, file) => {
-              const fileType = file.slice(file.lastIndexOf('.') + 1);
-              types[fileType] = types[fileType] || [];
-              types[fileType].push(file);
-              return types;
-            }, {});
-
-            const chunkIds = ([] as unknown[]).concat(
-              ...(entry.chunks ?? []).map((chunk) => chunk.ids),
-            );
-
-            return name
-              ? {
-                ...acc,
-                [name]:  {...filesByType, chunks: chunkIds},
-              }
-              : acc;
-          }, seed) as Manifest;
-          const noEntryMap = (
-            [...noChunkFiles]
-              .map((file) => !file.path.includes('/.') && file.path)
-              .filter(Boolean) as string[]
-          );
-          entryArrayManifest.noentry = noEntryMap.reduce((types, file) => {
-            const fileType = file.slice(file.lastIndexOf('.') + 1);
-            types[fileType] = types[fileType] || [];
-            types[fileType].push(file);
-            return types;
-          }, {});
-          return entryArrayManifest;
-        },
-      }),
-    ].filter((x) => x);
-    /* eslint-enable */
+    ];
 
     if (IS_DEV) {
       config.devServer = {

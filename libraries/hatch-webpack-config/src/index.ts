@@ -269,6 +269,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
               limit: 10000,
               name: urlLoaderOutputName,
               emitFile: IS_WEB,
+              esModule: false,
             },
           }],
         },

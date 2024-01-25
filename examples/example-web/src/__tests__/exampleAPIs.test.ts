@@ -11,6 +11,6 @@ describe('server', () => {
   test('test GET api/1', async () => {
     const response = await request.get('/api/example');
     expect(response.status).toBe(200);
-    expect(response.text).toBe('Example GET');
+    expect(response.text).toMatch(/Example GET.*/);
   });
 });

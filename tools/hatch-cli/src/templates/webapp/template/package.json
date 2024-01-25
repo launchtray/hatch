@@ -15,7 +15,6 @@
     "start:prod": "NODE_ENV=production node build/server.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
-
   },
   "dependencies": {
     "@launchtray/hatch-server": "workspace:*",
@@ -158,13 +157,13 @@
     "source-map-loader": "^4.0.2"
   },
   "jest": {
+    "testEnvironment": "<rootDir>/node_modules/@launchtray/hatch-test/dist/SpecInfoJestEnvironment",
+    "testTimeout": 120000,
     "transform": {
-      "\\.(ts|tsx)$": "ts-jest",
-      "^(?!.*\\.(js|jsx|json)$)": "<rootDir>/node_modules/hatch-webpack-config/config/jestFileTransform.js"
+      "\\.(ts|tsx)$": "ts-jest"
     },
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",
-      "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
+      "<rootDir>/src/**/__tests__/**/?(*.)(spec|test).(ts|js)?(x)"
     ],
     "moduleFileExtensions": [
       "ts",

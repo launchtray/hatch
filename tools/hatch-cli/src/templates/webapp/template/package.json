@@ -82,7 +82,6 @@
     "@types/webpack-env": "^1.18.4",
     "@types/source-map": "0.5.2",
     "@sentry/types": "^5",
-    "@babel/runtime": "^7",
     "@launchtray/hatch-test": "workspace:*",
     "@launchtray/hatch-test-web": "workspace:*",
     "ajv": "^6.9.1",
@@ -153,14 +152,9 @@
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "react-refresh-typescript": "^2.0.9",
-    "babel-loader": "^9.1.3",
     "ts-loader": "^9.5.1",
     "@babel/core": "^7.23.7",
-    "@babel/preset-react": "^7.23.3",
-    "@babel/preset-typescript": "^7.23.3",
-    "@babel/plugin-proposal-decorators": "^7.23.7",
     "type-fest": "^4.9.0",
-    "@babel/preset-env": "^7.15.6",
     "source-map-loader": "^4.0.2"
   },
   "jest": {

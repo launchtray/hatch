@@ -212,25 +212,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
                 transpileOnly: true,
                 experimentalWatchApi: true,
               },
-              // loader: require.resolve('babel-loader'),
-              // options: {
-              //   presets: [
-              //     ['@babel/preset-env', {
-              //       targets: 'defaults',
-              //     }],
-              //     ['@babel/preset-typescript'],
-              //     ['@babel/preset-react', {
-              //       development: IS_DEV,
-              //     }],
-              //     ['@babel/plugin-proposal-decorators', {
-              //       legacy: true,
-              //     }],
-              //   ],
-              //   plugins: filterTruthy([
-              //     IS_WEB && IS_DEV && require.resolve('react-refresh/babel'),
-              //   ]),
-              //   sourceMaps: true,
-              // },
             },
           ],
         },

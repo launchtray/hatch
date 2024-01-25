@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-server-user-management",
+      "comment": "Updates in support of Razzle removal",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-server-user-management"
+}

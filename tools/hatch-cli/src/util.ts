@@ -404,19 +404,18 @@ const updatePnpmConfig = (monorepoPath: string) => {
   pnpmConfigParsed.useWorkspaces = true;
   pnpmConfigParsed.globalOverrides = {
     ...pnpmConfigParsed.globalOverrides,
-    'fork-ts-checker-webpack-plugin': '6.4.0',
-    'postcss@^8.2': '8.2.12',
+    'postcss@<8.2.12': '8.2.12',
     'immer@<9.0.6': '9.0.16',
-    'trim-newlines': '4.0.2',
+    'trim-newlines@<4.0.2': '4.0.2',
     'react-native-web@<0.18.8': '0.18.8',
     'react@<17': '^17',
     'react-dom@<17': '^17',
-    'react-error-overlay': '6.0.9',
-    '@braintree/sanitize-url': '6.0.2',
+    '@braintree/sanitize-url@<6.0.2': '6.0.2',
     'shell-quote@<1.7.3': '1.7.3',
     'loader-utils@>=2.0.0 <2.0.4': '2.0.4',
     'node-forge@<1.3.1': '1.3.1',
     'trim@<1.0.1': '1.0.1',
+    'chokidar@<3.5.3': '3.5.3',
   };
   pnpmConfigParsed.globalPeerDependencyRules = {
     ...pnpmConfigParsed.globalPeerDependencyRules,

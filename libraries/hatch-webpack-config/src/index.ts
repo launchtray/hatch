@@ -7,7 +7,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import WebpackBar from 'webpackbar';
-import {InternalOptions, Manifest, WebpackManifestPlugin} from 'webpack-manifest-plugin';
+import {WebpackManifestPlugin} from 'webpack-manifest-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import util from 'util';
 import childProcess from 'child_process';
@@ -18,15 +18,10 @@ import type {IWebpackConfigurationFnEnvironment} from '@rushstack/heft-webpack5-
 import ReactRefreshTypeScript from 'react-refresh-typescript';
 import StartServerPlugin from './StartServerPlugin';
 
-// Prevent use of insecure hash function for webpack 4 without requiring legacy openssl provider
+// Prevent use of insecure hash function without requiring legacy openssl provider
 // From: https://stackoverflow.com/questions/69394632/webpack-build-failing-with-err-ossl-evp-unsupported#69691525
 const origCreateHash = crypto.createHash;
 crypto.createHash = (algorithm) => origCreateHash(algorithm === 'md4' ? 'sha256' : algorithm);
-
-type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
-type FileDescriptor = ArrayElement<Parameters<InternalOptions['generate']>[1]>;
-type ChunkGroup = Parameters<webpack.Chunk['addGroup']>[0];
 
 const logAndReturn = (name: string, value: unknown, metadata: {dev: boolean, target: string}) => {
   const logDir = process.env.WEBPACK_CONFIG_INSPECTION_OUTDIR;
@@ -53,6 +48,50 @@ export interface HatchWebappComponentWebpackOptions extends HatchWebappWebpackOp
   target: 'web' | 'node';
   includeServerDevServer: boolean;
 }
+
+const addNodeAliases = (config: webpack.Configuration) => {
+  // eslint-disable-next-line no-param-reassign
+  config.resolve = {
+    ...(config.resolve ?? {}),
+    fallback: {
+      ...(config.resolve?.fallback ?? {}),
+      fs: false,
+      events: require.resolve('events/'),
+      stream: require.resolve('stream-browserify'),
+      /* eslint-disable @typescript-eslint/naming-convention */
+      _stream_duplex: require.resolve('readable-stream/lib/_stream_duplex'),
+      _stream_passthrough: require.resolve('readable-stream/lib/_stream_passthrough'),
+      _stream_readable: require.resolve('readable-stream/lib/_stream_readable'),
+      _stream_transform: require.resolve('readable-stream/lib/_stream_transform'),
+      _stream_writable: require.resolve('readable-stream/lib/_stream_writable'),
+      /* eslint-enable @typescript-eslint/naming-convention */
+    },
+  };
+  // eslint-disable-next-line no-param-reassign
+  config.plugins = [
+    ...(config.plugins ?? []),
+    new webpack.ProvidePlugin({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      Buffer: [require.resolve('buffer/'), 'Buffer'],
+      process: [require.resolve('process/browser')],
+      console: [require.resolve('console-browserify')],
+    }),
+  ];
+};
+
+const addResolveAliases = (config: webpack.Configuration) => {
+  // eslint-disable-next-line no-param-reassign
+  config.resolve = {
+    ...(config.resolve ?? {}),
+    alias: {
+      ...(config.resolve?.alias ?? {}),
+      // Support React Native Web
+      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+      'react-native': 'react-native-web',
+      'react-native-svg': 'react-native-svg/lib/commonjs/ReactNativeSVG.web',
+    },
+  };
+};
 
 // eslint-disable-next-line complexity -- Started complex with Razzle. We'll pick away at this over time.
 const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) => {
@@ -183,10 +222,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
       alias: {
         // This is required so symlinks work during development.
         'webpack/hot/poll': require.resolve('webpack/hot/poll'),
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        'react-native': 'react-native-web',
-        'react-native-svg': 'react-native-svg/lib/commonjs/ReactNativeSVG.web',
       },
     },
     ignoreWarnings: [/Failed to parse source map/],
@@ -303,6 +338,8 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
     },
   };
 
+  addResolveAliases(config);
+
   config.performance = {
     maxAssetSize: 100 * 1000 * 1000,
     maxEntrypointSize: 100 * 1000 * 1000,
@@ -410,31 +447,10 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
       client: [paths.appClientEntry],
     };
 
-    config.resolve = {
-      ...config.resolve,
-      fallback: {
-        ...config.resolve?.fallback,
-        fs: false,
-        events: require.resolve('events/'),
-        stream: require.resolve('stream-browserify'),
-        /* eslint-disable @typescript-eslint/naming-convention */
-        _stream_duplex: require.resolve('readable-stream/lib/_stream_duplex'),
-        _stream_passthrough: require.resolve('readable-stream/lib/_stream_passthrough'),
-        _stream_readable: require.resolve('readable-stream/lib/_stream_readable'),
-        _stream_transform: require.resolve('readable-stream/lib/_stream_transform'),
-        _stream_writable: require.resolve('readable-stream/lib/_stream_writable'),
-        /* eslint-enable @typescript-eslint/naming-convention */
-      },
-    };
+    addNodeAliases(config);
 
     config.plugins = [
       ...config.plugins,
-      new webpack.ProvidePlugin({
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Buffer: [require.resolve('buffer/'), 'Buffer'],
-        process: [require.resolve('process/browser')],
-        console: [require.resolve('console-browserify')],
-      }),
       new WebpackManifestPlugin({
         writeToFileEmit: true,
         fileName: paths.appAssetsManifest,
@@ -604,6 +620,12 @@ export const createSingleComponentConfig = (options: HatchWebappComponentWebpack
       process.exit(1);
     }
   };
+};
+
+export const patchToolWebpackConfig = (config: webpack.Configuration): webpack.Configuration => {
+  addResolveAliases(config);
+  addNodeAliases(config);
+  return config;
 };
 
 export const createWebappConfig = (options: HatchWebappWebpackOptions) => {

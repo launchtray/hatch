@@ -16,7 +16,7 @@
   "devDependencies": {
     "webpack": "~5.82.1",
     "@types/node": "^18",
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^29.5.11",
     "@types/webpack-env": "^1.18.4",
     "@types/webpack": "^5.28.5",
     "@launchtray/hatch-eslint-config": "workspace:*",

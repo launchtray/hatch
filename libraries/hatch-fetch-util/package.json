@@ -19,7 +19,7 @@
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "workspace:*",
     "@launchtray/hatch-util": "workspace:*",
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^29.5.11",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
@@ -27,9 +27,9 @@
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",
-    "jest": "^27.5.1",
+    "jest": "^29.7.0",
     "rimraf": "3.0.0",
-    "ts-jest": "^27.1.5",
+    "ts-jest": "^29.1.2",
     "typescript": "4.9.5"
   },
   "jest": {

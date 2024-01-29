@@ -31,9 +31,7 @@
     "terser-webpack-plugin": "^5.3.10",
     "mini-css-extract-plugin": "2.7.6",
     "css-minimizer-webpack-plugin": "^6.0.0",
-    "@types/react-dev-utils": "^9.0.15",
     "copy-webpack-plugin": "^11.0.0",
-    "react-dev-utils": "^12.0.1",
     "webpackbar": "^6.0.0",
     "webpack-manifest-plugin": "^5.0.0",
     "webpack-dev-server": "~4.9.3",
@@ -72,9 +70,7 @@
     "terser-webpack-plugin": "^5.3.10",
     "mini-css-extract-plugin": "2.7.6",
     "css-minimizer-webpack-plugin": "^6.0.0",
-    "@types/react-dev-utils": "^9.0.15",
     "copy-webpack-plugin": "^11.0.0",
-    "react-dev-utils": "^12.0.1",
     "webpackbar": "^6.0.0",
     "webpack-manifest-plugin": "^5.0.0",
     "webpack-dev-server": "~4.9.3",
@@ -105,5 +101,16 @@
     "@babel/core": "^7.23.7",
     "type-fest": "^4.9.0",
     "source-map-loader": "^4.0.2"
+  },
+  "peerDependenciesMeta": {
+    "@pmmmwh/react-refresh-webpack-plugin": {
+      "optional": true
+    },
+    "react-refresh-typescript": {
+      "optional": true
+    },
+    "react-refresh": {
+      "optional": true
+    }
   }
 }

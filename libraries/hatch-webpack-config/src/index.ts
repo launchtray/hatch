@@ -5,7 +5,6 @@ import webpackDevServer from 'webpack-dev-server';
 import TerserPlugin from 'terser-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import WebpackBar from 'webpackbar';
 import {WebpackManifestPlugin} from 'webpack-manifest-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
@@ -15,8 +14,22 @@ import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 import crypto from 'crypto';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import type {IWebpackConfigurationFnEnvironment} from '@rushstack/heft-webpack5-plugin';
-import ReactRefreshTypeScript from 'react-refresh-typescript';
 import StartServerPlugin from './StartServerPlugin';
+
+let reactRefreshAvailable: boolean;
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+let ReactRefreshWebpackPlugin: any;
+let ReactRefreshTypeScript: any;
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+try {
+  ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+  ReactRefreshTypeScript = require('react-refresh-typescript');
+  reactRefreshAvailable = true;
+} catch (e) {
+  reactRefreshAvailable = false;
+}
 
 // Prevent use of insecure hash function without requiring legacy openssl provider
 // From: https://stackoverflow.com/questions/69394632/webpack-build-failing-with-err-ossl-evp-unsupported#69691525
@@ -37,7 +50,15 @@ const filterTruthy = <T>(elements: (T | boolean)[]): T[] => {
   return elements.filter(Boolean) as T[];
 };
 
-export interface HatchWebappWebpackOptions {
+export interface HatchWebappWebpackOptions extends HatchMicroserviceWebpackOptions {
+  appDirectory: string;
+  isDev?: boolean;
+  disableFilenameHashes?: boolean;
+  minimizeServer?: boolean;
+  useReactRefresh?: boolean;
+}
+
+export interface HatchMicroserviceWebpackOptions {
   appDirectory: string;
   isDev?: boolean;
   disableFilenameHashes?: boolean;
@@ -241,9 +262,17 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
             {
               loader: require.resolve('ts-loader'),
               options: {
-                getCustomTransformers: () => ({
-                  before: [IS_DEV && !IS_NODE && ReactRefreshTypeScript()].filter(Boolean),
-                }),
+                getCustomTransformers: () => {
+                  if (options.useReactRefresh && IS_DEV && !IS_NODE) {
+                    try {
+                      return {before: [ReactRefreshTypeScript()]};
+                    } catch (e) {
+                      console.error('Webpack config expected react-refresh-typescript to be installed.');
+                      process.exit(1);
+                    }
+                  }
+                  return {before: []};
+                },
                 transpileOnly: true,
                 experimentalWatchApi: true,
               },
@@ -490,7 +519,14 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
         },
       };
 
-      config.plugins.push(new ReactRefreshWebpackPlugin());
+      if (options.useReactRefresh) {
+        try {
+          config.plugins.push(new ReactRefreshWebpackPlugin());
+        } catch (e) {
+          console.error('Webpack config expected @pmmmwh/react-refresh-webpack-plugin to be installed.');
+          process.exit(1);
+        }
+      }
 
       config.optimization = {
         splitChunks: {
@@ -601,11 +637,11 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 export const createSingleComponentConfig = (options: HatchWebappComponentWebpackOptions) => {
   // eslint-disable-next-line consistent-return
   return (env: IWebpackConfigurationFnEnvironment) => {
+    const optionsLocal = {...options};
     // Attempt to auto-detect dev mode if this is run via the Heft Webpack Plugin
-    if (options.isDev == null) {
+    if (optionsLocal.isDev == null) {
       if (env?.taskSession?.parameters?.watch != null) {
-        // eslint-disable-next-line no-param-reassign
-        options.isDev = env.taskSession.parameters.watch;
+        optionsLocal.isDev = env.taskSession.parameters.watch;
       } else {
         // eslint-disable-next-line no-console
         console.error('Could not auto-determine isDev parameter for hatch-webpack-config. Please specify manually.');
@@ -613,7 +649,7 @@ export const createSingleComponentConfig = (options: HatchWebappComponentWebpack
       }
     }
     try {
-      return createWebpackConfigHelper(options);
+      return createWebpackConfigHelper(optionsLocal);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error creating webpack config', e);
@@ -629,10 +665,20 @@ export const patchToolWebpackConfig = (config: webpack.Configuration): webpack.C
 };
 
 export const createWebappConfig = (options: HatchWebappWebpackOptions) => {
+  const optionsLocal = {...options};
+  if (optionsLocal.useReactRefresh == null) {
+    // For a webapp, assume we want to use React Refresh if it's available
+    optionsLocal.useReactRefresh = reactRefreshAvailable;
+  }
   return (env: IWebpackConfigurationFnEnvironment) => {
     return [
-      createSingleComponentConfig({...options, target: 'web', includeServerDevServer: false})(env),
-      createSingleComponentConfig({...options, target: 'node', includeServerDevServer: false})(env),
+      createSingleComponentConfig({...optionsLocal, target: 'web', includeServerDevServer: false})(env),
+      createSingleComponentConfig({...optionsLocal, target: 'node', includeServerDevServer: false})(env),
     ];
   };
+};
+
+export const createMicroserviceConfig = (options: HatchMicroserviceWebpackOptions) => {
+  // For a non-web app, assume we do not want to use React Refresh
+  return createWebappConfig({...options, useReactRefresh: false});
 };

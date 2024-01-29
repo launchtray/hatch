@@ -90,7 +90,7 @@
   {
     "definitionName": "lockStepVersion",
     "policyName": "hatchVersionPolicy",
-    "version": "0.23.0-alpha.0",
+    "version": "0.23.0-alpha.1",
     "nextBump": "patch"
   }
 ]

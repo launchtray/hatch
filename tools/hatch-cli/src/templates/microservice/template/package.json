@@ -39,8 +39,9 @@
     "buffer": "^6.0.3",
     "console-browserify": "^1.2.0",
     "stream-browserify": "^3.0.0",
+    "crypto-browserify": "^3.12.0",
     "readable-stream": "^4.5.2",
-    "events": "^3.3.0"
+    "events": "^3.3.0",
   },
   "devDependencies": {
     "@types/ws": "^7",

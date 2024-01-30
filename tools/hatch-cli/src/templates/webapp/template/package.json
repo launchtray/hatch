@@ -55,6 +55,7 @@
     "redux-saga": "^1",
     "regenerator-runtime": "^0.13.3",
     "stream-browserify": "^3.0.0",
+    "crypto-browserify": "^3.12.0",
     "supports-color": "^7.2.0",
     "swagger-ui-react": "4.5.2",
     "utf-8-validate": "^5",

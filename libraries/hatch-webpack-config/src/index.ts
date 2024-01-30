@@ -79,6 +79,7 @@ const addNodeAliases = (config: webpack.Configuration) => {
       fs: false,
       events: require.resolve('events/'),
       stream: require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify'),
       /* eslint-disable @typescript-eslint/naming-convention */
       _stream_duplex: require.resolve('readable-stream/lib/_stream_duplex'),
       _stream_passthrough: require.resolve('readable-stream/lib/_stream_passthrough'),

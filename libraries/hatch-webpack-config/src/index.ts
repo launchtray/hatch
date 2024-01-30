@@ -605,12 +605,14 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
     }
   }
 
-  config.plugins.push(
-    new WebpackBar({
-      color: options.target === 'web' ? '#505bf1' : '#6c2bfa',
-      name: options.target === 'web' ? 'client' : 'server',
-    }),
-  );
+  if (!IS_PROD) {
+    config.plugins.push(
+      new WebpackBar({
+        color: options.target === 'web' ? '#505bf1' : '#6c2bfa',
+        name: options.target === 'web' ? 'client' : 'server',
+      }),
+    );
+  }
 
   // Ignore warning about express being bundled
   config.plugins.push(

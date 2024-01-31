@@ -77,6 +77,7 @@ const addNodeAliases = (config: webpack.Configuration) => {
     fallback: {
       ...(config.resolve?.fallback ?? {}),
       fs: false,
+      assert: require.resolve('assert/'),
       events: require.resolve('events/'),
       stream: require.resolve('stream-browserify'),
       crypto: require.resolve('crypto-browserify'),

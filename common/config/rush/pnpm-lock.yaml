@@ -1499,6 +1499,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@types/source-map-support':
+        specifier: ^0.5.10
+        version: 0.5.10
       '@typescript-eslint/eslint-plugin':
         specifier: ^5
         version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.56.0)(supports-color@7.2.0)(typescript@4.9.5)
@@ -3539,7 +3542,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-lambda': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-sns': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
-      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-lambda@1.73.0)(@aws-cdk/aws-sns@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
+      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/aws-sqs': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/core': 1.73.0
       constructs: 3.4.344
@@ -4011,7 +4014,7 @@ packages:
       '@aws-cdk/aws-kinesisfirehose': 1.73.0(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/aws-lambda': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-sns': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
-      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-lambda@1.73.0)(@aws-cdk/aws-sns@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
+      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/aws-sqs': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-stepfunctions': 1.73.0(@aws-cdk/aws-events@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/core': 1.73.0
@@ -4278,13 +4281,11 @@ packages:
       constructs: 3.4.344
     dev: true
 
-  /@aws-cdk/aws-sns-subscriptions@1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-lambda@1.73.0)(@aws-cdk/aws-sns@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344):
+  /@aws-cdk/aws-sns-subscriptions@1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344):
     resolution: {integrity: sha512-b5LnCM1CsqrNFurSrR7xI4Soldh01xMPsyz8G7qwOY2X7ZJJF2iHRAABjNEmClKDDP6Ln8mdJO50C9m3PM852A==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     peerDependencies:
       '@aws-cdk/aws-iam': 1.73.0
-      '@aws-cdk/aws-lambda': 1.73.0
-      '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
       constructs: ^3.2.0
@@ -4295,6 +4296,12 @@ packages:
       '@aws-cdk/aws-sqs': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/core': 1.73.0
       constructs: 3.4.344
+    transitivePeerDependencies:
+      - '@aws-cdk/aws-ec2'
+      - '@aws-cdk/aws-kms'
+      - '@aws-cdk/aws-logs'
+      - '@aws-cdk/aws-s3'
+      - '@aws-cdk/aws-s3-assets'
     dev: true
 
   /@aws-cdk/aws-sns@1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0):
@@ -9943,6 +9950,12 @@ packages:
 
   /@types/source-list-map@0.1.6:
     resolution: {integrity: sha512-5JcVt1u5HDmlXkwOD2nslZVllBBc7HDuOICfiZah2Z0is8M8g+ddAEawbmd3VjedfDHBzxCaXLs07QEmb7y54g==}
+    dev: true
+
+  /@types/source-map-support@0.5.10:
+    resolution: {integrity: sha512-tgVP2H469x9zq34Z0m/fgPewGhg/MLClalNOiPIzQlXrSS2YrKu/xCdSCKnEDwkFha51VKEKB6A9wW26/ZNwzA==}
+    dependencies:
+      source-map: 0.6.1
     dev: true
 
   /@types/source-map@0.5.2:

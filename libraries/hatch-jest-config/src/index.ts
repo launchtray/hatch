@@ -12,8 +12,7 @@ export const createJestConfig = (): Config => ({
   ],
   moduleNameMapper: {
     '^uuid$': require.resolve('uuid'),
-    '^react-native$': 'react-native-web',
-    '^d3-(.*)$': 'd3-$1/dist/d3-$1',
+    '^react-native$': require.resolve('react-native-web'),
   },
   moduleFileExtensions: [
     'ts',

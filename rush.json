@@ -347,6 +347,11 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-jest-config",
+      "projectFolder": "libraries/hatch-jest-config",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-server-middleware",
       "projectFolder": "libraries/hatch-server-middleware",
       "versionPolicyName": "hatchVersionPolicy"

@@ -1,30 +1,27 @@
 {
-  "name": "@launchtray/hatch-user-management-client",
+  "name": "@launchtray/hatch-jest-config",
   "version": "0.23.0-alpha.4",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",
     "build": "rimraf dist && tsc",
     "build:watch": "tsc"
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "peerDependencies": {
-    "@launchtray/hatch-util": "workspace:*",
-    "@launchtray/tsyringe-async": "4.3.3"
-  },
   "devDependencies": {
-    "@launchtray/hatch-eslint-config": "workspace:*",
-    "@launchtray/hatch-util": "workspace:*",
-    "@launchtray/tsyringe-async": "4.3.3",
     "@types/node": "^18",
-    "@typescript-eslint/eslint-plugin": "^5",
-    "@typescript-eslint/parser": "^5",
+    "@types/jest": "^29.5.11",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "eslint": "^8",
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@typescript-eslint/parser": "^5",
+    "@typescript-eslint/eslint-plugin": "^5",
     "eslint-config-airbnb-base": "^15",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest": "^26",

@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "workspace:*",
+    "@launchtray/hatch-jest-config": "workspace:*",
     "@launchtray/hatch-test": "workspace:*",
     "@launchtray/tsyringe-async": "4.3.3",
     "@sentry/types": "^5",
@@ -39,24 +40,5 @@
   "peerDependencies": {
     "@launchtray/tsyringe-async": "4.3.3",
     "@sentry/types": "^5"
-  },
-  "jest": {
-    "testEnvironment": "<rootDir>/node_modules/@launchtray/hatch-test/dist/SpecInfoJestEnvironment",
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",
-      "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ]
   }
 }

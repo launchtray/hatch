@@ -34,6 +34,7 @@
     "**/acceptance-tests",
     "**/webpack",
     "**/jest",
+    "**/jest*.config.js",
     "**/webpack*.config.js",
     "**/main.js",
     "**/*eslintrc*.js"

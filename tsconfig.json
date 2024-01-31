@@ -35,6 +35,7 @@
     "**/acceptance-tests",
     "**/webpack",
     "**/jest",
+    "**/jest*.config.js",
     "**/webpack*.config.js",
     "**/template",
     "**/template.ts",

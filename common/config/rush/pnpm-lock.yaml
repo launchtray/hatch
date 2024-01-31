@@ -328,6 +328,9 @@ importers:
       '@babel/core':
         specifier: ^7.23.7
         version: 7.23.9(supports-color@7.2.0)
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../../libraries/hatch-jest-config
       '@launchtray/hatch-test':
         specifier: workspace:*
         version: link:../../libraries/hatch-test
@@ -762,6 +765,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../hatch-jest-config
       '@launchtray/hatch-util':
         specifier: workspace:*
         version: link:../hatch-util
@@ -907,6 +913,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../hatch-jest-config
       '@types/jest':
         specifier: ^29.5.11
         version: 29.5.11
@@ -955,6 +964,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../hatch-jest-config
       '@launchtray/hatch-util':
         specifier: workspace:*
         version: link:../hatch-util
@@ -1004,6 +1016,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../hatch-jest-config
       '@launchtray/hatch-rpc':
         specifier: workspace:*
         version: link:../hatch-rpc
@@ -1524,6 +1539,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../hatch-jest-config
       '@types/jest':
         specifier: ^29.5.11
         version: 29.5.11
@@ -1676,6 +1694,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../hatch-jest-config
       '@launchtray/hatch-test':
         specifier: workspace:*
         version: link:../hatch-test
@@ -2545,6 +2566,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../../../../../../libraries/hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../../../../../../libraries/hatch-jest-config
       '@types/jest':
         specifier: ^29.5.11
         version: 29.5.11
@@ -2672,6 +2696,9 @@ importers:
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../../../../../../libraries/hatch-eslint-config
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../../../../../../libraries/hatch-jest-config
       '@launchtray/hatch-test':
         specifier: workspace:*
         version: link:../../../../../../libraries/hatch-test
@@ -3069,6 +3096,9 @@ importers:
       '@babel/core':
         specifier: ^7.23.7
         version: 7.23.9(supports-color@7.2.0)
+      '@launchtray/hatch-jest-config':
+        specifier: workspace:*
+        version: link:../../../../../../libraries/hatch-jest-config
       '@launchtray/hatch-test':
         specifier: workspace:*
         version: link:../../../../../../libraries/hatch-test

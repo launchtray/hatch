@@ -69,6 +69,7 @@
     "@launchtray/hatch-test-web": "workspace:*",
     "@launchtray/hatch-web-eslint-config": "workspace:*",
     "@launchtray/hatch-webpack-config": "workspace:*",
+    "@launchtray/hatch-jest-config": "workspace:*",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@rushstack/heft": "^0.64.2",
     "@rushstack/heft-webpack5-plugin": "~0.9.16",
@@ -154,24 +155,5 @@
     "webpack-dev-server": "~4.9.3",
     "webpack-manifest-plugin": "^5.0.0",
     "webpackbar": "^6.0.0"
-  },
-  "jest": {
-    "testEnvironment": "<rootDir>/node_modules/@launchtray/hatch-test/dist/SpecInfoJestEnvironment",
-    "testTimeout": 120000,
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/?(*.)(spec|test).(ts|js)?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ]
   }
 }

@@ -74,6 +74,7 @@
     "require-from-string": "^2.0.2",
     "@rushstack/heft-webpack5-plugin": "~0.9.16",
     "@launchtray/hatch-webpack-config": "workspace:*",
+    "@launchtray/hatch-jest-config": "workspace:*",
     "@rushstack/heft": "^0.64.2",
     "@types/webpack": "^5.28.5",
     "webpack": "~5.82.1",
@@ -103,24 +104,5 @@
     "@babel/core": "^7.23.7",
     "type-fest": "^4.9.0",
     "source-map-loader": "^4.0.2"
-  },
-  "jest": {
-    "testEnvironment": "<rootDir>/node_modules/@launchtray/hatch-test/dist/SpecInfoJestEnvironment",
-    "testTimeout": 120000,
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/?(*.)(spec|test).(ts|js)?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ]
   }
 }

@@ -158,8 +158,8 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 
   const hatchDefinitions = {};
   hatchDefinitions['process.env.HATCH_BUILDTIME_PORT'] = process.env.PORT;
-  hatchDefinitions['process.env.HATCH_BUILDTIME_HOSTNAME'] = process.env.HOSTNAME;
-  hatchDefinitions['process.env.HATCH_BUILDTIME_HOST'] = process.env.HOST;
+  hatchDefinitions['process.env.HATCH_BUILDTIME_HOSTNAME'] = JSON.stringify(process.env.HOSTNAME);
+  hatchDefinitions['process.env.HATCH_BUILDTIME_HOST'] = JSON.stringify(process.env.HOST);
   hatchDefinitions['process.env.HATCH_BUILDTIME_BUILD_DATE'] = JSON.stringify(new Date().toISOString());
   hatchDefinitions['process.env.WDS_SOCKET_PORT'] = devServerPort;
 

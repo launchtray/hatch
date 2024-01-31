@@ -1493,6 +1493,9 @@ importers:
         specifier: ^27.5.1
         version: 27.5.1
     devDependencies:
+      '@jest/types':
+        specifier: ^29.6.3
+        version: 29.6.3
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
@@ -1517,6 +1520,9 @@ importers:
       rimraf:
         specifier: 3.0.0
         version: 3.0.0
+      source-map-support:
+        specifier: ^0.5.21
+        version: 0.5.21
       typescript:
         specifier: 4.9.5
         version: 4.9.5
@@ -3533,7 +3539,7 @@ packages:
       '@aws-cdk/aws-kms': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-lambda': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-sns': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
-      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
+      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-lambda@1.73.0)(@aws-cdk/aws-sns@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/aws-sqs': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/core': 1.73.0
       constructs: 3.4.344
@@ -4005,7 +4011,7 @@ packages:
       '@aws-cdk/aws-kinesisfirehose': 1.73.0(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/aws-lambda': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-sns': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
-      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
+      '@aws-cdk/aws-sns-subscriptions': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-lambda@1.73.0)(@aws-cdk/aws-sns@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/aws-sqs': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/aws-stepfunctions': 1.73.0(@aws-cdk/aws-events@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344)
       '@aws-cdk/core': 1.73.0
@@ -4272,11 +4278,13 @@ packages:
       constructs: 3.4.344
     dev: true
 
-  /@aws-cdk/aws-sns-subscriptions@1.73.0(@aws-cdk/aws-ec2@1.73.0)(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/aws-logs@1.73.0)(@aws-cdk/aws-s3-assets@1.73.0)(@aws-cdk/aws-s3@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344):
+  /@aws-cdk/aws-sns-subscriptions@1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-lambda@1.73.0)(@aws-cdk/aws-sns@1.73.0)(@aws-cdk/aws-sqs@1.73.0)(@aws-cdk/core@1.73.0)(constructs@3.4.344):
     resolution: {integrity: sha512-b5LnCM1CsqrNFurSrR7xI4Soldh01xMPsyz8G7qwOY2X7ZJJF2iHRAABjNEmClKDDP6Ln8mdJO50C9m3PM852A==}
     engines: {node: '>= 10.13.0 <13 || >=13.7.0'}
     peerDependencies:
       '@aws-cdk/aws-iam': 1.73.0
+      '@aws-cdk/aws-lambda': 1.73.0
+      '@aws-cdk/aws-sns': 1.73.0
       '@aws-cdk/aws-sqs': 1.73.0
       '@aws-cdk/core': 1.73.0
       constructs: ^3.2.0
@@ -4287,12 +4295,6 @@ packages:
       '@aws-cdk/aws-sqs': 1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0)
       '@aws-cdk/core': 1.73.0
       constructs: 3.4.344
-    transitivePeerDependencies:
-      - '@aws-cdk/aws-ec2'
-      - '@aws-cdk/aws-kms'
-      - '@aws-cdk/aws-logs'
-      - '@aws-cdk/aws-s3'
-      - '@aws-cdk/aws-s3-assets'
     dev: true
 
   /@aws-cdk/aws-sns@1.73.0(@aws-cdk/aws-iam@1.73.0)(@aws-cdk/aws-kms@1.73.0)(@aws-cdk/core@1.73.0):

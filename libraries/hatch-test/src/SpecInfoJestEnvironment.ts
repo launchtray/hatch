@@ -1,4 +1,6 @@
 import NodeEnvironment from 'jest-environment-node';
+import sourceMapSupport from 'source-map-support';
+import type {Config} from '@jest/types';
 
 export interface SpecInfo {
   suiteName?: string;
@@ -20,6 +22,11 @@ export const getCurrentSpecInfo = (): SpecInfo => {
 class SpecInfoJestEnvironment extends NodeEnvironment {
   public currentTestName?: string;
   public currentSuiteName?: string;
+
+  constructor(config: Config.ProjectConfig) {
+    super(config);
+    sourceMapSupport.install();
+  }
 
   async handleTestEvent(event?: {name?: string, test?: {name?: string, parent?: {name?: string}}}) {
     if (event?.name === 'test_start') {

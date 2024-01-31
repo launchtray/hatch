@@ -6,11 +6,7 @@ import fs from 'fs';
 import {PathLike} from 'node:fs';
 import readline from 'readline';
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  prompt: '',
-});
+let rl: readline.Interface | undefined;
 
 const exists = async (f: PathLike) => {
   try {
@@ -84,6 +80,7 @@ export default class StartServerPlugin {
     this.handleChildMessage = this.handleChildMessage.bind(this);
     this.handleWebpackExit = this.handleWebpackExit.bind(this);
     this.handleProcessKill = this.handleProcessKill.bind(this);
+    this.exitCleanly = this.exitCleanly.bind(this);
 
     this.worker = null;
     if (this.options.restartable && !options.once) {
@@ -107,9 +104,21 @@ export default class StartServerPlugin {
     process.stdout.write(msg);
   }
 
+  private exitCleanly() {
+    this.options.once = true;
+    this.options.killOnExit = false;
+    this.handleWebpackExit();
+    process.exit(0);
+  }
+
   private enableRestarting() {
     this.info('Type `rs<Enter>` to restart the worker');
     process.stdin.setEncoding('utf8');
+    rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      prompt: '',
+    });
     rl.on('line', (data) => {
       const cmd = data.toString().trim();
       if (cmd === 'rs') {
@@ -267,8 +276,12 @@ export default class StartServerPlugin {
 
     process.on('exit', this.handleWebpackExit);
     process.on('uncaughtException', this.handleWebpackExit);
-    process.on('SIGINT', this.handleWebpackExit);
-    process.on('SIGTERM', this.handleWebpackExit);
+    process.on('SIGINT', this.exitCleanly);
+    process.on('SIGTERM', this.exitCleanly);
+    process.on('SIGQUIT', this.exitCleanly);
+    rl?.on('SIGINT', this.exitCleanly);
+    rl?.on('SIGTERM', this.exitCleanly);
+    rl?.on('SIGQUIT', this.exitCleanly);
 
     this.worker = worker;
 

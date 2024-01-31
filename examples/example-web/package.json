@@ -7,7 +7,7 @@
     "access": "restricted"
   },
   "scripts": {
-    "start": "rush build:watch --to-except @launchtray/example-web & rushx start:no-watch && pkill -P $$",
+    "start": "hatch-dev-server",
     "start:no-watch": "heft start",
     "lint": "eslint --max-warnings=0 .",
     "lint:fix": "eslint --max-warnings=0 --fix .",

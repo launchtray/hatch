@@ -13,6 +13,9 @@
     "build": "rimraf dist && tsc",
     "build:watch": "tsc"
   },
+  "bin": {
+    "hatch-dev-server": "./bin/start-dev-server"
+  },
   "devDependencies": {
     "webpack": "~5.82.1",
     "@types/node": "^18",

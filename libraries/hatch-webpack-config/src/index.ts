@@ -489,6 +489,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 
     if (IS_DEV) {
       config.devServer = {
+        hot: true,
         headers: {
           'Access-Control-Allow-Origin': '*',
         },
@@ -605,7 +606,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
     }
   }
 
-  if (!IS_PROD) {
+  if (process.env.CI !== 'true') {
     config.plugins.push(
       new WebpackBar({
         color: options.target === 'web' ? '#505bf1' : '#6c2bfa',
@@ -638,17 +639,15 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 };
 
 export const createSingleComponentConfig = (options: HatchWebappComponentWebpackOptions) => {
-  // eslint-disable-next-line consistent-return
-  return (env: IWebpackConfigurationFnEnvironment) => {
+  // eslint-disable-next-line consistent-return, @typescript-eslint/naming-convention
+  return (env?: IWebpackConfigurationFnEnvironment & {WEBPACK_SERVE?: boolean}) => {
     const optionsLocal = {...options};
     // Attempt to auto-detect dev mode if this is run via the Heft Webpack Plugin
     if (optionsLocal.isDev == null) {
       if (env?.taskSession?.parameters?.watch != null) {
         optionsLocal.isDev = env.taskSession.parameters.watch;
       } else {
-        // eslint-disable-next-line no-console
-        console.error('Could not auto-determine isDev parameter for hatch-webpack-config. Please specify manually.');
-        process.exit(2);
+        optionsLocal.isDev = env?.WEBPACK_SERVE === true;
       }
     }
     try {

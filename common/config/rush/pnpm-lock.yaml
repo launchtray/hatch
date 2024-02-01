@@ -861,6 +861,9 @@ importers:
 
   ../../libraries/hatch-jest-config:
     devDependencies:
+      '@jest/transform':
+        specifier: ^29.7.0
+        version: 29.7.0(supports-color@7.2.0)
       '@launchtray/hatch-eslint-config':
         specifier: workspace:*
         version: link:../hatch-eslint-config
@@ -15232,7 +15235,7 @@ packages:
   /ignore-walk@3.0.4:
     resolution: {integrity: sha512-PY6Ii8o1jMRA1z4F2hRkH/xN59ox43DavKvD3oDpfurRlOJyAHpifIwpbdv1n4jt4ov0jSpw3kQ4GhJnpBL6WQ==}
     dependencies:
-      minimatch: 3.0.8
+      minimatch: 3.1.2
     dev: false
 
   /ignore@5.1.9:
@@ -16650,7 +16653,7 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       graceful-fs: 4.2.11
-      js-yaml: 3.13.1
+      js-yaml: 3.14.1
       pify: 4.0.1
       strip-bom: 3.0.0
     dev: false

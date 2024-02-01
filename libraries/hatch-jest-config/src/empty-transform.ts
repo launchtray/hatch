@@ -1,8 +1,9 @@
 import {TsJestTransformer} from 'ts-jest';
+import type {TransformedSource} from '@jest/transform';
 
 class EmptyTransform extends TsJestTransformer {
-  process(): string {
-    return 'module.exports = {};';
+  process(): TransformedSource {
+    return {code: 'module.exports = {};'};
   }
 
   getCacheKey(): string {

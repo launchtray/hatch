@@ -1,6 +1,6 @@
 import {TsJestTransformer} from 'ts-jest';
 
-export default class extends TsJestTransformer {
+class EmptyTransform extends TsJestTransformer {
   process(): string {
     return 'module.exports = {};';
   }
@@ -9,3 +9,5 @@ export default class extends TsJestTransformer {
     return 'empty-transform';
   }
 }
+
+export default new EmptyTransform();

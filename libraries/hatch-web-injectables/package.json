@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-web-injectables",
-  "version": "0.23.0-alpha.9",
+  "version": "0.23.0-alpha.10",
   "description": "Injectable utility components for web applications",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",

@@ -14,7 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "jest-environment-node": "^27.5.1"
+    "jest-environment-node": "^29.7.0"
   },
   "devDependencies": {
     "@launchtray/hatch-eslint-config": "workspace:*",

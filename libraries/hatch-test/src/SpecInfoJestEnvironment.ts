@@ -1,6 +1,5 @@
 import NodeEnvironment from 'jest-environment-node';
 import sourceMapSupport from 'source-map-support';
-import type {Config} from '@jest/types';
 
 export interface SpecInfo {
   suiteName?: string;
@@ -23,8 +22,8 @@ class SpecInfoJestEnvironment extends NodeEnvironment {
   public currentTestName?: string;
   public currentSuiteName?: string;
 
-  constructor(config: Config.ProjectConfig) {
-    super(config);
+  constructor(config: unknown, context: unknown) {
+    super(config, context);
     sourceMapSupport.install();
   }
 

@@ -36,6 +36,8 @@ try {
 const origCreateHash = crypto.createHash;
 crypto.createHash = (algorithm) => origCreateHash(algorithm === 'md4' ? 'sha256' : algorithm);
 
+const assetMatcher = /\.(bmp|png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i;
+
 const logAndReturn = (name: string, value: unknown, metadata: {dev: boolean, target: string}) => {
   const logDir = process.env.WEBPACK_CONFIG_INSPECTION_OUTDIR;
   if (logDir != null) {
@@ -219,8 +221,8 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 
   const jsOutputFilename = `${jsPrefix}[name]${jsHashSuffix}.js`;
   const jsOutputChunkFilename = `${jsPrefix}[name]${jsHashSuffix}.chunk.js`;
-  const fileLoaderOutputName = `${mediaPrefix}[name]${cssMediaHashSuffix}.[ext]`;
-  const urlLoaderOutputName = `${mediaPrefix}[name]${cssMediaHashSuffix}.[ext]`;
+  const fileLoaderOutputName = `${mediaPrefix}[name]${cssMediaHashSuffix}[ext][query]`;
+  const urlLoaderOutputName = `${mediaPrefix}[name]${cssMediaHashSuffix}[ext][query]`;
   const cssOutputFilename = `${cssPrefix}[name]${cssMediaHashSuffix}.css`;
   const cssOutputChunkFilename = `${cssPrefix}[name]${cssMediaHashSuffix}.chunk.css`;
 
@@ -250,7 +252,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
     ignoreWarnings: [/Failed to parse source map/],
     module: {
       strictExportPresence: true,
-      rules: [
+      rules: filterTruthy([
         {
           test: /\.js$/,
           enforce: 'pre',
@@ -283,42 +285,36 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
         },
         {
           exclude: [
+            assetMatcher,
             /\.html$/,
-            /\.(js|jsx|mjs|cjs)$/,
-            /\.(ts|tsx)$/,
-            /\.(vue)$/,
-            /\.(less)$/,
-            /\.(re)$/,
-            /\.(s?css|sass)$/,
+            /\.(tsx?|jsx?|mjs|cjs)$/i,
             /\.json$/,
-            /\.bmp$/,
-            /\.gif$/,
-            /\.jpe?g$/,
-            /\.png$/,
+            /\.(less)$/,
+            /\.(s?css|sass)$/,
+            /\.(vue)$/,
+            /\.(re)$/,
           ],
-          use: [{ // fix for vue-loader plugin
-            loader: require.resolve('file-loader'),
-            options: {
-              name: fileLoaderOutputName,
-              emitFile: IS_WEB,
-            },
-          }],
+          type: 'asset/resource',
+          generator: {
+            emit: IS_WEB,
+            filename: fileLoaderOutputName,
+          },
         },
-
-        // "url" loader works like "file" loader except that it embeds assets
-        // smaller than specified limit in bytes as data URLs to avoid requests.
-        // A missing `test` is equivalent to a match.
+        { // TODO: is this right for avoiding emission of data URLs from imported CSS?
+          type: 'asset/resource',
+          scheme: 'data',
+          generator: {
+            emit: false,
+          },
+        },
         {
-          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-          use: [{
-            loader: require.resolve('url-loader'),
-            options: {
-              limit: 10000,
-              name: urlLoaderOutputName,
-              emitFile: IS_WEB,
-              esModule: false,
-            },
-          }],
+          test: assetMatcher,
+          type: 'asset',
+          generator: {
+            emit: IS_WEB,
+            filename: urlLoaderOutputName,
+            // How to do esModule: false? is it needed anymore?
+          },
         },
 
         // "postcss" loader applies autoprefixer to our CSS.
@@ -365,7 +361,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
             },
           ]),
         },
-      ],
+      ]),
     },
   };
 

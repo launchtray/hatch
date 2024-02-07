@@ -5,6 +5,7 @@ import delay from './delay';
 import delegate from './delegate';
 import {ErrorReporter} from './ErrorReporter';
 import {
+  addMetadata,
   Class,
   containerSingleton,
   initializeInjection,
@@ -42,6 +43,7 @@ import {
 import StreamUtils from './StreamUtils';
 
 export {
+  addMetadata,
   ALT_ACTION_CODE_KEY,
   ALT_ACTION_KEY,
   getTypeHint,

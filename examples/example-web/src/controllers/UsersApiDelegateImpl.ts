@@ -1,5 +1,6 @@
 import {Readable} from 'stream';
 import {
+  addMetadata,
   ApiAlternateAction,
   ApiDelegateResponse,
   containerSingleton,
@@ -216,12 +217,12 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   // Demonstrates how a delegate can prevent the default response and send a response via the underlying response obj
+  @addMetadata()
   handleMakeAdmin(
     request: MakeAdminHttpRequest,
-    @inject('Logger') logger: Logger,
     basicRouteParams: BasicRouteParams,
   ) {
-    logger.debug(`handleMakeAdmin: ${JSON.stringify(request)}`);
+    this.logger.debug(`handleMakeAdmin: ${JSON.stringify(request)}`);
     basicRouteParams.res.sendStatus(500);
     return PREVENT_DEFAULT_RESPONSE;
   }

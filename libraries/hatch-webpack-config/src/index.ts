@@ -433,6 +433,12 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 
     config.plugins = [
       ...config.plugins,
+      new webpack.ProvidePlugin({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        Buffer: [require.resolve('buffer/'), 'Buffer'],
+        process: [require.resolve('process/browser')],
+        console: [require.resolve('console-browserify')],
+      }),
       new WebpackManifestPlugin({
         writeToFileEmit: true,
         fileName: paths.appAssetsManifest,

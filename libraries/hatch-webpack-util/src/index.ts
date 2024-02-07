@@ -1,38 +1,34 @@
-import webpack from 'webpack';
+import type {Configuration} from 'webpack';
 
-export const addNodeAliases = (config: webpack.Configuration) => {
+const mapIfValid = (key: string, factory: () => string) => {
+  try {
+    return {[key]: factory()};
+  } catch {
+    return {};
+  }
+};
+
+export const addNodeAliases = (config: Configuration) => {
   // eslint-disable-next-line no-param-reassign
   config.resolve = {
     ...(config.resolve ?? {}),
     fallback: {
       ...(config.resolve?.fallback ?? {}),
       fs: false,
-      assert: require.resolve('assert/'),
-      events: require.resolve('events/'),
-      stream: require.resolve('stream-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      /* eslint-disable @typescript-eslint/naming-convention */
-      _stream_duplex: require.resolve('readable-stream/lib/_stream_duplex'),
-      _stream_passthrough: require.resolve('readable-stream/lib/_stream_passthrough'),
-      _stream_readable: require.resolve('readable-stream/lib/_stream_readable'),
-      _stream_transform: require.resolve('readable-stream/lib/_stream_transform'),
-      _stream_writable: require.resolve('readable-stream/lib/_stream_writable'),
-      /* eslint-enable @typescript-eslint/naming-convention */
+      ...mapIfValid('assert', () => require.resolve('assert/')),
+      ...mapIfValid('events', () => require.resolve('events/')),
+      ...mapIfValid('stream', () => require.resolve('stream-browserify')),
+      ...mapIfValid('crypto', () => require.resolve('crypto-browserify')),
+      ...mapIfValid('_stream_duplex', () => require.resolve('readable-stream/lib/_stream_duplex')),
+      ...mapIfValid('_stream_passthrough', () => require.resolve('readable-stream/lib/_stream_passthrough')),
+      ...mapIfValid('_stream_readable', () => require.resolve('readable-stream/lib/_stream_readable')),
+      ...mapIfValid('_stream_transform', () => require.resolve('readable-stream/lib/_stream_transform')),
+      ...mapIfValid('_stream_writable', () => require.resolve('readable-stream/lib/_stream_writable')),
     },
   };
-  // eslint-disable-next-line no-param-reassign
-  config.plugins = [
-    ...(config.plugins ?? []),
-    new webpack.ProvidePlugin({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      Buffer: [require.resolve('buffer/'), 'Buffer'],
-      process: [require.resolve('process/browser')],
-      console: [require.resolve('console-browserify')],
-    }),
-  ];
 };
 
-export const addResolveAliases = (config: webpack.Configuration) => {
+export const addResolveAliases = (config: Configuration) => {
   // eslint-disable-next-line no-param-reassign
   config.resolve = {
     ...(config.resolve ?? {}),
@@ -46,7 +42,7 @@ export const addResolveAliases = (config: webpack.Configuration) => {
   };
 };
 
-const patchToolWebpackConfig = (config: webpack.Configuration): webpack.Configuration => {
+const patchToolWebpackConfig = (config: Configuration): Configuration => {
   addResolveAliases(config);
   addNodeAliases(config);
   return config;

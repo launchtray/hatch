@@ -180,6 +180,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
   const urlLoaderOutputName = `${mediaPrefix}[name]${cssMediaHashSuffix}[ext][query]`;
   const cssOutputFilename = `${cssPrefix}[name]${cssMediaHashSuffix}.css`;
   const cssOutputChunkFilename = `${cssPrefix}[name]${cssMediaHashSuffix}.chunk.css`;
+  const dataUrlResourceOutputName = `${mediaPrefix}[contenthash:8][ext][query]`;
 
   // This is our base webpack config.
   const config: webpack.Configuration & webpackDevServer.Configuration = {
@@ -255,11 +256,12 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
             filename: fileLoaderOutputName,
           },
         },
-        { // TODO: is this right for avoiding emission of data URLs from imported CSS?
-          type: 'asset/resource',
+        {
+          type: 'asset',
           scheme: 'data',
           generator: {
-            emit: false,
+            emit: IS_WEB,
+            filename: dataUrlResourceOutputName,
           },
         },
         {
@@ -268,7 +270,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
           generator: {
             emit: IS_WEB,
             filename: urlLoaderOutputName,
-            // How to do esModule: false? is it needed anymore?
           },
         },
 

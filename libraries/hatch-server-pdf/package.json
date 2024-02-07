@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-server-pdf",
-  "version": "0.23.0-alpha.15",
+  "version": "0.23.0-alpha.16",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

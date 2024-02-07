@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@launchtray/hatch-jest-config",
+      "comment": "",
+      "type": "none"
+    }
+  ],
+  "packageName": "@launchtray/hatch-jest-config"
+}

@@ -71,6 +71,7 @@
     "@launchtray/hatch-web-eslint-config": "workspace:*",
     "@launchtray/hatch-webpack-config": "workspace:*",
     "@launchtray/hatch-jest-config": "workspace:*",
+    "@launchtray/hatch-storybook-config": "workspace:*",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@rushstack/heft": "^0.64.2",
     "@rushstack/heft-webpack5-plugin": "~0.9.16",

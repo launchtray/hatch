@@ -1,0 +1,32 @@
+{
+  "name": "@launchtray/hatch-webpack-util",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
+  },
+  "devDependencies": {
+    "webpack": "~5.82.1",
+    "@types/webpack": "^5.28.5",
+    "@types/node": "^18",
+    "eslint": "^8",
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@typescript-eslint/parser": "^5",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "eslint-config-airbnb-base": "^15",
+    "eslint-plugin-import": "^2",
+    "rimraf": "3.0.0",
+    "typescript": "4.9.5"
+  },
+  "peerDependencies": {
+    "webpack": "~5.82.1"
+  }
+}

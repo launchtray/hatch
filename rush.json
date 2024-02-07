@@ -347,8 +347,18 @@
       "versionPolicyName": "hatchVersionPolicy"
     },
     {
+      "packageName": "@launchtray/hatch-webpack-util",
+      "projectFolder": "libraries/hatch-webpack-util",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
       "packageName": "@launchtray/hatch-jest-config",
       "projectFolder": "libraries/hatch-jest-config",
+      "versionPolicyName": "hatchVersionPolicy"
+    },
+    {
+      "packageName": "@launchtray/hatch-storybook-config",
+      "projectFolder": "libraries/hatch-storybook-config",
       "versionPolicyName": "hatchVersionPolicy"
     },
     {

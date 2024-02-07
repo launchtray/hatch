@@ -16,6 +16,9 @@
   "bin": {
     "hatch-dev-server": "./bin/start-dev-server"
   },
+  "dependencies": {
+    "@launchtray/hatch-webpack-util": "workspace:*"
+  },
   "devDependencies": {
     "webpack": "~5.82.1",
     "@types/node": "^18",

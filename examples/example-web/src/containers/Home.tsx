@@ -1,7 +1,8 @@
 import {Button, Image, navActions} from '@launchtray/hatch-web';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
+import './example.css';
 
 interface PropTypes {
   onButtonPress: () => void;
@@ -10,7 +11,12 @@ interface PropTypes {
 const Home = (props: PropTypes) => {
   const [disabled, setDisabled] = useState(false);
   return (
-    <View style={{height: 300, justifyContent: 'space-around'}}>
+    <View style={styles.container}>
+      <ol>
+        <li>
+          {'First'}
+        </li>
+      </ol>
       <Image
         style={{height: 100, width: 68, alignSelf: 'center'}}
         source={require('../assets/hatch_eyes.png')}
@@ -33,6 +39,16 @@ const Home = (props: PropTypes) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 24,
+    marginHorizontal: 32,
+    backgroundColor: 'green',
+    height: 300,
+    justifyContent: 'space-around',
+  },
+});
 
 export default connect(
   null,

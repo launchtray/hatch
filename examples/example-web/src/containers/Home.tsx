@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 24,
     marginHorizontal: 32,
-    backgroundColor: 'green',
+    backgroundColor: 'skyblue',
     height: 300,
     justifyContent: 'space-around',
   },

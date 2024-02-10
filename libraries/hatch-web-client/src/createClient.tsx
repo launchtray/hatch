@@ -40,7 +40,7 @@ import {
   setTag,
 } from '@sentry/browser';
 import {Options} from '@sentry/types';
-import React, {Suspense, lazy} from 'react';
+import React, {useState, useEffect, ReactElement, ComponentType} from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
@@ -50,15 +50,6 @@ import {composeWithDevTools} from '@redux-devtools/extension';
 import createSagaMiddleware, {Saga, Task} from 'redux-saga';
 import {WebClientComposer, WebClientComposition} from './WebClientComposer';
 import type {SwaggerUIProps} from 'swagger-ui-react';
-
-const SwaggerUI = lazy(async () => {
-  return Promise.all([
-    import('swagger-ui-react') as unknown as Promise<{default: React.ComponentType<SwaggerUIProps>}>,
-    // @ts-ignore -- TypeScript doesn't recognize this as a module
-    import('swagger-ui-react/swagger-ui.css')
-  ]).then(([module]) => module);
-});
-
 /* eslint-enable import/first */
 
 export interface CreateClientOptions {
@@ -66,6 +57,20 @@ export interface CreateClientOptions {
   reloadComposeModule: () => any;
   injectionOptions?: InjectionInitializationContext;
 }
+
+const SwaggerUIAsync = (props: SwaggerUIProps) => {
+  const [Component, setComponent] = useState<ComponentType<SwaggerUIProps> | null>(null);
+  useEffect(() => {
+    const loadComponent = async () => {
+      const SwaggerUI = await import('swagger-ui-react').then((module) => module.default) as ReactElement;
+      // @ts-ignore -- TypeScript doesn't recognize this as a module
+      await import('swagger-ui-react/swagger-ui.css');
+      setComponent(() => SwaggerUI);
+    };
+    loadComponent().then();
+  }, []);
+  return Component ? <Component {...props} /> : null;
+};
 
 // eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
 const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
@@ -75,9 +80,7 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.Element
         <HelmetProvider>
           <Switch>
             <Route path={'/api'}>
-              <Suspense fallback={null}>
-                <SwaggerUI url={'/api.json'} docExpansion={'list'}/>
-              </Suspense>
+              <SwaggerUIAsync url={'/api.json'} docExpansion={'list'}/>
             </Route>
             <Route>
               <RootApp/>

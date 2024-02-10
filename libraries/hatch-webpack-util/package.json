@@ -1,6 +1,6 @@
 {
   "name": "@launchtray/hatch-webpack-util",
-  "version": "0.23.0-alpha.16",
+  "version": "0.23.0-alpha.17",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "license": "MIT",

@@ -394,7 +394,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 
       config.plugins.push(
         new StartServerPlugin({
-          verbose: true,
+          verbose: false,
           entryName: 'server',
           nodeArgs: ['--enable-source-maps'],
           manifestPath: paths.appAssetsManifest,

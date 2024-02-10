@@ -35,6 +35,7 @@
     "yaml": "2.0.0-3"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@launchtray/hatch-eslint-config": "workspace:*",
     "@types/fs-extra": "^8",
     "@types/node": "^18",

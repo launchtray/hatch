@@ -1,9 +1,9 @@
 import sysPath from 'path';
 import childProcess from 'child_process';
-import webpack, {Compiler} from 'webpack';
-import {Compilation} from 'mini-css-extract-plugin/types/utils';
+import webpack, {Compiler, Compilation} from 'webpack';
 import fs from 'fs';
 import {PathLike} from 'node:fs';
+import util from 'util';
 import readline from 'readline';
 
 let rl: readline.Interface | undefined;
@@ -20,32 +20,19 @@ const exists = async (f: PathLike) => {
 export interface StartServerPluginOptions {
   verbose: boolean; // print logs
   entryName: string; // What to run
-  once: boolean; // Run once and exit when worker exits
   nodeArgs: string[]; // Node arguments for worker
   scriptArgs: string[]; // Script arguments for worker
-  signal: boolean | string; // Send a signal instead of a message
-  restartable: boolean; // Restartable via keyboard
-  inject: boolean; // inject monitor to script
-  killOnExit: boolean; // issue SIGKILL on child process exit
-  killOnError: boolean; // issue SIGKILL on child process error
-  killTimeout: number; // timeout before SIGKILL in milliseconds
   manifestPath?: string; // path to manifest file
 }
 
 const DEFAULT_OPTIONS: StartServerPluginOptions = {
   verbose: true,
   entryName: 'main',
-  once: false,
   nodeArgs: [],
   scriptArgs: [],
-  signal: false,
-  // Only listen on keyboard in development, so the server doesn't hang forever
-  restartable: process.env.NODE_ENV === 'development',
-  inject: true,
-  killOnExit: true,
-  killOnError: true,
-  killTimeout: 1000,
 };
+
+const HMR_SIGNAL = 'SIGUSR2';
 
 export default class StartServerPlugin {
   private readonly options: StartServerPluginOptions;
@@ -53,117 +40,89 @@ export default class StartServerPlugin {
   private workerLoaded = false;
   private scriptFile: string | undefined;
   private exiting = false;
+  private preventRestart = false;
 
   constructor(options: Partial<StartServerPluginOptions> | string) {
+    let localOptions: Partial<StartServerPluginOptions>;
     if (options == null) {
-      options = {};
-    }
-    if (typeof options === 'string') {
-      options = {entryName: options};
+      localOptions = {};
+    } else if (typeof options === 'string') {
+      localOptions = {entryName: options};
+    } else {
+      localOptions = {...options};
     }
     this.options = {
       ...DEFAULT_OPTIONS,
-      ...options,
+      ...localOptions,
     };
     if (!Array.isArray(this.options.scriptArgs)) {
       throw new Error('options.args has to be an array of strings');
     }
-    if (this.options.signal === true) {
-      this.options.signal = 'SIGUSR2';
-      this.options.inject = false;
-    }
+
     this.afterEmit = this.afterEmit.bind(this);
     this.apply = this.apply.bind(this);
     this.handleChildError = this.handleChildError.bind(this);
     this.handleChildExit = this.handleChildExit.bind(this);
     this.handleChildQuit = this.handleChildQuit.bind(this);
-    this.handleChildMessage = this.handleChildMessage.bind(this);
     this.handleWebpackExit = this.handleWebpackExit.bind(this);
-    this.handleProcessKill = this.handleProcessKill.bind(this);
     this.exitCleanly = this.exitCleanly.bind(this);
 
     this.worker = null;
-    if (this.options.restartable && !options.once) {
-      this.enableRestarting();
-    }
-  }
-
-  private info(msg: string, ...args: unknown[]) {
-    if (this.options.verbose) console.log(`sswp> ${msg}`, ...args);
-  }
-
-  private error(msg: string, ...args: unknown[]) {
-    console.error(`sswp> !!! ${msg}`, ...args);
-  }
-
-  private workerError(msg: string, ...args: unknown[]) {
-    process.stderr.write(msg);
-  }
-
-  private workerInfo(msg: string, ...args: unknown[]) {
-    process.stdout.write(msg);
-  }
-
-  private exitCleanly() {
-    this.options.once = true;
-    this.options.killOnExit = false;
-    this.handleWebpackExit();
-    process.exit(0);
-  }
-
-  private enableRestarting() {
-    this.info('Type `rs<Enter>` to restart the worker');
-    process.stdin.setEncoding('utf8');
     rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
       prompt: '',
     });
-    rl.on('line', (data) => {
-      const cmd = data.toString().trim();
-      if (cmd === 'rs') {
-        if (this.worker != null && this.worker.pid != null) {
-          this.info('Killing worker...');
-          process.kill(this.worker.pid);
-        } else {
-          this.runWorker();
-        }
-      } else if (cmd === 'exit') {
-        this.options.once = true;
-        this.options.killOnExit = false;
-        this.handleWebpackExit();
-        process.exit(0);
-      }
-    });
+  }
+
+  private info(msg: string, ...args: unknown[]) {
+    // eslint-disable-next-line no-console
+    if (this.options.verbose) console.log(`sswp> ${msg}`, ...args);
+  }
+
+  private error(msg: string, ...args: unknown[]) {
+    // eslint-disable-next-line no-console
+    console.error(`sswp> !!! ${msg}`, ...args);
+  }
+
+  private workerError(msg: string) {
+    process.stderr.write(msg);
+  }
+
+  private workerInfo(msg: string) {
+    process.stdout.write(msg);
+  }
+
+  private exitCleanly() {
+    this.preventRestart = true;
+    this.handleWebpackExit();
+    // noinspection TypeScriptValidateJSTypes
+    process.exit(0);
   }
 
   private getScript(compilation: Compilation) {
     const {entryName} = this.options;
     const {entrypoints} = compilation;
-    const entry = entrypoints.get
+    const entry = (entrypoints as (Map<string, unknown> | Record<string, unknown>)).get != null
       ? entrypoints.get(entryName)
       : entrypoints[entryName];
-    if (!entry) {
+    if (entry == null) {
       this.info('compilation: %O', compilation);
-      throw new Error(
-        `Requested entry "${entryName}" does not exist, try one of: ${(entrypoints.keys
-          ? Array.from(entrypoints.keys())
-          : Object.keys(entrypoints)
-        ).join(' ')}`,
-      );
+      throw new Error(`Requested entry "${entryName}" does not exist`);
     }
 
-    const runtimeChunk = webpack.EntryPlugin && (entry.runtimeChunk || entry._entrypointChunk);
-    const runtimeChunkFiles = runtimeChunk && runtimeChunk.files && runtimeChunk.files.values();
-    const entryScript = (runtimeChunkFiles && runtimeChunkFiles.next().value) || ((entry.chunks[0] || {}).files || [])[0];
-    if (!entryScript) {
+    // eslint-disable-next-line no-underscore-dangle
+    const runtimeChunk = webpack.EntryPlugin != null && (entry.runtimeChunk ?? entry._entrypointChunk);
+    const runtimeChunkFiles = runtimeChunk?.files?.values();
+    const entryScript = (runtimeChunkFiles?.next().value) ?? ((entry.chunks[0] ?? {}).files ?? [])[0];
+    if (entryScript == null) {
       this.error('Entry chunk not outputted: %O', entry);
-      return;
+      return undefined;
     }
     const {path} = compilation.outputOptions;
-    if (!path) {
+    if (path == null) {
       this.error('Path not outputted: %O', entry);
-      return;
+      return undefined;
     }
     return sysPath.resolve(path, entryScript);
   }
@@ -177,7 +136,7 @@ export default class StartServerPlugin {
   }
 
   private handleChildExit(code: number, signal: string) {
-    this.error(`Script exited with ${signal ? `signal ${signal}` : `code ${code}`}`);
+    this.error(`Script exited with ${signal != null ? `signal ${signal}` : `code ${code}`}`);
     this.worker = null;
 
     if (code === 143 || signal === 'SIGTERM') {
@@ -185,18 +144,13 @@ export default class StartServerPlugin {
         this.error('Script did not load, or HMR failed; not restarting');
         return;
       }
-      if (this.options.once) {
+      if (this.preventRestart) {
         this.info('Only running script once, as requested');
         return;
       }
 
       this.workerLoaded = false;
       this.runWorker();
-      return;
-    }
-
-    if (this.options.killOnExit) {
-      this.handleProcessKill();
     }
   }
 
@@ -207,35 +161,9 @@ export default class StartServerPlugin {
     }
   }
 
-  private handleChildError(ignored: Error) {
+  private handleChildError() {
     this.error('Script errored');
     this.worker = null;
-
-    if (this.options.killOnError) {
-      this.handleProcessKill();
-    }
-  }
-
-  private handleProcessKill() {
-    const pKill = () => process.kill(process.pid, 'SIGKILL');
-
-    if (!isNaN(this.options.killTimeout)) {
-      setTimeout(pKill, this.options.killTimeout);
-    } else {
-      pKill();
-    }
-  }
-
-  private handleChildMessage(message: string) {
-    if (message === 'SSWP_LOADED') {
-      this.workerLoaded = true;
-      this.info('Script loaded');
-      if (process.env.NODE_ENV === 'test' && this.options.once && this.worker != null && this.worker.pid != null) {
-        process.kill(this.worker.pid);
-      }
-    } else if (message === 'SSWP_HMR_FAIL') {
-      this.workerLoaded = false;
-    }
   }
 
   private runWorker(callback?: () => void) {
@@ -261,12 +189,12 @@ export default class StartServerPlugin {
     const worker = childProcess.fork(scriptFile, extScriptArgs, {
       execArgv,
       silent: true,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       env: Object.assign(process.env, {FORCE_COLOR: 3}),
     });
     worker.on('exit', this.handleChildExit);
     worker.on('quit', this.handleChildQuit);
     worker.on('error', this.handleChildError);
-    worker.on('message', this.handleChildMessage);
     if (worker.stdout != null) {
       worker.stdout.on('data', this.workerInfo);
     }
@@ -288,15 +216,11 @@ export default class StartServerPlugin {
     if (callback != null) callback();
   }
 
-  private hmrWorker(compilation: Compilation, callback: () => void) {
-    const {
-      worker,
-      options: {signal},
-    } = this;
-    if (signal != null && typeof signal !== 'boolean' && worker != null && worker.pid != null) {
-      process.kill(worker.pid, signal);
-    } else if (worker != null && worker.send) {
-      worker.send('SSWP_HMR');
+  private hmrWorker(ignored: Compilation, callback: () => void) {
+    const {worker} = this;
+    if (worker != null && worker.pid != null) {
+      this.info(`Sending ${HMR_SIGNAL} to worker`);
+      process.kill(worker.pid, HMR_SIGNAL);
     } else {
       this.error('hot reloaded but no way to tell the worker');
     }
@@ -304,6 +228,7 @@ export default class StartServerPlugin {
   }
 
   async afterEmit(compilation: Compilation, callback: () => void) {
+    this.info(`afterEmit: ${util.inspect({assets: compilation.assets})}`);
     // monitor filesystem to wait for manifest.json to exist
     const {options: {manifestPath}} = this;
     if (manifestPath != null) {
@@ -314,41 +239,28 @@ export default class StartServerPlugin {
       }
       this.info('Waiting for manifest to exist...');
       while (!(await exists(manifestPath))) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => {
+          setTimeout(resolve, 100);
+        });
       }
     }
 
     this.scriptFile = this.getScript(compilation);
 
     if (this.worker != null) {
-      return this.hmrWorker(compilation, callback);
+      this.hmrWorker(compilation, callback);
+      return;
     }
 
-    if (!this.scriptFile) return;
+    if (this.scriptFile == null) {
+      return;
+    }
 
     this.runWorker(callback);
   }
 
-  private getMonitor() {
-    const loaderPath = require.resolve('./monitor-loader');
-    return `!!${loaderPath}!${loaderPath}`;
-  }
-
   apply(compiler: Compiler) {
-    const {inject} = this.options;
     const plugin = {name: 'StartServerPlugin'};
-    if (inject) {
-      compiler.hooks.make.tap(plugin, (compilation: Compilation) => {
-        compilation.addEntry(
-          compilation.compiler.context,
-          webpack.EntryPlugin.createDependency(this.getMonitor(), {
-            name: this.options.entryName,
-          }),
-          this.options.entryName,
-          () => {},
-        );
-      });
-    }
     compiler.hooks.afterEmit.tapAsync(plugin, this.afterEmit);
   }
 }

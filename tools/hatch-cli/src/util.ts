@@ -12,6 +12,8 @@ import {RushConfiguration, RushConfigurationProject} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
 import YAML from 'yaml';
 import {Pair, YAMLMap} from 'yaml/types';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore -- types don't seem to work for this library
 import dotenv from 'dotenv';
 
 type TemplateType =
@@ -414,14 +416,28 @@ const updatePnpmConfig = (monorepoPath: string) => {
   pnpmConfigParsed.globalPeerDependencyRules = {
     ...pnpmConfigParsed.globalPeerDependencyRules,
     allowedVersions: {
-      react: '^17',
-      'react-dom': '^17',
-      'react-native-web': '0.18.8',
+      react: '^17 || ^18',
+      'react-dom': '^17 || ^18',
+      'react-native-web': '^0.18 || ^0.19',
     },
     ignoreMissing: ['react-native'],
   };
   const pnpmConfigRawUpdated = stringify(pnpmConfigParsed, null, 2);
   fs.writeFileSync(pnpmConfigPath, pnpmConfigRawUpdated);
+};
+
+const updateCommonVersions = (monorepoPath: string) => {
+  const commonVersionsPath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'common-versions.json');
+  const commonVersionsRaw = fs.readFileSync(commonVersionsPath).toString();
+  const commonVersionsParsed = parse(commonVersionsRaw);
+  commonVersionsParsed.allowedAlternativeVersions = {
+    ...commonVersionsParsed.allowedAlternativeVersions,
+    react: ['^17', '^18'],
+    'react-dom': ['^17', '^18'],
+    'react-native-web': ['^0.18', '^0.19'],
+  };
+  const commonVersionsRawUpdated = stringify(commonVersionsParsed, null, 2);
+  fs.writeFileSync(commonVersionsPath, commonVersionsRawUpdated);
 };
 
 const updateCustomCommands = (monorepoPath: string) => {
@@ -624,6 +640,7 @@ export const createFromTemplate = async (
         updateVersionPolicies(tempFilePath);
         updateCustomCommands(tempFilePath);
         updatePnpmConfig(tempFilePath);
+        updateCommonVersions(tempFilePath);
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {

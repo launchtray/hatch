@@ -1,6 +1,6 @@
 import React from 'react';
-import {Button, ButtonProps, View} from 'react-native';
 import Link from './Link';
+import {Button, ButtonProps, View} from 'react-native';
 
 interface PropTypesWithRoute extends Omit<ButtonProps, 'onPress'> {
   onPressRoute: string;
@@ -16,11 +16,11 @@ export default (props: PropTypes) => {
   if (isPropTypesWithRoute(props)) {
     const {testID, onPressRoute, ...otherProps} = props;
     return (
-      <View>
-        <Link to={onPressRoute} testID={testID} textStyle={{textDecorationLine: 'none'}}>
+      <Link to={onPressRoute} testID={testID} textStyle={{textDecorationLine: 'none'}}>
+        <View testID={testID}>
           <Button onPress={() => null} {...otherProps}/>
-        </Link>
-      </View>
+        </View>
+      </Link>
     );
   }
   return <Button {...props}/>;

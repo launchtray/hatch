@@ -40,7 +40,7 @@ import {
   setTag,
 } from '@sentry/browser';
 import {Options} from '@sentry/types';
-import React from 'react';
+import React, {Suspense, lazy} from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
@@ -48,10 +48,16 @@ import {Route, Switch} from 'react-router';
 import {applyMiddleware, createStore, Middleware, Store} from 'redux';
 import {composeWithDevTools} from '@redux-devtools/extension';
 import createSagaMiddleware, {Saga, Task} from 'redux-saga';
-import SwaggerUI from 'swagger-ui-react';
-import 'swagger-ui-react/swagger-ui.css';
-
 import {WebClientComposer, WebClientComposition} from './WebClientComposer';
+import type {SwaggerUIProps} from 'swagger-ui-react';
+
+const SwaggerUI = lazy(async () => {
+  return Promise.all([
+    import('swagger-ui-react') as unknown as Promise<{default: React.ComponentType<SwaggerUIProps>}>,
+    // @ts-ignore -- TypeScript doesn't recognize this as a module
+    import('swagger-ui-react/swagger-ui.css')
+  ]).then(([module]) => module);
+});
 
 /* eslint-enable import/first */
 
@@ -69,7 +75,9 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.Element
         <HelmetProvider>
           <Switch>
             <Route path={'/api'}>
-              <SwaggerUI url={'/api.json'} docExpansion={'list'}/>
+              <Suspense fallback={null}>
+                <SwaggerUI url={'/api.json'} docExpansion={'list'}/>
+              </Suspense>
             </Route>
             <Route>
               <RootApp/>
@@ -227,6 +235,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     initialProps: {reduxStore: store, RootApp: composition.appComponent},
     // eslint-disable-next-line no-undef -- global document object
     rootTag: document.getElementById(composition.appRootId ?? 'root'),
+    hydrate: !composition.disableSsr,
   });
 };
 

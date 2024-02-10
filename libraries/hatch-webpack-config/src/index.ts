@@ -116,7 +116,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
   const hatchDefinitions = {};
   hatchDefinitions['process.env.HATCH_BUILDTIME_PORT'] = process.env.PORT;
   hatchDefinitions['process.env.HATCH_BUILDTIME_HOSTNAME'] = JSON.stringify(process.env.HOSTNAME);
-  hatchDefinitions['process.env.HATCH_BUILDTIME_HOST'] = JSON.stringify(process.env.HOST);
   hatchDefinitions['process.env.HATCH_BUILDTIME_BUILD_DATE'] = JSON.stringify(new Date().toISOString());
   hatchDefinitions['process.env.WDS_SOCKET_PORT'] = devServerPort;
 
@@ -202,7 +201,7 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
       extensions: ['.cjs', '.mjs', '.js', '.jsx', '.json', '.ts', '.tsx'],
       alias: {
         // This is required so symlinks work during development.
-        'webpack/hot/poll': require.resolve('webpack/hot/poll'),
+        'webpack/hot/signal': require.resolve('webpack/hot/signal'),
       },
     },
     ignoreWarnings: [/Failed to parse source map/],
@@ -378,21 +377,9 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
 
     if (IS_DEV) {
       serverEntry = [
-        `${require.resolve('webpack/hot/poll')}?300`,
+        `${require.resolve('webpack/hot/signal')}`,
         ...serverEntry,
       ];
-
-      config.plugins.push(
-        new StartServerPlugin({
-          verbose: false,
-          entryName: 'server',
-          killOnExit: false,
-          killOnError: false,
-          restartable: true,
-          nodeArgs: ['--enable-source-maps'],
-          manifestPath: paths.appAssetsManifest,
-        }),
-      );
 
       if (options.includeServerDevServer) {
         config.devServer = {
@@ -404,6 +391,15 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
           },
         };
       }
+
+      config.plugins.push(
+        new StartServerPlugin({
+          verbose: true,
+          entryName: 'server',
+          nodeArgs: ['--enable-source-maps'],
+          manifestPath: paths.appAssetsManifest,
+        }),
+      );
     }
 
     config.entry = {
@@ -488,15 +484,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
           process.exit(1);
         }
       }
-
-      config.optimization = {
-        splitChunks: {
-          cacheGroups: {
-            default: false,
-            defaultVendors: false,
-          },
-        },
-      };
     } else {
       config.plugins.push(new MiniCssExtractPlugin({
         filename: cssOutputFilename,
@@ -522,12 +509,6 @@ const createWebpackConfigHelper = (options: HatchWebappComponentWebpackOptions) 
       }
 
       config.optimization = {
-        splitChunks: {
-          cacheGroups: {
-            default: false,
-            defaultVendors: false,
-          },
-        },
         moduleIds: 'deterministic',
         minimize: true,
         minimizer: [

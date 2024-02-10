@@ -20,7 +20,7 @@ import {
 import {DependencyContainer} from '@launchtray/tsyringe-async';
 import crypto from 'crypto';
 import {RequestHandler} from 'express';
-import React from 'react';
+import React, {Suspense} from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {HelmetServerState, HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
@@ -30,6 +30,7 @@ import createSagaMiddleware from 'redux-saga';
 import serialize, {SerializeJSOptions} from 'serialize-javascript';
 
 import {WebServerComposition} from './WebServerComposer';
+import {Route, Switch} from 'react-router';
 
 const SSR_TIMEOUT_MS = 5000;
 
@@ -124,7 +125,13 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
     <StoreProvider store={store}>
       <NavProvider>
         <HelmetProvider context={helmetContext}>
-          <App/>
+          <Route path={'/api'}>
+            <Suspense fallback={null}>
+            </Suspense>
+          </Route>
+          <Route>
+            <App/>
+          </Route>
         </HelmetProvider>
       </NavProvider>
     </StoreProvider>

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+packageDir="${1}"
+if [ -n "${packageDir}" ]; then
+  cd "${packageDir}"
+fi
+
+if ! command -v rush &> /dev/null; then
+  >&2 echo "Rush is not installed, so skipping watching of dependencies."
+  >&2 echo "Please install it globally with 'npm install -g @microsoft/rush'."
+  npm run start:no-watch
+else
+  set -e
+  # Build dependencies in full first, before starting server
+  rush build --to-except .
+  # Start watching dependencies and rebuilding on changes
+  rush build:watch --to-except . &
+  watchProcess=$!
+  set +e
+  # Start the server
+  rushx start:no-watch
+  kill ${watchProcess}
+fi

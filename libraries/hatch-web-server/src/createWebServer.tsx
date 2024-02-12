@@ -30,6 +30,7 @@ import createSagaMiddleware from 'redux-saga';
 import serialize, {SerializeJSOptions} from 'serialize-javascript';
 
 import {WebServerComposition} from './WebServerComposer';
+import {Route} from 'react-router';
 
 const SSR_TIMEOUT_MS = 5000;
 
@@ -50,8 +51,8 @@ const renderStaticClient = async (requestContext: ClientRenderRequestContext): P
   const {composition} = requestContext;
   const faviconPath = `${assetsPrefix}/favicon.ico`;
   let assetsScript: string;
-  if (assets?.client?.js != null) {
-    assetsScript = `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+  if (assets['client.js'] != null) {
+    assetsScript = `<script src="${assetsPrefix + assets['client.js']}" defer></script>`;
   } else {
     assetsScript = '';
   }
@@ -67,7 +68,7 @@ const renderStaticClient = async (requestContext: ClientRenderRequestContext): P
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      ${assets?.client?.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets?.['client.css'] != null ? `<link rel="stylesheet" href="${assetsPrefix + assets['client.css']}">` : ''}
       ${assetsScript}
     </head>
     <body>
@@ -124,7 +125,9 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
     <StoreProvider store={store}>
       <NavProvider>
         <HelmetProvider context={helmetContext}>
-          <App/>
+          <Route>
+            <App/>
+          </Route>
         </HelmetProvider>
       </NavProvider>
     </StoreProvider>
@@ -142,10 +145,10 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = `${assetsPrefix}/favicon.ico`;
   let assetsScript: string;
-  if (assets?.client?.js != null) {
+  if (assets['client.js'] != null) {
     assetsScript = crossOrigin
-      ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-      : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+      ? `<script src="${assetsPrefix + assets['client.js']}" defer crossorigin></script>`
+      : `<script src="${assetsPrefix + assets['client.js']}" defer></script>`;
   } else {
     assetsScript = '';
   }
@@ -166,7 +169,7 @@ const renderDynamicClient = async (requestContext: ClientRenderRequestContext): 
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${css}
-      ${assets?.client?.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets?.['client.css'] != null ? `<link rel="stylesheet" href="${assetsPrefix + assets['client.css']}">` : ''}
       ${assetsScript}
     </head>
     <body ${helmet.bodyAttributes.toString()}>
@@ -186,7 +189,9 @@ const renderClient = async (requestContext: ClientRenderRequestContext): Promise
 export default (options: CreateServerOptions<WebServerComposition>) => {
   resetDefinedActions();
   runtimeConfig.SENTRY_DSN = process.env.SENTRY_DSN;
-  runtimeConfig.ENABLE_API_SPEC = process.env.NODE_ENV === 'development' ? 'true' : process.env.ENABLE_API_SPEC;
+  runtimeConfig.ENABLE_API_SPEC = process.env.NODE_ENV === 'development'
+    ? (process.env.ENABLE_API_SPEC ?? 'true')
+    : process.env.ENABLE_API_SPEC;
   runtimeConfig.ENABLE_CLIENT_LOGGING = process.env.ENABLE_CLIENT_LOGGING;
   createServer(options, (server, app, composition, logger, errorReporter) => {
     const disableSsr = composition.disableSsr ?? process.env.DISABLE_SSR === 'true';

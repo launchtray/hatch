@@ -1,11 +1,13 @@
 import {Readable} from 'stream';
 import {
+  addMetadata,
   ApiAlternateAction,
   ApiDelegateResponse,
   containerSingleton,
   inject,
   Logger,
   PREVENT_DEFAULT_RESPONSE,
+  StreamUtils,
 } from '@launchtray/hatch-util';
 import {
   ApiExampleEnumListIdGetHttpRequest,
@@ -19,7 +21,7 @@ import {
   GetMetricsCountHttpResponse,
   GetReportPdfHttpRequest,
   GetReportPdfHttpResponse,
-  GetStatusHttpRequestBase,
+  GetStatusHttpRequest,
   GetStatusHttpResponse,
   GetUserHttpRequest,
   GetUserHttpResponse,
@@ -55,10 +57,10 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   handleGetStatus(
-    request: GetStatusHttpRequestBase,
+    request: GetStatusHttpRequest,
   ): GetStatusHttpResponse {
     return {
-      body: `${request.queryParams?.type ?? 'ALL'}: OK`,
+      body: `${request?.queryParams?.type ?? 'ALL'}: OK`,
     };
   }
 
@@ -126,7 +128,7 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
       headers: {
         xStartDate: request.queryParams.startDate.getTime(),
       },
-      body: Readable.toWeb(readable),
+      body: StreamUtils.convertNodeReadableToWebStream(readable),
     };
   }
 
@@ -215,12 +217,12 @@ export default class UsersApiDelegateImpl implements UsersApiDelegate, MetricsAp
   }
 
   // Demonstrates how a delegate can prevent the default response and send a response via the underlying response obj
+  @addMetadata()
   handleMakeAdmin(
     request: MakeAdminHttpRequest,
-    @inject('Logger') logger: Logger,
     basicRouteParams: BasicRouteParams,
   ) {
-    logger.debug(`handleMakeAdmin: ${JSON.stringify(request)}`);
+    this.logger.debug(`handleMakeAdmin: ${JSON.stringify(request)}`);
     basicRouteParams.res.sendStatus(500);
     return PREVENT_DEFAULT_RESPONSE;
   }

@@ -40,7 +40,7 @@ import {
   setTag,
 } from '@sentry/browser';
 import {Options} from '@sentry/types';
-import React from 'react';
+import React, {useState, useEffect, ReactElement, ComponentType} from 'react';
 import {HelmetProvider} from 'react-helmet-async';
 import {AppRegistry} from 'react-native';
 import {Provider as StoreProvider} from 'react-redux';
@@ -48,11 +48,8 @@ import {Route, Switch} from 'react-router';
 import {applyMiddleware, createStore, Middleware, Store} from 'redux';
 import {composeWithDevTools} from '@redux-devtools/extension';
 import createSagaMiddleware, {Saga, Task} from 'redux-saga';
-import SwaggerUI from 'swagger-ui-react';
-import 'swagger-ui-react/swagger-ui.css';
-
 import {WebClientComposer, WebClientComposition} from './WebClientComposer';
-
+import type {SwaggerUIProps} from 'swagger-ui-react';
 /* eslint-enable import/first */
 
 export interface CreateClientOptions {
@@ -60,6 +57,20 @@ export interface CreateClientOptions {
   reloadComposeModule: () => any;
   injectionOptions?: InjectionInitializationContext;
 }
+
+const SwaggerUIAsync = (props: SwaggerUIProps) => {
+  const [Component, setComponent] = useState<ComponentType<SwaggerUIProps> | null>(null);
+  useEffect(() => {
+    const loadComponent = async () => {
+      const SwaggerUI = await import('swagger-ui-react').then((module) => module.default) as ReactElement;
+      // @ts-ignore -- TypeScript doesn't recognize this as a module
+      await import('swagger-ui-react/swagger-ui.css');
+      setComponent(() => SwaggerUI);
+    };
+    loadComponent().then();
+  }, []);
+  return Component ? <Component {...props} /> : null;
+};
 
 // eslint-disable-next-line @typescript-eslint/naming-convention -- React component should be PascalCase
 const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.ElementType}) => {
@@ -69,7 +80,7 @@ const RNApp = ({reduxStore, RootApp}: {reduxStore: Store, RootApp: React.Element
         <HelmetProvider>
           <Switch>
             <Route path={'/api'}>
-              <SwaggerUI url={'/api.json'} docExpansion={'list'}/>
+              <SwaggerUIAsync url={'/api.json'} docExpansion={'list'}/>
             </Route>
             <Route>
               <RootApp/>
@@ -227,6 +238,7 @@ const createClientAsync = async (clientComposer: WebClientComposer) => {
     initialProps: {reduxStore: store, RootApp: composition.appComponent},
     // eslint-disable-next-line no-undef -- global document object
     rootTag: document.getElementById(composition.appRootId ?? 'root'),
+    hydrate: !composition.disableSsr,
   });
 };
 

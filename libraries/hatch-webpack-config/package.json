@@ -1,0 +1,122 @@
+{
+  "name": "@launchtray/hatch-webpack-config",
+  "version": "0.23.0-alpha.17",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint --max-warnings=0 --fix .",
+    "build": "rimraf dist && tsc",
+    "build:watch": "tsc"
+  },
+  "bin": {
+    "hatch-dev-server": "./bin/start-dev-server"
+  },
+  "dependencies": {
+    "@launchtray/hatch-webpack-util": "workspace:*"
+  },
+  "devDependencies": {
+    "webpack": "~5.82.1",
+    "@types/node": "^18",
+    "@types/jest": "^29.5.11",
+    "@types/webpack-env": "^1.18.4",
+    "@types/webpack": "^5.28.5",
+    "@launchtray/hatch-eslint-config": "workspace:*",
+    "@typescript-eslint/parser": "^5",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "eslint-config-airbnb-base": "^15",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jest": "^26",
+    "rimraf": "3.0.0",
+    "typescript": "4.9.5",
+    "eslint": "^8",
+    "terser-webpack-plugin": "^5.3.10",
+    "mini-css-extract-plugin": "2.7.6",
+    "css-minimizer-webpack-plugin": "^6.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "webpackbar": "^6.0.0",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-dev-server": "~4.9.3",
+    "terser": "^5.26.0",
+    "postcss": "8.4.33",
+    "postcss-loader": "^7.3.4",
+    "react-refresh": "^0.14.0",
+    "strip-ansi": "^7.1.0",
+    "process": "^0.11.10",
+    "source-map-support": "^0.5.21",
+    "autoprefixer": "^10.4.16",
+    "buffer": "^6.0.3",
+    "clean-css": "^5.3.3",
+    "css-loader": "^6.9.0",
+    "style-loader": "^3.3.4",
+    "console-browserify": "^1.2.0",
+    "assert": "^2.1.0",
+    "stream-browserify": "^3.0.0",
+    "crypto-browserify": "^3.12.0",
+    "readable-stream": "^4.5.2",
+    "events": "^3.3.0",
+    "webpack-bundle-analyzer":"^4.10.1",
+    "@types/webpack-bundle-analyzer": "^4.6.3",
+    "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "react-refresh-typescript": "^2.0.9",
+    "ts-loader": "^9.5.1",
+    "type-fest": "^4.9.0",
+    "source-map-loader": "^4.0.2",
+    "@rushstack/heft-webpack5-plugin": "~0.9.16",
+    "@rushstack/heft": "^0.64.2"
+  },
+  "peerDependencies": {
+    "webpack": "~5.82.1",
+    "eslint": "^8",
+    "terser-webpack-plugin": "^5.3.10",
+    "mini-css-extract-plugin": "2.7.6",
+    "css-minimizer-webpack-plugin": "^6.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "webpackbar": "^6.0.0",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-dev-server": "~4.9.3",
+    "terser": "^5.26.0",
+    "postcss": "8.4.33",
+    "postcss-loader": "^7.3.4",
+    "react-refresh": "^0.14.0",
+    "strip-ansi": "^7.1.0",
+    "process": "^0.11.10",
+    "source-map-support": "^0.5.21",
+    "autoprefixer": "^10.4.16",
+    "buffer": "^6.0.3",
+    "clean-css": "^5.3.3",
+    "css-loader": "^6.9.0",
+    "style-loader": "^3.3.4",
+    "console-browserify": "^1.2.0",
+    "assert": "^2.1.0",
+    "stream-browserify": "^3.0.0",
+    "crypto-browserify": "^3.12.0",
+    "readable-stream": "^4.5.2",
+    "events": "^3.3.0",
+    "webpack-bundle-analyzer":"^4.10.1",
+    "@types/webpack-bundle-analyzer": "^4.6.3",
+    "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "react-refresh-typescript": "^2.0.9",
+    "ts-loader": "^9.5.1",
+    "@babel/core": "^7.23.7",
+    "type-fest": "^4.9.0",
+    "source-map-loader": "^4.0.2"
+  },
+  "peerDependenciesMeta": {
+    "@pmmmwh/react-refresh-webpack-plugin": {
+      "optional": true
+    },
+    "react-refresh-typescript": {
+      "optional": true
+    },
+    "react-refresh": {
+      "optional": true
+    }
+  }
+}

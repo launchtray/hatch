@@ -89,8 +89,6 @@
    * PNPM documentation: https://pnpm.io/package_json#pnpmoverrides
    */
   "globalOverrides": {
-    "fork-ts-checker-webpack-plugin": "6.4.0",
-    "postcss@^8.2": "8.2.12",
     "immer@<9.0.6": "9.0.16",
     "trim-newlines": "4.0.2",
     "react-native-web@<0.18.8": "0.18.8",
@@ -117,12 +115,12 @@
    * https://pnpm.io/package_json#pnpmpeerdependencyrules
    */
   "globalPeerDependencyRules": {
-    // "ignoreMissing": ["@eslint/*"],
-    // "allowAny": ["@babel/*"]
+    "ignoreMissing": ["react-native"],
     "allowedVersions": {
-      "react": "^17",
-      "react-dom": "^17",
-      "react-native-web": "0.18.8"
+      "react": "^17 || ^18",
+      "react-dom": "^17 || ^18",
+      "react-native-web": "^0.18 || ^0.19",
+      "typescript": "4.9.5"
     }
   },
 

@@ -83,6 +83,12 @@ export const initializeInjection = (context?: InjectionInitializationContext) =>
   }
 };
 
+// No-op decorator to force metadata to be emitted
+export const addMetadata = () => {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
+  return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) => {};
+};
+
 export const injectable: <T>() => (target: Class<T>) => void = tsyringe_injectable;
 export const ROOT_CONTAINER: DependencyContainer = tsyringe_container;
 export const containerSingleton = <T>() => (target: Class<T>) => {

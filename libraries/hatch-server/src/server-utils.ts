@@ -2,10 +2,10 @@ import express, {Application} from 'express';
 import fs from 'fs';
 import path from 'path';
 
-// This works around a Razzle bug where assets.json is incomplete after a client compilation failure
+// This works around a bug where manifest.json is incomplete after a client compilation failure
 let warningShown = false;
 const getAssets = () => {
-  const assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './assets.json')) as unknown as string);
+  const assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, './manifest.json')) as unknown as string);
   if (process.env.NODE_ENV === 'development') {
     const portString = process.env.PORT ?? process.env.HATCH_BUILDTIME_PORT;
     let port: number;
@@ -14,20 +14,11 @@ const getAssets = () => {
     } else {
       port = 3000;
     }
-    const razzleFix = {
-      client: {
-        js: [
-          `http://localhost:${port + 1}/static/js/client.js`,
-        ],
-        map: [
-          `http://localhost:${port + 1}/static/js/client.js.map`,
-        ],
-        chunks: [
-          'client',
-        ],
-      },
+    const hardcodedFix = {
+      'client.js': `http://localhost:${port + 1}/static/js/client.js`,
+      'client.js.map': `http://localhost:${port + 1}/static/js/client.js.map`,
     };
-    if (assets?.client == null && !warningShown) {
+    if (assets?.['client.js'] == null && !warningShown) {
       warningShown = true;
       // eslint-disable-next-line no-console
       console.error(`
@@ -36,7 +27,7 @@ const getAssets = () => {
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      !! Encounterd Razzle bug that prevents assets.json from containing client asset information.   !!
+      !! Encountered bug that prevents assets manifest from containing client.js information.        !!
       !! Hatch will attempt to work around this, but you may need to restart your development server !!
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -47,7 +38,7 @@ const getAssets = () => {
       `);
     }
     return {
-      ...razzleFix,
+      ...hardcodedFix,
       ...assets,
     };
   }

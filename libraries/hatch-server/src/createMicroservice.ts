@@ -13,10 +13,10 @@ const renderClient = async (): Promise<string> => {
   const crossOrigin = process.env.NODE_ENV === 'development' || process.env.STATIC_ASSETS_CROSS_ORIGIN === 'true';
   const faviconPath = `${assetsPrefix}/favicon.ico`;
   let assetsScript: string;
-  if (assets?.client?.js != null) {
+  if (assets['client.js'] != null) {
     assetsScript = crossOrigin
-      ? `<script src="${assetsPrefix + assets.client.js}" defer crossorigin></script>`
-      : `<script src="${assetsPrefix + assets.client.js}" defer></script>`;
+      ? `<script src="${assetsPrefix + assets['client.js']}" defer crossorigin></script>`
+      : `<script src="${assetsPrefix + assets['client.js']}" defer></script>`;
   } else {
     assetsScript = '';
   }
@@ -31,7 +31,7 @@ const renderClient = async (): Promise<string> => {
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      ${assets?.client?.css != null ? `<link rel="stylesheet" href="${assetsPrefix + assets.client.css}">` : ''}
+      ${assets?.['client.css'] != null ? `<link rel="stylesheet" href="${assetsPrefix + assets['client.css']}">` : ''}
       ${assetsScript}
     </head>
     <body>

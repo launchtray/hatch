@@ -28,7 +28,7 @@ appShortNames="$( \
 maxShortNameLength=0
 buildCommand="rush build:watch"
 while IFS= read -r shortName; do
-  if [ -f "apps/${shortName}/razzle.config.js" ]; then
+  if [ -f "apps/${shortName}/webpack.config.js" ]; then
     packageName=$(grep \"name\": "apps/${shortName}/package.json" | awk '{ print $2 }' | sed 's/[,"]//g')
     buildCommand="${buildCommand} --to-except ${packageName}"
     shortNameLength=${#shortName}
@@ -61,7 +61,7 @@ while IFS= read -r shortName; do
 
   cd "apps/$shortName"
   appTagPrefix="$(printf %-$(($maxShortNameLength))s "$shortName")  | "
-  if [ -f "razzle.config.js" ]; then
+  if [ -f "webpack.config.js" ]; then
     envName="$(echo "${shortName//[^[:alnum:]]/_}" | awk '{print toupper($0)}')"
     portName="${envName}_PORT"
     appPort=$(grep "^$portName=" ../../.env | awk -F '=' '{print $2}')

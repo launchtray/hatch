@@ -12,6 +12,8 @@ import {RushConfiguration, RushConfigurationProject} from '@microsoft/rush-lib';
 import {parse, stringify} from 'comment-json';
 import YAML from 'yaml';
 import {Pair, YAMLMap} from 'yaml/types';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore -- types don't seem to work for this library
 import dotenv from 'dotenv';
 
 type TemplateType =
@@ -404,30 +406,38 @@ const updatePnpmConfig = (monorepoPath: string) => {
   pnpmConfigParsed.useWorkspaces = true;
   pnpmConfigParsed.globalOverrides = {
     ...pnpmConfigParsed.globalOverrides,
-    'fork-ts-checker-webpack-plugin': '6.4.0',
-    'postcss@^8.2': '8.2.12',
-    'immer@<9.0.6': '9.0.16',
-    'trim-newlines': '4.0.2',
     'react-native-web@<0.18.8': '0.18.8',
     'react@<17': '^17',
     'react-dom@<17': '^17',
-    'react-error-overlay': '6.0.9',
-    '@braintree/sanitize-url': '6.0.2',
-    'shell-quote@<1.7.3': '1.7.3',
-    'loader-utils@>=2.0.0 <2.0.4': '2.0.4',
+    '@braintree/sanitize-url@<6.0.2': '6.0.2',
     'node-forge@<1.3.1': '1.3.1',
-    'trim@<1.0.1': '1.0.1',
+    'chokidar@<3.5.3': '3.5.3',
   };
   pnpmConfigParsed.globalPeerDependencyRules = {
     ...pnpmConfigParsed.globalPeerDependencyRules,
     allowedVersions: {
-      react: '^17',
-      'react-dom': '^17',
-      'react-native-web': '0.18.8',
+      react: '^17 || ^18',
+      'react-dom': '^17 || ^18',
+      'react-native-web': '^0.18 || ^0.19',
     },
+    ignoreMissing: ['react-native'],
   };
   const pnpmConfigRawUpdated = stringify(pnpmConfigParsed, null, 2);
   fs.writeFileSync(pnpmConfigPath, pnpmConfigRawUpdated);
+};
+
+const updateCommonVersions = (monorepoPath: string) => {
+  const commonVersionsPath = path.resolve(monorepoPath, 'common', 'config', 'rush', 'common-versions.json');
+  const commonVersionsRaw = fs.readFileSync(commonVersionsPath).toString();
+  const commonVersionsParsed = parse(commonVersionsRaw);
+  commonVersionsParsed.allowedAlternativeVersions = {
+    ...commonVersionsParsed.allowedAlternativeVersions,
+    react: ['^17', '^18'],
+    'react-dom': ['^17', '^18'],
+    'react-native-web': ['^0.18', '^0.19'],
+  };
+  const commonVersionsRawUpdated = stringify(commonVersionsParsed, null, 2);
+  fs.writeFileSync(commonVersionsPath, commonVersionsRawUpdated);
 };
 
 const updateCustomCommands = (monorepoPath: string) => {
@@ -630,6 +640,7 @@ export const createFromTemplate = async (
         updateVersionPolicies(tempFilePath);
         updateCustomCommands(tempFilePath);
         updatePnpmConfig(tempFilePath);
+        updateCommonVersions(tempFilePath);
       }
       await fs.copy(srcPath, tempFilePath);
       if (templateType === 'monorepo') {

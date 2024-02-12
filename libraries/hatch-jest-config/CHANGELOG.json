@@ -1,0 +1,11 @@
+{
+  "name": "@launchtray/hatch-jest-config",
+  "entries": [
+    {
+      "version": "0.23.0",
+      "tag": "@launchtray/hatch-jest-config_v0.23.0",
+      "date": "Mon, 12 Feb 2024 22:43:07 GMT",
+      "comments": {}
+    }
+  ]
+}

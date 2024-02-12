@@ -1,0 +1,17 @@
+{
+  "name": "@launchtray/hatch-webpack-config",
+  "entries": [
+    {
+      "version": "0.23.0",
+      "tag": "@launchtray/hatch-webpack-config_v0.23.0",
+      "date": "Mon, 12 Feb 2024 22:43:07 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Updates in support of Razzle removal"
+          }
+        ]
+      }
+    }
+  ]
+}

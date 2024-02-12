@@ -2,6 +2,18 @@
   "name": "@launchtray/hatch-web-injectables",
   "entries": [
     {
+      "version": "0.23.0",
+      "tag": "@launchtray/hatch-web-injectables_v0.23.0",
+      "date": "Mon, 12 Feb 2024 22:43:07 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Updates in support of Razzle removal"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.22.1",
       "tag": "@launchtray/hatch-web-injectables_v0.22.1",
       "date": "Wed, 31 May 2023 06:26:00 GMT",
